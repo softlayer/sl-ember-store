@@ -1,6 +1,4 @@
-'use strict';
-
-var expect = require('../../helpers/expect.js');
+var expect = chai.expect;
 
 describe( 'store', function(){
     expect();

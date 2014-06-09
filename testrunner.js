@@ -116,7 +116,7 @@ process.on('SIGTERM', function () {
 process.addListener('exit', function () {
     console.log( 'exiting' );
     builder.cleanup();
-    fs.rmdirSync( 'tmp' );
+    fs.rmdir( 'tmp' );
 });
 
 console.log('starting...');
