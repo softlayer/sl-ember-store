@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Tests</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/testem/mocha.css">
+    <script src="/assets/vendor.js"></script>
+
+    <script src="/testem/mocha.js"></script>
+    <script src="/testem/chai.js"></script>
+    <script src="/testem.js"></script>
+
+    <script>mocha.setup('bdd')</script>
+    {{#styles}}<link rel="stylesheet" href="{{.}}">{{/styles}}
+
+  </head>
+  <body>
+    <div id="mocha"></div>
+      <script src="/interface-library.js"></script>
+      <script src="/test/tests.js"></script>
+      <script>
+      Object.keys(require.entries).forEach(function(entry){
+        if ((/unit/).test(entry) || (/integration/).test(entry)) {
+          console.log('entry', entry);
+          require(entry, null, null, true);
+        }
+      });
+      mocha.run();
+      </script>
+  </body>
+</html>
