@@ -345,7 +345,7 @@ define("interface-model/initializer",
     });
   });
 define("interface-model",
-  ["./model","./adapter","./store","./adapters/ajax","./adapters/localstorage","./initializer.js","exports"],
+  ["./model","./adapter","./store","./adapters/ajax","./adapters/localstorage","./initializer","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __exports__) {
     "use strict";
     var Model = __dependency1__["default"] || __dependency1__;
@@ -359,7 +359,7 @@ define("interface-model",
 
     Ember.Application.initializer(Initializer);
 
-    Ember.libraries.register("Interface-model", "0.0.1");
+    Ember.libraries.register("interface-model", "0.0.1");
 
     __exports__["default"] = Model;
   });
