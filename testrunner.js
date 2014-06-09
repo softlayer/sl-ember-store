@@ -44,6 +44,11 @@ tree =  mergeTrees(
                                 srcDir: '/',
                                 files: [ 'ember-resolver.js' ],
                                 destDir: '/assets'
+                            }),
+                            pickFiles( 'bower_components/emberize-model/dist', {
+                                srcDir: '/',
+                                files: [ 'emberize-model.js' ],
+                                destDir: '/assets'
                             })
                         ],
                         { overwrite: true }
@@ -65,7 +70,7 @@ tree =  mergeTrees(
                             moduleType: 'amd',
                             anonymous: false,
                             compatFix: true,
-                            packageName: 'emberize-model-test'
+                            packageName: 'interface-model-test'
                         }
                     ),
                     {

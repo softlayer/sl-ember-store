@@ -15,7 +15,8 @@
     "bower_components"
   ],
   "dependencies": {
-    "loader.js": "~1.0.0"
+    "loader.js": "~1.0.0",
+    "emberize-model": "git@gitlab.softlayer.local:mmarcum/emberize-model.git"
   },
   "devDependencies": {
     "ember":"",
