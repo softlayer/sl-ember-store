@@ -502,6 +502,7 @@ define("interface-model/store",
             var preQueryHooks = this.get( 'preQueryHooks' );
             if( ! preQueryHooks ){
                 this.set( 'preQueryHooks', [] );
+                preQueryHooks = this.get( 'preQueryHooks' )
             }
             preQueryHooks.push( f );
         },
@@ -510,6 +511,7 @@ define("interface-model/store",
             var postQueryHooks = this.get( 'postQueryHooks' );
             if( ! postQueryHooks ){
                 this.set( 'postQueryHooks', [] );
+                postQueryHooks = this.get( 'postQueryHooks' );
             }
             postQueryHooks.push( f );
         }
