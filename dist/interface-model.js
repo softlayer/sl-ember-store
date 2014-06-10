@@ -313,26 +313,22 @@ define("interface-model/adapters/localstorage",
         
     });
   });
-define("interface-model/initializer",
-  ["ember","./store","./adapter","./adapters/ajax","./adapters/localstorage","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __exports__) {
+define("interface-model/initializers/main",
+  ["../store","../adapter","../adapters/ajax","../adapters/localstorage","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     "use strict";
     'use strict';
 
-    var Ember = __dependency1__["default"] || __dependency1__;
-    var Store = __dependency2__["default"] || __dependency2__;
-    var Adapter = __dependency3__["default"] || __dependency3__;
-    var AjaxAdapter = __dependency4__["default"] || __dependency4__;
-    var LocalAdapter = __dependency5__["default"] || __dependency5__;
+    var Store = __dependency1__["default"] || __dependency1__;
+    var Adapter = __dependency2__["default"] || __dependency2__;
+    var AjaxAdapter = __dependency3__["default"] || __dependency3__;
+    var LocalAdapter = __dependency4__["default"] || __dependency4__;
 
-
-    __exports__["default"] = Ember.Application.initialize({
+    __exports__["default"] = {
 
         name: 'interface-model',
 
         initialize: function ( container, application ) {
-
-    console.log( 'interface-model initializer' );
 
             container.register('store:main', Store );
 
@@ -347,7 +343,7 @@ define("interface-model/initializer",
             application.inject('route', 'store', 'store:main');
 
         }
-    });
+    };
   });
 define("interface-model",
   ["./model","./adapter","./store","./adapters/ajax","./adapters/localstorage","./initializer","exports"],
@@ -361,10 +357,6 @@ define("interface-model",
     var LocalstorageAdapter = __dependency5__["default"] || __dependency5__;
 
     var Initializer = __dependency6__["default"] || __dependency6__;
-
-    Ember.Application.initializer(Initializer);
-
-    Ember.libraries.register("interface-model", "0.0.1");
 
     __exports__["default"] = Model;
   });
