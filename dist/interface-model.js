@@ -1,10 +1,11 @@
 define("interface-model/adapter",
-  ["emberize-model","exports"],
-  function(__dependency1__, __exports__) {
+  ["./store","emberize-model","exports"],
+  function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
     'use strict';
 
-    var EmberizeModel = __dependency1__["default"] || __dependency1__;
+    var Store = __dependency1__["default"] || __dependency1__;
+    var EmberizeModel = __dependency2__["default"] || __dependency2__;
 
     __exports__["default"] = Ember.Object.extend({
         /**
@@ -85,8 +86,22 @@ define("interface-model/adapter",
          */
         emberizeResponse: EmberizeModel,
 
-        __forceLogout: function(){
-            this.container.lookup( 'controller:application' ).send( 'forceLogout' );
+        /**
+         * Run pre-query hooks
+         *
+         */
+
+        runPreQueryHooks: function(){
+            this.get( 'container' ).lookup( 'store:main' ).get( 'preQueryHooks').forEach( function( f ){ f(); } );
+        },
+
+        /**
+         * Run after-query hooks
+         *
+         */
+
+        runPostQueryHooks: function(){
+            this.get( 'container' ).lookup( 'store:main' ).get( 'postQueryHooks').forEach( function( f ){ f(); } );
         }
     });
   });
@@ -193,13 +208,7 @@ define("interface-model/adapters/ajax",
             .always( function( jqxhr ) {
                 // Clearing request cache since it is no longer in flight
                 delete this.requestCache[cacheKey];
-
-                if( 401 === jqxhr.status ){
-                    this.__forceLogout();
-
-                } else if ( 401 != jqxhr.status ) {
-                    SF.MessageBus.push( 'session-keep-alive' );
-                }
+                this.runPostQueryHooks( jqxhr.status );
             });
 
             // Preset the id, if one was used for the find, to support things like serialize on the route
@@ -234,13 +243,7 @@ define("interface-model/adapters/ajax",
                 context: this
             })
             .always( function( jqxhr ) {
-                if( 401 === jqxhr.status ){
-                    this.__forceLogout();
-
-                } else if ( 401 != jqxhr.status ) {
-                    SF.MessageBus.push( 'session-keep-alive' );
-
-                }
+                this.runPostQueryHooks( jqxhr.status );
             });
         },
 
@@ -279,16 +282,10 @@ define("interface-model/adapters/ajax",
                     'details'    : jqxhr.responseJSON && jqxhr.responseJSON.details || "Service Unavailable"
                 };
 
-                SF.MessageBus.push( 'saving-' + topic + '-error', errorData );
                 defer.reject( errorData );
             })
             .always( function( jqxhr ) {
-                if( 401 === jqxhr.status ){
-                    this.__forceLogout();
-
-                } else if ( 401 != jqxhr.status ) {
-                    SF.MessageBus.push( 'session-keep-alive' );
-                }
+                this.runPostQueryHooks( jqhx.status );
             });
 
             return defer;
@@ -386,6 +383,7 @@ define("interface-model/model",
     });
 
     Model.reopenClass({
+        //default adapter
         adapter: 'ajax',
 
         /**
@@ -457,6 +455,11 @@ define("interface-model/store",
     'use strict';
 
     __exports__["default"] = Ember.Object.extend({
+
+        preQueryHooks: null,
+
+        postQueryHooks: null,
+
         adapterFor: function( type ){
             var adapterType = this.modelFor(type).adapter,
                 adapter = this.container.lookupFactory( 'adapter:'+adapterType );
@@ -494,6 +497,22 @@ define("interface-model/store",
         createRecord: function( type ){
             var factory = this.modelFor( type );
             return factory.create( { container: this.container } );
+        },
+
+        registerPreQueryHook: function( f ){
+            var preQueryHooks = this.get( 'preQueryHooks' );
+            if( ! preQueryHooks ){
+                this.set( 'preQueryHooks', [] );
+            }
+            preQueryHooks.pushObject( f );
+        },
+
+        registerPostQueryHook: function( f ){
+            var postQueryHooks = this.get( 'postQueryHooks' );
+            if( ! postQueryHooks ){
+                this.set( 'postQueryHooks', [] );
+            }
+            postQueryHooks.pushObject( f );
         }
     });
   });
