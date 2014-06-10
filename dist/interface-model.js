@@ -1,11 +1,10 @@
 define("interface-model/adapter",
-  ["./store","emberize-model","exports"],
-  function(__dependency1__, __dependency2__, __exports__) {
+  ["emberize-model","exports"],
+  function(__dependency1__, __exports__) {
     "use strict";
     'use strict';
 
-    var Store = __dependency1__["default"] || __dependency1__;
-    var EmberizeModel = __dependency2__["default"] || __dependency2__;
+    var EmberizeModel = __dependency1__["default"] || __dependency1__;
 
     __exports__["default"] = Ember.Object.extend({
         /**
