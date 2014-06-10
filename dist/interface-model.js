@@ -314,26 +314,29 @@ define("interface-model/adapters/localstorage",
     });
   });
 define("interface-model/initializer",
-  ["ember","./store","./adapters/ajax","./adapters/localstorage","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
+  ["ember","./store","./adapter","./adapters/ajax","./adapters/localstorage","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __exports__) {
     "use strict";
     'use strict';
 
     var Ember = __dependency1__["default"] || __dependency1__;
     var Store = __dependency2__["default"] || __dependency2__;
-    var AjaxAdapter = __dependency3__["default"] || __dependency3__;
-    var LocalAdapter = __dependency4__["default"] || __dependency4__;
+    var Adapter = __dependency3__["default"] || __dependency3__;
+    var AjaxAdapter = __dependency4__["default"] || __dependency4__;
+    var LocalAdapter = __dependency5__["default"] || __dependency5__;
 
 
-    __exports__["default"] = Ember.Application.initializer({
+    __exports__["default"] = Ember.Application.initialize({
 
         name: 'interface-model',
 
         initialize: function ( container, application ) {
 
+    console.log( 'interface-model initializer' );
+
             container.register('store:main', Store );
 
-            container.register('adapter:default', Store );
+            container.register('adapter:default', Adapter );
 
             container.register('adapter:ajax', AjaxAdapter );
 
