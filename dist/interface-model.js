@@ -122,7 +122,7 @@ define("interface-model/adapters/ajax",
          * @param  {bool} findOne force return of single recrord
          * @return { ObjectProxy | ArrayProxy } The record or array of records requested
          */
-        __find: function ( url, id, options, findOne ){
+        __find: function ( url, id, options, findOne, type ){
 
             Ember.assert('A url is required to find a model', url);
 
@@ -174,11 +174,11 @@ define("interface-model/adapters/ajax",
                     response = this.emberize( response );
                     if ( results instanceof Ember.ArrayProxy ) {
                         Ember.makeArray( response ).forEach( function ( child ) {
-                            results.pushObject( this.create( child ) );
+                            results.pushObject( type.create( child ) );
                         }, this );
 
                     } else {
-                        results.set( 'content', this.create( response ) );
+                        results.set( 'content', type.create( response ) );
                     }
 
                     // Cache the results
@@ -257,8 +257,7 @@ define("interface-model/adapters/ajax",
          save: function( url, context ) {
             Ember.assert('A url property is required to save a model', url);
 
-            var defer  = Ember.Deferred.create(),
-                action = ( context.action ) ? '-' + context.action : '';
+            var defer  = Ember.Deferred.create();
 
             $.ajax({
                 url  : url,
@@ -372,8 +371,15 @@ define("interface-model/model",
          * @param {integer} Record Id
          * @return {object} jqXHR from jQuery.ajax()
          */
-        destroy: function( context ) {
-            return this.constructor.adapter.destroy( this.url, context );
+        destroy: function() {
+            var data;
+
+            if ( arguments[0] ) {
+                data = arguments[0];
+            }
+
+            data = data || this;
+            return this.constructor.adapter.destroy( this.url, data );
         }
     });
 
@@ -425,7 +431,7 @@ define("interface-model/model",
          */
 
         __find: function( id, options, findOne ) {
-            return this.adapter.__find( this.url, id, options, findOne );
+            return this.adapter.__find( this.url, id, options, findOne, this );
         },
 
         /**
