@@ -1,12 +1,10 @@
 define("interface-model/adapter",
-  ["ember","emberize-model","exports"],
-  function(__dependency1__, __dependency2__, __exports__) {
+  ["emberize-model","exports"],
+  function(__dependency1__, __exports__) {
     "use strict";
     'use strict';
 
-    var Ember = __dependency1__["default"] || __dependency1__;
-
-    var EmberizeModel = __dependency2__["default"] || __dependency2__;
+    var EmberizeModel = __dependency1__["default"] || __dependency1__;
 
     __exports__["default"] = Ember.Object.extend({
         /**
@@ -93,14 +91,12 @@ define("interface-model/adapter",
     });
   });
 define("interface-model/adapters/ajax",
-  ["ember","../adapter","exports"],
-  function(__dependency1__, __dependency2__, __exports__) {
+  ["../adapter","exports"],
+  function(__dependency1__, __exports__) {
     "use strict";
     "use strict";
 
-    var Ember = __dependency1__["default"] || __dependency1__;
-
-    var Adapter = __dependency2__["default"] || __dependency2__;
+    var Adapter = __dependency1__["default"] || __dependency1__;
 
     __exports__["default"] = Adapter.extend({
 
@@ -300,17 +296,14 @@ define("interface-model/adapters/ajax",
     });
   });
 define("interface-model/adapters/localstorage",
-  ["ember","../adapter","exports"],
-  function(__dependency1__, __dependency2__, __exports__) {
+  ["exports"],
+  function(__exports__) {
     "use strict";
     'use strict';
 
-    var Ember = __dependency1__["default"] || __dependency1__;
-
-    var Adapter = __dependency2__["default"] || __dependency2__;
 
     __exports__["default"] = Adapter.extend({
-        
+
     });
   });
 define("interface-model/initializers/main",
@@ -346,27 +339,18 @@ define("interface-model/initializers/main",
     };
   });
 define("interface-model",
-  ["./model","./adapter","./store","./adapters/ajax","./adapters/localstorage","./initializer","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __exports__) {
+  ["./model","exports"],
+  function(__dependency1__, __exports__) {
     "use strict";
     var Model = __dependency1__["default"] || __dependency1__;
-    var Adapter = __dependency2__["default"] || __dependency2__;
-    var Store = __dependency3__["default"] || __dependency3__;
-
-    var AjaxAdapter = __dependency4__["default"] || __dependency4__;
-    var LocalstorageAdapter = __dependency5__["default"] || __dependency5__;
-
-    var Initializer = __dependency6__["default"] || __dependency6__;
 
     __exports__["default"] = Model;
   });
 define("interface-model/model",
-  ["ember","exports"],
-  function(__dependency1__, __exports__) {
+  ["exports"],
+  function(__exports__) {
     "use strict";
     'use strict';
-
-    var Ember = __dependency1__["default"] || __dependency1__;
 
     var Model =  Ember.Object.extend({
          /**
@@ -466,12 +450,10 @@ define("interface-model/model",
     __exports__["default"] = Model;
   });
 define("interface-model/store",
-  ["ember","exports"],
-  function(__dependency1__, __exports__) {
+  ["exports"],
+  function(__exports__) {
     "use strict";
     'use strict';
-
-    var Ember = __dependency1__["default"] || __dependency1__;
 
     __exports__["default"] = Ember.Object.extend({
         adapterFor: function( type ){
