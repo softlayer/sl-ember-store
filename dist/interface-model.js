@@ -296,11 +296,12 @@ define("interface-model/adapters/ajax",
     });
   });
 define("interface-model/adapters/localstorage",
-  ["exports"],
-  function(__exports__) {
+  ["../adapter","exports"],
+  function(__dependency1__, __exports__) {
     "use strict";
     'use strict';
 
+    var Adapter = __dependency1__["default"] || __dependency1__;
 
     __exports__["default"] = Adapter.extend({
 
