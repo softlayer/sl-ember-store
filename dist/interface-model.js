@@ -300,19 +300,21 @@ define("interface-model/adapters/ajax",
     });
   });
 define("interface-model/adapters/localstorage",
-  ["ember","exports"],
-  function(__dependency1__, __exports__) {
+  ["ember","../adapter","exports"],
+  function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
     'use strict';
 
     var Ember = __dependency1__["default"] || __dependency1__;
 
-    __exports__["default"] = Ember.Object.extend({
+    var Adapter = __dependency2__["default"] || __dependency2__;
 
+    __exports__["default"] = Adapter.extend({
+        
     });
   });
 define("interface-model/initializer",
-  ["ember","store","adapters/ajax","adapters/localstorage","exports"],
+  ["ember","./store","./adapters/ajax","./adapters/localstorage","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     "use strict";
     'use strict';
