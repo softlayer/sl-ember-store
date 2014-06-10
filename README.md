@@ -7,7 +7,7 @@ In order to use this just include this package in your bower.json like so:
 ```javascript
 {
     dependencies: {
-        "interface-model": "git@gitlab.softlayer.local:mmarcum/interface-model.git#master"
+        "interface-model": "git@gitlab.softlayer.local:mmarcum/interface-model.git#v0.1.0"
     }
 }
 ```
