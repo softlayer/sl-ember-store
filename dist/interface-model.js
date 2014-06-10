@@ -171,7 +171,7 @@ define("interface-model/adapters/ajax",
 
             }).done(
                 function ( response ) {
-                    response = this.emberizeResponse( response );
+                    response = this.emberize( response );
                     if ( results instanceof Ember.ArrayProxy ) {
                         Ember.makeArray( response ).forEach( function ( child ) {
                             results.pushObject( this.create( child ) );
