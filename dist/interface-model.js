@@ -154,8 +154,7 @@ define("interface-model/adapters/ajax",
             var results     = ( ( options.data && options.data.id  ) || findOne ) ?
                 Ember.ObjectProxy.createWithMixins( Ember.Evented, { content: null } ) :
                 Ember.ArrayProxy.createWithMixins( Ember.Evented, { content: Em.A([]) } ),
-                _parameters = options.data,
-                topic       = Ember.String.dasherize( this.toString().replace( 'SF.', '' ) );
+                _parameters = options.data;
 
 
             var cachedRequest = this.requestCache[cacheKey];
@@ -185,7 +184,6 @@ define("interface-model/adapters/ajax",
                     // Cache the results
                     this.addToCache( url, _parameters, results );
 
-                    SF.MessageBus.push( 'finding-' + topic + '-success', response );
                     results.set( 'isLoaded', true );
                     results.trigger( 'isLoaded' );
                 }
@@ -199,7 +197,6 @@ define("interface-model/adapters/ajax",
                 };
 
                 results.error = errorData;
-                SF.MessageBus.push( 'finding-' + topic + '-error', errorData );
                 results.set( 'isError', true );
                 results.trigger( 'isError', errorData );
             })
@@ -251,7 +248,8 @@ define("interface-model/adapters/ajax",
          *
          * @public
          * @method save
-         * @param {SF.Model}
+         * @param url
+         * @param context
          * @publishes saving-/api/orders-success
          * @publishes saving-/api/orders-error
          * @return void
@@ -260,8 +258,7 @@ define("interface-model/adapters/ajax",
             Ember.assert('A url property is required to save a model', url);
 
             var defer  = Ember.Deferred.create(),
-                action = ( context.action ) ? '-' + context.action : '',
-                topic  = Ember.String.dasherize( this.toString().replace( 'SF.', '' ) ) + action;
+                action = ( context.action ) ? '-' + context.action : '';
 
             $.ajax({
                 url  : url,
@@ -270,7 +267,6 @@ define("interface-model/adapters/ajax",
                 context : this
             })
             .done( function ( response ) {
-                SF.MessageBus.push( 'saving-' + topic + '-success', response );
                 defer.resolve( response );
             })
             .fail( function( jqxhr, textStatus, error ) {
