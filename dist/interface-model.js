@@ -83,7 +83,7 @@ define("interface-model/adapter",
          * @param {object}
          * @return {object}
          */
-        emberizeResponse: EmberizeModel,
+        emberize: EmberizeModel,
 
         /**
          * Run pre-query hooks
