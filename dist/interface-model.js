@@ -503,7 +503,7 @@ define("interface-model/store",
             if( ! preQueryHooks ){
                 this.set( 'preQueryHooks', [] );
             }
-            preQueryHooks.pushObject( f );
+            preQueryHooks.push( f );
         },
 
         registerPostQueryHook: function( f ){
@@ -511,7 +511,7 @@ define("interface-model/store",
             if( ! postQueryHooks ){
                 this.set( 'postQueryHooks', [] );
             }
-            postQueryHooks.pushObject( f );
+            postQueryHooks.push( f );
         }
     });
   });
