@@ -1,4 +1,4 @@
-define("interface-model/adapter",
+define("sl-model/adapter",
   ["emberize-model","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -104,7 +104,7 @@ define("interface-model/adapter",
         }
     });
   });
-define("interface-model/adapters/ajax",
+define("sl-model/adapters/ajax",
   ["../adapter","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -286,7 +286,7 @@ define("interface-model/adapters/ajax",
          }
     });
   });
-define("interface-model/adapters/localstorage",
+define("sl-model/adapters/localstorage",
   ["../adapter","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -298,7 +298,7 @@ define("interface-model/adapters/localstorage",
 
     });
   });
-define("interface-model/initializers/main",
+define("sl-model/initializers/main",
   ["../store","../adapter","../adapters/ajax","../adapters/localstorage","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     "use strict";
@@ -330,7 +330,7 @@ define("interface-model/initializers/main",
         }
     };
   });
-define("interface-model",
+define("sl-model",
   ["./model","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
@@ -338,7 +338,7 @@ define("interface-model",
 
     __exports__["default"] = Model;
   });
-define("interface-model/model",
+define("sl-model/model",
   ["exports"],
   function(__exports__) {
     "use strict";
@@ -449,7 +449,7 @@ define("interface-model/model",
 
     __exports__["default"] = Model;
   });
-define("interface-model/store",
+define("sl-model/store",
   ["exports"],
   function(__exports__) {
     "use strict";

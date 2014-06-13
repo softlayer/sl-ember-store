@@ -5,18 +5,18 @@
     "Matthew Marcum <mmarcum@softlayer.com>"
   ],
   "description": "",
-  "main": "dist/main.js",
+  "main": "dist/sl-model.js",
   "keywords": [],
   "license": "?",
   "private": true,
   "ignore": [
     "**/.*",
     "node_modules",
-    "bower_components"
+    "vendor"
   ],
   "dependencies": {
     "loader.js": "~1.0.0",
-    "emberize-model": "git@gitlab.softlayer.local:mmarcum/emberize-model.git"
+    "sl-modelizer": "git@gitlab.softlayer.local:mmarcum/sl-modelize.git"
   },
   "devDependencies": {
     "ember":"",

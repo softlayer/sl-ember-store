@@ -2,14 +2,14 @@
   "name": "interface-model",
   "version": "0.1.0",
   "description": "",
-  "main": "lib/main.js",
+  "main": "lib/sl-model.js",
   "scripts": {
     "test": "",
     "release": ""
   },
   "repository": {
     "type": "git",
-    "url": "git@gitlab.softlayer.local:mmarcum/interface-model.git"
+    "url": "git@gitlab.softlayer.local:mmarcum/sl-model.git"
   },
   "keywords": [],
   "author": "Matt Marcum",

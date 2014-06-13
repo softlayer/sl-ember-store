@@ -6,12 +6,12 @@ module.exports = broconcat(
         moduleType: 'amd',
         anonymous: false,
         compatFix: true,
-        packageName: 'interface-model',
+        packageName: 'sl-model',
         main: 'main'
     }),
     {
         inputFiles: ['**/*.js'],
-        outputFile: '/interface-model.js',
+        outputFile: '/sl-model.js',
         wrapInEval: false
     }
 );

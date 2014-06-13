@@ -26,7 +26,6 @@
     "strictEqual",
     "module",
     "process",
-    "expect",
     "visit",
     "exists",
     "fillIn",
@@ -41,7 +40,12 @@
     "andThen",
     "currentURL",
     "currentPath",
-    "currentRouteName"
+    "currentRouteName",
+    "mocha",
+    "before",
+    "describe",
+    "it",
+    "chai"
   ],
   "node" : true,
   "browser" : false,
