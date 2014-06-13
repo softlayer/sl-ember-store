@@ -48,6 +48,16 @@ tree =  mergeTrees(
                                 files : [ 'ember-resolver.js' ],
                                 destDir : '/assets'
                             } ),
+                            pickFiles( 'vendor/sinon/lib/sinon.js', {
+                                srcDir : '/',
+                                files : [ 'sl-modelize.js' ],
+                                destDir : '/assets'
+                            } ),
+                            pickFiles( 'vendor/sinon-chai/lib/sinon-chai.js', {
+                                srcDir : '/',
+                                files : [ 'sl-modelize.js' ],
+                                destDir : '/assets'
+                            } ),
                             pickFiles( 'vendor/sl-modelizer/dist', {
                                 srcDir : '/',
                                 files : [ 'sl-modelize.js' ],

@@ -61,6 +61,9 @@ describe( 'store', function(){
 
 
     describe( 'findOne', function(){
+        store.__find = function(){ return arguments; };
+
+        expect( store.findOne( 'foo', { otherId: 1 } )
 
     });
     
