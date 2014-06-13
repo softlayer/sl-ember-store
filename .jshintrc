@@ -43,6 +43,7 @@
     "currentRouteName",
     "mocha",
     "before",
+    "beforeEach",    
     "describe",
     "it",
     "chai"

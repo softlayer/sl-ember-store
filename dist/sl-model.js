@@ -1,12 +1,10 @@
 define("sl-model/adapter",
-  ["emberize-model","exports"],
+  ["sl-modelize","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
-    'use strict';
+    var ModelizeMixin = __dependency1__["default"] || __dependency1__;
 
-    var EmberizeModel = __dependency1__["default"] || __dependency1__;
-
-    __exports__["default"] = Ember.Object.extend({
+    __exports__["default"] = Ember.Object.extend( ModelizeMixin, {
         /**
          * Cached results
          *
@@ -76,16 +74,6 @@ define("sl-model/adapter",
         },
 
         /**
-         * Recursively convert objects to Ember objects
-         *
-         * @protected
-         * @method emberizeResponse
-         * @param {object}
-         * @return {object}
-         */
-        emberize: EmberizeModel,
-
-        /**
          * Run pre-query hooks
          *
          */
@@ -108,8 +96,6 @@ define("sl-model/adapters/ajax",
   ["../adapter","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
-    "use strict";
-
     var Adapter = __dependency1__["default"] || __dependency1__;
 
     __exports__["default"] = Adapter.extend({
@@ -171,7 +157,7 @@ define("sl-model/adapters/ajax",
 
             }).done(
                 function ( response ) {
-                    response = this.emberize( response );
+                    response = this.modelize( response );
                     if ( results instanceof Ember.ArrayProxy ) {
                         Ember.makeArray( response ).forEach( function ( child ) {
                             results.pushObject( type.create( child ) );
@@ -279,7 +265,7 @@ define("sl-model/adapters/ajax",
                 defer.reject( errorData );
             })
             .always( function( jqxhr ) {
-                this.runPostQueryHooks( jqhx.status );
+                this.runPostQueryHooks( jqxhr.status );
             });
 
             return defer;
@@ -290,8 +276,6 @@ define("sl-model/adapters/localstorage",
   ["../adapter","exports"],
   function(__dependency1__, __exports__) {
     "use strict";
-    'use strict';
-
     var Adapter = __dependency1__["default"] || __dependency1__;
 
     __exports__["default"] = Adapter.extend({
@@ -302,8 +286,6 @@ define("sl-model/initializers/main",
   ["../store","../adapter","../adapters/ajax","../adapters/localstorage","exports"],
   function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
     "use strict";
-    'use strict';
-
     var Store = __dependency1__["default"] || __dependency1__;
     var Adapter = __dependency2__["default"] || __dependency2__;
     var AjaxAdapter = __dependency3__["default"] || __dependency3__;
@@ -342,8 +324,6 @@ define("sl-model/model",
   ["exports"],
   function(__exports__) {
     "use strict";
-    'use strict';
-
     var Model =  Ember.Object.extend({
          /**
          * Proxy the current instance to the class save method
@@ -453,8 +433,6 @@ define("sl-model/store",
   ["exports"],
   function(__exports__) {
     "use strict";
-    'use strict';
-
     __exports__["default"] = Ember.Object.extend({
 
         preQueryHooks: null,
@@ -504,7 +482,7 @@ define("sl-model/store",
             var preQueryHooks = this.get( 'preQueryHooks' );
             if( ! preQueryHooks ){
                 this.set( 'preQueryHooks', [] );
-                preQueryHooks = this.get( 'preQueryHooks' )
+                preQueryHooks = this.get( 'preQueryHooks' );
             }
             preQueryHooks.push( f );
         },

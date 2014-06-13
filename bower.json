@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "ember":"",
-    "ember-resolver": "stefanpenner/ember-jj-abrams-resolver#master"
+    "ember-resolver": "stefanpenner/ember-jj-abrams-resolver#master",
+    "ember-load-initializers": "stefanpenner/ember-load-initializers#0.0.2"
   }
 }

@@ -13,13 +13,13 @@
     <script src="/testem/chai.js"></script>
     <script src="/testem.js"></script>
 
-    <script>mocha.setup('bdd')</script>
+    <script>mocha.setup('bdd');</script>
     {{#styles}}<link rel="stylesheet" href="{{.}}">{{/styles}}
 
   </head>
   <body>
     <div id="mocha"></div>
-      <script src="/interface-model.js"></script>
+      <script src="/sl-model.js"></script>
       <script src="/test/tests.js"></script>
       <script>
       Object.keys(require.entries).forEach(function(entry){
