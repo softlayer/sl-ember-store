@@ -46,7 +46,8 @@
     "beforeEach",    
     "describe",
     "it",
-    "chai"
+    "chai",
+    "sinon"
   ],
   "node" : true,
   "browser" : false,

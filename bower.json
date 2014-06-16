@@ -16,14 +16,16 @@
   ],
   "dependencies": {
     "loader.js": "~1.0.0",
-    "sl-modelizer": "git@gitlab.softlayer.local:mmarcum/sl-modelize.git"
+    "sl-modelize": "git@gitlab.softlayer.local:mmarcum/sl-modelize.git",
+    "chai": "~1.9.1",
+    "mocha": "~1.20.1"
   },
   "devDependencies": {
     "ember": "",
     "ember-resolver": "stefanpenner/ember-jj-abrams-resolver#master",
     "ember-load-initializers": "stefanpenner/ember-load-initializers#0.0.2",
+    "sinonjs": "~1.10.2",
     "sinon-chai": "~2.5.0",
-    "sinon": "~1.10.2",
     "mocha": "~1.20.1",
     "chai": "~1.9.1"
   }

@@ -48,17 +48,27 @@ tree =  mergeTrees(
                                 files : [ 'ember-resolver.js' ],
                                 destDir : '/assets'
                             } ),
-                            pickFiles( 'vendor/sinon/lib/sinon.js', {
+                            pickFiles( 'vendor/mocha/', {
                                 srcDir : '/',
-                                files : [ 'sl-modelize.js' ],
+                                files : [ 'mocha.js' ],
                                 destDir : '/assets'
                             } ),
-                            pickFiles( 'vendor/sinon-chai/lib/sinon-chai.js', {
+                            pickFiles( 'vendor/chai/', {
                                 srcDir : '/',
-                                files : [ 'sl-modelize.js' ],
+                                files : [ 'chai.js' ],
                                 destDir : '/assets'
                             } ),
-                            pickFiles( 'vendor/sl-modelizer/dist', {
+                            pickFiles( 'vendor/sinonjs/', {
+                                srcDir : '/',
+                                files : [ 'sinon.js' ],
+                                destDir : '/assets'
+                            } ),
+                            pickFiles( 'vendor/sinon-chai/lib', {
+                                srcDir : '/',
+                                files : [ 'sinon-chai.js' ],
+                                destDir : '/assets'
+                            } ),
+                            pickFiles( 'vendor/sl-modelize/dist', {
                                 srcDir : '/',
                                 files : [ 'sl-modelize.js' ],
                                 destDir : '/assets'
@@ -72,6 +82,9 @@ tree =  mergeTrees(
                             'assets/jquery.js',
                             'assets/handlebars.js',
                             'assets/ember.js',
+                            'assets/chai.js',
+                            'assets/sinon-chai.js',
+                            'assets/sinon.js',
                             '**/*.js'
                         ],
                         outputFile : '/assets/vendor.js',

@@ -1,19 +1,23 @@
 import Model from "sl-model";
 import Store from 'sl-model/store';
 
-var expect = chai.expect;
 
-describe( 'store', function(){
+chai.should();
 
-    var store,
-        AjaxAdapter,
-        LocalstorageAdapter,
-        Foo,
-        Bar;
+var expect = chai.expect,
+    store,
+    AjaxAdapter,
+    LocalstorageAdapter,
+    Foo,
+    Bar,
+    queryHook = function(){ return true;};
+
+
+describe( 'sl-model/store', function(){
 
     beforeEach(function(){
 
-        AjaxAdapter = Ember.Object.extend({ type: 'ajax' });
+        AjaxAdapter = Ember.Object.extend({ type: 'ajax', __find: function(){} });
         LocalstorageAdapter = Ember.Object.extend({ type: 'localstorage' });
         Foo = Model.extend();
         Bar = Model.extend();
@@ -61,31 +65,76 @@ describe( 'store', function(){
 
 
     describe( 'findOne', function(){
-        store.__find = function(){ return arguments; };
-
-        expect( store.findOne( 'foo', { otherId: 1 } )
+        it( 'should have called __find with correct args', function(){
+            var options = { "otherId": 1 };
+            store.__find = sinon.spy();
+            store.findOne( 'foo', options );
+            store.__find.should.have.been.calledWith( 'foo', null, options, true );
+        });
 
     });
     
     describe( 'find', function(){
-
-    });
-
-    describe( '__find', function(){
-
-    });
-
-    describe( 'createRecord', function(){
-        it( 'should exist', function(){
-            expect();
+        it( 'should have called __find with the correct args', function(){
+            var options = { "otherId": 1 };
+            store.__find = sinon.spy();
+            store.find( 'foo', 1, options );
+            store.__find.should.have.been.calledWith( 'foo', 1, options, false );
         });
     });
 
-    describe( 'registerPreQueryHook', function(){
+    describe( '__find', function(){
+        beforeEach( function(){
+            sinon.spy( store, "modelFor" );
+            sinon.spy( store, "adapterFor" );        
+            sinon.spy( Foo, "setAdapter" );
+            store.__find( 'foo', 1 );
+        });
+
+        it( 'should have called modelFor with the correct args', function(){
+            store.modelFor.should.have.been.calledWith( 'foo' );
+        });
+        it( 'should have called adapterFor with the correct args', function(){
+            store.adapterFor.should.have.been.calledWith( 'foo' );
+        });
+        it( 'should have called Model.setAdapter with the correct args', function(){
+            Foo.setAdapter.should.have.been.calledWith( AjaxAdapter, store.container );
+        });
+    });
+
+    describe( 'createRecord', function(){
+        beforeEach( function(){
+            sinon.spy( store, 'modelFor' );
+            sinon.spy( Foo, 'create' );
+            store.createRecord( 'foo' );
+        });
+        it( 'should have called modelFor with "foo"', function(){
+            store.modelFor.should.have.been.calledWith( 'foo' );
+        });
+        it( 'should have called Foo.create once', function(){
+            expect( Foo.create.should.have.been.called.once );
+        });
+        it( 'should have called Foo.create with an object container', function(){
+            Foo.create.should.have.been.calledWith( { container: store.container } );
+        });
 
     });
 
-    describe( 'registerPostQueryHook', function(){
+    describe( 'registerPreQueryHook', function(){
+        beforeEach( function(){
+            store.registerPreQueryHook( queryHook );
+        });
+        it( 'should add an entry to preQueryHooks', function(){
+            expect( store.get( 'preQueryHooks' ) ).to.have.length(1);
+        });
+    });
 
+    describe( 'registerPostQueryHook', function(){
+        beforeEach( function(){
+            store.registerPostQueryHook( queryHook );
+        });
+        it( 'should add an entry to postQueryHooks', function(){
+            expect( store.get( 'postQueryHooks' ) ).to.have.length(1);
+        });
     });
 });
