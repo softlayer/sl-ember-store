@@ -89,6 +89,10 @@ define("sl-model/adapter",
 
         runPostQueryHooks: function(){
             this.get( 'container' ).lookup( 'store:main' ).get( 'postQueryHooks').forEach( function( f ){ f(); } );
+        },
+
+        __find: function(){
+            Ember.assert( 'Your model should overwrite adapterType', true);
         }
     });
   });
@@ -214,7 +218,7 @@ define("sl-model/adapters/ajax",
          * @param {integer} Record Id
          * @return {object} jqXHR from jQuery.ajax()
          */
-        destroy: function( url, context ) {
+        delete: function( url, context ) {
 
             Ember.assert('A url is required to destroy a model', url);
 
@@ -325,6 +329,9 @@ define("sl-model/model",
   function(__exports__) {
     "use strict";
     var Model =  Ember.Object.extend({
+
+        url: '',
+
          /**
          * Proxy the current instance to the class save method
          *
@@ -334,13 +341,14 @@ define("sl-model/model",
         save: function() {
             var data;
 
+            Ember.assert( 'Url must be set', this.get('url.length') );
             if ( arguments[0] ) {
                 data = arguments[0];
             }
 
             data = data || this;
 
-            return this.constructor.adapter.save( this.url, data );
+            return this.container.lookup( 'adapter:'+this.constructor.adapter ).save( this.url, data );
         },
 
         /**
@@ -351,80 +359,21 @@ define("sl-model/model",
          * @param {integer} Record Id
          * @return {object} jqXHR from jQuery.ajax()
          */
-        destroy: function() {
+        delete: function() {
             var data;
-
+            
+            Ember.assert( 'Url must be set', this.get('url.length') );
             if ( arguments[0] ) {
                 data = arguments[0];
             }
 
             data = data || this;
-            return this.constructor.adapter.destroy( this.url, data );
+            return this.container.lookup( 'adapter:'+this.constructor.adapter ).delete( this.url, data );
         }
     });
 
     Model.reopenClass({
-        //default adapter
-        adapter: 'ajax',
-
-        /**
-         * Find One record without using an id
-         * alias to find( null, options, true )
-         *
-         * @public
-         * @method  findOne
-         * @param {object} options hash of options for find method
-         * @return {Ember.ObjectProxy}
-         */
-        findOne: function( options ) {
-            return this.__find( null, options, true );
-        },
-
-        /**
-         * Find all records for associated endpoint
-         *
-         * Example structure of the `options` parameter:
-         *
-         *   {
-         *     data : {      // url parameters
-         *       limit: 2
-         *     },
-         *     reload: true  // refresh cached data
-         *   }
-         *
-         * @public
-         * @method findAll
-         * @param {integer} id
-         * @param {object}  options
-         * @return {Ember.ArrayProxy}
-         */
-        find: function( id, options ) {
-            return this.__find( id, options, false );
-        },
-
-        /**
-         * _find protected method
-         * @param  {int}    id      record id
-         * @param  {object} options hash of options
-         * @param  {bool} findOne force return of single recrord
-         * @return { ObjectProxy | ArrayProxy } The record or array of records requested
-         */
-
-        __find: function( id, options, findOne ) {
-            return this.adapter.__find( this.url, id, options, findOne, this );
-        },
-
-        /**
-         * Delete record
-         *
-         * @public
-         * @method destroy
-         * @param {integer} Record Id
-         * @return {object} jqXHR from jQuery.ajax()
-         */
-        destroy: function( context ) {
-            return this.adapter.destroy( this.url, context );
-        }
+        adapter: "ajax"
     });
 
     __exports__["default"] = Model;
@@ -439,13 +388,6 @@ define("sl-model/store",
 
         postQueryHooks: null,
 
-        adapterFor: function( type ){
-            var adapterType = this.modelFor(type).adapter,
-                adapter = this.container.lookupFactory( 'adapter:'+adapterType );
-
-            return adapter;
-        },
-
         modelFor: function( type ){
             var normalizedKey = this.container.normalize( 'model:'+type ),
                 factory = this.container.lookupFactory( normalizedKey );
@@ -457,6 +399,13 @@ define("sl-model/store",
             return factory;
         },
 
+        adapterFor: function( type ){
+            var adapterType = this.modelFor(type).adapter,
+                adapter = this.container.lookup( 'adapter:'+adapterType );
+
+            return adapter;
+        },
+
         findOne: function( type, options ) {
             return this.__find( type, null, options, true );
         },
@@ -466,11 +415,8 @@ define("sl-model/store",
         },
 
         __find: function( type, id, options, findOne ) {
-            var factory = this.modelFor( type );
 
-            factory.reopenClass({ adapter: this.adapterFor( type ).create({container: this.container }) });
-
-            return factory.__find( id, options, findOne );
+            return this.adapterFor( type ).__find( id, options, findOne );
         },
 
         createRecord: function( type ){

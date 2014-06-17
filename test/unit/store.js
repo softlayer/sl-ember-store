@@ -6,7 +6,9 @@ chai.should();
 
 var expect = chai.expect,
     store,
+
     AjaxAdapter,
+    ajaxadapter,
     LocalstorageAdapter,
     Foo,
     Bar,
@@ -20,14 +22,23 @@ describe( 'sl-model/store', function(){
         AjaxAdapter = Ember.Object.extend({ type: 'ajax', __find: function(){} });
         LocalstorageAdapter = Ember.Object.extend({ type: 'localstorage' });
         Foo = Model.extend();
+        Foo.reopenClass({url:'/foo'});
         Bar = Model.extend();
         Bar.reopenClass({ adapter: 'localstorage' });
 
         store = Store.create({
             container: {
                 registry: [],
+                cache: {},
                 normalize: function( key ){
                     return key;
+                },
+                lookup: function( key ){
+                    if( this.cache[key] ) return this.cache[key];
+
+                    var obj = this.registry.findBy( 'key', key ).factory.create({container:this});
+                    this.cache[key] = obj;
+                    return obj;
                 },
                 lookupFactory: function( key ){
                     return this.registry.findBy( 'key', key ).factory;
@@ -55,11 +66,11 @@ describe( 'sl-model/store', function(){
 
     describe( 'adapterFor', function(){
         it( 'should return the adapter "ajax" for model type "foo"', function(){
-            expect( store.adapterFor( 'foo' ) ).to.equal( AjaxAdapter );
+            expect( store.adapterFor( 'foo' ) ).to.be.an.instanceof( AjaxAdapter );
         });
 
         it( 'should return the adapter "localstorage" for model type "bar"', function(){
-            expect( store.adapterFor( 'bar' ) ).to.equal( LocalstorageAdapter );
+            expect( store.adapterFor( 'bar' ) ).to.be.an.instanceof( LocalstorageAdapter );
         });
     });
 
@@ -85,10 +96,11 @@ describe( 'sl-model/store', function(){
 
     describe( '__find', function(){
         beforeEach( function(){
+            ajaxadapter = store.container.lookup( 'adapter:ajax');
+            ajaxadapter.__find = sinon.spy();
             sinon.spy( store, "modelFor" );
-            sinon.spy( store, "adapterFor" );        
-            sinon.spy( Foo, "setAdapter" );
-            store.__find( 'foo', 1 );
+            sinon.spy( store, "adapterFor" );
+            store.__find( 'foo', 1, {}, false );
         });
 
         it( 'should have called modelFor with the correct args', function(){
@@ -97,8 +109,8 @@ describe( 'sl-model/store', function(){
         it( 'should have called adapterFor with the correct args', function(){
             store.adapterFor.should.have.been.calledWith( 'foo' );
         });
-        it( 'should have called Model.setAdapter with the correct args', function(){
-            Foo.setAdapter.should.have.been.calledWith( AjaxAdapter, store.container );
+        it( 'should have called AjaxAdapter.__find with the correct args', function(){
+            ajaxadapter.__find.should.have.been.calledWith( Foo, 1, {}, false );
         });
     });
 
