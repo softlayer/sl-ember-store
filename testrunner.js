@@ -72,6 +72,16 @@ tree =  mergeTrees(
                                 srcDir : '/',
                                 files : [ 'sl-modelize.js' ],
                                 destDir : '/assets'
+                            } ),
+                            pickFiles( 'vendor/ic-ajax/dist/named-amd', {
+                                srcDir : '/',
+                                files : [ 'main.js' ],
+                                destDir : '/assets'
+                            } ),
+                            pickFiles( 'vendor/ember-cli-shims', {
+                                srcDir : '/',
+                                files : [ 'app-shims.js' ],
+                                destDir : '/assets'
                             } )
                         ],
                         { overwrite : true }
@@ -85,6 +95,7 @@ tree =  mergeTrees(
                             'assets/chai.js',
                             'assets/sinon-chai.js',
                             'assets/sinon.js',
+                            'assets/app-shims.js',
                             '**/*.js'
                         ],
                         outputFile : '/assets/vendor.js',
@@ -131,11 +142,19 @@ builder = new broccoli.Builder( tree );
 Watcher = require( 'broccoli/lib/watcher' );
 watcher = new Watcher( builder );
 
-testem  = new Testem();
+watcher.then( 
+    function(){
+        testem  = new Testem();
 
-testem.startDev( { 'file' : './testem.json' }, function( code ) {
-    process.exit( code );
-} );
+        testem.startDev( { 'file' : './testem.json' }, function( code ) {
+            process.exit( code );
+        } );
+    }
+    ,function( reason ){
+        console.log( 'broccoli build failed:', reason );
+        process.exit( 1 );
+    }
+);
 
 watcher.on( 'change', function() {
     testem.restart();

@@ -17,8 +17,8 @@
   "dependencies": {
     "loader.js": "~1.0.0",
     "sl-modelize": "git@gitlab.softlayer.local:mmarcum/sl-modelize.git",
-    "chai": "~1.9.1",
-    "mocha": "~1.20.1"
+    "ic-ajax": "~2.0.1",
+    "ember-cli-shims": "stefanpenner/ember-cli-shims#0.0.2"
   },
   "devDependencies": {
     "ember": "",
@@ -27,6 +27,7 @@
     "sinonjs": "~1.10.2",
     "sinon-chai": "~2.5.0",
     "mocha": "~1.20.1",
-    "chai": "~1.9.1"
+    "chai": "~1.9.1",
+    "chai-as-promised": "~4.1.1"
   }
 }
