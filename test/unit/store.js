@@ -1,7 +1,6 @@
 import Model from "sl-model";
 import Store from 'sl-model/store';
 
-
 chai.should();
 
 var expect = chai.expect,
@@ -12,7 +11,7 @@ var expect = chai.expect,
     LocalstorageAdapter,
     Foo,
     Bar,
-    queryHook = function(){ return true;};
+    queryHook = sinon.spy();
 
 
 describe( 'sl-model/store', function(){
@@ -97,7 +96,7 @@ describe( 'sl-model/store', function(){
     describe( '__find', function(){
         beforeEach( function(){
             ajaxadapter = store.container.lookup( 'adapter:ajax');
-            ajaxadapter.__find = sinon.spy();
+            ajaxadapter.find = sinon.spy();
             sinon.spy( store, "modelFor" );
             sinon.spy( store, "adapterFor" );
             store.__find( 'foo', 1, {}, false );
@@ -109,8 +108,8 @@ describe( 'sl-model/store', function(){
         it( 'should have called adapterFor with the correct args', function(){
             store.adapterFor.should.have.been.calledWith( 'foo' );
         });
-        it( 'should have called AjaxAdapter.__find with the correct args', function(){
-            ajaxadapter.__find.should.have.been.calledWith( Foo, 1, {}, false );
+        it( 'should have called AjaxAdapter.find with the correct args', function(){
+            ajaxadapter.find.should.have.been.calledWith( Foo, 1, {}, false );
         });
     });
 
@@ -133,11 +132,28 @@ describe( 'sl-model/store', function(){
     });
 
     describe( 'registerPreQueryHook', function(){
-        beforeEach( function(){
+        before( function(){
             store.registerPreQueryHook( queryHook );
+        });
+        after( function(){
+            store.preQueryHooks = Ember.A([]);
         });
         it( 'should add an entry to preQueryHooks', function(){
             expect( store.get( 'preQueryHooks' ) ).to.have.length(1);
+        });
+    });
+
+    describe( 'runPreQueryHooks', function(){
+        before( function(){
+            store.registerPreQueryHook( queryHook );
+            store.runPreQueryHooks();
+        });
+        after( function(){
+            store.preQueryHooks = Ember.A([]);
+            queryHook.reset();
+        });
+        it( 'should have run queryHook once', function(){
+            queryHook.should.have.been.calledOnce;
         });
     });
 
@@ -145,8 +161,25 @@ describe( 'sl-model/store', function(){
         beforeEach( function(){
             store.registerPostQueryHook( queryHook );
         });
+        after( function(){
+            store.postQueryHooks = Ember.A([]);
+        });
         it( 'should add an entry to postQueryHooks', function(){
             expect( store.get( 'postQueryHooks' ) ).to.have.length(1);
+        });
+    });
+
+    describe( 'runPostQueryHooks', function(){
+        before( function(){
+            store.registerPostQueryHook( queryHook );
+            store.runPostQueryHooks();
+        });
+        after( function(){
+            store.postQueryHooks = Ember.A([]);
+            queryHook.reset();
+        });
+        it( 'should have run queryHook once', function(){
+            queryHook.should.have.been.calledOnce;
         });
     });
 });

@@ -5,30 +5,29 @@ chai.should();
 
 var expect = chai.expect,
     adapter,
-    preHook = sinon.spy(function(){  }),
-    postHook =  sinon.spy(function(){  });
+    store = {
+        runPostQueryHooks: sinon.spy(),
+        runPreQueryHooks: sinon.spy()
+    };
 
 
 describe( 'sl-model/adapter', function(){
+    
     beforeEach( function(){
-        sinon.spy( postHook );
 
         adapter = Adapter.create({
             container:{
-                lookup: function(){
-                    return {
-                        get: function( type ){
-                            if( type === 'preQueryHooks' )
-                                return [ preHook ];
-                            else
-                                return [ postHook ];
-                        }
-                    };
+                lookup: function( type ){
+                    if( type === 'store:main' )
+                        return store;
+                    else
+                        Ember.Assert( 'Container could not find "'+type+'"', false);
                 }
             }
         });
         
     });
+
     after(function(){
         adapter.clearCache();
         adapter.clearRequestCache();
@@ -70,17 +69,16 @@ describe( 'sl-model/adapter', function(){
     describe( 'runPreQueryHooks', function(){
         before(function(){
             adapter.runPreQueryHooks();
-
         });
         it( 'should run the prequeryhook once', function(){
-            preHook.should.have.been.calledOnce;
+            store.runPreQueryHooks.should.have.been.calledOnce;
         });
         it( 'should not have run postqueryhook', function(){
-            postHook.should.have.callCount(0);
+            store.runPostQueryHooks.should.have.callCount(0);
         });
         after(function(){
-            preHook.reset();
-            postHook.reset();
+            store.runPreQueryHooks.reset();
+            store.runPostQueryHooks.reset();
         });
     });
     describe( 'runPostQueryHooks', function(){
@@ -88,14 +86,14 @@ describe( 'sl-model/adapter', function(){
             adapter.runPostQueryHooks();
         });
         it( 'should run the postqueryhook once', function(){
-            postHook.should.have.been.calledOnce;
+            store.runPostQueryHooks.should.have.been.calledOnce;
         });
         it( 'should not have run prequeryhook', function(){
-            preHook.should.have.callCount(0);
+            store.runPreQueryHooks.should.have.callCount(0);
         });
         after(function(){
-            preHook.reset();
-            postHook.reset();
+            store.runPreQueryHooks.reset();
+            store.runPostQueryHooks.reset();
         });
     });
 });
