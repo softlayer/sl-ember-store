@@ -58,6 +58,11 @@ tree =  mergeTrees(
                                 files : [ 'chai.js' ],
                                 destDir : '/assets'
                             } ),
+                            pickFiles( 'vendor/chai-as-promised/lib/', {
+                                srcDir : '/',
+                                files : [ 'chai-as-promised.js' ],
+                                destDir : '/assets'
+                            } ),
                             pickFiles( 'vendor/sinonjs/', {
                                 srcDir : '/',
                                 files : [ 'sinon.js' ],
@@ -92,6 +97,7 @@ tree =  mergeTrees(
                             'assets/jquery.js',
                             'assets/handlebars.js',
                             'assets/ember.js',
+                            'assets/mocha.js',
                             'assets/chai.js',
                             'assets/sinon-chai.js',
                             'assets/sinon.js',
@@ -113,7 +119,7 @@ tree =  mergeTrees(
                             moduleType : 'amd',
                             anonymous : false,
                             compatFix : true,
-                            packageName : 'interface-model-test'
+                            packageName : 'sl-model-test'
                         }
                     ),
                     {

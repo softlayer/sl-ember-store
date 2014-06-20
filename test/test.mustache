@@ -8,8 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/testem/mocha.css">
 
+    <script src="/assets/vendor.js"></script>    
     <script src="/testem.js"></script>
-    <script src="/assets/vendor.js"></script>
+
 
     <script>mocha.setup('bdd');</script>
     {{#styles}}<link rel="stylesheet" href="{{.}}">{{/styles}}
@@ -20,13 +21,9 @@
       <script src="/sl-model.js"></script>
       <script src="/test/tests.js"></script>
       <script>
-      Object.keys(require.entries).forEach(function(entry){
-        if ((/unit/).test(entry) || (/integration/).test(entry)) {
-          console.log('entry', entry);
-          require(entry, null, null, true);
-        }
-      });
-      mocha.run();
+        require( 'sl-model-test/test/integration-tests');
+        require( 'sl-model-test/test/unit-tests');             
+        mocha.run();
       </script>
   </body>
 </html>

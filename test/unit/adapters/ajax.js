@@ -21,7 +21,6 @@ var expect = chai.expect,
 describe( 'sl-model/adapter/ajax', function(){
 
     before( function( ){
-        console.log( 'setting up ajaxdapter' );
 
         ajaxdapter = Ajaxdapter.create({
             container: {
