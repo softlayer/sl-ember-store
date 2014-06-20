@@ -5,13 +5,18 @@ define("sl-model/adapter",
     var ModelizeMixin = __dependency1__["default"] || __dependency1__;
 
     __exports__["default"] = Ember.Object.extend( ModelizeMixin, {
+        init: function(){
+            this.cache = {};
+            this.requestCache = {};
+        },
+
         /**
          * Cached results
          *
          * @protected
          * @property {object} cache
          */
-        cache: {},
+        cache: null,
 
         /**
          * Cache in flight GET requests by URL
@@ -20,7 +25,7 @@ define("sl-model/adapter",
          * @protected
          * @property {object} requestCache
          */
-        requestCache: {},
+        requestCache: null,
 
          /**
          * Add payload to cache
@@ -60,6 +65,44 @@ define("sl-model/adapter",
             this.cache = {};
         },
 
+         /**
+         * Add request to requestCache
+         *
+         * @protected
+         * @method addToCache
+         * @param {string} API url being requested
+         * @param {array}  API url parameters
+         * @param {object} Promise to cache
+         * @return void
+         */
+        addToRequestCache: function( url, parameters, promise ) {
+            this.requestCache[ this.generateCacheKey( url, parameters ) ] = promise;
+        },
+
+        /**
+         * Remove request from requestCache
+         *
+         * @protected
+         * @method removeFromCache
+         * @param {string} API url being requested
+         * @param {array}  API url parameters
+         * @return void
+         */
+        removeFromRequestCache: function( url, parameters ) {
+            delete( this.requestCache[ this.generateCacheKey( url, parameters ) ] );
+        },
+
+        /**
+         * Clear all requestCache values
+         *
+         * @public
+         * @method clearRequestCache
+         * @return void
+         */
+        clearRequestCache: function() {
+            this.requestCache = {};
+        },
+
         /**
          * Generate cache key
          *
@@ -79,7 +122,7 @@ define("sl-model/adapter",
          */
 
         runPreQueryHooks: function(){
-            this.get( 'container' ).lookup( 'store:main' ).get( 'preQueryHooks').forEach( function( f ){ f(); } );
+            this.get( 'container' ).lookup( 'store:main' ).runPreQueryHooks();
         },
 
         /**
@@ -88,7 +131,7 @@ define("sl-model/adapter",
          */
 
         runPostQueryHooks: function(){
-            this.get( 'container' ).lookup( 'store:main' ).get( 'postQueryHooks').forEach( function( f ){ f(); } );
+            this.get( 'container' ).lookup( 'store:main' ).runPostQueryHooks();
         },
 
         __find: function(){
@@ -97,10 +140,11 @@ define("sl-model/adapter",
     });
   });
 define("sl-model/adapters/ajax",
-  ["../adapter","exports"],
-  function(__dependency1__, __exports__) {
+  ["../adapter","ic-ajax","exports"],
+  function(__dependency1__, __dependency2__, __exports__) {
     "use strict";
     var Adapter = __dependency1__["default"] || __dependency1__;
+    var icAjax = __dependency2__;
 
     __exports__["default"] = Adapter.extend({
 
@@ -112,17 +156,28 @@ define("sl-model/adapters/ajax",
          * @param  {bool} findOne force return of single recrord
          * @return { ObjectProxy | ArrayProxy } The record or array of records requested
          */
-        __find: function ( url, id, options, findOne, type ){
+        find: function ( model, id, options, findOne ){
+
+            var url = model.url,
+                cacheKey,
+                cachedModel,
+                results,
+                cachedRequest,
+                promise,
+                initialObj = {};
 
             Ember.assert('A url is required to find a model', url);
 
             options = options || {};
 
             if ( 'object' === typeof id  && null !== id ) {
+                //assume a valid options.data object was passed in as second arg
                 options = id;
-            } else if ( undefined !== id ) {
+                initialObj.id = id;
+            } else if ( ! Ember.isNone( id ) ) {
                 options.data    = options.data || {};
                 options.data.id = parseInt( id, 10 );
+                initialObj.id = id;
             }
 
             // Clear previously-cached data
@@ -130,83 +185,93 @@ define("sl-model/adapters/ajax",
                 this.removeFromCache( url, options.data );
             }
 
-            // Return previously-retrieved data if exist
-            var cacheKey = this.generateCacheKey( url, options.data ),
-                cachedModel = this.cache[cacheKey];
 
+            //set up the results, either an object or an array proxy w/ promise mixin
+            results     = ( ( options.data && options.data.id  ) || findOne ) ?
+                model.createWithMixins( Ember.PromiseProxyMixin, initialObj ) :
+                Ember.ArrayProxy.createWithMixins( Ember.PromiseProxyMixin );        
+
+            //get cached model, if any
+            cacheKey = this.generateCacheKey( url, options.data );
+            cachedModel = this.cache[cacheKey];
+
+            //return the cachedModel if possible
             if ( !options.reload && cachedModel ) {
-                Ember.run.once( this, function() {
-                    cachedModel.trigger( 'isLoaded' );
-                });
-                return cachedModel;
+
+                results.set( 'promise', new Promise( function( resolve ){
+                        resolve( cachedModel );
+                    }) 
+                );
+       
+                return results;
             }
 
-            var results     = ( ( options.data && options.data.id  ) || findOne ) ?
-                Ember.ObjectProxy.createWithMixins( Ember.Evented, { content: null } ) :
-                Ember.ArrayProxy.createWithMixins( Ember.Evented, { content: Em.A([]) } ),
-                _parameters = options.data;
+            //check to see if there is an outstanding cachedRequest
+            cachedRequest = this.requestCache[cacheKey];
 
-
-            var cachedRequest = this.requestCache[cacheKey];
+            // Responding with in flight promise if possible
             if ( cachedRequest ) {
-                // Responding with in flight promise
-                return cachedRequest;
+                results.set( 'promise', cachedRequest );
+                return results;
             }
-
-            $.ajax({
+     
+            promise = icAjax.request({
                 dataType : 'json',
                 url      : url,
                 data     : options.data,
                 context  : this
+            }).then(
+                function ajaxAdapterFindResponse ( response ) {
+                    var tmpResult;
 
-            }).done(
-                function ( response ) {
+                    //run the modelize mixin to map keys to models
                     response = this.modelize( response );
-                    if ( results instanceof Ember.ArrayProxy ) {
-                        Ember.makeArray( response ).forEach( function ( child ) {
-                            results.pushObject( type.create( child ) );
-                        }, this );
 
-                    } else {
-                        results.set( 'content', type.create( response ) );
+                    if ( results instanceof Ember.ArrayProxy ) {
+                        tmpResult = Ember.A([]);
+                        Ember.makeArray( response ).forEach( function ( child ) {
+                            tmpResult.pushObject( model.create( child ) );
+                        }, this );
+                    }else{
+                        tmpResult = response;
                     }
 
                     // Cache the results
-                    this.addToCache( url, _parameters, results );
+                    this.addToCache( url, options.data, tmpResult );
 
-                    results.set( 'isLoaded', true );
-                    results.trigger( 'isLoaded' );
-                }
-            )
+                    return tmpResult;
 
-            .fail( function( jqxhr, textStatus, error ) {
+                }.bind( this ) , null, 'sl-model.ajaxAdapter:find - then' )
+
+            .catch( function ajaxAdapterFindCatch( response ) {
                 var errorData = {
-                    'statusCode' : jqxhr.status,
-                    'statusText' : jqxhr.statusText,
-                    'message'    : jqxhr.responseJSON && jqxhr.responseJSON.error || "Service Unavailable"
+                    'statusCode' : response.status,
+                    'statusText' : response.statusText,
+                    'message'    : response.responseJSON && response.responseJSON.error || "Service Unavailable"
                 };
 
-                results.error = errorData;
-                results.set( 'isError', true );
-                results.trigger( 'isError', errorData );
-            })
+                return errorData;
 
-            .always( function( jqxhr ) {
+            }.bind( this ), 'sl-model.ajaxAdapter:find - catch' )
+
+            .finally( function ajaxAdapaterFindFinally( response ) {
                 // Clearing request cache since it is no longer in flight
-                delete this.requestCache[cacheKey];
-                this.runPostQueryHooks( jqxhr.status );
-            });
+                this.removeFromRequestCache( url, options.data );
 
-            // Preset the id, if one was used for the find, to support things like serialize on the route
-            if ( options.data && options.data.id ) {
-                results.set( 'id', options.data.id );
-            }
+                //run post query hooks
+                this.runPostQueryHooks( response );
+
+            }.bind( this ), 'sl-model.ajaxAdapter:find - finally');
+
+            //set the promise on the promiseProxy
+            results.set( 'promise', promise );
 
             // Cache request object.  Other GET requests for the same URL will receive this
             // response promise while the request remains in flight.  This will prevent us
             // from having multiple simultaneous requests for the same endpoint in flight
             // at the same time
-            this.requestCache[cacheKey] = results;
+            this.addToRequestCache( url, options.data, promise );
+
             return results;
         },
 
@@ -222,15 +287,15 @@ define("sl-model/adapters/ajax",
 
             Ember.assert('A url is required to destroy a model', url);
 
-            return $.ajax({
+            return icAjax.request({
                 url  : url,
                 type : 'DELETE',
                 data : JSON.stringify({ id: context.get( 'id' ) }),
                 context: this
             })
-            .always( function( jqxhr ) {
-                this.runPostQueryHooks( jqxhr.status );
-            });
+            .finally( function ajaxAdapterDeleteFinally( response ) {
+                this.runPostQueryHooks( response );
+            }.bind( this ) , 'sl-model.ajaxAdapter:delete - always ');
         },
 
         /**
@@ -244,21 +309,26 @@ define("sl-model/adapters/ajax",
          * @publishes saving-/api/orders-error
          * @return void
          */
-         save: function( url, context ) {
+         save: function( url, content ) {
+            var promise,
+                result;
+
             Ember.assert('A url property is required to save a model', url);
 
-            var defer  = Ember.Deferred.create();
-
-            $.ajax({
+            promise = icAjax.request({
                 url  : url,
                 type : 'POST',
-                data : JSON.stringify( context ),
+                data : JSON.stringify( content ),
                 context : this
             })
-            .done( function ( response ) {
-                defer.resolve( response );
-            })
-            .fail( function( jqxhr, textStatus, error ) {
+            
+            .then( function ajaxAdapterSaveResponse( response ) {
+                //run the modelize mixin to map keys to models
+                return this.modelize( response );
+
+            }.bind( this ), null, 'sl-model:save - then' )
+
+            .catch( function ajaxAdapterSaveCatch( jqxhr, textStatus, error ) {
                 var errorData = {
                     'statusCode' : jqxhr.status,
                     'statusText' : jqxhr.statusText,
@@ -266,13 +336,18 @@ define("sl-model/adapters/ajax",
                     'details'    : jqxhr.responseJSON && jqxhr.responseJSON.details || "Service Unavailable"
                 };
 
-                defer.reject( errorData );
-            })
-            .always( function( jqxhr ) {
-                this.runPostQueryHooks( jqxhr.status );
-            });
+                return errorData;
 
-            return defer;
+            }.bind( this ), 'sl-model:save - catch' )
+            
+            .finally( function ajaxAdapterSaveFinally( response ) {
+                this.runPostQueryHooks( response );
+
+            }.bind( this ), 'sl-model.ajaxAdapter:save - finally' );
+
+
+            return promise;
+
          }
     });
   });
@@ -328,9 +403,11 @@ define("sl-model/model",
   ["exports"],
   function(__exports__) {
     "use strict";
-    var Model =  Ember.Object.extend({
+    var Model =  Ember.ObjectProxy.extend({
 
         url: '',
+
+        container: null,
 
          /**
          * Proxy the current instance to the class save method
@@ -339,16 +416,17 @@ define("sl-model/model",
          * @method save
          */
         save: function() {
-            var data;
+            var data,
+                promise;
 
-            Ember.assert( 'Url must be set', this.get('url.length') );
-            if ( arguments[0] ) {
-                data = arguments[0];
-            }
+            Ember.assert( 'Url must be set on '+this.toString()+' before save.', this.constructor.url );
 
-            data = data || this;
+            data = this.get( 'content' );
 
-            return this.container.lookup( 'adapter:'+this.constructor.adapter ).save( this.url, data );
+            return this.container.lookup( 'adapter:'+this.constructor.adapter ).save( this.constructor.url, data )
+                .then( function( response ){
+                    this.set( 'content', response );
+                }.bind( this ), null, 'sl-model.model:save');
         },
 
         /**
@@ -362,13 +440,14 @@ define("sl-model/model",
         delete: function() {
             var data;
             
-            Ember.assert( 'Url must be set', this.get('url.length') );
-            if ( arguments[0] ) {
-                data = arguments[0];
-            }
+            Ember.assert( 'Url must be set on '+this.toString()+' before delete.', this.constructor.url);
+            
+            data = this.get( 'content' ) || this;
 
-            data = data || this;
-            return this.container.lookup( 'adapter:'+this.constructor.adapter ).delete( this.url, data );
+            return this.container.lookup( 'adapter:'+this.constructor.adapter ).delete( this.constructor.url, data )
+                .then( function( response ){
+                    this.destroy();
+                }.bind( this ), null, 'sl-model.model:delet' );
         }
     });
 
@@ -384,9 +463,9 @@ define("sl-model/store",
     "use strict";
     __exports__["default"] = Ember.Object.extend({
 
-        preQueryHooks: null,
+        preQueryHooks: Ember.A([]),
 
-        postQueryHooks: null,
+        postQueryHooks: Ember.A([]),
 
         modelFor: function( type ){
             var normalizedKey = this.container.normalize( 'model:'+type ),
@@ -415,31 +494,37 @@ define("sl-model/store",
         },
 
         __find: function( type, id, options, findOne ) {
-
-            return this.adapterFor( type ).__find( id, options, findOne );
+            var model = this.modelFor( type );
+            return this.adapterFor( type ).find( model, id, options, findOne );
         },
 
         createRecord: function( type ){
             var factory = this.modelFor( type );
-            return factory.create( { container: this.container } );
+            return factory.create( { 
+                    container: this.container 
+                }); 
         },
 
         registerPreQueryHook: function( f ){
+            this.get( 'preQueryHooks' ).push( f );
+        },
+
+        runPreQueryHooks: function(){
             var preQueryHooks = this.get( 'preQueryHooks' );
-            if( ! preQueryHooks ){
-                this.set( 'preQueryHooks', [] );
-                preQueryHooks = this.get( 'preQueryHooks' );
+            if( Ember.isArray( preQueryHooks ) ){
+                preQueryHooks.forEach( function( f ){ f(); } );
             }
-            preQueryHooks.push( f );
         },
 
         registerPostQueryHook: function( f ){
+            this.get( 'postQueryHooks' ).push( f );
+        },
+
+        runPostQueryHooks: function(){
             var postQueryHooks = this.get( 'postQueryHooks' );
-            if( ! postQueryHooks ){
-                this.set( 'postQueryHooks', [] );
-                postQueryHooks = this.get( 'postQueryHooks' );
+            if( Ember.isArray( postQueryHooks ) ){
+                postQueryHooks.forEach( function( f ){ f(); } );
             }
-            postQueryHooks.push( f );
-        }
+        },
     });
   });
