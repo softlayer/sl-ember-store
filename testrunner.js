@@ -48,6 +48,11 @@ tree =  mergeTrees(
                                 files : [ 'ember-resolver.js' ],
                                 destDir : '/assets'
                             } ),
+                            pickFiles( 'vendor/ember-load-initializers/', {
+                                srcDir : '/',
+                                files : [ 'ember-load-initializers.js' ],
+                                destDir : '/assets'
+                            } ),
                             pickFiles( 'vendor/mocha/', {
                                 srcDir : '/',
                                 files : [ 'mocha.js' ],
@@ -87,6 +92,11 @@ tree =  mergeTrees(
                                 srcDir : '/',
                                 files : [ 'app-shims.js' ],
                                 destDir : '/assets'
+                            } ),
+                            pickFiles( 'vendor/ember-mocha-adapter', {
+                                srcDir : '/',
+                                files : [ 'adapter.js' ],
+                                destDir : '/assets'
                             } )
                         ],
                         { overwrite : true }
@@ -97,11 +107,15 @@ tree =  mergeTrees(
                             'assets/jquery.js',
                             'assets/handlebars.js',
                             'assets/ember.js',
+                            'assets/app-shims.js',
+                            'assets/ember-resolver.js',
+                            'assets/ember-load-initializers.js',                            
                             'assets/mocha.js',
                             'assets/chai.js',
                             'assets/sinon-chai.js',
                             'assets/sinon.js',
                             'assets/app-shims.js',
+                            'assets/adapter.js',
                             '**/*.js'
                         ],
                         outputFile : '/assets/vendor.js',
@@ -155,8 +169,8 @@ watcher.then(
         testem.startDev( { 'file' : './testem.json' }, function( code ) {
             process.exit( code );
         } );
-    }
-    ,function( reason ){
+    },
+    function( reason ){
         console.log( 'broccoli build failed:', reason );
         process.exit( 1 );
     }
