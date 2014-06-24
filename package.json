@@ -4,8 +4,8 @@
   "description": "",
   "main": "lib/sl-model.js",
   "scripts": {
-    "test": "",
-    "release": ""
+    "test": "./testrunner.js",
+    "release": "rm -rf dist;broccoli build dist;"
   },
   "repository": {
     "type": "git",
