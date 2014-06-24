@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@gitlab.softlayer.local:mmarcum/sl-model.git"
+    "url": "git@gitlab.softlayer.local:interface/sl-model.git"
   },
   "keywords": [],
   "author": "Matt Marcum",
