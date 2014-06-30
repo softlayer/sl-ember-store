@@ -7,7 +7,7 @@ In order to use this just include this package in your bower.json like so:
 ```javascript
 {
     dependencies: {
-        "interface-model": "git@gitlab.softlayer.local:mmarcum/interface-model.git#v0.1.0"
+        "interface-model": "git@gitlab.softlayer.local:interface/sl-model.git#v0.1.1"
     }
 }
 ```
@@ -15,7 +15,7 @@ In order to use this just include this package in your bower.json like so:
 And then be sure and initialize it before your app in app.js:
 
 ```javascript
-loadInitializers(App, 'interface-model');
+loadInitializers(App, 'sl-model');
 ```
 
 You may want to set up some pre/post query hooks that run after every query.  If so just create an initializer in your apps initializers folder:
@@ -41,7 +41,26 @@ export default {
 };
 ```
 
+To add a model to your project, first create a new model in your models/ folder:
 
+$touch models/foo.js
+
+Add inside that file:
+
+```javascript
+
+import SlModel from 'sl-model'
+
+var Foo = SlModel.extend({ });
+
+Foo.reopenClass({
+    endpoints: {
+        default: '/foo'
+    }
+});
+
+export default Foo;
+```
 
 
 
