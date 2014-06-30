@@ -4,12 +4,12 @@
   "description": "",
   "main": "lib/sl-model.js",
   "scripts": {
-    "test": "",
-    "release": ""
+    "test": "./testrunner.js",
+    "release": "rm -rf dist;broccoli build dist;"
   },
   "repository": {
     "type": "git",
-    "url": "git@gitlab.softlayer.local:mmarcum/sl-model.git"
+    "url": "git@gitlab.softlayer.local:interface/sl-model.git"
   },
   "keywords": [],
   "author": "Matt Marcum",
