@@ -11,7 +11,7 @@ var expect = chai.expect,
     AppClass,
     App,
     initializerSpy,
-    container, 
+    container,
     store,
     Foo,
     fooResponse,
@@ -37,18 +37,18 @@ loadInitializers( App, 'sl-model' );
 
 
 //set up models
-define('SlModelTest/models/foo', [ ] , function(){  
-    Foo = SlModel.extend(); 
+define('SlModelTest/models/foo', [ ] , function(){
+    Foo = SlModel.extend();
     Foo.reopenClass({ url: '/foo' });
     return Foo;
 });
-define('SlModelTest/models/bar', [ ] , function(){  
-    Bar = SlModel.extend(); 
+define('SlModelTest/models/bar', [ ] , function(){
+    Bar = SlModel.extend();
     Bar.reopenClass({ url: '/bar' });
     return Bar;
 });
-define('SlModelTest/models/car', [ ] , function(){  
-    Car = SlModel.extend(); 
+define('SlModelTest/models/car', [ ] , function(){
+    Car = SlModel.extend();
     Car.reopenClass({ url: '/car' });
     return Car;
 });
@@ -77,7 +77,7 @@ defineFixture( '/car', {
 
 
 
-describe.only( 'sl-model:', function(){
+describe( 'sl-model:', function(){
     beforeEach(function(done){
         //set up ember app
         visit( '/' ).then(function(){
@@ -86,7 +86,7 @@ describe.only( 'sl-model:', function(){
             done();
         });
     });
-    
+
     afterEach( function(){
         App.reset();
     });
@@ -157,6 +157,6 @@ describe.only( 'sl-model:', function(){
         },function(err){
             done(err);
         });
-    });    
+    });
 
 });
