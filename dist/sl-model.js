@@ -172,7 +172,7 @@ define("sl-model/adapters/ajax",
 
             options = options || {};
 
-            url = model.getEndpointForAction( options.endpoint, 'get' );
+            url = model.getUrlForEndpointAction( options.endpoint, 'get' );
 
             Ember.assert('A url is required to find a model', url);
 
@@ -230,28 +230,37 @@ define("sl-model/adapters/ajax",
 
             this.runPreQueryHooks( queryObj );
 
-            promise = icAjax.request( queryObj ).then(
-                function ajaxAdapterFindResponse ( response ) {
-                    var tmpResult;
+            promise = icAjax.request( queryObj )
 
-                    //run the modelize mixin to map keys to models
-                    response = this.modelize( response );
+            .then( function ajaxAdapterFindTransformResponse( response ){
 
-                    if ( results instanceof Ember.ArrayProxy ) {
-                        tmpResult = Ember.A([]);
-                        Ember.makeArray( response ).forEach( function ( child ) {
-                            tmpResult.pushObject( model.create( child ) );
-                        }, this );
-                    }else{
-                        tmpResult = response;
-                    }
+                var serializer = model.getSerializerForEndpointAction( options.endpoint, 'get' );
 
-                    // Cache the results
-                    this.addToCache( url, options.data, tmpResult );
+                return serializer( response, results );
 
-                    return tmpResult;
+            }.bind( this ) )
 
-                }.bind( this ) , null, 'sl-model.ajaxAdapter:find - then' )
+            .then( function ajaxAdapterFindResponse ( response ) {
+                var tmpResult;
+
+                //run the modelize mixin to map keys to models
+                response = this.modelize( response );
+
+                if ( results instanceof Ember.ArrayProxy ) {
+                    tmpResult = Ember.A([]);
+                    Ember.makeArray( response ).forEach( function ( child ) {
+                        tmpResult.pushObject( model.create( child ) );
+                    }, this );
+                }else{
+                    tmpResult = response;
+                }
+
+                // Cache the results
+                this.addToCache( url, options.data, tmpResult );
+
+                return tmpResult;
+
+            }.bind( this ) , null, 'sl-model.ajaxAdapter:find - then' )
 
             .catch( function ajaxAdapterFindCatch( response ) {
                 var errorData = {
@@ -480,10 +489,37 @@ define("sl-model/model",
         //set default adapter
         adapter: "ajax",
 
-        getEndpointForAction: function( endpoint, action ) {
-            endpoint = endpoint || 'default';
+        getUrlForEndpointAction: function( endpoint, action ) {
+            var resolvedEndpoint,
+                testEndpoint;
 
-            return get( this, 'endpoints.'+endpoint+'.'+action ) || get( this, 'url' );
+            endpoint = endpoint || 'default';
+            testEndpoint = get( this, 'endpoints.'+endpoint+'.'+action );
+
+            if( testEndpoint === 'string' ){
+                resolvedEndpoint = get( this, testEndpoint ) || get( this, 'url' );
+            } else {
+                resolvedEndpoint = get( this, testEndpoint+'.url' ) || get( this, 'url' );
+            }
+
+            return resolvedEndpoint;
+        },
+
+        getSerializerForEndpointAction: function( endpoint, action ) {
+            var resolvedSerializer,
+                testEndpoint,
+                passThroughSerializer = function( response ){ return response; };
+
+            endpoint = endpoint || 'default';
+            testEndpoint = get( this, 'endpoints.'+endpoint+'.'+action );
+
+            if( testEndpoint === 'string' ){
+                resolvedSerializer = passThroughSerializer;
+            } else {
+                resolvedSerializer = get( this, testEndpoint+'.serializer' ) || passThroughSerializer;
+            }
+
+            return resolvedSerializer;
         }
 
     });
