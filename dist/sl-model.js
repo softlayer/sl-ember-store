@@ -236,7 +236,7 @@ define("sl-model/adapters/ajax",
 
                 var serializer = model.getSerializerForEndpointAction( options.endpoint, 'get' );
 
-                return serializer( response, results );
+                return serializer( response, this.container.lookup( 'store:main' ) );
 
             }.bind( this ) )
 
@@ -508,15 +508,17 @@ define("sl-model/model",
         getSerializerForEndpointAction: function( endpoint, action ) {
             var resolvedSerializer,
                 testEndpoint,
+                defaultSerializer,
                 passThroughSerializer = function( response ){ return response; };
 
             endpoint = endpoint || 'default';
             testEndpoint = get( this, 'endpoints.'+endpoint+'.'+action );
+            defaultSerializer = get( this, 'endpoints.default.'+action+'.serializer' );
 
             if( testEndpoint === 'string' ){
-                resolvedSerializer = passThroughSerializer;
+                resolvedSerializer = defaultSerializer || passThroughSerializer;
             } else {
-                resolvedSerializer = get( testEndpoint, 'serializer' ) || passThroughSerializer;
+                resolvedSerializer = get( testEndpoint, 'serializer' ) || defaultSerializer || passThroughSerializer;
             }
 
             return resolvedSerializer;
@@ -533,7 +535,7 @@ define("sl-model/store",
     /**
      * SL-Model/Store
      *
-     * 
+     *
      * @class sl-model/store
      */
 
@@ -555,7 +557,7 @@ define("sl-model/store",
          * modelFor returns the model class for a given model type
          * @param  {string} type - lower case name of the model class
          * @return {function} - model constructor
-         */     
+         */
         modelFor: function( type ){
             var normalizedKey = this.container.normalize( 'model:'+type ),
                 factory = this.container.lookupFactory( normalizedKey );
@@ -565,6 +567,30 @@ define("sl-model/store",
             }
 
             return factory;
+        },
+
+        /**
+         * private variable that store all the metadata for all the models
+         * @type {Object}
+         */
+        _metadataCache: {},
+
+        /**
+         * metaForType sets the metadata object for the specified model type
+         * @param  {string} type the lowercase model name
+         * @param  {object} metadata the metadata to save
+         */
+        metaForType: function( type, metadata ){
+            this.set( '_metadataCache.'+type, metadata );
+        },
+
+        /**
+         * metadataFor returns the metadata object for the specified model type
+         * @param  {string} type lower case model name
+         * @return {object}      the metadata object that was saved with metaForType
+         */
+        metadataFor: function( type ){
+            return this.get( '_metadataCache.'+type );
         },
 
         /**
@@ -592,7 +618,7 @@ define("sl-model/store",
         /**
          * find a/an record(s) using an id or options
          * @param  {string} type    lower case name of the model class
-         * @param  {int} id      
+         * @param  {int} id
          * @param  {object} options hash of options to be passed on to the adapter
          * @return {object / array}         an object or an array depending on whether you specified an id
          */
@@ -606,28 +632,28 @@ define("sl-model/store",
         },
 
         /**
-         * create a new record, it will not have been saved via an adapter yet  
+         * create a new record, it will not have been saved via an adapter yet
          * @param  {string} type lower case name of model class
          * @return {object}      model object, instance of Ember.ObjectProxy
          */
         createRecord: function( type ){
             var factory = this.modelFor( type );
-            return factory.create( { 
-                    container: this.container 
-                }); 
+            return factory.create( {
+                    container: this.container
+                });
         },
 
         /**
          * registerPreQueryHook add a function to ther prequery hooks array
          * @param  {function} f a function
-         * 
+         *
          */
         registerPreQueryHook: function( f ){
             this.get( 'preQueryHooks' ).push( f );
         },
 
         /**
-         * runPreQueryHooks 
+         * runPreQueryHooks
          * @param  {[type]} query [description]
          * @return {[type]}       [description]
          */
