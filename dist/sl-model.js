@@ -497,9 +497,9 @@ define("sl-model/model",
             testEndpoint = get( this, 'endpoints.'+endpoint+'.'+action );
 
             if( testEndpoint === 'string' ){
-                resolvedEndpoint = get( this, testEndpoint ) || get( this, 'url' );
+                resolvedEndpoint = testEndpoint;
             } else {
-                resolvedEndpoint = get( this, testEndpoint+'.url' ) || get( this, 'url' );
+                resolvedEndpoint = get( testEndpoint, 'url' ) || get( this, 'url' );
             }
 
             return resolvedEndpoint;
@@ -516,7 +516,7 @@ define("sl-model/model",
             if( testEndpoint === 'string' ){
                 resolvedSerializer = passThroughSerializer;
             } else {
-                resolvedSerializer = get( this, testEndpoint+'.serializer' ) || passThroughSerializer;
+                resolvedSerializer = get( testEndpoint, 'serializer' ) || passThroughSerializer;
             }
 
             return resolvedSerializer;
