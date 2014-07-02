@@ -4,6 +4,12 @@ define("sl-model/adapter",
     "use strict";
     var ModelizeMixin = __dependency1__["default"] || __dependency1__;
 
+    /**
+     * SL-Model/adapter
+     *
+     *
+     * @class adapter
+     */
     __exports__["default"] = Ember.Object.extend( ModelizeMixin, {
         init: function(){
             this.cache = {};
@@ -106,7 +112,7 @@ define("sl-model/adapter",
         /**
          * Generate cache key
          *
-         * @protected
+         * @public
          * @method generateCacheKey
          * @param {string} API url being requested
          * @param {array}  API url parameters
@@ -116,26 +122,31 @@ define("sl-model/adapter",
             return url + ( JSON.stringify( parameters ) || '' );
         },
 
-        /**
-         * Run pre-query hooks
-         *
-         */
 
+        /**
+         * Run Pre Query Hooks
+         * @public
+         * @method runPreQueryHooks
+         * @param  {object} query an object containing data about the query to be run
+         */
         runPreQueryHooks: function( query ){
             this.get( 'container' ).lookup( 'store:main' ).runPreQueryHooks( query );
         },
 
         /**
-         * Run after-query hooks
-         *
+         * Run Post Query Hooks
+         * @public
+         * @method runPostQueryHooks
+         * @param  {object} response an object containing the reponse data
          */
-
         runPostQueryHooks: function( response ){
             this.get( 'container' ).lookup( 'store:main' ).runPostQueryHooks( response );
         },
 
         /**
-         * place holder, to be overridden by subclass
+         * find place holder function - to be overwritten by child classes
+         * @public
+         * @method  find
          */
         find: function(){
             Ember.assert( 'Your model should overwrite adapterType', true);
@@ -149,11 +160,19 @@ define("sl-model/adapters/ajax",
     var Adapter = __dependency1__["default"] || __dependency1__;
     var icAjax = __dependency2__;
 
+    /**
+     * SL-Model/adapters/ajas
+     *
+     *
+     * @class adapters_ajax
+     */
     __exports__["default"] = Adapter.extend({
 
 
         /**
          * find
+         * @public
+         * @method find
          * @param  {int}    id      record id
          * @param  {object} options hash of options
          * @param  {bool} findOne force return of single recrord
@@ -300,7 +319,7 @@ define("sl-model/adapters/ajax",
          * @public
          * @method destroy
          * @param {integer} Record Id
-         * @return {object} jqXHR from jQuery.ajax()
+         * @return {object} Promise
          */
         delete: function( url, context ) {
 
@@ -324,9 +343,7 @@ define("sl-model/adapters/ajax",
          * @method save
          * @param url
          * @param context
-         * @publishes saving-/api/orders-success
-         * @publishes saving-/api/orders-error
-         * @return void
+         * @return {object} Promise
          */
          save: function( url, content ) {
             var promise,
@@ -376,32 +393,41 @@ define("sl-model/adapters/localstorage",
     "use strict";
     var Adapter = __dependency1__["default"] || __dependency1__;
 
+    /**
+     * SL-Model/adapters/localstorage
+     *
+     *
+     * @class adapters_localstorage
+     */
     __exports__["default"] = Adapter.extend({
 
     });
   });
 define("sl-model/initializers/main",
-  ["../store","../adapter","../adapters/ajax","../adapters/localstorage","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
+  ["sl-model","exports"],
+  function(__dependency1__, __exports__) {
     "use strict";
-    var Store = __dependency1__["default"] || __dependency1__;
-    var Adapter = __dependency2__["default"] || __dependency2__;
-    var AjaxAdapter = __dependency3__["default"] || __dependency3__;
-    var LocalAdapter = __dependency4__["default"] || __dependency4__;
+    var SlModel = __dependency1__;
 
+    /**
+     * SL-Model/initializers/main
+     *
+     *
+     * @class initializers_main
+     */
     __exports__["default"] = {
 
         name: 'sl-model',
 
         initialize: function ( container, application ) {
 
-            container.register('store:main', Store );
+            container.register('store:main', SlModel.Store );
 
-            container.register('adapter:default', Adapter );
+            container.register('adapter:default', SlModel.Adapter );
 
-            container.register('adapter:ajax', AjaxAdapter );
+            container.register('adapter:ajax', SlModel.AjaxAdapter );
 
-            container.register('adapter:localstorage', LocalAdapter );
+            container.register('adapter:localstorage', SlModel.LocalstorageAdapter );
 
             application.inject('controller', 'store', 'store:main');
 
@@ -411,12 +437,36 @@ define("sl-model/initializers/main",
     };
   });
 define("sl-model",
-  ["./model","exports"],
-  function(__dependency1__, __exports__) {
+  ["./model","./store","./adapter","./adapters/ajax","./adapters/localstorage","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __exports__) {
     "use strict";
     var Model = __dependency1__["default"] || __dependency1__;
+    var Store = __dependency2__["default"] || __dependency2__;
+    var Adapter = __dependency3__["default"] || __dependency3__;
+    var AjaxAdapter = __dependency4__["default"] || __dependency4__;
+    var LocalstorageAdapter = __dependency5__["default"] || __dependency5__;
 
-    __exports__["default"] = Model;
+
+    /**
+     * SL-Model exports sl-model/model as its default export.
+     *
+     * This allows you to do:
+     *
+     * ```javascript
+     * import SlModel from 'sl-model'
+     *
+     * export default SlModel.extend({})
+     *```
+     * In your model files.
+     *
+     * @class sl-model
+     */
+    __exports__.Model = Model;
+    __exports__.Model = Model;
+    __exports__.Store = Store;
+    __exports__.Adapter = Adapter;
+    __exports__.AjaxAdapter = AjaxAdapter;
+    __exports__.LocalstorageAdapter = LocalstorageAdapter;
   });
 define("sl-model/model",
   ["ember","exports"],
@@ -426,6 +476,12 @@ define("sl-model/model",
 
     var get = Ember.get;
 
+    /**
+     * SL-Model/Model
+     *
+     *
+     * @class model
+     */
     var Model =  Ember.ObjectProxy.extend({
 
         url: '',
@@ -444,7 +500,7 @@ define("sl-model/model",
 
             options = options || {};
 
-            endpoint  = this.constructor.getEndpointForAction( options.endpoint, 'post' );
+            endpoint  = this.constructor.getUrlForEndpointAction( options.endpoint, 'post' );
 
             data = this.get( 'content' );
 
@@ -473,7 +529,7 @@ define("sl-model/model",
 
             data = this.get( 'content' ) || this;
 
-            endpoint  = this.constructor.getEndpointForAction( options.endpoint, 'delete' );
+            endpoint  = this.constructor.getUrlForEndpointAction( options.endpoint, 'delete' );
 
             Ember.assert( 'Enpoint must be configure on '+this.toString()+' before delete.', endpoint );
 
@@ -494,7 +550,7 @@ define("sl-model/model",
                 testEndpoint;
 
             endpoint = endpoint || 'default';
-            testEndpoint = get( this, 'endpoints.'+endpoint+'.'+action );
+            testEndpoint = get( this, 'endpoints.'+endpoint+'.'+action ) || {};
 
             if( typeof testEndpoint === 'string' ){
                 resolvedEndpoint = testEndpoint;
@@ -512,7 +568,7 @@ define("sl-model/model",
                 passThroughSerializer = function( response ){ return response; };
 
             endpoint = endpoint || 'default';
-            testEndpoint = get( this, 'endpoints.'+endpoint+'.'+action );
+            testEndpoint = get( this, 'endpoints.'+endpoint+'.'+action ) || {};
             defaultSerializer = get( this, 'endpoints.default.'+action+'.serializer' );
 
             if( testEndpoint === 'string' ){
@@ -529,54 +585,66 @@ define("sl-model/model",
     __exports__["default"] = Model;
   });
 define("sl-model/store",
-  ["exports"],
-  function(__exports__) {
+  ["ember","exports"],
+  function(__dependency1__, __exports__) {
     "use strict";
+    var Ember = __dependency1__["default"] || __dependency1__;
+
     /**
      * SL-Model/Store
      *
      *
-     * @class sl-model/store
+     * @class store
      */
-
     __exports__["default"] = Ember.Object.extend({
 
         /**
          * preQueryHooks is an array of functions to be run before an adapter runs a query
-         * @type {array}
+         *
+         * @property preQueryHooks
+         * @type {Array}
          */
         preQueryHooks: Ember.A([]),
 
         /**
          * postQueryHooks is an array of functions to be run after an adapter runs a query
-         * @type {array}
+         *
+         * @property postQueryHooks
+         * @type {Array}
          */
         postQueryHooks: Ember.A([]),
 
         /**
          * modelFor returns the model class for a given model type
-         * @param  {string} type - lower case name of the model class
+         *
+         * @public
+         * @method modelFor
+         * @type {method}
+         * @param  {string} type lower case name of the model class
          * @return {function} - model constructor
          */
         modelFor: function( type ){
             var normalizedKey = this.container.normalize( 'model:'+type ),
                 factory = this.container.lookupFactory( normalizedKey );
 
-            if( !factory ){
-                throw new Ember.Error( "No model was found for `"+type+"`");
-            }
+            Ember.assert( "No model was found for `"+type+"`", factory );
 
             return factory;
         },
 
         /**
          * private variable that store all the metadata for all the models
+         *
+         * @property _metadataCache
+         * @private
          * @type {Object}
          */
         _metadataCache: {},
 
         /**
          * metaForType sets the metadata object for the specified model type
+         * @method metaForType
+         * @public
          * @param  {string} type the lowercase model name
          * @param  {object} metadata the metadata to save
          */
@@ -586,6 +654,8 @@ define("sl-model/store",
 
         /**
          * metadataFor returns the metadata object for the specified model type
+         * @method  metadataFor
+         * @public
          * @param  {string} type lower case model name
          * @return {object}      the metadata object that was saved with metaForType
          */
@@ -595,7 +665,9 @@ define("sl-model/store",
 
         /**
          * adapterFor returns the configured adapter for the specified model type
-         * @param  {string} type - the lower case name of the model class
+         * @method  adapterFor
+         * @public
+         * @param  {string} type the lower case name of the model class
          * @return {object} the adapter singleton
          */
         adapterFor: function( type ){
@@ -607,6 +679,8 @@ define("sl-model/store",
 
         /**
          * findOne returns an object proxy, does not use an id to perform a lookup (use the options obj instead).
+         * @method  findOne
+         * @public
          * @param  {string} type    lower case name of the model
          * @param  {Object} options hash of options to be passed on to the adapter
          * @return {Object}         Ember.ObjectProxy
@@ -617,6 +691,8 @@ define("sl-model/store",
 
         /**
          * find a/an record(s) using an id or options
+         * @method  find
+         * @public
          * @param  {string} type    lower case name of the model class
          * @param  {int} id
          * @param  {object} options hash of options to be passed on to the adapter
@@ -626,6 +702,16 @@ define("sl-model/store",
             return this.__find( type, id, options, false );
         },
 
+        /**
+         * private find method
+         * @private
+         * @method  __find
+         * @param  {string} type    lowercase model name
+         * @param  {integer / string} id      record identifier
+         * @param  {object} options objects containing all options for query
+         * @param  {boolean} findOne force the retrieval of a single record
+         * @return {object}         an ember object / array proxy with the promise proxy mixin
+         */
         __find: function( type, id, options, findOne ) {
             var model = this.modelFor( type );
             return this.adapterFor( type ).find( model, id, options, findOne );
@@ -633,6 +719,8 @@ define("sl-model/store",
 
         /**
          * create a new record, it will not have been saved via an adapter yet
+         * @method  createRecord
+         * @public
          * @param  {string} type lower case name of model class
          * @return {object}      model object, instance of Ember.ObjectProxy
          */
@@ -645,6 +733,9 @@ define("sl-model/store",
 
         /**
          * registerPreQueryHook add a function to ther prequery hooks array
+         *
+         * @method  registerPreQueryHook
+         * @public
          * @param  {function} f a function
          *
          */
@@ -654,8 +745,9 @@ define("sl-model/store",
 
         /**
          * runPreQueryHooks
-         * @param  {[type]} query [description]
-         * @return {[type]}       [description]
+         * @method  runPreQueryHooks
+         * @public
+         * @param  {object} query
          */
         runPreQueryHooks: function( query ){
             var preQueryHooks = this.get( 'preQueryHooks' );
@@ -666,7 +758,9 @@ define("sl-model/store",
 
         /**
          * registerPostQueryHook add a function to the postquery array
-         * @param  {function} f a function to be run after a query
+         * @method  registerPostQueryHook
+         * @public
+         * @param  {function} f function to be run after a query
          */
         registerPostQueryHook: function( f ){
             this.get( 'postQueryHooks' ).push( f );
@@ -674,7 +768,9 @@ define("sl-model/store",
 
         /**
          * runPostQueryHooks call the post query hooks with the response obj
-         * @param  {obj} response the response from the adapter
+         * @method  runPostQueryHooks
+         * @public
+         * @param  {object} response the response from the adapter
          */
         runPostQueryHooks: function( response ){
             var postQueryHooks = this.get( 'postQueryHooks' );

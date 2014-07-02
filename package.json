@@ -18,19 +18,21 @@
   "license": "",
 
   "dependencies": {
+    "broccoli-merge-trees": "",
+    "broccoli-static-compiler": "",
+    "ic-ajax": "1.0.4",
+    "rsvp": "^3.0.6"
+  },
+  "devDependencies": {
     "broccoli": "^0.12.2",
     "broccoli-cli": "^0.0.1",
     "broccoli-concat": "0.0.6",
     "broccoli-es6-module-filter": "^0.1.9",
-    "broccoli-merge-trees": "",
     "broccoli-export-tree": "0.3.1",
-    "broccoli-static-compiler": "",
     "chai": "^1.9.1",
     "chai-as-promised": "^4.1.1",
     "mocha": "^1.18.0",
     "bower": "^1.2.8",
-    "ic-ajax": "1.0.4",
-    "rsvp": "^3.0.6",
     "testem": "0.6.15"
   }
 }

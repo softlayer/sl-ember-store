@@ -16,27 +16,53 @@ SlModel.prototype.treeFor = function treeFor( name ) {
     var path = require('path'),
         slmodelPath = path.join( 'node_modules', 'sl-model' ),
         vendorTree,
+        appTree,
         mergeTrees = require( 'broccoli-merge-trees' ),
         pickFiles = require( 'broccoli-static-compiler' );
 
-    if( name === 'vendor' ){
-        return mergeTrees([
-            unwatchedTree( path.join( slmodelPath, 'vendor', 'sl-modelize', 'dist' ) ),
-            unwatchedTree(
-                pickFiles( path.join( slmodelPath, 'dist' ), {
-                        srcDir  : '/',
-                        files   : [ 'sl-model.js' ],
-                        destDir : 'sl-model/dist'
-                    }
-                )
+    if( name === 'vendor' ) {
+        vendorTree = mergeTrees([
+            pickFiles( path.join( slmodelPath, 'vendor', 'sl-modelize' ), {
+                    srcDir  : '/',
+                    destDir : 'sl-modelize'
+                }
+            ),
+            pickFiles( path.join( slmodelPath, 'dist' ), {
+                    srcDir  : '/',
+                    destDir : 'sl-model'
+                }
             )
         ]);
+
+        return vendorTree;
+    } else if ( name === 'app' ) {
+        appTree = pickFiles( path.join( slmodelPath, 'lib', 'initializers' ), {
+            srcDir: '/',
+            files: [ 'main.js' ],
+            destDir : '/initializers'
+        } );
+
+        return appTree;
     }
 };
 
-SlModel.prototype.inluded = function included( app ) {
+SlModel.prototype.included = function included( app ) {
     this.app = app;
 
-    this.app.import( 'vendor/sl-model/dist/sl-model.js' );
+    var inspect = require( 'util' ).inspect;
+    this.app.import( 'vendor/sl-model/sl-model.js', {
+        exports: {
+            'sl-model': [
+                'default',
+                'store',
+                'adapter',
+                'adapter/ajax',
+                'adapter/localstorage'
+            ]
+        }
+    });
     this.app.import( 'vendor/sl-modelize/dist/sl-modelize.js' );
 };
+
+
+module.exports = SlModel;
