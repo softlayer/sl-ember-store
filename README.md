@@ -85,7 +85,7 @@ In your routes, simply used the `store` variable that is injected into every rou
     }
 ```
 
-If you want to load a particular record via and `id` then pass the `id` in as the second parameter:
+If you want to load a particular record via an `id` then pass the `id` in as the second parameter to `store.find`:
 
 ```javasctript
     this.store.find( 'foo', 23 );
