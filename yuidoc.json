@@ -4,7 +4,7 @@
     "version": "0.1",
     "url": "https://gitlab.softlayer.local/interface/sl-model",
     "options": {
-        "exclude": "node_modules,tmp,vendor,test,dist",
+        "exclude": "node_modules,tmp,vendor,test,dist,ember-addon",
         "outdir": "doc",
         "paths": [
             "./lib"

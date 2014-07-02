@@ -1,17 +1,19 @@
 {
   "name": "sl-model",
-  "version": "0.1.1",
+  "version": "0.1.4",
   "description": "",
   "main": "lib/sl-model.js",
+  "ember-addon-main": "ember-addon/main.js",
   "scripts": {
     "test": "./testrunner.js",
-    "release": "rm -rf dist;broccoli build dist;"
+    "release": "rm -rf dist;broccoli build dist;",
+    "docs": "yuidoc ."
   },
   "repository": {
     "type": "git",
     "url": "git@gitlab.softlayer.local:interface/sl-model.git"
   },
-  "keywords": [],
+  "keywords": [ "ember-addon" ],
   "author": "Matt Marcum",
   "license": "",
 
