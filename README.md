@@ -1,16 +1,32 @@
-# interface-model
+# sl-model
 
 ## use this to provide a nice-ish model layer for interface apps
+
+
+### Installation
 
 In order to use this just include this package in your bower.json like so:
 
 ```javascript
 {
     dependencies: {
-        "interface-model": "git@gitlab.softlayer.local:interface/sl-model.git#v0.1.1"
+
+        "sl-model": "git@gitlab.softlayer.local:interface/sl-model.git#v0.1.1"
     }
 }
 ```
+
+Add sl-model and sl-modelize to your Brocfile.js:
+
+```javascript
+app.import( 'vendor/sl-modelize/dist/sl-modelize.js' );
+
+app.import( 'vendor/sl-model/dist/sl-model.js', {
+    exports: {
+        'sl-model': [ 'default' ]
+    }
+});
+````
 
 And then be sure and initialize it before your app in app.js:
 
@@ -18,28 +34,7 @@ And then be sure and initialize it before your app in app.js:
 loadInitializers(App, 'sl-model');
 ```
 
-You may want to set up some pre/post query hooks that run after every query.  If so just create an initializer in your apps initializers folder:
-
-```javascript
-export default {
-    name: 'interface-model-hooks',
-    after: 'interface-model',
-    initialize: function( container ){
-        container.lookup( 'store:main' ).registerPostQueryHook(
-            function( status ){
-                if( 401 === status ){
-                    container.lookup( 'controller:application' ).send( 'forceLogout' );
-                } else if ( 401 != status ) {
-                    var msgbus = container.lookup( 'messagebus:main' );
-                    if( msgbus ){
-                        msgbus.push( 'session-keep-alive' );
-                    }
-                }
-            }
-        );
-    }
-};
-```
+### Usage
 
 To add a model to your project, first create a new model in your models/ folder:
 
@@ -55,12 +50,45 @@ var Foo = SlModel.extend({ });
 
 Foo.reopenClass({
     endpoints: {
-        default: '/foo'
+        default: '/foo',
+        'superFoo': {
+            url: '/superFoo',
+            serialzer: function( response, store ){
+                store.metaForType( 'device', {
+                    totalCount: response.totalCount,
+                    totalPages: response.totalPages
+                });
+
+                return response.result;
+            }
+        }
     }
 });
 
 export default Foo;
 ```
 
+### Hooks
 
+You may want to set up some pre/post query hooks that run after every query.  If so just create an initializer in your apps initializers folder:
 
+```javascript
+export default {
+    name: 'sl-model-hooks',
+    after: 'sl-model',
+    initialize: function( container ){
+        container.lookup( 'store:main' ).registerPostQueryHook(
+            function( status ){
+                if( 401 === status ){
+                    container.lookup( 'controller:application' ).send( 'forceLogout' );
+                } else if ( 401 != status ) {
+                    var authController = container.lookup( 'controller:auth' );
+                    if( authController ){
+                        authController.sendAction( 'session-keep-alive' );
+                    }
+                }
+            }
+        );
+    }
+};
+```
