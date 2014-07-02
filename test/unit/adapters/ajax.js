@@ -42,7 +42,7 @@ describe( 'sl-model/adapter/ajax', function(){
                 }
             }
         });
-        
+
         //register mock data
         ajaxdapter.container.cache['store:main']={
             runPostQueryHooks: sinon.spy(),
@@ -82,17 +82,17 @@ describe( 'sl-model/adapter/ajax', function(){
                 responseFromCache = ajaxdapter.find( Foo, 1 );
                 responseFromCache.then( function(){
                     done();
-                })
+                });
             });
         });
-        
+
 
         it( 'should call icAjax.request with the correct arguments', function(){
             expect( requestSpy.args[0][0].url ).to.equal( '/foo' );
             expect( requestSpy.args[0][0].data.id ).to.equal( 1 );
         });
 
-        ajaxTestSuite()
+        ajaxTestSuite();
 
         singleObjectAjaxTestSuite();
 
@@ -199,7 +199,7 @@ describe( 'sl-model/adapter/ajax', function(){
         it( 'should return a promise proxy', function(){
             response.then.should.exist;
         });
-        
+
     });
 });
 
@@ -260,4 +260,4 @@ function singleObjectAjaxTestSuite(){
     })
 }
 
-       
+
