@@ -10,8 +10,7 @@ In order to use this just include this package in your bower.json like so:
 ```javascript
 {
     dependencies: {
-
-        "sl-model": "git@gitlab.softlayer.local:interface/sl-model.git#v0.1.1"
+        "sl-model": "git@gitlab.softlayer.local:interface/sl-model.git#v0.1.3"
     }
 }
 ```
@@ -44,7 +43,7 @@ Add inside that file:
 
 ```javascript
 
-import SlModel from 'sl-model'
+import SlModel from 'sl-model';
 
 var Foo = SlModel.extend({ });
 
