@@ -85,6 +85,12 @@ In your routes, simply used the `store` variable that is injected into every rou
     }
 ```
 
+If you want to load a particular record via and `id` then pass the `id` in as the second parameter:
+
+```javasctript
+    this.store.find( 'foo', 23 );
+```
+
 #### Controller
 In your controller you have access to the `store` too.  You can create an options object to handle extra params for the query.  Simply list the params in an object on the `data` key.
 
