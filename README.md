@@ -35,6 +35,8 @@ loadInitializers(App, 'sl-model');
 
 ### Usage
 
+#### Model
+
 To add a model to your project, first create a new model in your models/ folder:
 
 $touch models/foo.js
@@ -66,6 +68,49 @@ Foo.reopenClass({
 
 export default Foo;
 ```
+
+#### Route
+
+In your routes, simply used the `store` variable that is injected into every route and controller.  Store has the `find`, `createRecord`, and 'metadataFor' methods.
+
+```javascript
+    model: function(){
+        var model = this.store.find( 'foo' );
+
+        model.then( function(){
+            this.controllerFor( 'foo/index' ).setProperties( this.store.metadataFor( 'foo' ) );
+        }.bind( this ) );
+
+        return model;
+    }
+```
+
+#### Controller
+In your controller you have access to the `store` too.  You can create an options object to handle extra params for the query.  Simply list the params in an object on the `data` key.
+
+```javascript
+
+    actions: {
+
+        changePage: function( page ){
+
+            var model = this.store.find( 'device', { data: {page: page } } );
+
+            model.then( function(){
+                this.set( 'currentPage', page );
+                this.set( 'model', model );
+            }.bind(this));
+
+        }
+    }
+```
+
+The options object can also take a `reload` parameter to bypass the cache:
+
+```javascript
+this.store.find( 'device', { reload: true } );
+```
+
 
 ### Hooks
 
