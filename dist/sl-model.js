@@ -496,7 +496,7 @@ define("sl-model/model",
             endpoint = endpoint || 'default';
             testEndpoint = get( this, 'endpoints.'+endpoint+'.'+action );
 
-            if( testEndpoint === 'string' ){
+            if( typeof testEndpoint === 'string' ){
                 resolvedEndpoint = testEndpoint;
             } else {
                 resolvedEndpoint = get( testEndpoint, 'url' ) || get( this, 'url' );
