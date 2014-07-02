@@ -1,4 +1,4 @@
-# interface-model
+# sl-model
 
 ## use this to provide a nice-ish model layer for interface apps
 
@@ -7,7 +7,7 @@ In order to use this just include this package in your bower.json like so:
 ```javascript
 {
     dependencies: {
-        "interface-model": "git@gitlab.softlayer.local:interface/sl-model.git#v0.1.1"
+        "sl-model": "git@gitlab.softlayer.local:interface/sl-model.git#v0.1.1"
     }
 }
 ```
@@ -49,13 +49,13 @@ Add inside that file:
 
 ```javascript
 
-import SlModel from 'sl-model'
+import SlModel from 'sl-model';
 
 var Foo = SlModel.extend({ });
 
 Foo.reopenClass({
     endpoints: {
-        default: '/foo'
+        'default': '/foo'
     }
 });
 
