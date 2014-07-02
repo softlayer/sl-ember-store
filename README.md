@@ -94,7 +94,7 @@ In your controller you have access to the `store` too.  You can create an option
 
         changePage: function( page ){
 
-            var model = this.store.find( 'device', { data: {page: page } } );
+            var model = this.store.find( 'device', null, { data: {page: page } } );
 
             model.then( function(){
                 this.set( 'currentPage', page );
@@ -108,7 +108,7 @@ In your controller you have access to the `store` too.  You can create an option
 The options object can also take a `reload` parameter to bypass the cache:
 
 ```javascript
-this.store.find( 'device', { reload: true } );
+this.store.find( 'device', null, { reload: true } );
 ```
 
 
