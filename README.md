@@ -7,7 +7,7 @@ In order to use this just include this package in your bower.json like so:
 ```javascript
 {
     dependencies: {
-        "sl-model": "git@gitlab.softlayer.local:interface/sl-model.git#v0.1.2"
+        "sl-model": "git@gitlab.softlayer.local:interface/sl-model.git#v0.1.3"
     }
 }
 ```
