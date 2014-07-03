@@ -18,7 +18,9 @@ var expect = chai.expect,
     Bar,
     barResponse,
     Car,
-    carResponse;
+    carResponse,
+    superCarResponse,
+    crappyCarResponse;
 
 App = Ember.Application.create({
     modulePrefix: 'SlModelTest',
@@ -49,7 +51,24 @@ define('SlModelTest/models/bar', [ ] , function(){
 });
 define('SlModelTest/models/car', [ ] , function(){
     Car = SlModel.extend();
-    Car.reopenClass({ url: '/car' });
+    Car.reopenClass({
+        url: '/car',
+        serializer: function( response, store ){
+            return response.response;
+        },
+        endpoints: {
+            'superCar': '/superCar',
+            'crappyCar': {
+                get: {
+                    url: '/crappyCar',
+                    serializer: function( response, store ){
+                        return response.cars;
+                    }
+                }
+            }
+        }
+
+    });
     return Car;
 });
 
@@ -57,7 +76,35 @@ define('SlModelTest/models/car', [ ] , function(){
 //set up icAjax
 fooResponse = { id: 1, test: 'foo', 'bar': { id: 1, quiz: 'bar' } };
 barResponse = { id: 1, test: 'bar', 'car': { id: 1, color: 'black' } };
-carResponse = [ { id: 1, color: 'blue' }, { id: 2, color: 'black' } ];
+carResponse = {
+    response: [
+        { id: 1, color: 'blue' },
+        { id: 2, color: 'black' },
+        { id: 3, color: 'white' }
+    ],
+    totalCount: 3,
+    totalPages: 1
+};
+
+superCarResponse = {
+    response: [
+        { id: 11, color: 'super blue' },
+        { id: 12, color: 'super black' },
+        { id: 13, color: 'super white' }
+    ],
+    totalCount: 3,
+    totalPages: 1
+};
+
+crappyCarResponse = {
+    cars: [
+        { id: 21, color: 'dull blue' },
+        { id: 22, color: 'washed out black' },
+        { id: 23, color: 'dingy white' }
+    ],
+    totalCount: 3,
+    totalPages: 1
+};
 
 defineFixture( '/foo', {
     response: fooResponse,
@@ -74,8 +121,16 @@ defineFixture( '/car', {
     jqXHR: {},
     textStatus: 'success'
 });
-
-
+defineFixture( '/superCar', {
+    response: superCarResponse,
+    jqXHR: {},
+    textStatus: 'success'
+});
+defineFixture( '/crappyCar', {
+    response: crappyCarResponse,
+    jqXHR: {},
+    textStatus: 'success'
+});
 
 describe( 'sl-model:', function(){
     beforeEach(function(done){
@@ -148,11 +203,36 @@ describe( 'sl-model:', function(){
     });
 
     it( 'should find an array of Car models, with correct content', function( done ){
-        var carRecords = store.find( 'car', 1 );
+        var carRecords = store.find( 'car' );
         carRecords.then(function(){
             var ajaxAdapter = container.lookup('adapter:ajax'),
                 carModelized = ajaxAdapter.modelize( carResponse );
-            carRecords.get('content').should.deep.equal( carModelized );
+            expect( carRecords.get('content').mapBy('id') ).to.deep.equal( carModelized.response.mapBy('id') );
+            done();
+        },function(err){
+            done(err);
+        });
+    });
+
+
+    it( 'should find an array of superCar models, with correct content, using an endpoint', function( done ){
+        var carRecords = store.find( 'car', null, { endpoint: 'superCar' } );
+        carRecords.then(function(){
+            var ajaxAdapter = container.lookup('adapter:ajax'),
+                carModelized = ajaxAdapter.modelize( superCarResponse );
+            expect( carRecords.get('content').mapBy('id') ).to.deep.equal( carModelized.response.mapBy('id') );
+            done();
+        },function(err){
+            done(err);
+        });
+    });
+
+    it( 'should find an array of crappyCar models, with correct content, using an endpoint', function( done ){
+        var carRecords = store.find( 'car', null, { endpoint: 'crappyCar' } );
+        carRecords.then(function(){
+            var ajaxAdapter = container.lookup('adapter:ajax'),
+                carModelized = ajaxAdapter.modelize( crappyCarResponse );
+            expect( carRecords.get('content').mapBy('id') ).to.deep.equal( carModelized.cars.mapBy('id') );
             done();
         },function(err){
             done(err);
