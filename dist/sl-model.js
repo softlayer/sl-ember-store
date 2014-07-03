@@ -461,7 +461,8 @@ define("sl-model",
      *
      * @class sl-model
      */
-    __exports__.Model = Model;
+    __exports__["default"] = Model;
+
     __exports__.Model = Model;
     __exports__.Store = Store;
     __exports__.Adapter = Adapter;
