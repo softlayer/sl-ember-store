@@ -317,13 +317,14 @@ define("sl-model/adapters/ajax",
          * Delete record
          *
          * @public
-         * @method destroy
-         * @param {integer} Record Id
+         * @method deleteRecord
+         * @param {string} url  the url to send the DELETE command to
+         * @param {object} context
          * @return {object} Promise
          */
-        delete: function( url, context ) {
+        deleteRecord: function( url, context ) {
 
-            Ember.assert('A url is required to destroy a model', url);
+            Ember.assert('A url is required to delete a model', url);
 
             return icAjax.request({
                 url  : url,
@@ -333,7 +334,7 @@ define("sl-model/adapters/ajax",
             })
             .finally( function ajaxAdapterDeleteFinally( response ) {
                 this.runPostQueryHooks( response );
-            }.bind( this ) , 'sl-model.ajaxAdapter:delete - always ');
+            }.bind( this ) , 'sl-model.ajaxAdapter:deleteRecord - always ');
         },
 
         /**
@@ -505,7 +506,7 @@ define("sl-model/model",
 
             data = this.get( 'content' );
 
-            Ember.assert( 'Endpoint must be configured on '+this.toString()+' before save.', endpoint );
+            Ember.assert( 'Endpoint must be configured on '+this.toString()+' before calling save.', endpoint );
 
 
             return this.container.lookup( 'adapter:'+this.constructor.adapter ).save( endpoint, data )
@@ -518,11 +519,11 @@ define("sl-model/model",
          * Delete the record via the configured adapter
          *
          * @public
-         * @method destroy
+         * @method deleteRecord
          * @param {integer} Record Id
          * @return {object} jqXHR from jQuery.ajax()
          */
-        delete: function( options ) {
+        deleteRecord: function( options ) {
             var data,
                 endpoint;
 
@@ -532,12 +533,12 @@ define("sl-model/model",
 
             endpoint  = this.constructor.getUrlForEndpointAction( options.endpoint, 'delete' );
 
-            Ember.assert( 'Enpoint must be configure on '+this.toString()+' before delete.', endpoint );
+            Ember.assert( 'Enpoint must be configured on '+this.toString()+' before calling deleteRecord.', endpoint );
 
-            return this.container.lookup( 'adapter:'+this.constructor.adapter ).delete( endpoint, data )
+            return this.container.lookup( 'adapter:'+this.constructor.adapter ).deleteRecord( endpoint, data )
                 .then( function( response ){
                     this.destroy();
-                }.bind( this ), null, 'sl-model.model:delete' );
+                }.bind( this ), null, 'sl-model.model:deleteRecord' );
         }
     });
 

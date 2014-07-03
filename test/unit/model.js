@@ -3,7 +3,11 @@ import Ember from "ember";
 
 chai.should();
 
-var expect = chai.expect,
+
+
+
+describe.only( 'sl-model:model', function(){
+    var expect = chai.expect,
     Foo,
     foo,
     Bar,
@@ -15,9 +19,7 @@ var expect = chai.expect,
         return new Ember.RSVP.Promise(function(resolve){ resolve( fooResponse ); });
     };
 
-
-describe( 'sl-model', function(){
-    before( function(){
+    beforeEach( function(){ console.log('model beforeEach');
         Foo = Model.extend();
         Foo.reopenClass({url:'/foo'});
         Bar = Model.extend();
@@ -116,6 +118,23 @@ describe( 'sl-model', function(){
         });
     });
 
+    describe( 'save-endpoint:car', function(){
+        before(function( done ){
+            bar.save({endpoint:'car'}).then(function(){done();});
+        });
+        after(function(){
+            adapter.save.reset();
+            adapter.deleteRecord.reset();
+        });
+        it( 'should call adapter.save with correct arguments', function(){
+            expect( adapter.save.args[0][0] ).to.equal( '/carUpdate' );
+            expect( adapter.save.args[0][1].test ).to.equal( 'bar' );
+        });
+        it( 'should update its content with fooResponse', function(){
+            expect( bar.get('content') ).to.deep.equal( fooResponse );
+        });
+    });
+
     describe( 'delete', function(){
         before(function( done ){
             var p = foo.deleteRecord().then(function(){ done(); });
@@ -142,6 +161,22 @@ describe( 'sl-model', function(){
         });
         it( 'should call adapter.delete with correct arguments', function(){
             adapter.deleteRecord.should.have.been.calledWith( '/barDelete' );
+        });
+        it( 'should destroy bar', function(){
+            expect( bar.isDestroyed );
+        });
+    });
+
+    describe( 'delete-endpoint:car', function(){
+        before(function( done ){
+            var p = bar.deleteRecord({endpoint:'car'}).then(function(){ done(); });
+        });
+        after(function(){
+            adapter.save.reset();
+            adapter.deleteRecord.reset();
+        });
+        it( 'should call adapter.delete with correct arguments', function(){
+            adapter.deleteRecord.should.have.been.calledWith( '/carDelete' );
         });
         it( 'should destroy bar', function(){
             expect( bar.isDestroyed );
