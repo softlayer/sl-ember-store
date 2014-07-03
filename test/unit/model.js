@@ -146,7 +146,7 @@ describe( 'sl-model:model', function(){
 
     });
 
-    describe.only( 'getSerializerForEndpointAction', function(){
+    describe( 'getSerializerForEndpointAction', function(){
         it( 'should return serializer1 for Bar - ( `null`, `get` )', function(){
             expect( Bar.getSerializerForEndpointAction( null, 'get' )).to.equal( serializer1 );
 
