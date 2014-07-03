@@ -6,7 +6,7 @@ chai.should();
 
 
 
-describe.only( 'sl-model:model', function(){
+describe( 'sl-model:model', function(){
     var expect = chai.expect,
     Foo,
     foo,
@@ -19,14 +19,14 @@ describe.only( 'sl-model:model', function(){
         return new Ember.RSVP.Promise(function(resolve){ resolve( fooResponse ); });
     };
 
-    beforeEach( function(){ console.log('model beforeEach');
+    before( function(){
         Foo = Model.extend();
         Foo.reopenClass({url:'/foo'});
         Bar = Model.extend();
         Bar.reopenClass({
+            url: '/bar',
             endpoints: {
                 default: {
-                    get: '/bar',
                     post: '/barUpdate',
                     delete: '/barDelete'
                 },
@@ -81,6 +81,48 @@ describe.only( 'sl-model:model', function(){
             },
             container: container
         });
+    });
+
+    describe.only( 'getUrlForEndpointAction', function(){
+        it( 'should return /bar for ( null, `get` ) ', function(){
+            expect( Bar.getUrlForEndpointAction( null, 'get' )).to.equal( '/bar' );
+        });
+
+        it( 'should return /barUpdate for ( null, `post` ) ', function(){
+            expect( Bar.getUrlForEndpointAction( null, 'post' )).to.equal( '/barUpdate' );
+        });
+
+        it( 'should return /barDelete for ( null, `delete` ) ', function(){
+            expect( Bar.getUrlForEndpointAction( null, 'delete' )).to.equal( '/barDelete' );
+        });
+
+        it( 'should return /bar for ( `default`, `get` ) ', function(){
+            expect( Bar.getUrlForEndpointAction( 'default', 'get' )).to.equal( '/bar' );
+        });
+
+        it( 'should return /barUpdate for ( `default`, `post` ) ', function(){
+            expect( Bar.getUrlForEndpointAction( 'default', 'post' )).to.equal( '/barUpdate' );
+        });
+
+        it( 'should return /barDelete for ( `default`, `delete` ) ', function(){
+            expect( Bar.getUrlForEndpointAction( 'default', 'delete' )).to.equal( '/barDelete' );
+        });
+
+        it( 'should return /bar for ( `car`, `get` ) ', function(){
+            expect( Bar.getUrlForEndpointAction( 'car', 'get' )).to.equal( '/bar' );
+        });
+
+        it( 'should return /carUpdate for ( `car`, `post` ) ', function(){
+            expect( Bar.getUrlForEndpointAction( 'car', 'post' )).to.equal( '/carUpdate' );
+        });
+
+        it( 'should return /carDelete for ( `car`, `delete` ) ', function(){
+            expect( Bar.getUrlForEndpointAction( 'car', 'delete' )).to.equal( '/carDelete' );
+        });
+
+    });
+
+    describe( 'getSerializerForEndpointAction', function(){
 
     });
 
@@ -120,6 +162,13 @@ describe.only( 'sl-model:model', function(){
 
     describe( 'save-endpoint:car', function(){
         before(function( done ){
+            bar = Bar.create({
+                content: {
+                    test: 'bar',
+                    'car': { id: 1, quiz: 'car' },
+                },
+                container: container
+            });
             bar.save({endpoint:'car'}).then(function(){done();});
         });
         after(function(){

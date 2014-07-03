@@ -50,24 +50,27 @@ import SlModel from 'sl-model';
 var Foo = SlModel.extend({ });
 
 Foo.reopenClass({
+    url: '/foo',
     endpoints: {
-        default: '/foo',
         'superFoo': {
-            url: '/superFoo',
-            serialzer: function( response, store ){
-                store.metaForType( 'device', {
-                    totalCount: response.totalCount,
-                    totalPages: response.totalPages
-                });
+            get: {
+                url: '/superFoo',
+                serialzer: function( response, store ){
+                    store.metaForType( 'device', {
+                        totalCount: response.totalCount,
+                        totalPages: response.totalPages
+                    });
 
-                return response.result;
-            }
-        }
+                    return response.result;
+                }
+            },
+        },
     }
 });
 
 export default Foo;
 ```
+Models should always have a `url` key specified.  Further urls can be specified in the `endpoints` object.
 
 #### Route
 

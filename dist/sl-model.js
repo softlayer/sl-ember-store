@@ -310,7 +310,7 @@ define("sl-model/adapters/ajax",
             // at the same time
             this.addToRequestCache( url, options.data, promise );
 
-            return results;
+            return redatasults;
         },
 
         /**
@@ -322,14 +322,14 @@ define("sl-model/adapters/ajax",
          * @param {object} context
          * @return {object} Promise
          */
-        deleteRecord: function( url, context ) {
+        deleteRecord: function( url, id ) {
 
             Ember.assert('A url is required to delete a model', url);
 
             return icAjax.request({
                 url  : url,
                 type : 'DELETE',
-                data : JSON.stringify({ id: context.get( 'id' ) }),
+                data : JSON.stringify({ id: id }),
                 context: this
             })
             .finally( function ajaxAdapterDeleteFinally( response ) {
@@ -488,6 +488,8 @@ define("sl-model/model",
 
         url: '',
 
+        content: {},
+
         container: null,
 
          /**
@@ -520,22 +522,19 @@ define("sl-model/model",
          *
          * @public
          * @method deleteRecord
-         * @param {integer} Record Id
+         * @param {object} optional
          * @return {object} jqXHR from jQuery.ajax()
          */
         deleteRecord: function( options ) {
-            var data,
-                endpoint;
+            var endpoint;
 
             options = options || {};
-
-            data = this.get( 'content' ) || this;
 
             endpoint  = this.constructor.getUrlForEndpointAction( options.endpoint, 'delete' );
 
             Ember.assert( 'Enpoint must be configured on '+this.toString()+' before calling deleteRecord.', endpoint );
 
-            return this.container.lookup( 'adapter:'+this.constructor.adapter ).deleteRecord( endpoint, data )
+            return this.container.lookup( 'adapter:'+this.constructor.adapter ).deleteRecord( endpoint, this.get( 'id' ) )
                 .then( function( response ){
                     this.destroy();
                 }.bind( this ), null, 'sl-model.model:deleteRecord' );

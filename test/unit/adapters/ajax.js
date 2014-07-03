@@ -178,7 +178,7 @@ describe( 'sl-model/adapter/ajax', function(){
         before(function( done ){
             //request
             var foo = Foo.create({ id: 1, test: 'foo', 'bar': { id: 1, quiz: 'bar' } });
-            response = ajaxdapter.deleteRecord( '/foo', foo );
+            response = ajaxdapter.deleteRecord( '/foo', 1 );
             response.then( function(){ done(); });
         });
         after( function(){
