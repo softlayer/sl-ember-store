@@ -29,6 +29,7 @@
     "mocha": "~1.20.1",
     "chai": "~1.9.1",
     "chai-as-promised": "~4.1.1",
-    "ember-mocha-adapter": "~0.2.0"
+    "ember-mocha-adapter": "~0.2.0",
+    "sl-modelize": "git+ssh://git@gitlab.softlayer.local:interface/sl-modelize.git#master"
   }
 }

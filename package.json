@@ -21,7 +21,8 @@
     "broccoli-merge-trees": "",
     "broccoli-static-compiler": "",
     "ic-ajax": "1.0.4",
-    "rsvp": "^3.0.6"
+    "rsvp": "^3.0.6",
+    "sl-modelize": "git+ssh://git@gitlab.softlayer.local:interface/sl-modelize.git#master"
   },
   "devDependencies": {
     "broccoli": "^0.12.2",

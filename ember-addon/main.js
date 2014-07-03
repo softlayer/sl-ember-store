@@ -22,7 +22,7 @@ SlModel.prototype.treeFor = function treeFor( name ) {
 
     if( name === 'vendor' ) {
         vendorTree = mergeTrees([
-            pickFiles( path.join( slmodelPath, 'vendor', 'sl-modelize' ), {
+            pickFiles( path.join( slmodelPath, 'node_modules', 'sl-modelize' ), {
                     srcDir  : '/',
                     destDir : 'sl-modelize'
                 }
