@@ -36,11 +36,11 @@ describe( 'sl-model', function(){
         });
         adapter = {
             save: ajaxMock,
-            delete: ajaxMock,
+            deleteRecord: ajaxMock,
         };
 
         sinon.spy( adapter, 'save' );
-        sinon.spy( adapter, 'delete' );
+        sinon.spy( adapter, 'deleteRecord' );
 
         container = {
                 registry: [],
@@ -88,7 +88,7 @@ describe( 'sl-model', function(){
         });
         after(function(){
             adapter.save.reset();
-            adapter.delete.reset();
+            adapter.deleteRecord.reset();
         });
         it( 'should call adapter.save with correct arguments', function(){
             expect( adapter.save.args[0][0] ).to.equal( '/foo' );
@@ -105,7 +105,7 @@ describe( 'sl-model', function(){
         });
         after(function(){
             adapter.save.reset();
-            adapter.delete.reset();
+            adapter.deleteRecord.reset();
         });
         it( 'should call adapter.save with correct arguments', function(){
             expect( adapter.save.args[0][0] ).to.equal( '/barUpdate' );
@@ -118,14 +118,14 @@ describe( 'sl-model', function(){
 
     describe( 'delete', function(){
         before(function( done ){
-            var p = foo.delete().then(function(){ done(); });
+            var p = foo.deleteRecord().then(function(){ done(); });
         });
         after(function(){
             adapter.save.reset();
-            adapter.delete.reset();
+            adapter.deleteRecord.reset();
         });
-        it( 'should call adapter.delete with correct arguments', function(){
-            adapter.delete.should.have.been.calledWith( '/foo' );
+        it( 'should call adapter.deleteRecord with correct arguments', function(){
+            adapter.deleteRecord.should.have.been.calledWith( '/foo' );
         });
         it( 'should destroy foo', function(){
             expect( foo.isDestroyed );
@@ -134,14 +134,14 @@ describe( 'sl-model', function(){
 
     describe( 'delete-endpoint', function(){
         before(function( done ){
-            var p = bar.delete().then(function(){ done(); });
+            var p = bar.deleteRecord().then(function(){ done(); });
         });
         after(function(){
             adapter.save.reset();
-            adapter.delete.reset();
+            adapter.deleteRecord.reset();
         });
         it( 'should call adapter.delete with correct arguments', function(){
-            adapter.delete.should.have.been.calledWith( '/barDelete' );
+            adapter.deleteRecord.should.have.been.calledWith( '/barDelete' );
         });
         it( 'should destroy bar', function(){
             expect( bar.isDestroyed );
