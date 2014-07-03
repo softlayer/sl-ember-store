@@ -17,21 +17,41 @@ describe( 'sl-model:model', function(){
     fooResponse = { id: 1, test: 'true' },
     ajaxMock = function(){
         return new Ember.RSVP.Promise(function(resolve){ resolve( fooResponse ); });
-    };
+    },
+    serializer1 = function( response, store ){ return response },
+    serializer2 = function( response, store ){ return response };
 
     before( function(){
         Foo = Model.extend();
-        Foo.reopenClass({url:'/foo'});
+        Foo.reopenClass({
+            url:'/foo',
+            endpoints: {
+                doo: {
+                    url: '/doo'
+                },
+                goo: {
+                    serializer: serializer1,
+                    post: {
+                        url: '/goo',
+                        serializer: serializer2
+                    }
+                }
+            }
+        });
         Bar = Model.extend();
         Bar.reopenClass({
             url: '/bar',
             endpoints: {
                 default: {
                     post: '/barUpdate',
-                    delete: '/barDelete'
+                    delete: '/barDelete',
+                    serializer: serializer1
                 },
                 car: {
-                    post: '/carUpdate',
+                    post: {
+                        url: '/carUpdate',
+                        serializer: serializer2,
+                    },
                     delete: '/carDelete'
                 }
             }
@@ -83,7 +103,7 @@ describe( 'sl-model:model', function(){
         });
     });
 
-    describe.only( 'getUrlForEndpointAction', function(){
+    describe( 'getUrlForEndpointAction', function(){
         it( 'should return /bar for ( null, `get` ) ', function(){
             expect( Bar.getUrlForEndpointAction( null, 'get' )).to.equal( '/bar' );
         });
@@ -120,9 +140,35 @@ describe( 'sl-model:model', function(){
             expect( Bar.getUrlForEndpointAction( 'car', 'delete' )).to.equal( '/carDelete' );
         });
 
+        it( 'should return /foo for ( `car`, `delete` ) ', function(){
+            expect( Foo.getUrlForEndpointAction( 'car', 'delete' )).to.equal( '/foo' );
+        });
+
     });
 
-    describe( 'getSerializerForEndpointAction', function(){
+    describe.only( 'getSerializerForEndpointAction', function(){
+        it( 'should return serializer1 for Bar - ( `null`, `get` )', function(){
+            expect( Bar.getSerializerForEndpointAction( null, 'get' )).to.equal( serializer1 );
+
+        });
+        it( 'should return serializer2 for Bar - ( `car`, `post` )', function(){
+            expect( Bar.getSerializerForEndpointAction( 'car', 'post' )).to.equal( serializer2 );
+        });
+        it( 'should return serializer1 for Bar - ( `car`, `delete` )', function(){
+            expect( Bar.getSerializerForEndpointAction( 'car', 'delete' )).to.equal( serializer1 );
+        });
+
+        it( 'should return Foo.serializer for Foo -( `doo`, `get` )', function(){
+            expect( Foo.getSerializerForEndpointAction( 'doo', 'get' )).to.equal( Foo.serializer );
+        });
+
+        it( 'should return serializer1 for Foo -( `goo`, `get` )', function(){
+            expect( Foo.getSerializerForEndpointAction( 'goo', 'get' )).to.equal( serializer1 );
+        });
+
+        it( 'should return serializer2 for Foo - ( `goo`, `post` )', function(){
+            expect( Foo.getSerializerForEndpointAction( 'goo', 'post' )).to.equal( serializer2 );
+        });
 
     });
 

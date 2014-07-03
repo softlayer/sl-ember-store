@@ -51,6 +51,7 @@ var Foo = SlModel.extend({ });
 
 Foo.reopenClass({
     url: '/foo',
+    serializer: function( response, store ){ return xformData( response ); },
     endpoints: {
         'superFoo': {
             get: {
@@ -64,13 +65,20 @@ Foo.reopenClass({
                     return response.result;
                 }
             },
+            post: '/superFooPost'
         },
+        'superDuperFoo': '/supdupfoo',
+        'boringFoo': {
+            url: '/boringFoo',
+            serializer: someSerializer
+        }
     }
 });
 
 export default Foo;
 ```
-Models should always have a `url` key specified.  Further urls can be specified in the `endpoints` object.
+Models should always have a `url` specified.  Further urls can be specified in the `endpoints` object.  Urls and Serializers can be specified on a per endpoint/action basis and will default to the top level url and serializer.
+
 
 #### Route
 
