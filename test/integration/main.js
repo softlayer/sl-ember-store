@@ -239,4 +239,21 @@ describe( 'sl-model:', function(){
         });
     });
 
+    it( 'should save a newly created bar and return the model with an id', function( done ){
+        var barRecord = store.createRecord( 'bar' );
+        barRecord.save().then( function( response ){
+            expect( barRecord.get('id') ).to.equal( 1 );
+            done();
+        });
+    });
+
+    it( 'should destroy a record when calling deleteRecord', function( done ){
+        var barRecord = store.createRecord( 'bar' );
+
+        barRecord.deleteRecord().then( function( response ){
+            expect( barRecord.isDestroyed );
+            done();
+        });
+    });
+
 });
