@@ -310,7 +310,7 @@ define("sl-model/adapters/ajax",
             // at the same time
             this.addToRequestCache( url, options.data, promise );
 
-            return redatasults;
+            return results;
         },
 
         /**
@@ -486,10 +486,6 @@ define("sl-model/model",
      */
     var Model =  Ember.ObjectProxy.extend({
 
-        url: '',
-
-        content: {},
-
         container: null,
 
          /**
@@ -514,6 +510,7 @@ define("sl-model/model",
             return this.container.lookup( 'adapter:'+this.constructor.adapter ).save( endpoint, data )
                 .then( function( response ){
                     this.set( 'content', response );
+                    return response;
                 }.bind( this ), null, 'sl-model.model:save');
         },
 
@@ -536,12 +533,16 @@ define("sl-model/model",
 
             return this.container.lookup( 'adapter:'+this.constructor.adapter ).deleteRecord( endpoint, this.get( 'id' ) )
                 .then( function( response ){
-                    this.destroy();
+                    Ember.run(this, 'destroy');
                 }.bind( this ), null, 'sl-model.model:deleteRecord' );
         }
     });
 
     Model.reopenClass({
+
+        url: null,
+
+        serializer: function( response ){ return response; },
 
         //set default adapter
         adapter: "ajax",
@@ -551,7 +552,8 @@ define("sl-model/model",
                 testEndpoint;
 
             endpoint = endpoint || 'default';
-            testEndpoint = get( this, 'endpoints.'+endpoint+'.'+action ) || {};
+
+            testEndpoint = get( this, 'endpoints.'+endpoint+'.'+action ) || get( this, 'endpoints.'+endpoint ) || {};
 
             if( typeof testEndpoint === 'string' ){
                 resolvedEndpoint = testEndpoint;
@@ -559,24 +561,29 @@ define("sl-model/model",
                 resolvedEndpoint = get( testEndpoint, 'url' ) || get( this, 'url' );
             }
 
+            Ember.assert( 'A url needs to be set for '+this.toString(), resolvedEndpoint );
+
             return resolvedEndpoint;
         },
 
         getSerializerForEndpointAction: function( endpoint, action ) {
             var resolvedSerializer,
                 testEndpoint,
-                defaultSerializer,
-                passThroughSerializer = function( response ){ return response; };
+                defaultSerializer;
 
             endpoint = endpoint || 'default';
-            testEndpoint = get( this, 'endpoints.'+endpoint+'.'+action ) || {};
-            defaultSerializer = get( this, 'endpoints.default.'+action+'.serializer' );
+            testEndpoint = get( this, 'endpoints.'+endpoint+'.'+action ) || get( this, 'endpoints.'+endpoint ) || {};
+            defaultSerializer = get( this, 'endpoints.default.'+action+'.serializer' ) ||
+                get( this, 'endpoints.default.serializer' ) ||
+                get( this, 'serializer' );
 
-            if( testEndpoint === 'string' ){
-                resolvedSerializer = defaultSerializer || passThroughSerializer;
+            if( typeof testEndpoint === 'string' ){
+                resolvedSerializer = defaultSerializer;
             } else {
-                resolvedSerializer = get( testEndpoint, 'serializer' ) || defaultSerializer || passThroughSerializer;
+                resolvedSerializer = get( testEndpoint, 'serializer' ) || defaultSerializer;
             }
+
+            Ember.assert( 'A serializer needs to be set for '+this.toString(), resolvedSerializer );
 
             return resolvedSerializer;
         }
@@ -725,11 +732,15 @@ define("sl-model/store",
          * @param  {string} type lower case name of model class
          * @return {object}      model object, instance of Ember.ObjectProxy
          */
-        createRecord: function( type ){
-            var factory = this.modelFor( type );
-            return factory.create( {
+        createRecord: function( type, defaults ){
+            var factory = this.modelFor( type ),
+                record = factory.create( {
                     container: this.container
                 });
+
+                record.setProperties( defaults );
+
+                return record;
         },
 
         /**
