@@ -46,6 +46,10 @@ SlModel.prototype.treeFor = function treeFor( name ) {
     }
 };
 
+SlModel.prototype.blueprintsPath = function() {
+  return __dirname + '/blueprints';
+}
+
 SlModel.prototype.included = function included( app ) {
     this.app = app;
 
