@@ -49,7 +49,7 @@ describe( 'sl-model/store', function(){
         store.container.registry.push( { key: 'adapter:localstorage', factory: LocalstorageAdapter } );
 
         store.container.registry.push( { key: 'model:foo', factory: Foo } );
-        store.container.registry.push( { key: 'model:bar', factory: Bar } );        
+        store.container.registry.push( { key: 'model:bar', factory: Bar } );
     });
 
     describe( 'modelFor', function(){
@@ -83,8 +83,8 @@ describe( 'sl-model/store', function(){
         });
 
     });
-    
-    describe( 'find', function(){
+
+    describe( 'find with numeric id', function(){
         it( 'should have called __find with the correct args', function(){
             var options = { "otherId": 1 };
             store.__find = sinon.spy();
@@ -92,6 +92,24 @@ describe( 'sl-model/store', function(){
             store.__find.should.have.been.calledWith( 'foo', 1, options, false );
         });
     });
+
+    describe( 'find with object for first param', function(){
+        it( 'should have called __find with the correct args', function(){
+            var options = { "otherId": 1 };
+            store.__find = sinon.spy();
+            store.find( 'foo', options );
+            store.__find.should.have.been.calledWith( 'foo', null, options, false );
+        });
+    });
+
+    describe( 'find with only type', function(){
+        it( 'should have called __find with the correct args', function(){
+            store.__find = sinon.spy();
+            store.find( 'foo' );
+            store.__find.should.have.been.calledWith( 'foo', null, null, false );
+        });
+    });
+
 
     describe( '__find', function(){
         beforeEach( function(){

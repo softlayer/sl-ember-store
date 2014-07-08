@@ -707,6 +707,12 @@ define("sl-model/store",
          * @return {object / array}         an object or an array depending on whether you specified an id
          */
         find: function( type, id, options ) {
+            if( typeof id === 'object' && typeof options === 'undefined' ){
+                return this.__find( type, null, id, false );
+            }
+            if( typeof id === 'undefined' && typeof options === 'undefined' ){
+                return this.__find( type, null, null, false );
+            }
             return this.__find( type, id, options, false );
         },
 

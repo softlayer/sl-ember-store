@@ -228,7 +228,7 @@ describe( 'sl-model:', function(){
     });
 
     it( 'should find an array of crappyCar models, with correct content, using an endpoint', function( done ){
-        var carRecords = store.find( 'car', null, { endpoint: 'crappyCar' } );
+        var carRecords = store.find( 'car', { endpoint: 'crappyCar' } );
         carRecords.then(function(){
             var ajaxAdapter = container.lookup('adapter:ajax'),
                 carModelized = ajaxAdapter.modelize( crappyCarResponse );
