@@ -51,9 +51,15 @@ Add inside that file:
 import SlModel from 'sl-model';
 
 var Foo = SlModel.extend({ });
+```
 
-##### Urls and Endpoints:
+##### Urls, Endpoints, Serializers:
 
+You can setup a single url if your api is restful or multiple endpoints if you need fine grain control.
+
+The base level `url` and `serializer will be used by default.  Override them or add different ones at any endpoint.  Endpoints that return multiple records should only return an array.  You can add any metadata for those queries to the store via the `metaForType` function.
+
+```javascript
 Foo.reopenClass({
     url: '/foo',
     serializer: function( response, store ){ return xformData( response ); },
