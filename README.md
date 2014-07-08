@@ -37,7 +37,10 @@ loadInitializers(App, 'sl-model');
 
 #### Model
 
-To add a model to your project, first create a new model in your models/ folder:
+To add a model to your project, simple do `ember g slmodel modelname`
+
+##### Old way of creating models:
+First create a new model in your models/ folder:
 
 $touch models/foo.js
 
@@ -48,6 +51,8 @@ Add inside that file:
 import SlModel from 'sl-model';
 
 var Foo = SlModel.extend({ });
+
+##### Urls and Endpoints:
 
 Foo.reopenClass({
     url: '/foo',
