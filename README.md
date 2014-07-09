@@ -37,7 +37,9 @@ loadInitializers(App, 'sl-model');
 
 #### Model
 
-To add a model to your project, simple do `ember g slmodel modelname`
+To add a model to your project, simple do `ember g slmodel <modelname>`.  You can also specify the url and/or the adapter by appending the options:
+
+* `ember g slmodel <modelname> url:<url> adapter:<adapter>`
 
 ##### Old way of creating models:
 First create a new model in your models/ folder:
@@ -173,9 +175,9 @@ If you have added SL-Model as an Ember addon:
 * `ember g localstorage-initializer`
 
 Else:
-* `ember g initializer localstorage-initializer`
+* `ember g initializer localstorage-initializer <namespace>`
 
-Now edit the file that was generated in `app/initializers/localstorage-initializer.js`
+Now view the file that was generated in `app/initializers/localstorage-initializer.js`, it should have the namespace defined.
 
 ```javascript
 module SlModel from 'sl-model';
@@ -188,7 +190,7 @@ export default {
         var localStorageAdapter = SlModel.LocalstorageAdapter;
 
         localStorageAdapter.reopenClass({
-            namspace: 'YOUR_NAMESPACE_HERE'
+            namspace: '<namespace'
         });
 
         container.register('adapter:localstorage', localStorageAdapter );

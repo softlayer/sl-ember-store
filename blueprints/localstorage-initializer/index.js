@@ -1,5 +1,7 @@
 module.exports = {
-    locals = function( options ){
-        return {};
+    locals : function( options ){
+        return {
+            namespace: options.entity.name
+        };
     }
 };
