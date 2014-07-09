@@ -1,10 +1,13 @@
-var Blueprint = require('ember-cli/lib/models/blueprint');
 
-module.exports = Blueprint.extend({
+module.exports = {
     locals: function( options ){
+        var locals = {},
+            url = options.entity.options.url,
+            adpater: options.entity.options.adapter;
+
         return {
-            url: options.entity.options.url,
-            needs: options.entity.options.needs
+            url: url ? url : "'';throw 'Please add a URL to model: "+entity.name+"';",
+            adpater: adapter ? adapter : "ajax"
         }
     }
-});
+};

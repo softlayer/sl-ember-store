@@ -4,8 +4,7 @@ var <%= classifiedModuleName %> = SlModel.extend();
 
 <%= classifiedModuleName %>.reopenClass({
     url: '<%= url %>',
-    endpoints: {
-    }
+    adapter: '<%= adapter %>'
 });
 
-export default Device;
+export default <%= classifiedModuleName %>;
