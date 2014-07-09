@@ -53,7 +53,6 @@ SlModel.prototype.blueprintsPath = function() {
 SlModel.prototype.included = function included( app ) {
     this.app = app;
 
-    var inspect = require( 'util' ).inspect;
     this.app.import( 'vendor/sl-model/sl-model.js', {
         exports: {
             'sl-model': [

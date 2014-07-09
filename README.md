@@ -164,3 +164,39 @@ export default {
     }
 };
 ```
+
+### Localstorage adapter
+
+To use the local storage adapter you first need to initialize it with a namespace.  The namespace will be the key that your data will be written too in the localStorage subsytem.
+
+* `ember g slmodel-localstorage`
+
+Now edit the file that was generated in `app/initializers/slmodel-localstorage.js`
+
+```javascript
+module SlModel from 'sl-model';
+
+export default {
+    name: 'slmodel-localstorage',
+    after: 'sl-model',
+
+    initialize: function( container ) {
+        var slmodeLsAdapter = SlModel.LocalstorageAdapter.reopenClass({
+                namespace: '/* put your key here*/'
+            });
+
+        container.register('adapter:localstorage', SlModel.LocalstorageAdapter );
+
+    }
+};
+```
+Now you can assign the localstorage adapter to your models like so:
+
+```javascript
+
+Foo.reopenClass({
+    adapter: 'localstorage',
+    url: '/foo'
+});
+```
+Notice that the url variable is still needed as it will be used to store this model's records under the adapter's namespace in localStorage.

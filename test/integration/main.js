@@ -132,7 +132,7 @@ defineFixture( '/crappyCar', {
     textStatus: 'success'
 });
 
-describe( 'sl-model:', function(){
+describe( 'sl-model:Integration', function(){
     beforeEach(function(done){
         //set up ember app
         visit( '/' ).then(function(){
@@ -198,8 +198,17 @@ describe( 'sl-model:', function(){
         });
     });
 
-    it( 'should find an array of Car models', function(){
-        store.find( 'car' ).should.be.instanceof( Ember.ArrayProxy );
+    it( 'should find an array of Car models', function( done ){
+        var cars = store.find( 'car' )
+
+        cars.should.be.instanceof( Ember.ArrayProxy );
+
+        cars.then( function(){
+            done();
+        }).catch( function( reason ){
+            done( reason );
+        });
+
     });
 
     it( 'should find an array of Car models, with correct content', function( done ){
@@ -216,7 +225,7 @@ describe( 'sl-model:', function(){
 
 
     it( 'should find an array of superCar models, with correct content, using an endpoint', function( done ){
-        var carRecords = store.find( 'car', null, { endpoint: 'superCar' } );
+        var carRecords = store.find( 'car', { endpoint: 'superCar' } );
         carRecords.then(function(){
             var ajaxAdapter = container.lookup('adapter:ajax'),
                 carModelized = ajaxAdapter.modelize( superCarResponse );
