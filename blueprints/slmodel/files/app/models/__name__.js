@@ -1,10 +1,11 @@
 import SlModel from 'sl-model';
 
-var <%= classifiedModuleName %> = SlModel.extend();
+var <%= classifiedModuleName %> = SlModel.extend({
+
+});
 
 <%= classifiedModuleName %>.reopenClass({
-    url: '<%= url %>',
-    adapter: '<%= adapter %>'
+    <%= url %><%= adapter %>
 });
 
 export default <%= classifiedModuleName %>;
