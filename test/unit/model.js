@@ -18,6 +18,8 @@ describe( 'sl-model:model', function(){
     ajaxMock = function(){
         return new Ember.RSVP.Promise(function(resolve){ resolve( fooResponse ); });
     },
+    serRespons1 = { test: true },
+    serResponse2 = { test: false },
     serializer1 = function( response, store ){ return response },
     serializer2 = function( response, store ){ return response };
 
@@ -146,28 +148,31 @@ describe( 'sl-model:model', function(){
 
     });
 
-    describe( 'getSerializerForEndpointAction', function(){
-        it( 'should return serializer1 for Bar - ( `null`, `get` )', function(){
-            expect( Bar.getSerializerForEndpointAction( null, 'get' )).to.equal( serializer1 );
+    describe( 'callSerializerForEndpointAction', function(){
+        var testResponse1 = { test:true },
+            testResponse2 = { test: false },
+            TestModel = Model.extend({});
+            TestModel.reopenClass({
+                serializer: function( response, store ){
+                    return testResponse1;
+                },
+                endpoints: {
+                    test: {
+                        get: {
+                            serializer: function( response, store ){
+                                return testResponse2;
+                            }
+                        }
+                    }
+                }
+            });
+
+        it( 'should return testResponse1 for TestModel - ( `null`, `get` )', function(){
+            expect( TestModel.callSerializerForEndpointAction( null, 'get', {} )).to.equal( testResponse1 );
 
         });
-        it( 'should return serializer2 for Bar - ( `car`, `post` )', function(){
-            expect( Bar.getSerializerForEndpointAction( 'car', 'post' )).to.equal( serializer2 );
-        });
-        it( 'should return serializer1 for Bar - ( `car`, `delete` )', function(){
-            expect( Bar.getSerializerForEndpointAction( 'car', 'delete' )).to.equal( serializer1 );
-        });
-
-        it( 'should return Foo.serializer for Foo -( `doo`, `get` )', function(){
-            expect( Foo.getSerializerForEndpointAction( 'doo', 'get' )).to.equal( Foo.serializer );
-        });
-
-        it( 'should return serializer1 for Foo -( `goo`, `get` )', function(){
-            expect( Foo.getSerializerForEndpointAction( 'goo', 'get' )).to.equal( serializer1 );
-        });
-
-        it( 'should return serializer2 for Foo - ( `goo`, `post` )', function(){
-            expect( Foo.getSerializerForEndpointAction( 'goo', 'post' )).to.equal( serializer2 );
+        it( 'should return testResponse2 for TestModel - ( `test`, `get` )', function(){
+            expect( TestModel.callSerializerForEndpointAction( 'test', 'get', {} )).to.equal( testResponse2 );
         });
 
     });

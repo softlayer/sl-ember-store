@@ -249,12 +249,11 @@ define("sl-model/adapters/ajax",
 
             .then( function ajaxAdapterFindTransformResponse( response ){
 
-                var serializer = model.getSerializerForEndpointAction( options.endpoint, 'get' ),
-                    tmpResult;
+                var tmpResult;
 
                 //since serializer will probably be overwritten by a child class,
                 //need to make sure it is called in the proper context so _super functionality will work
-                response = serializer.call( model, response, this.container.lookup( 'store:main' ) );
+                response = model.callSerializerForEndpointAction( options.endpoint, 'get', response, this.container.lookup( 'store:main' ) );
 
                 //run the modelize mixin to map keys to models
                 response = this.modelize( response );
@@ -444,8 +443,7 @@ define("sl-model/adapters/localstorage",
                     modelKey,
                     records,
                     response,
-                    finalResult,
-                    serializer = model.getSerializerForEndpointAction( options.endpoint, 'get' );
+                    finalResult;
 
                 db = this._getDb();
 
@@ -463,9 +461,7 @@ define("sl-model/adapters/localstorage",
                     response = records;
                 }
 
-                //since serializer will probably be overwritten by a child class,
-                //need to make sure it is called in the proper context so _super functionality will work
-                response = serializer.call( model, response, this.container.lookup( 'store:main' ) );
+                response = model.callSerializerForEndpointAction( options.endpoint, 'get', response, this.container.lookup( 'store:main' ) );
 
                 response = this.modelize( response );
 
@@ -727,14 +723,15 @@ define("sl-model/initializers/main",
     };
   });
 define("sl-model",
-  ["./model","./store","./adapter","./adapters/ajax","./adapters/localstorage","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __exports__) {
+  ["./model","./store","./adapter","./adapters/ajax","./adapters/localstorage","./module-for-sl-model","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __exports__) {
     "use strict";
     var Model = __dependency1__["default"] || __dependency1__;
     var Store = __dependency2__["default"] || __dependency2__;
     var Adapter = __dependency3__["default"] || __dependency3__;
     var AjaxAdapter = __dependency4__["default"] || __dependency4__;
     var LocalstorageAdapter = __dependency5__["default"] || __dependency5__;
+    var moduleForSlModel = __dependency6__["default"] || __dependency6__;
 
 
     /**
@@ -758,6 +755,7 @@ define("sl-model",
     __exports__.Adapter = Adapter;
     __exports__.AjaxAdapter = AjaxAdapter;
     __exports__.LocalstorageAdapter = LocalstorageAdapter;
+    __exports__.moduleForSlModel = moduleForSlModel;
   });
 define("sl-model/model",
   ["ember","exports"],
@@ -829,13 +827,33 @@ define("sl-model/model",
 
     Model.reopenClass({
 
+        /**
+         * the default url for this class
+         * @type {string}
+         */
         url: null,
 
+        /**
+         * the default serializer
+         * @method serializer
+         * @param  {object}   response data to be serialized
+         * @return {object}            serialized data
+         */
         serializer: function( response ){ return response; },
 
-        //set default adapter
+        /**
+         * the default adapter, currently either 'ajax' or 'localstorage'
+         * @type {String}
+         */
         adapter: "ajax",
 
+        /**
+         * resolves the url by walking down the endpoints object and defaulting to the root:url string
+         * @method getUrlForEndpointAction
+         * @param  {string}                endpoint the endpoint, leave blank or null for default
+         * @param  {string}                action   the action, leave blank or null for default
+         * @return {string}                         resolved url
+         */
         getUrlForEndpointAction: function( endpoint, action ) {
             var resolvedEndpoint,
                 testEndpoint;
@@ -855,7 +873,16 @@ define("sl-model/model",
             return resolvedEndpoint;
         },
 
-        getSerializerForEndpointAction: function( endpoint, action ) {
+        /**
+         * calls the serializer for the specified endpoint and actions
+         * @method callSerializerForEndpointAction
+         * @param  {string}                        endpoint
+         * @param  {string}                        action
+         * @param  {object}                        data     the data to be serialized
+         * @param  {object}                        store    the app's store, use to store metadata
+         * @return {object}                                 the serialized data
+         */
+        callSerializerForEndpointAction: function( endpoint, action, data, store ) {
             var resolvedSerializer,
                 testEndpoint,
                 defaultSerializer;
@@ -874,12 +901,41 @@ define("sl-model/model",
 
             Ember.assert( 'A serializer needs to be set for '+this.toString(), resolvedSerializer );
 
-            return resolvedSerializer;
+            return resolvedSerializer.call( this, data, store );
         }
 
     });
 
     __exports__["default"] = Model;
+  });
+define("sl-model/module-for-sl-model",
+  ["ember-qunit","ember","sl-model","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
+    "use strict";
+    var moduleFor = __dependency1__.moduleFor;
+    var Ember = __dependency2__["default"] || __dependency2__;
+    var SlModel = __dependency3__;
+
+
+    __exports__["default"] = function moduleForSlModel(name, description, callbacks) {
+
+        moduleFor('model:' + name, description, callbacks, function(container, context, defaultSubject) {
+
+            container.register('store:main', SlModel.Store );
+
+            context.__setup_properties__.store = function(){
+                return container.lookup('store:main');
+            };
+
+            if (context.__setup_properties__.subject === defaultSubject) {
+                context.__setup_properties__.subject = function(options) {
+                    return Ember.run(function() {
+                        return container.lookup('store:main').createRecord(name, options);
+                    });
+                };
+            }
+        });
+    }
   });
 define("sl-model/store",
   ["ember","exports"],

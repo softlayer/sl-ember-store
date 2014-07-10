@@ -1,6 +1,7 @@
-import { test, moduleForModel } from 'ember-qunit';
+import { test } from 'ember-qunit';
+import { moduleForSlModel } from 'sl-model';
 
-moduleForModel('<%= dasherizedModuleName %>', '<%= classifiedModuleName %>', {
+moduleForSlModel('<%= dasherizedModuleName %>', '<%= classifiedModuleName %>', {
 
 });
 
