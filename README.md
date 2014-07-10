@@ -15,24 +15,6 @@ In order to use this just include this package in your bower.json like so:
 }
 ```
 
-Add sl-model and sl-modelize to your Brocfile.js:
-
-```javascript
-app.import( 'vendor/sl-modelize/dist/sl-modelize.js' );
-
-app.import( 'vendor/sl-model/dist/sl-model.js', {
-    exports: {
-        'sl-model': [ 'default' ]
-    }
-});
-````
-
-And then be sure and initialize it before your app in app.js:
-
-```javascript
-loadInitializers(App, 'sl-model');
-```
-
 ### Usage
 
 #### Model
