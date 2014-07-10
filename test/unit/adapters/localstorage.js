@@ -1,6 +1,6 @@
 import Model from "sl-model";
 import Adapter from 'sl-model/adapter';
-import Ajaxdapter from 'sl-model/adapters/localstorage';
+import LocalStorageAdapter from 'sl-model/adapters/localstorage';
 
 chai.should();
 
@@ -33,7 +33,7 @@ describe( 'sl-model/adapter/localstorage', function(){
             }
         };
 
-        localstoragedapter = Ajaxdapter.create({
+        localstoragedapter = LocalStorageAdapter.create({
             container: {
                 registry: [],
                 cache: {},

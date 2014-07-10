@@ -5,7 +5,7 @@ export default {
     after: 'sl-model',
 
     initialize: function( container ) {
-        var localStorageAdapter = SlModel.LocalstorageAdapter;
+        var localStorageAdapter = SlModel.LocalstorageAdapter.extend();
 
         localStorageAdapter.reopenClass({
             namspace: '<%= namespace %>'
