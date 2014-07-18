@@ -22,7 +22,7 @@ SlModel.prototype.treeFor = function treeFor( name ) {
 
     if( name === 'vendor' ) {
         vendorTree = mergeTrees([
-            pickFiles( path.join( slmodelPath, 'node_modules', 'sl-modelize' ), {
+            pickFiles( path.join( slmodelPath, 'node_modules', 'sl-modelize', 'dist' ), {
                     srcDir  : '/',
                     destDir : 'sl-modelize'
                 }
@@ -49,7 +49,7 @@ SlModel.prototype.treeFor = function treeFor( name ) {
 SlModel.prototype.blueprintsPath = function() {
     var path = require( 'path' );
     return path.join( 'node_modules', 'sl-model', 'blueprints' );
-}
+};
 
 SlModel.prototype.included = function included( app ) {
     this.app = app;
@@ -65,7 +65,7 @@ SlModel.prototype.included = function included( app ) {
             ]
         }
     });
-    this.app.import( 'vendor/sl-modelize/dist/sl-modelize.js' );
+    this.app.import( 'vendor/sl-modelize/sl-modelize.js' );
 };
 
 
