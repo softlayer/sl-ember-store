@@ -3,7 +3,9 @@
   "version": "0.1.5",
   "description": "",
   "main": "lib/sl-model.js",
-  "ember-addon-main": "ember-addon/main.js",
+  "ember-addon": {
+    "main": "ember-addon/main.js"
+  },
   "scripts": {
     "test": "./testrunner.js",
     "release": "rm -rf dist;broccoli build dist;",

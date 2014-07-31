@@ -10,6 +10,7 @@ var expect = chai.expect,
     lookupFixture = icAjax.lookupFixture,
     AppClass,
     App,
+    localStorage,
     initializerSpy,
     container,
     store,
@@ -20,7 +21,9 @@ var expect = chai.expect,
     Car,
     carResponse,
     superCarResponse,
-    crappyCarResponse;
+    crappyCarResponse,
+    Dog,
+    dog;
 
 App = Ember.Application.create({
     modulePrefix: 'SlModelTest',
@@ -36,15 +39,23 @@ initializerSpy = sinon.spy( slModelInitializer, 'initialize' );
 
 loadInitializers( App, 'sl-model' );
 
-
+localStorage =  {
+                    _ns: 'testLSObject',
+                    setItem: function( item, content ){
+                        this[item] = content;
+                    },
+                    getItem: function( item ){
+                        return this[item];
+                    }
+                };
 
 //set up models
-define('SlModelTest/models/foo', [ ] , function(){
+define('SlModelTest/models/foo', [] , function(){
     Foo = SlModel.extend();
     Foo.reopenClass({ url: '/foo' });
     return Foo;
 });
-define('SlModelTest/models/bar', [ ] , function(){
+define('SlModelTest/models/bar', [] , function(){
     Bar = SlModel.extend();
     Bar.reopenClass({ url: '/bar' });
     return Bar;
@@ -72,6 +83,11 @@ define('SlModelTest/models/car', [ ] , function(){
     return Car;
 });
 
+define('SlModelTest/models/dog', [ ] , function(){
+    Dog = SlModel.extend();
+    Dog.reopenClass({ url: '/dog', adapter: 'localstorage' });
+    return Dog;
+});
 
 //set up icAjax
 fooResponse = { id: 1, test: 'foo', 'bar': { id: 1, quiz: 'bar' } };
@@ -137,6 +153,7 @@ describe( 'sl-model:Integration', function(){
         //set up ember app
         visit( '/' ).then(function(){
             container = App.__container__;
+            container.lookup('adapter:localstorage').set( 'localStorageMockup', localStorage );
             store = container.lookup( 'store:main');
             done();
         });
@@ -164,6 +181,11 @@ describe( 'sl-model:Integration', function(){
 
     it( 'should inject the store in a controller', function(){
         container.lookup( 'controller:application' ).get( 'store' ).should.exist;
+    });
+
+    it( 'should create a new record', function(){
+        var fooRecord = store.createRecord( 'foo', {test: true});
+        fooRecord.get('test').should.equal( true );
     });
 
     it( 'should find a single Foo model', function(){
@@ -257,7 +279,9 @@ describe( 'sl-model:Integration', function(){
     });
 
     it( 'should destroy a record when calling deleteRecord', function( done ){
-        var barRecord = store.createRecord( 'bar' );
+        var barRecord = store.createRecord( 'bar', { test: false} );
+
+        barRecord.set( 'test', true );
 
         barRecord.deleteRecord().then( function( response ){
             expect( barRecord.isDestroyed );
@@ -265,4 +289,19 @@ describe( 'sl-model:Integration', function(){
         });
     });
 
+    it( 'should create a localstorage record', function(){
+        var dogRecord = store.createRecord( 'dog', { test: false } );
+        dogRecord.get( 'test' ).should.equal( false );
+        dogRecord.set( 'test2', 42 );
+        dogRecord.get( 'test2' ).should.equal( 42 );
+    });
+
+    it( 'should create a localstorage record and save it', function( done){
+        var dogRecord = store.createRecord( 'dog', { test: 42 } );
+        dogRecord.save().then(function( result ){
+            var foundDog = store.findOne('dog');
+            foundDog.get('test').should.equal(42);
+            done();
+        });
+    });
 });
