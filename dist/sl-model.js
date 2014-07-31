@@ -449,7 +449,7 @@ define("sl-model/adapters/localstorage",
 
                 records = this._getRecords( db, url );
 
-                if( options.data.id ){
+                if( options.data && options.data.id ){
                     response = records.findBy( 'id', options.data.id );
                 }
                 else if( findOne ){
@@ -775,6 +775,8 @@ define("sl-model/model",
 
         container: null,
 
+        content: {},
+
          /**
          * Save the contents via the configured adapter
          *
@@ -797,7 +799,7 @@ define("sl-model/model",
             return this.container.lookup( 'adapter:'+this.constructor.adapter ).save( endpoint, data )
                 .then( function( response ){
                     this.set( 'content', response );
-                    return response;
+                    return this;
                 }.bind( this ), null, 'sl-model.model:save');
         },
 
