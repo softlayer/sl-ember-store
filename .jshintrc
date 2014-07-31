@@ -45,6 +45,7 @@
     "before",
     "beforeEach",
     "after",
+    "afterEach",
     "describe",
     "it",
     "chai",

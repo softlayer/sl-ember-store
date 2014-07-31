@@ -8,6 +8,7 @@ var expect = chai.expect,
     localstoragedapter,
     Foo = Model.extend(),
     Bar = Model.extend(),
+    Car = Model.extend(),
     localStorage,
     defineFixture,
     response,
@@ -62,11 +63,13 @@ describe( 'sl-model/adapter/localstorage', function(){
 
         localstoragedapter.container.registry.push( { key: 'model:foo', factory: Foo } );
         localstoragedapter.container.registry.push( { key: 'model:bar', factory: Bar } );
+        localstoragedapter.container.registry.push( { key: 'model:bar', factory: Car } );
 
         localstoragedapter.set( 'localStorageMockup', localStorage );
 
         Foo.reopenClass( { url: '/foo' } );
         Bar.reopenClass( { url: '/bar' } );
+        Car.reopenClass( { url: '/car' } );
 
         //spies
         requestSpy = sinon.spy( localStorage, 'getItem' );
@@ -104,7 +107,19 @@ describe( 'sl-model/adapter/localstorage', function(){
 
         singleObjectTestSuite();
 
+        it( 'should reject when no model was found', function( done ){
+            response = localstoragedapter.find( Car, 1, { label: '1' } );
+            response.then( function(result){
+                throw( 'error, find should have been rejecteed' );
+            });
+            response.catch( function(result){
+                done();
+            });
+        });
+
     });
+
+
 
     describe( '__find single model with no id', function(){
         beforeEach(function(done){
@@ -122,6 +137,16 @@ describe( 'sl-model/adapter/localstorage', function(){
 
         singleObjectTestSuite();
 
+        it( 'should reject when no model was found', function( done ){
+            response = localstoragedapter.find( Car, null, {data: {main: true }}, true );
+            response.then( function(result){
+                throw( 'error, find should have been rejecteed' );
+            });
+            response.catch( function(result){
+                done();
+            });
+        });
+
     });
 
     describe( '__find array of models', function(){
@@ -132,7 +157,7 @@ describe( 'sl-model/adapter/localstorage', function(){
             response.then(function(){done();});
         });
 
-        localstorageTestSuite()
+        localstorageTestSuite();
 
         it( 'should return an instance of Ember.ArrayProxy', function(){
             response.should.be.instanceOf( Ember.ArrayProxy );
@@ -141,8 +166,36 @@ describe( 'sl-model/adapter/localstorage', function(){
         it( 'should return an array of Bar models', function(){
             response.content[0].should.to.be.instanceOf( Bar );
             response.content[1].should.to.be.instanceOf( Bar );
-        })
+        });
     });
+
+    describe( '__find array, reject', function(){
+        beforeEach(function( done ){
+            var options =  {data: {main: true }};
+            //request
+            response = localstoragedapter.find( Car, null, options, false );
+            response.finally(function(){done();});
+        });
+
+        it( 'should reject ', function( done){
+            response.then(function(){
+                throw( 'find should have been rejected' );
+            }).catch(function(reason){
+                done();
+            });
+        });
+        it( 'should still be an array', function(){
+            response.should.be.instanceOf( Ember.ArrayProxy );
+        });
+        it( 'should be an empty array', function(){
+            response.get('length').should.equal(0);
+        });
+
+        after( function(){
+            requestSpy.reset();
+        });
+    });
+
 
     describe( 'save', function(){
         before( function( done ){
@@ -169,7 +222,7 @@ describe( 'sl-model/adapter/localstorage', function(){
 
             expect( fooRecord.id ).to.equal( 2 );
 
-        })
+        });
 
     });
 
@@ -197,7 +250,7 @@ describe( 'sl-model/adapter/localstorage', function(){
 
             expect( fooRecord ).to.be.undefined;
 
-        })
+        });
 
     });
 });
