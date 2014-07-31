@@ -9,14 +9,10 @@ var expect = chai.expect,
     ajaxdapter,
     Foo = Model.extend(),
     Bar = Model.extend(),
+    Car = Model.extend(),    
     defineFixture = icAjax.defineFixture,
-    response,
-    responseFromCache,
-    responseFromRequestCache,
-    requestSpy,
-    generateCacheKeySpy,
-    addRequestCacheSpy,
-    removeRequestCacheSpy;
+    response,    
+    requestSpy;
 
 describe( 'sl-model/adapter/ajax', function(){
 
@@ -51,6 +47,8 @@ describe( 'sl-model/adapter/ajax', function(){
 
         ajaxdapter.container.registry.push( { key: 'model:foo', factory: Foo } );
         ajaxdapter.container.registry.push( { key: 'model:bar', factory: Bar } );
+        ajaxdapter.container.registry.push( { key: 'model:bar', factory: Car } );
+
         defineFixture( '/foo', {
             response: { id: 1, test: 'foo', 'bar': { id: 1, quiz: 'bar' } },
             jqXHR: {},
@@ -61,15 +59,17 @@ describe( 'sl-model/adapter/ajax', function(){
             jqXHR: {},
             testStatus: 'success'
         });
+        defineFixture( '/car', {
+            response:  [],
+            jqXHR: {},
+            testStatus: 'success'
+        });
         Foo.reopenClass( { url: '/foo'});
         Bar.reopenClass( { url: '/bar'});
+        Car.reopenClass( { url: '/car'});
 
         //spies
         requestSpy = sinon.spy( icAjax, 'request' );
-        generateCacheKeySpy = sinon.spy(ajaxdapter, 'generateCacheKey');
-        addRequestCacheSpy = sinon.spy( ajaxdapter, 'addToRequestCache' );
-        removeRequestCacheSpy = sinon.spy( ajaxdapter, 'removeFromRequestCache' );
-
 
     });
 
@@ -77,12 +77,9 @@ describe( 'sl-model/adapter/ajax', function(){
         beforeEach(function( done ){
             //request
             response = ajaxdapter.find( Foo, 1 );
-            responseFromRequestCache = ajaxdapter.find( Foo, 1 );
+            
             response.then( function(){
-                responseFromCache = ajaxdapter.find( Foo, 1 );
-                responseFromCache.then( function(){
                     done();
-                });
             });
         });
 
@@ -103,12 +100,8 @@ describe( 'sl-model/adapter/ajax', function(){
             var options =  {data: {main: true }};
             //request
             response = ajaxdapter.find( Foo, null, options, true );
-            responseFromRequestCache = ajaxdapter.find( Foo, null, options, true );
-            response.then( function(){
-                responseFromCache = ajaxdapter.find( Foo, null, options, true );
-                responseFromCache.then( function(){
+            response.finally( function(){
                     done();
-                })
             });
         });
 
@@ -128,16 +121,12 @@ describe( 'sl-model/adapter/ajax', function(){
             var options =  {data: {main: true }};
             //request
             response = ajaxdapter.find( Bar, null, options, false );
-            responseFromRequestCache = ajaxdapter.find( Bar, null, options, false );
-            response.then( function(){
-                responseFromCache = ajaxdapter.find( Bar, null, options, false );
-                responseFromCache.then( function(){
+            response.finally( function(){
                     done();
-                })
             });
         });
 
-        ajaxTestSuite()
+        ajaxTestSuite();
 
         it( 'should return an instance of Ember.ArrayProxy', function(){
             response.should.be.instanceOf( Ember.ArrayProxy );
@@ -146,7 +135,34 @@ describe( 'sl-model/adapter/ajax', function(){
         it( 'should return an array of Bar models', function(){
             response.content[0].should.to.be.instanceOf( Bar );
             response.content[1].should.to.be.instanceOf( Bar );
-        })
+        });
+    });
+    
+    describe( '__find array with zero items', function(){
+        beforeEach(function( done ){
+            var options =  {data: {main: true }};
+            //request
+            response = ajaxdapter.find( Car, null, options, false );
+            response.finally(function(){done();});
+        });
+
+        it( 'should reject the promise', function( done){
+            response.then(function(){
+                done(  new Error("error: should not have resolved the find" ));
+            },function(reason){
+                done();
+            });
+        });
+        it( 'should still be an array', function(){
+            response.should.be.instanceOf( Ember.ArrayProxy );
+        });
+        it( 'should be an empty array', function(){
+            response.get('length').should.equal(0);
+        });
+
+        after( function(){
+            requestSpy.reset();
+        });
     });
 
     describe( 'save', function(){
@@ -208,16 +224,7 @@ function ajaxTestSuite(){
     afterEach(function(){
         //reset spies
         requestSpy.reset();
-        generateCacheKeySpy.reset();
-        addRequestCacheSpy.reset();
-        removeRequestCacheSpy.reset();
-        ajaxdapter.clearCache();
-        ajaxdapter.clearRequestCache();
-    });
-
-    it( 'should call generateCacheKey', function(){
-        expect( ajaxdapter.generateCacheKey.calledOnce );
-    });
+    });    
 
     it( 'should call icAjax.request once', function(){
         requestSpy.should.be.calledOnce;
@@ -229,35 +236,12 @@ function ajaxTestSuite(){
 
     });
 
-    it( 'should add and remove a request to the requestCache', function(){
-        addRequestCacheSpy.should.have.been.calledOnce;
-        removeRequestCacheSpy.should.have.been.calledOnce;
-    });
-
-    it( 'should return a promise proxy from cache, if cached', function(){
-        responseFromCache.then.should.exist;
-        expect( Ember.PromiseProxyMixin.detect( responseFromCache ) );
-    });
-
-    it( 'should return promise proxy with in flight promise, if inflight promise found', function(){
-        responseFromRequestCache.then.should.exist;
-        expect( Ember.PromiseProxyMixin.detect( responseFromRequestCache ) );
-
-    });
 }
 
 function singleObjectAjaxTestSuite(){
     it( 'should return an instanceof Foo', function(){
         response.should.be.instanceOf( Foo );
     });
-
-    it( 'should return and object from cache that is an instanceof foo', function(){
-        responseFromCache.should.be.instanceOf( Foo );
-    })
-
-    it( 'should return an object from the request cache that is an instanceof foo', function(){
-        responseFromRequestCache.should.be.instanceOf( Foo );
-    })
 }
 
 

@@ -15,10 +15,7 @@ var expect = chai.expect,
     responseFromCache,
     responseFromRequestCache,
     requestSpy,
-    saveSpy,
-    generateCacheKeySpy,
-    addRequestCacheSpy,
-    removeRequestCacheSpy;
+    saveSpy;
 
 describe( 'sl-model/adapter/localstorage', function(){
 
@@ -74,9 +71,6 @@ describe( 'sl-model/adapter/localstorage', function(){
         //spies
         requestSpy = sinon.spy( localStorage, 'getItem' );
         saveSpy = sinon.spy( localStorage, 'setItem' );
-        generateCacheKeySpy = sinon.spy( localstoragedapter, 'generateCacheKey');
-        addRequestCacheSpy = sinon.spy( localstoragedapter, 'addToRequestCache' );
-        removeRequestCacheSpy = sinon.spy( localstoragedapter, 'removeFromRequestCache' );
 
 
         localstoragedapter.save( '/foo',  {id: 1, test: 'foo', 'bar': { id: 1, quiz: 'bar' } } );
@@ -110,7 +104,7 @@ describe( 'sl-model/adapter/localstorage', function(){
         it( 'should reject when no model was found', function( done ){
             response = localstoragedapter.find( Car, 1, { label: '1' } );
             response.then( function(result){
-                throw( 'error, find should have been rejecteed' );
+                throw 'error, find should have been rejecteed' ;
             });
             response.catch( function(result){
                 done();
@@ -169,7 +163,7 @@ describe( 'sl-model/adapter/localstorage', function(){
         });
     });
 
-    describe( '__find array, reject', function(){
+    describe( '__find array with zero items', function(){
         beforeEach(function( done ){
             var options =  {data: {main: true }};
             //request
@@ -177,10 +171,10 @@ describe( 'sl-model/adapter/localstorage', function(){
             response.finally(function(){done();});
         });
 
-        it( 'should reject ', function( done){
+         it( 'should reject the promise', function( done){
             response.then(function(){
-                throw( 'find should have been rejected' );
-            }).catch(function(reason){
+                done(  new Error("error: should not have resolved the find" ));
+            },function(reason){
                 done();
             });
         });
@@ -260,11 +254,6 @@ function localstorageTestSuite(){
     afterEach(function(){
         //reset spies
         requestSpy.reset();
-        generateCacheKeySpy.reset();
-        addRequestCacheSpy.reset();
-        removeRequestCacheSpy.reset();
-        localstoragedapter.clearCache();
-        localstoragedapter.clearRequestCache();
     });
 
     it( 'should return a promise proxy', function(){
