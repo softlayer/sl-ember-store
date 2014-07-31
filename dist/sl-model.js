@@ -461,6 +461,10 @@ define("sl-model/adapters/localstorage",
                     response = records;
                 }
 
+                if( ! response ){
+                    reject();
+                }
+
                 response = model.callSerializerForEndpointAction( options.endpoint, 'get', response, this.container.lookup( 'store:main' ) );
 
                 response = this.modelize( response );
@@ -526,7 +530,7 @@ define("sl-model/adapters/localstorage",
                         statusCode: 404,
                         statusText: 'id: '+id+' not found at '+url,
                         message: 'The record with id: `'+id+'` was not found at url:'+url
-                    }
+                    };
                     reject( errorData );
                 }
 
@@ -615,7 +619,7 @@ define("sl-model/adapters/localstorage",
         _getDb: function(){
             var lsDb = this._getLocalStorage().getItem( this.getNamespace() );
             if( lsDb ){
-                return JSON.parse( lsDb )
+                return JSON.parse( lsDb );
             }
 
             return {};
