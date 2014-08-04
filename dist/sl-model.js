@@ -115,7 +115,7 @@ define("sl-model/adapters/ajax",
 
                 //since serializer will probably be overwritten by a child class,
                 //need to make sure it is called in the proper context so _super functionality will work
-                response = model.callSerializerForEndpointAction( options.endpoint, 'get', response, this.container.lookup( 'store:main' ) );
+                response = model.callSerializerForEndpointAction( options.endpoint, 'get', response, store );
 
                 //run the modelize mixin to map keys to models
                 response = this.modelize( response );
@@ -322,7 +322,7 @@ define("sl-model/adapters/localstorage",
                     reject();
                 }
 
-                response = model.callSerializerForEndpointAction( options.endpoint, 'get', response, this.container.lookup( 'store:main' ) );
+                response = model.callSerializerForEndpointAction( options.endpoint, 'get', response, store );
 
                 response = this.modelize( response );
 
