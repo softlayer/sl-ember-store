@@ -125,11 +125,11 @@ define("sl-model/adapters/ajax",
 
                     tmpResult = Ember.A([]);
                     Ember.makeArray( response ).forEach( function ( child ) {
-                        tmpResult.pushObject( model.create( child ) );
+                        tmpResult.pushObject( model.create().setProperties( child ) );
                     }, this );
 
                 }else{
-                    tmpResult = model.create( response );
+                    tmpResult = model.create().setProperties( response );
                 }
 
                 return tmpResult;
@@ -324,10 +324,10 @@ define("sl-model/adapters/localstorage",
                 if ( results instanceof Ember.ArrayProxy ) {
                     finalResult = Ember.A([]);
                     Ember.makeArray( response ).forEach( function ( child ) {
-                        finalResult.pushObject( model.create( child ) );
+                        finalResult.pushObject( model.create().setProperties( child ) );
                     }, this );
                 }else{
-                    finalResult = model.create( response );
+                    finalResult = model.create().setProperties( response );
                 }
 
                 resolve( finalResult );
