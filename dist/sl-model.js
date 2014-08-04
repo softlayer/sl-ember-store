@@ -628,10 +628,13 @@ define("sl-model/model",
      * @class model
      */
     var Model =  Ember.ObjectProxy.extend({
+        
+        init: function(){
+            this.set( 'content', {});
+        },
 
         container: null,
 
-        content: {},
 
          /**
          * Save the contents via the configured adapter
