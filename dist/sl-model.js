@@ -125,11 +125,11 @@ define("sl-model/adapters/ajax",
 
                     tmpResult = Ember.A([]);
                     Ember.makeArray( response ).forEach( function ( child ) {
-                        tmpResult.pushObject( model.create().setProperties( child ) );
+                        tmpResult.pushObject( model.createRecord( child ) );
                     }, this );
 
                 }else{
-                    tmpResult = model.create().setProperties( response );
+                    tmpResult = model.createRecord( response );
                 }
 
                 return tmpResult;
@@ -324,10 +324,10 @@ define("sl-model/adapters/localstorage",
                 if ( results instanceof Ember.ArrayProxy ) {
                     finalResult = Ember.A([]);
                     Ember.makeArray( response ).forEach( function ( child ) {
-                        finalResult.pushObject( model.create().setProperties( child ) );
+                        finalResult.pushObject( model.createRecord( child ) );
                     }, this );
                 }else{
-                    finalResult = model.create().setProperties( response );
+                    finalResult = model.createRecord( response );
                 }
 
                 resolve( finalResult );
@@ -629,13 +629,6 @@ define("sl-model/model",
      */
     var Model =  Ember.ObjectProxy.extend({
         
-        init: function(){
-            this.set( 'content', {});
-        },
-
-        container: null,
-
-
          /**
          * Save the contents via the configured adapter
          *
@@ -693,6 +686,12 @@ define("sl-model/model",
          * @type {string}
          */
         url: null,
+
+        createRecord: function( content ){
+            var record = this.create();
+            record.set( 'content', content || {} );
+            return record;
+        },
 
         /**
          * the default serializer
@@ -944,13 +943,9 @@ define("sl-model/store",
          * @param  {string} type lower case name of model class
          * @return {object}      model object, instance of Ember.ObjectProxy
          */
-        createRecord: function( type, defaults ){
+        createRecord: function( type, content ){
             var factory = this.modelFor( type ),
-                record = factory.create( {
-                    container: this.container
-                });
-
-                record.setProperties( defaults );
+                record = factory.createRecord( content );
 
                 return record;
         },
