@@ -63,12 +63,13 @@ define("sl-model/adapters/ajax",
          * find
          * @public
          * @method find
+         * @param  {string} type    model name
          * @param  {int}    id      record id
          * @param  {object} options hash of options
          * @param  {bool} findOne force return of single recrord
          * @return { ObjectProxy | ArrayProxy } The record or array of records requested
          */
-        find: function ( model, id, options, findOne ){
+        find: function ( type, id, options, findOne ){
 
             var url,
                 cacheKey,
@@ -77,7 +78,9 @@ define("sl-model/adapters/ajax",
                 cachedRequest,
                 promise,
                 initialObj = {},
-                queryObj;
+                queryObj,
+                store = this.get( 'store' ),
+                model = store.modelFor( type );
 
             options = options || {};
 
@@ -125,11 +128,11 @@ define("sl-model/adapters/ajax",
 
                     tmpResult = Ember.A([]);
                     Ember.makeArray( response ).forEach( function ( child ) {
-                        tmpResult.pushObject( model.createRecord( child ) );
+                        tmpResult.pushObject( store.createRecord( type, child ) );
                     }, this );
 
                 }else{
-                    tmpResult = model.createRecord( response );
+                    tmpResult = store.createRecord( type, response );
                 }
 
                 return tmpResult;
@@ -258,11 +261,13 @@ define("sl-model/adapters/localstorage",
          * @param  {bool} findOne force return of single recrord
          * @return { ObjectProxy | ArrayProxy } The record or array of records requested
          */
-        find: function ( model, id, options, findOne ){
+        find: function ( type, id, options, findOne ){
             var url,            
                 results,
                 promise,
-                queryObj;
+                queryObj,
+                store = this.get( 'store' ),
+                model = store.modelFor( type );
 
             options = options || {};
 
@@ -324,10 +329,10 @@ define("sl-model/adapters/localstorage",
                 if ( results instanceof Ember.ArrayProxy ) {
                     finalResult = Ember.A([]);
                     Ember.makeArray( response ).forEach( function ( child ) {
-                        finalResult.pushObject( model.createRecord( child ) );
+                        finalResult.pushObject( store.createRecord( type, child ) );
                     }, this );
                 }else{
-                    finalResult = model.createRecord( response );
+                    finalResult = store.createRecord( type, response );
                 }
 
                 resolve( finalResult );
@@ -574,6 +579,8 @@ define("sl-model/initializers/main",
             application.inject('controller', 'store', 'store:main');
 
             application.inject('route', 'store', 'store:main');
+            
+            application.inject('adapter', 'store', 'store:main');
 
         }
     };
@@ -686,12 +693,6 @@ define("sl-model/model",
          * @type {string}
          */
         url: null,
-
-        createRecord: function( content ){
-            var record = this.create();
-            record.set( 'content', content || {} );
-            return record;
-        },
 
         /**
          * the default serializer
@@ -932,8 +933,7 @@ define("sl-model/store",
          * @return {object}         an ember object / array proxy with the promise proxy mixin
          */
         __find: function( type, id, options, findOne ) {
-            var model = this.modelFor( type );
-            return this.adapterFor( type ).find( model, id, options, findOne );
+            return this.adapterFor( type ).find( type, id, options, findOne );
         },
 
         /**
@@ -945,7 +945,11 @@ define("sl-model/store",
          */
         createRecord: function( type, content ){
             var factory = this.modelFor( type ),
-                record = factory.createRecord( content );
+                record = factory.create( { 
+                    container: this.get( 'container' )
+                } );
+
+                record.set( 'content', content || {} );
 
                 return record;
         },

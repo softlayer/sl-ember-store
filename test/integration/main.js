@@ -189,7 +189,7 @@ describe( 'sl-model:Integration', function(){
     });
 
     it( 'should find a single Foo model', function(){
-        store.find( 'foo', 1 ).get('content').should.be.instanceof( Foo );
+        store.find( 'foo', 1 ).should.eventually.be.instanceof( Foo );
     });
 
     it( 'should find a single Foo model with correct content', function( done ){
@@ -197,7 +197,7 @@ describe( 'sl-model:Integration', function(){
         fooRecord.then(function(){
             var ajaxAdapter = container.lookup('adapter:ajax'),
                 fooModelized = ajaxAdapter.modelize( fooResponse );
-            fooRecord.get('content').should.deep.equal( fooModelized );
+            fooRecord.get('content.content').should.deep.equal( fooModelized );
             done();
         },function(err){
             done(err);
@@ -205,7 +205,7 @@ describe( 'sl-model:Integration', function(){
     });
 
     it( 'should find a single Bar model using findOne', function(){
-        store.findOne( 'bar' ).should.be.instanceof( Bar );
+        store.findOne( 'bar' ).should.eventually.be.instanceof( Bar );
     });
 
     it( 'should find a single Bar model, using findOne, with correct content', function( done ){
@@ -213,7 +213,7 @@ describe( 'sl-model:Integration', function(){
         barRecord.then(function(){
             var ajaxAdapter = container.lookup('adapter:ajax'),
                 barModelized = ajaxAdapter.modelize( barResponse );
-            barRecord.get('content').should.deep.equal( barModelized );
+            barRecord.get('content.content').should.deep.equal( barModelized );
             done();
         },function(err){
             done(err);
@@ -300,8 +300,10 @@ describe( 'sl-model:Integration', function(){
         var dogRecord = store.createRecord( 'dog', { test: 42 } );
         dogRecord.save().then(function( result ){
             var foundDog = store.findOne('dog');
-            foundDog.get('test').should.equal(42);
-            done();
+            foundDog.then( function(){
+                foundDog.get('test').should.equal(42);
+                done();
+            });
         });
     });
 });
