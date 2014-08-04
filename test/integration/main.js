@@ -189,7 +189,7 @@ describe( 'sl-model:Integration', function(){
     });
 
     it( 'should find a single Foo model', function(){
-        store.find( 'foo', 1 ).should.be.instanceof( Foo );
+        store.find( 'foo', 1 ).get('content').should.be.instanceof( Foo );
     });
 
     it( 'should find a single Foo model with correct content', function( done ){
