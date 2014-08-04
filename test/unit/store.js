@@ -127,7 +127,7 @@ describe( 'sl-model/store', function(){
             store.adapterFor.should.have.been.calledWith( 'foo' );
         });
         it( 'should have called AjaxAdapter.find with the correct args', function(){
-            ajaxadapter.find.should.have.been.calledWith( Foo, 1, {}, false );
+            ajaxadapter.find.should.have.been.calledWith( 'foo', 1, {}, false );
         });
     });
 

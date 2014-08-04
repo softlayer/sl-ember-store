@@ -15,24 +15,14 @@ var expect = chai.expect,
     responseFromCache,
     responseFromRequestCache,
     requestSpy,
-    saveSpy;
+    saveSpy,
+    store,
+    container;
 
 describe( 'sl-model/adapter/localstorage', function(){
 
     before( function( ){
-
-        localStorage = {
-            _ns: 'testLSObject',
-            setItem: function( item, content ){
-                this[item] = content;
-            },
-            getItem: function( item ){
-                return this[item];
-            }
-        };
-
-        localstoragedapter = LocalStorageAdapter.create({
-            container: {
+        container = {
                 registry: [],
                 cache: {},
                 normalize: function( key ){
@@ -49,7 +39,34 @@ describe( 'sl-model/adapter/localstorage', function(){
                     var item = this.registry.findBy( 'key', key );
                     return item ? item.factory : undefined;
                 }
+            };
+        store = {
+                container:container,
+                runPostQueryHooks: sinon.spy(),
+                runPreQueryHooks: sinon.spy(),
+                createRecord: function( type, content ){
+                    var record = this.modelFor( type ).create({conatainer:this.container}).set('content',content);
+                    return record;
+                },
+                modelFor: function( type ){
+                    return this.container.lookupFactory('model:'+type);
+                }
+            };
+
+
+        localStorage = {
+            _ns: 'testLSObject',
+            setItem: function( item, content ){
+                this[item] = content;
+            },
+            getItem: function( item ){
+                return this[item];
             }
+        };
+
+        localstoragedapter = LocalStorageAdapter.create({
+            container: container,
+            store:store
         });
 
         //register mock data
@@ -60,7 +77,7 @@ describe( 'sl-model/adapter/localstorage', function(){
 
         localstoragedapter.container.registry.push( { key: 'model:foo', factory: Foo } );
         localstoragedapter.container.registry.push( { key: 'model:bar', factory: Bar } );
-        localstoragedapter.container.registry.push( { key: 'model:bar', factory: Car } );
+        localstoragedapter.container.registry.push( { key: 'model:car', factory: Car } );
 
         localstoragedapter.set( 'localStorageMockup', localStorage );
 
@@ -83,14 +100,8 @@ describe( 'sl-model/adapter/localstorage', function(){
     describe( '__find single model with id', function(){
         beforeEach(function( done ){
             //request
-            response = localstoragedapter.find( Foo, 1, { label: '1' } );
-            responseFromRequestCache = localstoragedapter.find( Foo, 1, { label: '2'} );
-            response.then( function(){
-                responseFromCache = localstoragedapter.find( Foo, 1, { label: '3' } );
-                responseFromCache.then( function(){
-                    done();
-                });
-            });
+            response = localstoragedapter.find( 'foo', 1, { label: '1' } );
+            response.finally(function(){done();});
         });
 
         it( 'should call localStorage.getItem with the correct arguments', function(){
@@ -102,7 +113,7 @@ describe( 'sl-model/adapter/localstorage', function(){
         singleObjectTestSuite();
 
         it( 'should reject when no model was found', function( done ){
-            response = localstoragedapter.find( Car, 1, { label: '1' } );
+            response = localstoragedapter.find( 'car', 1, { label: '1' } );
             response.then( function(result){
                 throw 'error, find should have been rejecteed' ;
             });
@@ -119,7 +130,7 @@ describe( 'sl-model/adapter/localstorage', function(){
         beforeEach(function(done){
             var options =  {data: {main: true }};
             //request
-            response = localstoragedapter.find( Foo, null, options, true );
+            response = localstoragedapter.find( 'foo', null, options, true );
             response.then(function(){done();});
         });
 
@@ -132,7 +143,7 @@ describe( 'sl-model/adapter/localstorage', function(){
         singleObjectTestSuite();
 
         it( 'should reject when no model was found', function( done ){
-            response = localstoragedapter.find( Car, null, {data: {main: true }}, true );
+            response = localstoragedapter.find( 'car', null, {data: {main: true }}, true );
             response.then( function(result){
                 throw( 'error, find should have been rejecteed' );
             });
@@ -147,7 +158,7 @@ describe( 'sl-model/adapter/localstorage', function(){
         beforeEach(function( done ){
             var options =  {data: {main: true }};
             //request
-            response = localstoragedapter.find( Bar, null, options, false );
+            response = localstoragedapter.find( 'bar', null, options, false );
             response.then(function(){done();});
         });
 
@@ -167,7 +178,7 @@ describe( 'sl-model/adapter/localstorage', function(){
         beforeEach(function( done ){
             var options =  {data: {main: true }};
             //request
-            response = localstoragedapter.find( Car, null, options, false );
+            response = localstoragedapter.find( 'car', null, options, false );
             response.finally(function(){done();});
         });
 
@@ -267,7 +278,7 @@ function localstorageTestSuite(){
 
 function singleObjectTestSuite(){
     it( 'should return an instanceof Foo', function(){
-        response.should.be.instanceOf( Foo );
+        response.get('content').should.be.instanceOf( Foo );
     });
 }
 

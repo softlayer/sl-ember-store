@@ -7,6 +7,8 @@ chai.should();
 
 var expect = chai.expect,
     ajaxdapter,
+    store,
+    container,
     Foo = Model.extend(),
     Bar = Model.extend(),
     Car = Model.extend(),    
@@ -18,8 +20,7 @@ describe( 'sl-model/adapter/ajax', function(){
 
     before( function( ){
 
-        ajaxdapter = Ajaxdapter.create({
-            container: {
+        container = {
                 registry: [],
                 cache: {},
                 normalize: function( key ){
@@ -36,18 +37,29 @@ describe( 'sl-model/adapter/ajax', function(){
                     var item = this.registry.findBy( 'key', key );
                     return item ? item.factory : undefined;
                 }
-            }
-        });
+            };
+        store = {
+                container:container,
+                runPostQueryHooks: sinon.spy(),
+                runPreQueryHooks: sinon.spy(),
+                createRecord: function( type, content ){
+                    var record = this.modelFor( type ).create({conatainer:this.container}).set('content',content);
+                    return record;
+                },
+                modelFor: function( type ){
+                    return this.container.lookupFactory('model:'+type);
+                }
+            };
 
-        //register mock data
-        ajaxdapter.container.cache['store:main']={
-            runPostQueryHooks: sinon.spy(),
-            runPreQueryHooks: sinon.spy()
-        };
+        ajaxdapter = Ajaxdapter.create({
+            container: container,
+            store: store 
+        });
 
         ajaxdapter.container.registry.push( { key: 'model:foo', factory: Foo } );
         ajaxdapter.container.registry.push( { key: 'model:bar', factory: Bar } );
-        ajaxdapter.container.registry.push( { key: 'model:bar', factory: Car } );
+        ajaxdapter.container.registry.push( { key: 'model:car', factory: Car } );
+        ajaxdapter.container.cache['store:main']=store;
 
         defineFixture( '/foo', {
             response: { id: 1, test: 'foo', 'bar': { id: 1, quiz: 'bar' } },
@@ -76,7 +88,7 @@ describe( 'sl-model/adapter/ajax', function(){
     describe( '__find single model with id', function(){
         beforeEach(function( done ){
             //request
-            response = ajaxdapter.find( Foo, 1 );
+            response = ajaxdapter.find( 'foo', 1 );
             
             response.then( function(){
                     done();
@@ -99,7 +111,8 @@ describe( 'sl-model/adapter/ajax', function(){
         beforeEach(function( done ){
             var options =  {data: {main: true }};
             //request
-            response = ajaxdapter.find( Foo, null, options, true );
+            response = ajaxdapter.find( 'foo', null, options, true );
+
             response.finally( function(){
                     done();
             });
@@ -120,7 +133,7 @@ describe( 'sl-model/adapter/ajax', function(){
         beforeEach(function( done ){
             var options =  {data: {main: true }};
             //request
-            response = ajaxdapter.find( Bar, null, options, false );
+            response = ajaxdapter.find( 'bar', null, options, false );
             response.finally( function(){
                     done();
             });
@@ -142,7 +155,7 @@ describe( 'sl-model/adapter/ajax', function(){
         beforeEach(function( done ){
             var options =  {data: {main: true }};
             //request
-            response = ajaxdapter.find( Car, null, options, false );
+            response = ajaxdapter.find( 'car', null, options, false );
             response.finally(function(){done();});
         });
 
@@ -239,8 +252,11 @@ function ajaxTestSuite(){
 }
 
 function singleObjectAjaxTestSuite(){
-    it( 'should return an instanceof Foo', function(){
-        response.should.be.instanceOf( Foo );
+    it( 'should return an instanceof Foo', function(done){
+        response.then(function(r){
+            response.get('content').should.be.instanceOf( Foo );
+            done();
+        });
     });
 }
 
