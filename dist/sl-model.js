@@ -877,6 +877,37 @@ define("sl-model/store",
             return this.get( '_metadataCache.'+type );
         },
 
+
+        /**
+         * private variable that stores the inflection dictionary for non
+         * standard words 
+         *
+         * @property _inflectionDict
+         * @private
+         * @type {object}
+         */
+        _inflectionDict: {},
+
+        pluralize: function( word ){
+            return this.get( '_inflectionDict.'+word ) || word.match(/s$/) ? word+'es' : word+'s';
+        },
+
+        singularize: function( word ){
+            var inflectionDict = this.get( '_inflectionDict' ),
+                foundDef = inflectionDict.keys().reduce( function( word, key ){
+                    var def = inflectionDict.get( key ); 
+                    if( RegExp( '^'+word ).test( def ) ){
+                        return def;
+                    }
+                    return word;
+                });
+            return foundDef || word.replace( /s$/, '' ); 
+        },
+
+        defineInflection: function( word, pluralizedWord ){
+            this.set( '_inflectionDict.'+word, pluralizedWord );
+        },
+
         /**
          * adapterFor returns the configured adapter for the specified model type
          * @method  adapterFor
