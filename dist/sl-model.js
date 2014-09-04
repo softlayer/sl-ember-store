@@ -586,16 +586,14 @@ define("sl-model/initializers/main",
     };
   });
 define("sl-model",
-  ["./model","./store","./adapter","./adapters/ajax","./adapters/localstorage","./module-for-sl-model","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __exports__) {
+  ["./model","./store","./adapter","./adapters/ajax","./adapters/localstorage","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __exports__) {
     "use strict";
     var Model = __dependency1__["default"] || __dependency1__;
     var Store = __dependency2__["default"] || __dependency2__;
     var Adapter = __dependency3__["default"] || __dependency3__;
     var AjaxAdapter = __dependency4__["default"] || __dependency4__;
     var LocalstorageAdapter = __dependency5__["default"] || __dependency5__;
-    var moduleForSlModel = __dependency6__["default"] || __dependency6__;
-
 
     /**
      * SL-Model exports sl-model/model as its default export.
@@ -618,7 +616,6 @@ define("sl-model",
     __exports__.Adapter = Adapter;
     __exports__.AjaxAdapter = AjaxAdapter;
     __exports__.LocalstorageAdapter = LocalstorageAdapter;
-    __exports__.moduleForSlModel = moduleForSlModel;
   });
 define("sl-model/model",
   ["ember","exports"],
@@ -769,35 +766,6 @@ define("sl-model/model",
 
     __exports__["default"] = Model;
   });
-define("sl-model/module-for-sl-model",
-  ["ember-qunit","ember","sl-model","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
-    "use strict";
-    var moduleFor = __dependency1__.moduleFor;
-    var Ember = __dependency2__["default"] || __dependency2__;
-    var SlModel = __dependency3__;
-
-
-    __exports__["default"] = function moduleForSlModel(name, description, callbacks) {
-
-        moduleFor('model:' + name, description, callbacks, function(container, context, defaultSubject) {
-
-            container.register('store:main', SlModel.Store );
-
-            context.__setup_properties__.store = function(){
-                return container.lookup('store:main');
-            };
-
-            if (context.__setup_properties__.subject === defaultSubject) {
-                context.__setup_properties__.subject = function(options) {
-                    return Ember.run(function() {
-                        return container.lookup('store:main').createRecord(name, options);
-                    });
-                };
-            }
-        });
-    }
-  });
 define("sl-model/store",
   ["ember","exports"],
   function(__dependency1__, __exports__) {
@@ -880,7 +848,7 @@ define("sl-model/store",
 
         /**
          * private variable that stores the inflection dictionary for non
-         * standard words 
+         * standard words
          *
          * @property _inflectionDict
          * @private
@@ -895,13 +863,13 @@ define("sl-model/store",
         singularize: function( word ){
             var inflectionDict = this.get( '_inflectionDict' ),
                 foundDef = inflectionDict.keys().reduce( function( word, key ){
-                    var def = inflectionDict.get( key ); 
+                    var def = inflectionDict.get( key );
                     if( RegExp( '^'+word ).test( def ) ){
                         return def;
                     }
                     return word;
                 });
-            return foundDef || word.replace( /s$/, '' ); 
+            return foundDef || word.replace( /s$/, '' );
         },
 
         defineInflection: function( word, pluralizedWord ){
@@ -976,7 +944,7 @@ define("sl-model/store",
          */
         createRecord: function( type, content ){
             var factory = this.modelFor( type ),
-                record = factory.create( { 
+                record = factory.create( {
                     container: this.get( 'container' )
                 } );
 

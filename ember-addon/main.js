@@ -15,6 +15,7 @@ function unwatchedTree(dir) {
 SlModel.prototype.treeFor = function treeFor( name ) {
     var path = require('path'),
         slmodelPath = path.join( 'node_modules', 'sl-model' ),
+        testTree,
         vendorTree,
         appTree,
         mergeTrees = require( 'broccoli-merge-trees' ),
@@ -35,6 +36,15 @@ SlModel.prototype.treeFor = function treeFor( name ) {
         ]);
 
         return vendorTree;
+    } else if( name === 'test-support' ){
+        testTree = pickFiles( path.join( slmodelPath, 'test-helpers' ), {
+            srcDird: '/',
+            files: [ 'model-for-sl-model.js' ],
+            destFir: '/'
+        } );
+
+        return testTree;
+
     } else if ( name === 'app' ) {
         appTree = pickFiles( path.join( slmodelPath, 'lib', 'initializers' ), {
             srcDir: '/',
