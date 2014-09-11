@@ -38,7 +38,7 @@ SlModel.prototype.treeFor = function treeFor( name ) {
         return vendorTree;
     } else if( name === 'test-support' ){
         testTree = pickFiles( path.join( slmodelPath, 'test-helpers' ), {
-            srcDird: '/',
+            srcDir: '/',
             files: [ 'model-for-sl-model.js' ],
             destFir: '/'
         } );
