@@ -35,6 +35,6 @@
     "glob": "^4.0.5"
   },
   "dependencies": {
-    "sl-modelize": "git+ssh://git@gitlab.softlayer.local:mmarcum/sl-modelize.git"
+    "sl-modelize": "git+ssh://git@gitlab.softlayer.local:interface/sl-modelize.git#addon"
   }
 }
