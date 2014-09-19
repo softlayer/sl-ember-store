@@ -1,5 +1,5 @@
 import { test } from 'ember-qunit';
-import { moduleForSlModel } from 'sl-model';
+import moduleForSlModel from '../../helpers/module-for-sl-model';
 
 moduleForSlModel('<%= dasherizedModuleName %>', '<%= classifiedModuleName %>', {
 

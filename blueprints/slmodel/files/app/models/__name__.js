@@ -1,4 +1,4 @@
-import SlModel from 'sl-model';
+import SlModel from 'sl-model/model';
 
 var <%= classifiedModuleName %> = SlModel.extend({
 

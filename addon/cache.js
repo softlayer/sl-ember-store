@@ -155,16 +155,20 @@ export default Ember.Object.extend({
      */
     isCached: function( type, id, findOne ){
 
-        if( id || findOne ){
-            id = id || 0;
+        if( id ){
             return !!this.fetchById( type, id );
+        }
+        
+        if( findOne ){
+            return !!this.fetchOne( type );
         }
 
         return !!( this._getAllPromise( type ) || this._getAllRecords( type ).length );
     },
 
     /**
-     * fetch returns a record or array of records
+     * fetch returns a record or array of records wrapped in a promise. 
+     * If there are inflight promises then those will be returned instead.
      *
      * @param type
      * @param id
@@ -173,16 +177,42 @@ export default Ember.Object.extend({
      */
     fetch: function( type, id, findOne ){
  
-        if( id || findOne ){
-            id = id || 0;
+        if( id ){
             return  this.fetchById( type, id );
         }
 
-        return this.fetchAllByType( type );
+        if( findOne ){
+            return this.fetchOne( type );
+        }
+
+        return this.fetchAll( type );
+    },
+
+    fetchOne: function( type ){
+        var self = this,
+            record,
+            promise = this._getPromises( type ).get( 'ids.0' );
+
+        if( promise ){
+            return promise;
+        }
+
+        record = this._getRecords( type ).get( 'records.0' );
+
+        if( ! record ){
+            return false;
+        }
+        
+        return Ember.ObjectProxy.createWithMixins( Ember.PromiseProxyMixin )
+            .set( 'promise', new Ember.RSVP.Promise( function( resolve, reject ){
+                resolve( record );
+            }));
+
     },
 
     /**
-     * fetchById
+     * fetchById will return an object promise for this single record
+     * If there is an inflight promise for this record that will be returned instead
      *
      * @param type
      * @param id 
@@ -197,7 +227,7 @@ export default Ember.Object.extend({
             return promise;
         }
 
-        record = self._getRecordById( type, id );
+        record = this._getRecordById( type, id );
 
         if( ! record ){
             return false;
@@ -210,12 +240,13 @@ export default Ember.Object.extend({
     },
     
     /**
-     * fetchAllByType
+     * fetchAll will return an array promise with all the records for this type
+     * If there is an inflight array promise then that will be returned instead.
      *
      * @param type 
      * @return {Array}
      */
-    fetchAllByType: function( type ) {
+    fetchAll: function( type ) {
         var self = this,
             records,
             findAllPromise = this._getAllPromise( type );
@@ -232,12 +263,12 @@ export default Ember.Object.extend({
 
         return Ember.ArrayProxy.createWithMixins( Ember.PromiseProxyMixin )
             .set( 'promise', new Ember.RSVP.Promise( function( resolve, reject){
-                resolve( records);
+                resolve( records );
             }));
     },
 
     /**
-     * addToCache
+     * addToCache is the standard entry point for the store to add things to the cache
      *
      * @param type
      * @param id
@@ -248,6 +279,9 @@ export default Ember.Object.extend({
     addToCache: function( type, id, findOne, result ){
 
         if( id || findOne ){
+            
+            id = id || 0;
+
             if( result.then ){
                 return this.addPromise( type, id, result );
             } else {
@@ -259,7 +293,7 @@ export default Ember.Object.extend({
     },
 
     /**
-     * addPromise
+     * addPromise adds a promise that will resolve to a single record
      *
      * @param type
      * @param id
@@ -269,18 +303,18 @@ export default Ember.Object.extend({
     addPromise: function( type, id, promise ){
         var self = this;
 
-        this._getPromises( type ).get( 'ids' )[ id ] = promise;
+        this._getPromises( type ).set( 'ids.'+ id, promise );
 
-        promise.then( function( records ){
+        promise.then( function( record ){
             self.addRecord( type, record );
-            delete this._getPromises( type ).get( 'ids' )[ id ];
+            delete self._getPromises( type ).get( 'ids' )[ id ];
         });
 
         return promise;
     },
 
     /**
-     * addAllPromise
+     * addAllPromise adds a `find all` promise that will resolve to an array of records
      *
      * @param type
      * @param promise 
@@ -310,7 +344,12 @@ export default Ember.Object.extend({
      */
     addRecord: function( type, record ) {
         var typeRecords = this._getRecords( type ),
+            oldRecord = typeRecords.ids[ id ],
             id = record.get( 'id' ) || 0;
+
+        if( oldRecord ){
+            this.removeRecord( type, oldRecord ); 
+        }
 
         typeRecords.ids[ id ] = record;
         typeRecords.records.push( record );
@@ -340,8 +379,8 @@ export default Ember.Object.extend({
      * @param record 
      */
     removeRecord: function( type, record ) {
-        var typeRecords = this.get( '_records.'+type ),
-            id = record.get( 'id' ),
+        var typeRecords = this._getRecords( type ),
+            id = record.get( 'id' ) || 0,
             idx = typeRecords.records.indexOf( record );
 
         if( typeRecords ){
