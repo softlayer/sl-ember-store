@@ -142,7 +142,7 @@ export default Ember.Object.extend({
      * @return {Object}
      */
     _getAllPromise: function( type ){
-        return this.get( '_promise.'+type+'.all');
+        return this.get( '_promises.'+type+'.all');
     },
 
     /**
