@@ -8,7 +8,7 @@ export default {
         var localStorageAdapter = SlModelLocalstorageAdapter.extend();
 
         localStorageAdapter.reopenClass({
-            namspace: '<%= namespace %>'
+            namespace: '<%= namespace %>'
         });
 
         container.register('adapter:localstorage', localStorageAdapter );

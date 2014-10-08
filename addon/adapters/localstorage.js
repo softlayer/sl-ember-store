@@ -171,7 +171,7 @@ var LocalStorageAdapter = Adapter.extend({
     save: function( url, content ) {
         var promise;
 
-        Ember.assert('A url is required to delete a model', url);
+        Ember.assert('A url is required to save a model', url);
 
         promise = new Ember.RSVP.Promise( function( resolve ){
             var db,
@@ -218,7 +218,7 @@ var LocalStorageAdapter = Adapter.extend({
      * @return {object}         localStorage or mockup
      */
     _getLocalStorage: function(){
-        return this.get( 'localStorageMockup' ) || window.localStorage;
+        return window.localStorage;
     },
 
     /**

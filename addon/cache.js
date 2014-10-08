@@ -189,8 +189,7 @@ export default Ember.Object.extend({
     },
 
     fetchOne: function( type ){
-        var self = this,
-            record,
+        var record,
             promise = this._getPromises( type ).get( 'ids.0' );
 
         if( promise ){
@@ -204,9 +203,7 @@ export default Ember.Object.extend({
         }
         
         return Ember.ObjectProxy.createWithMixins( Ember.PromiseProxyMixin )
-            .set( 'promise', new Ember.RSVP.Promise( function( resolve, reject ){
-                resolve( record );
-            }));
+            .set( 'promise', new Ember.RSVP.Promise.resolve( record ) );
 
     },
 
@@ -219,8 +216,7 @@ export default Ember.Object.extend({
      * @return {Object}
      */
     fetchById: function( type, id ) {
-        var self = this,
-            record,
+        var record,
             promise = this._getPromiseById( type, id );
 
         if( promise ){
@@ -234,9 +230,7 @@ export default Ember.Object.extend({
         }
 
         return Ember.ObjectProxy.createWithMixins( Ember.PromiseProxyMixin )
-            .set( 'promise', new Ember.RSVP.Promise( function( resolve, reject ){
-                resolve( record );
-            }));
+            .set( 'promise', new Ember.RSVP.Promise.resolve( record ) );
     },
     
     /**
@@ -262,9 +256,7 @@ export default Ember.Object.extend({
         }
 
         return Ember.ArrayProxy.createWithMixins( Ember.PromiseProxyMixin )
-            .set( 'promise', new Ember.RSVP.Promise( function( resolve, reject){
-                resolve( records );
-            }));
+            .set( 'promise', new Ember.RSVP.Promise.resolve( records ) );
     },
 
     /**

@@ -21,4 +21,4 @@ export default function ( container, application ) {
     
     application.inject('adapter', 'store', 'store:main');
 
-};
+}

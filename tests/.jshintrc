@@ -39,13 +39,14 @@
     "findWithAssert",
     "wait",
     "DS",
-    "keyEvent",
     "isolatedContainer",
     "startApp",
     "andThen",
     "currentURL",
     "currentPath",
-    "currentRouteName"
+    "currentRouteName",
+    "propEqual",
+    "sinon"
   ],
   "node": false,
   "browser": false,
