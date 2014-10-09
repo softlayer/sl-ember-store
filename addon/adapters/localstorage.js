@@ -48,7 +48,6 @@ var LocalStorageAdapter = Adapter.extend({
         this.runPreQueryHooks( queryObj );
 
         promise = new Ember.RSVP.Promise( function( resolve, reject){
-            //todo actual localStorage query
             var db,
                 records,
                 response,
@@ -96,12 +95,10 @@ var LocalStorageAdapter = Adapter.extend({
 
         promise.finally( function lsAdapaterFindFinally( response ) {
 
-
             //run post query hooks
             this.runPostQueryHooks( response );
 
         }.bind( this ), 'sl-model.localstorageAdapter:find - finally');
-
 
         //set the promise on the promiseProxy
         results.set( 'promise', promise );
