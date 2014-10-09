@@ -1,58 +1,102 @@
 
-# sl-model
+Ember CLI version: **0.1.1**
 
-## use this to provide a nice-ish model layer for interface apps
+NPM package name: **sl-model**
+
+License: [MIT](LICENSE.md)
 
 
-### Installation
+# What sl-model is
 
-In order to use this just include this package in your bower.json like so:
+A library for managing model data in your Ember.js applications. It is designed to be agnostic to the underlying
+persistence mechanism, so it works just as well with JSON APIs over HTTP as it does with streaming WebSockets or local
+storage.
 
-```javascript
-{
-    dependencies: {
-        "sl-model": "git@gitlab.softlayer.local:interface/sl-model.git#v0.1.3"
-    }
-}
+This library **does not** support relationships or manage data state such as how Ember Data does.
+
+What this library **DOES** do is allow you to work with models that do not have to be pre-defined.  Having a dependency
+on [sl-modelize](https://github.com/softlayer/sl-modelize), this libary is able to dynamically set data returned from an
+endpoint onto the correct model objects without having any knowledge of the data it will be receiving.
+
+
+
+# Working Demo
+
+## Installation
+
+* `git clone` this repository
+* `npm install`
+* `bower install`
+
+## Running
+
+* `ember server`
+* View the demo at http://localhost:4200
+
+For more information on using ember-cli, visit [http://www.ember-cli.com/](http://www.ember-cli.com/).
+
+
+
+# How to use this addon in your application
+
+## Install this addon as a Node module
+
+```
+npm install sl-model
 ```
 
-### Usage
+## Instantiating the Store
 
-#### Model
+In *sl-model*, the store is responsible for managing the lifecycle of your models. Every time you need a model or a
+collection of models, you'll ask the store for it.
 
-To add a model to your project, simple do `ember g slmodel <modelname>`.  You can also specify the url and/or the adapter by appending the options:
+To create a store, you don't need to do anything. Just by loading the *sl-model* library all of the routes and
+controllers in your application will get a new store property. This property is an instance of *SL-Model/Store* that
+will be shared across all of the routes and controllers in your app.
 
-* `ember g slmodel <modelname> url:<url> adapter:<adapter>`
 
-##### Old way of creating models:
-First create a new model in your models/ folder:
+## Defining Your Models
 
-$touch models/foo.js
+### Using the generator
+
+To add a model to your project, simple do `ember g slmodel <modelname>`.  You can also specify the url and/or the
+adapter by appending the options:
+
+    ember g slmodel <modelname> url:<url> adapter:<adapter>
+
+More on these options later.
+
+### Creating by hand
+
+First create a new model in your */models* folder:
+
+    $touch models/foo.js
 
 Add inside that file:
 
 ```javascript
-
 import SlModel from 'sl-model';
 
 var Foo = SlModel.extend({ });
 ```
 
-##### Urls, Endpoints, Serializers:
+### Urls, Endpoints, Serializers:
 
 You can setup a single url if your api is restful or multiple endpoints if you need fine grain control.
 
-The base level `url` and `serializer` will be used by default.  Override them or add different ones at any endpoint.  Endpoints that return multiple records should only return an array.  You can add any metadata for those queries to the store via the `metaForType` function.
+The base level `url` and `serializer` will be used by default.  Override them or add different ones at any endpoint.
+Endpoints that return multiple records should only return an array.  You can add any metadata for those queries to the
+store via the `metaForType` function.
 
 ```javascript
 Foo.reopenClass({
     url: '/foo',
-    serializer: function( response, store ){ return xformData( response ); },
+    serializer: function( response, store ) { return xformData( response ); },
     endpoints: {
         'superFoo': {
             get: {
                 url: '/superFoo',
-                serialzer: function( response, store ){
+                serializer: function( response, store ) {
                     store.metaForType( 'device', {
                         totalCount: response.totalCount,
                         totalPages: response.totalPages
@@ -73,74 +117,112 @@ Foo.reopenClass({
 
 export default Foo;
 ```
-Models should always have a `url` specified.  Further urls can be specified in the `endpoints` object.  Urls and Serializers can be specified on a per endpoint/action basis and will default to the top level url and serializer.
+
+Models should always have a `url` specified.  Further urls can be specified in the `endpoints` object.  Urls and
+Serializers can be specified on a per endpoint/action basis and will default to the top level url and serializer.
 
 
-#### Route
+## Route
 
-In your routes, simply used the `store` variable that is injected into every route and controller.  Store has the `find`, `createRecord`, and 'metadataFor' methods.
+In your routes, simply use the `store` variable that is injected into every route and controller.  Store has the
+`find`, `findOne`, `createRecord`, and `metadataFor` methods.  Some example use cases:
+
+`find`:
 
 ```javascript
-    model: function(){
-        var model = this.store.find( 'foo' );
+model: function() {
+    return this.store.find( 'foo' );
+}
+```
 
-        model.then( function(){
-            this.controllerFor( 'foo/index' ).setProperties( this.store.metadataFor( 'foo' ) );
-        }.bind( this ) );
+```javascript
+setupController: function() {
+    this.set( 'model', this.store.find( 'foo' ) );
+}
+```
 
-        return model;
-    }
+`findOne`:
+
+```javascript
+model: function() {
+    return this.store.findOne( 'foo' );
+}
+```
+
+`createRecord`:
+
+```javascript
+setupController: function() {
+    this.set( 'model', this.store.createRecord( 'foo' ) );
+}
+```
+
+`metadataFor`:
+
+```javascript
+model: function() {
+    var model = this.store.find( 'foo' );
+
+    model.then( function() {
+        this.controllerFor( 'foo/index' ).setProperties( this.store.metadataFor( 'foo' ) );
+    }.bind( this ) );
+
+    return model;
+}
 ```
 
 If you want to load a particular record via an `id` then pass the `id` in as the second parameter to `store.find`:
 
-```javasctript
+```javascript
     this.store.find( 'foo', 23 );
 ```
 
-#### Controller
-In your controller you have access to the `store` too.  You can create an options object to handle extra params for the query.  Simply list the params in an object on the `data` key.
+
+
+## Controller
+In your controller you have access to the `store` too.  You can create an options object to handle extra parameters for
+to be added onto the url being queried.  Simply list the parameters in an object on the `data` key.
 
 ```javascript
+actions: {
+    changePage: function( page ) {
+        var model = this.store.find( 'device', { data: { page: page } } );
 
-    actions: {
-
-        changePage: function( page ){
-
-            var model = this.store.find( 'device', { data: {page: page } } );
-
-            model.then( function(){
-                this.set( 'currentPage', page );
-                this.set( 'model', model );
-            }.bind(this));
-
-        }
+        model.then( function() {
+            this.set( 'currentPage', page );
+            this.set( 'model', model );
+        }.bind(this) );
     }
+}
 ```
 
-The options object can also take a `reload` parameter to bypass the cache:
+The options object can also take a `reload` parameter to bypass the caching mechanism:
 
 ```javascript
 this.store.find( 'device', { reload: true } );
 ```
 
 
-### Hooks
+# Hooks
 
-You may want to set up some pre/post query hooks that run after every query.  If so just create an initializer in your apps initializers folder:
+You may want to set up some pre/post query hooks that run after every query.  If so just create an initializer in your
+application's initializers folder:
 
 ```javascript
 export default {
     name: 'sl-model-hooks',
+
     after: 'sl-model',
-    initialize: function( container ){
+
+    initialize: function( container ) {
         container.lookup( 'store:main' ).registerPostQueryHook(
-            function( status ){
-                if( 401 === status ){
+            function( status ) {
+                if ( 401 === status ) {
                     container.lookup( 'controller:application' ).send( 'forceLogout' );
                 } else if ( 401 != status ) {
                     var authController = container.lookup( 'controller:auth' );
-                    if( authController ){
+
+                    if ( authController ) {
                         authController.sendAction( 'session-keep-alive' );
                     }
                 }
@@ -150,45 +232,53 @@ export default {
 };
 ```
 
-### Localstorage adapter
+# Local Storage Adapter
 
-If you installed Sl-Model as an Ember addon then the localStorage adapter is initialized by default with your projects namespace.  If you are manually importing the Sl-Model or if you want to change the default namespace then you will want to create an initializer.
+## If you installed *sl-model* as an Ember CLI Addon
 
-If you have added SL-Model as an Ember addon:
-* `ember g localstorage-initializer`
+The localStorage adapter is initialized by default with your project's namespace.
 
-Else:
-* `ember g initializer localstorage-initializer <namespace>`
+If you want to change the default namespace then you will want to create an initializer:
 
-Now view the file that was generated in `app/initializers/localstorage-initializer.js`, it should have the namespace defined.
+    ember g localstorage-initializer
+
+Now edit the file that was generated in `app/initializers/localstorage-initializer.js` and define the `namespace` value.
 
 ```javascript
 module SlModel from 'sl-model';
 
 export default {
     name: 'sl-model-localstorage',
+
     after: 'sl-model',
 
     initialize: function( container ) {
         var localStorageAdapter = SlModel.LocalstorageAdapter;
 
         localStorageAdapter.reopenClass({
-            namspace: '<namespace'
+            namespace: '<namespace>'
         });
 
-        container.register('adapter:localstorage', localStorageAdapter );
-
+        container.register( 'adapter:localstorage', localStorageAdapter );
     }
 };
-
 ```
-Now you can assign the localstorage adapter to your models like so:
+
+## If you are manually importing *sl-model*
+
+You will want to create an initializer:
+
+    ember g initializer localstorage-initializer <namespace>
+
+
+## Assign the localstorage adapter to your models
 
 ```javascript
-
 Foo.reopenClass({
     adapter: 'localstorage',
     url: '/foo'
 });
 ```
-Notice that the url variable is still needed as it will be used to store this model's records under the adapter's namespace in localStorage.
+
+Notice that the url variable is still needed as it will be used to store this model's records under the adapter's
+namespace in localStorage.
