@@ -5,6 +5,7 @@ NPM package name: **sl-model**
 
 License: [MIT](LICENSE.md)
 
+---
 
 # What sl-model is
 
@@ -18,7 +19,7 @@ What this library **DOES** do is allow you to work with models that do not have 
 on [sl-modelize](https://github.com/softlayer/sl-modelize), this libary is able to dynamically set data returned from an
 endpoint onto the correct model objects without having any knowledge of the data it will be receiving.
 
-
+---
 
 # Working Demo
 
@@ -35,7 +36,7 @@ endpoint onto the correct model objects without having any knowledge of the data
 
 For more information on using ember-cli, visit [http://www.ember-cli.com/](http://www.ember-cli.com/).
 
-
+---
 
 # How to use this addon in your application
 
@@ -202,6 +203,7 @@ The options object can also take a `reload` parameter to bypass the caching mech
 this.store.find( 'device', { reload: true } );
 ```
 
+---
 
 # Hooks
 
@@ -231,6 +233,8 @@ export default {
     }
 };
 ```
+
+---
 
 # Local Storage Adapter
 
