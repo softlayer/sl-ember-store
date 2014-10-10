@@ -1,46 +1,49 @@
 import Ember from 'ember';
 import cache from './cache';
 
-/**
- * SL-Model/Store
- *
- *
- * @class store
- */
+/** @module SL-Model/store */
 export default Ember.Object.extend({
 
-    setupcache: function(){
+    /**
+     * Initialize the cache
+     *
+     * @function  setupcache
+     * @observers 'init'
+     * @return    {void}
+     */
+    setupcache: function() {
         this.set( '_cache', cache.create() );
-    }.on( 'init'),
+    }.on( 'init' ),
 
     /**
-     * preQueryHooks is an array of functions to be run before an adapter runs a query
+     * Array of functions to be run before an adapter runs a query
      *
-     * @property preQueryHooks
-     * @type {Array}
+     * @property {array} preQueryHooks
+     * @type     {Ember.Array}
+     * @default  {array}
      */
     preQueryHooks: Ember.A([]),
 
     /**
-     * postQueryHooks is an array of functions to be run after an adapter runs a query
+     * Array of functions to be run after an adapter runs a query
      *
-     * @property postQueryHooks
-     * @type {Array}
+     * @property {array} postQueryHooks
+     * @type     {Ember.Array}
+     * @default  {array}
      */
     postQueryHooks: Ember.A([]),
 
     /**
-     * modelFor returns the model class for a given model type
+     * Returns the model class for a given model type
      *
-     * @public
-     * @method modelFor
-     * @type {method}
-     * @param  {string} type lower case name of the model class
-     * @return {function} - model constructor
+     * @function modelFor
+     * @argument {string}     type lower case name of the model class
+     * @throws {Ember.assert} If [this condition is met]
+     * @return {function}     model constructor
      */
-    modelFor: function( type ){
+    modelFor: function( type ) {
         var normalizedKey = this.container.normalize( 'model:'+type ),
-            factory = this.container.lookupFactory( normalizedKey );
+            factory       = this.container.lookupFactory( normalizedKey );
 
         Ember.assert( "No model was found for `"+type+"`", factory );
 
@@ -48,210 +51,244 @@ export default Ember.Object.extend({
     },
 
     /**
-     * private variable that store all the metadata for all the models
+     * Stores all the metadata for all the models
      *
-     * @property _metadataCache
      * @private
-     * @type {Object}
+     * @property {object} _metadataCache
+     * @type     {Ember.Object}
+     * @default  {Ember.Object}
      */
     _metadataCache: {},
 
     /**
-     * metaForType sets the metadata object for the specified model type
-     * @method metaForType
-     * @public
-     * @param  {string} type the lowercase model name
-     * @param  {object} metadata the metadata to save
+     * Sets the metadata object for the specified model type
+     *
+     * @function metaForType
+     * @argument {string} type the lowercase model name
+     * @argument {object} metadata the metadata to save
+     * @return   {void}
      */
-    metaForType: function( type, metadata ){
+    metaForType: function( type, metadata ) {
         this.set( '_metadataCache.'+type, metadata );
     },
 
     /**
-     * metadataFor returns the metadata object for the specified model type
-     * @method  metadataFor
-     * @public
-     * @param  {string} type lower case model name
-     * @return {object}      the metadata object that was saved with metaForType
+     * Returns the metadata object for the specified model type
+     *
+     * @function metadataFor
+     * @argument {string} type lower case model name
+     * @return   {object} the metadata object that was saved with metaForType
      */
-    metadataFor: function( type ){
+    metadataFor: function( type ) {
         return this.get( '_metadataCache.'+type );
     },
 
-
     /**
-     * private variable that stores the inflection dictionary for non
-     * standard words
+     * The inflection dictionary for nonstandard words
      *
-     * @property _inflectionDict
      * @private
-     * @type {object}
+     * @property {object} _inflectionDict
+     * @type     {Ember.Object}
+     * @default  {Ember.Object}
      */
     _inflectionDict: {},
 
-    pluralize: function( word ){
+    /**
+     * Pluralize the provided word
+     *
+     * @function pluralize
+     * @argument {string} word
+     * @return   {string}
+     */
+    pluralize: function( word ) {
         return this.get( '_inflectionDict.'+word ) || word.match(/s$/) ? word+'es' : word+'s';
     },
 
-    singularize: function( word ){
+    /**
+     * Singularize the provided word
+     *
+     * @function singularize
+     * @argument {string} word
+     * @return   {string}
+     */
+    singularize: function( word ) {
         var inflectionDict = this.get( '_inflectionDict' ),
-            foundDef = inflectionDict.keys().reduce( function( word, key ){
-                var def = inflectionDict.get( key ),
+            foundDef       = inflectionDict.keys().reduce( function( word, key ) {
+                var def      = inflectionDict.get( key ),
                     defRegex = new RegExp( '^'+word );
-                    
-                if( defRegex.test( def ) ){
+
+                if ( defRegex.test( def ) ) {
                     return def;
                 }
+
                 return word;
             });
+
         return foundDef || word.replace( /s$/, '' );
     },
 
-    defineInflection: function( word, pluralizedWord ){
+    /**
+     * Set pluralized word value
+     *
+     * @function defineInflection
+     * @argument {string} word
+     * @argument {string} pluralizedWord
+     * @return   {void}
+     */
+    defineInflection: function( word, pluralizedWord ) {
         this.set( '_inflectionDict.'+word, pluralizedWord );
     },
 
     /**
-     * adapterFor returns the configured adapter for the specified model type
-     * @method  adapterFor
-     * @public
-     * @param  {string} type the lower case name of the model class
-     * @return {object} the adapter singleton
+     * Returns the configured adapter for the specified model type
+     *
+     * @function  adapterFor
+     * @argument  {string} type the lower case name of the model class
+     * @return    {object} the adapter singleton
      */
-    adapterFor: function( type ){
+    adapterFor: function( type ) {
         var adapterType = this.modelFor(type).adapter,
-            adapter = this.container.lookup( 'adapter:'+adapterType );
+            adapter     = this.container.lookup( 'adapter:'+adapterType );
 
         return adapter;
     },
 
     /**
-     * findOne returns an object proxy, does not use an id to perform a lookup (use the options obj instead).
-     * @method  findOne
-     * @public
-     * @param  {string} type    lower case name of the model
-     * @param  {Object} options hash of options to be passed on to the adapter
-     * @return {Object}         Ember.ObjectProxy
+     * Returns an object proxy
+     *
+     * Does not use an id to perform a lookup (use the options object instead).
+     *
+     * @function  findOne
+     * @argument  {string} type    lower case name of the model
+     * @argument  {object} options hash of options to be passed on to the adapter
+     * @return    {Ember.ObjectProxy}
      */
     findOne: function( type, options ) {
         return this.__find( type, null, options, true );
     },
 
     /**
-     * find a/an record(s) using an id or options
-     * @method  find
-     * @public
-     * @param  {string} type    lower case name of the model class
-     * @param  {int} id
-     * @param  {object} options hash of options to be passed on to the adapter
-     * @return {object / array}         an object or an array depending on whether you specified an id
+     * Find a/an record(s) using an id or options
+     *
+     * @function  find
+     * @argument  {string}  type     lower case name of the model class
+     * @argument  {integer} id
+     * @argument  {object}  options  hash of options to be passed on to the adapter
+     * @return {object / array}      an object or an array depending on whether you specified an id
      */
     find: function( type, id, options ) {
-        if( typeof id === 'object' && typeof options === 'undefined' ){
+        if ( typeof id === 'object' && typeof options === 'undefined' ) {
             return this.__find( type, null, id, false );
         }
-        if( typeof id === 'undefined' && typeof options === 'undefined' ){
+
+        if ( typeof id === 'undefined' && typeof options === 'undefined' ) {
             return this.__find( type, null, null, false );
         }
+
         return this.__find( type, id, options, false );
     },
 
     /**
-     * private find method
+     * Private find method
+     *
+     * @function  __find
      * @private
-     * @method  __find
-     * @param  {string} type    lowercase model name
-     * @param  {integer / string} id      record identifier
-     * @param  {object} options objects containing all options for query
-     * @param  {boolean} findOne force the retrieval of a single record
-     * @return {object}         an ember object / array proxy with the promise proxy mixin
+     * @argument  {string} type            lowercase model name
+     * @argument  {integer / string} id    record identifier
+     * @argument  {object} options         objects containing all options for query
+     * @argument  {boolean} findOne        force the retrieval of a single record
+     * @return                             an ember object / array proxy with the promise proxy mixin
      */
     __find: function( type, id, options, findOne ) {
-        var result,
-            cache = this.get( '_cache' ),
-            reload = options && options.reload;
-        
-        if( reload || !cache.isCached( type, id, findOne )){
+        var cache  = this.get( '_cache' ),
+            reload = options && options.reload,
+            result;
+
+        if ( reload || !cache.isCached( type, id, findOne ) ) {
             result = this.adapterFor( type ).find( type, id, options, findOne );
-            
-            if( !id || !findOne ){
+
+            if ( !id || !findOne ) {
                 cache.clearCache( type );
+
             } else {
                 cache.removeRecord( type, id || 0 );
             }
-            
-            cache.addToCache( type, id, findOne, result);
+
+            cache.addToCache( type, id, findOne, result );
 
             return result;
-
         }
 
         return cache.fetch( type, id, findOne );
     },
 
     /**
-     * create a new record, it will not have been saved via an adapter yet
-     * @method  createRecord
-     * @public
-     * @param  {string} type lower case name of model class
-     * @return {object}      model object, instance of Ember.ObjectProxy
+     * Create a new record, it will not have been saved via an adapter yet
+     *
+     * @function  createRecord
+     * @argument  {string} type         lower case name of model class
+     * @return    {Ember.ObjectProxy}   model object, instance of Ember.ObjectProxy
      */
-    createRecord: function( type, content ){
+    createRecord: function( type, content ) {
         var factory = this.modelFor( type ),
-            record = factory.create( {
+            record  = factory.create({
                 container: this.get( 'container' )
-            } );
+            });
 
-            record.set( 'content', content || {} );
+        record.set( 'content', content || {} );
 
-            return record;
+        return record;
     },
 
     /**
-     * registerPreQueryHook add a function to ther prequery hooks array
+     * Add a function to the prequery hooks array
      *
-     * @method  registerPreQueryHook
-     * @public
-     * @param  {function} f a function
-     *
+     * @function  registerPreQueryHook
+     * @argument  {function} f   a function
+     * @return    {void}
      */
-    registerPreQueryHook: function( f ){
+    registerPreQueryHook: function( f ) {
         this.get( 'preQueryHooks' ).push( f );
     },
 
     /**
-     * runPreQueryHooks
-     * @method  runPreQueryHooks
-     * @public
-     * @param  {object} query
+     * Call the pre query hooks with the query
+     *
+     * @function  runPreQueryHooks
+     * @argument  {object}  query
+     * @return    {void}
      */
-    runPreQueryHooks: function( query ){
+    runPreQueryHooks: function( query ) {
         var preQueryHooks = this.get( 'preQueryHooks' );
-        if( Ember.isArray( preQueryHooks ) ){
+
+        if ( Ember.isArray( preQueryHooks ) ) {
             preQueryHooks.forEach( function( f ){ f( query ); } );
         }
     },
 
     /**
-     * registerPostQueryHook add a function to the postquery array
-     * @method  registerPostQueryHook
-     * @public
-     * @param  {function} f function to be run after a query
+     * Add a function to the postquery array
+     *
+     * @function  registerPostQueryHook
+     * @argument  {function} f  function to be run after a query
+     * @return    {void}
      */
-    registerPostQueryHook: function( f ){
+    registerPostQueryHook: function( f ) {
         this.get( 'postQueryHooks' ).push( f );
     },
 
     /**
-     * runPostQueryHooks call the post query hooks with the response obj
-     * @method  runPostQueryHooks
-     * @public
-     * @param  {object} response the response from the adapter
+     * Call the post query hooks with the response obj
+     *
+     * @function  runPostQueryHooks
+     * @argument  {object} response   the response from the adapter
+     * @return    {void}
      */
-    runPostQueryHooks: function( response ){
+    runPostQueryHooks: function( response ) {
         var postQueryHooks = this.get( 'postQueryHooks' );
-        if( Ember.isArray( postQueryHooks ) ){
+
+        if ( Ember.isArray( postQueryHooks ) ) {
             postQueryHooks.forEach( function( f ){ f( response ); } );
         }
-    },
+    }
 });

@@ -1,65 +1,70 @@
 import Ember from 'ember';
 
-/**
- * SL-Model/cache
- *
- *
- * @class cache
- */
+/** @module SL-Model/cache */
 export default Ember.Object.extend({
-    
+
     /*
-     * holds the record cache
-     * @member object _records
-     * @access private
-     */    
+     * The record cache
+     *
+     * @private
+     * @property {object} _records
+     * @type     {Ember.Object}
+     * @default  null
+     */
     _records: null,
-    
+
     /*
-     * holds the promise cache
-     * @member object _promises
-     * @access private
+     * The promise cache
+     *
+     * @private
+     * @property {object} _promises
+     * @type     {Ember.Object}
+     * @default  null
      */
     _promises: null,
 
-    
     /**
-     * _setupCache
-     * @access private
+     * Initialize the cache properties
      *
+     * @private
+     * @function _setupCache
+     * @observes 'init'
+     * @return {void}
      */
-    _setupCache: function(){
-        this.setProperties( {
-            '_records': Ember.Object.create(),
-            '_promises': Ember.Object.create()
-        } );
+    _setupCache: function() {
+        this.setProperties({
+            '_records'  : Ember.Object.create(),
+            '_promises' : Ember.Object.create()
+        });
     }.on( 'init' ),
 
     /**
-     * _initializeRecords
+     * Initialize entry in records cache
      *
-     * @access private
-     * @param {String} type 
+     * @private
+     * @function _initializeRecords
+     * @argument {string} type
+     * @return {void}
      */
-    _initializeRecords: function( type ){
-
+    _initializeRecords: function( type ) {
         this.set( '_records.'+type, Ember.Object.create({
-            records: Ember.A([]),
-            ids: Ember.A([])
+            records : Ember.A([]),
+            ids     : Ember.A([])
         }));
     },
 
     /**
-     * _getRecords returns the record cache
+     * Return the record cache
      *
-     * @access private
-     * @param {String} type 
-     * @return {Object}
+     * @private
+     * @function _getRecords
+     * @argument {string} type
+     * @return   {Ember.Object}
      */
-    _getRecords: function( type ){
+    _getRecords: function( type ) {
         var typeRecords = this.get( '_records.'+type );
-        
-        if( ! typeRecords ){
+
+        if ( !typeRecords ) {
             this._initializeRecords( type );
             typeRecords = this.get( '_records.'+type );
         }
@@ -68,98 +73,104 @@ export default Ember.Object.extend({
     },
 
     /**
-     * _getRecordById gets a record by id
+     * Return record for specified ID
      *
-     * @access private
-     * @param type
-     * @param id 
-     * @return {Object}
+     * @private
+     * @function _getRecordById
+     * @argument {string} type
+     * @argument {integer} id
+     * @return   {Ember.Object}
      */
-    _getRecordById: function( type, id ){
+    _getRecordById: function( type, id ) {
         return this._getRecords( type ).ids[ id ];
     },
 
     /**
-     * _getAllRecords gets all records
+     * Get all records
      *
-     * @access private
-     * @param type 
-     * @return {Object}
+     * @private
+     * @function _getAllRecords
+     * @argument {string} type
+     * @return   {Ember.Object}
      */
-    _getAllRecords: function( type ){
+    _getAllRecords: function( type ) {
         return this._getRecords( type ).records;
     },
-    
+
     /**
-     * _initializePromises 
+     * Initialize entry in promises cache
      *
-     * @access private
-     * @param type 
-     * @return {Object}
+     * @private
+     * @function _initializePromises
+     * @argument {string} type
+     * @return   {void}
      */
-    _initializePromises: function( type ){
+    _initializePromises: function( type ) {
         this.set( '_promises.'+type, Ember.Object.create({
-            all: null,
-            ids: Ember.A([])
+            all : null,
+            ids : Ember.A([])
         }));
     },
 
     /**
-     * _getPromises
+     * Return the promise cache
      *
-     * @access private
-     * @param type 
-     * @return {Object}
+     * @private
+     * @function _getPromises
+     * @argument {string} type
+     * @return   {Ember.Object}
      */
-    _getPromises: function( type ){
+    _getPromises: function( type ) {
         var typePromises = this.get( '_promises.'+type );
-        
-        if( ! typePromises ){
+
+        if ( !typePromises ) {
             this._initializePromises( type );
             typePromises = this.get( '_promises.'+type );
         }
-        
+
         return typePromises;
     },
 
     /**
-     * _getPromiseById
+     * Return promise for specified ID
      *
-     * @access private
-     * @param type
-     * @param id 
-     * @return {Object}
+     * @private
+     * @function _getPromiseById
+     * @argument {string}  type
+     * @argument {integer} id
+     * @return   {Ember.Object}
      */
-    _getPromiseById: function( type, id ){
+    _getPromiseById: function( type, id ) {
         return this.get( '_promise.'+type+'.ids.'+id );
     },
 
     /**
-     * _getAllPromise
+     * Get all promises
      *
-     * @access private
-     * @param type 
-     * @return {Object}
+     * @private
+     * @function getAllPromise
+     * @argument {string} type
+     * @return   {Ember.Object}
      */
-    _getAllPromise: function( type ){
+    _getAllPromise: function( type ) {
         return this.get( '_promises.'+type+'.all');
     },
 
     /**
-     * isCached checks both caches to see if a record exists
+     * Checks both caches to see if a record exists
      *
-     * @param type
-     * @param id
-     * @param findOne 
-     * @return {Object}
+     * @function isCached
+     * @argument {string}  type
+     * @argument {integer} id
+     * @argument {boolean} findOne
+     * @return   {Ember.Object}
      */
-    isCached: function( type, id, findOne ){
-
-        if( id ){
+    isCached: function( type, id, findOne ) {
+        if ( id ) {
             return !!this.fetchById( type, id );
         }
-        
-        if( findOne ){
+
+        if ( findOne ) {
             return !!this.fetchOne( type );
         }
 
@@ -167,91 +178,104 @@ export default Ember.Object.extend({
     },
 
     /**
-     * fetch returns a record or array of records wrapped in a promise. 
-     * If there are inflight promises then those will be returned instead.
+     * Returns a record or array of records wrapped in a promise.
      *
-     * @param type
-     * @param id
-     * @param findOne 
-     * @return {Object|Array}
+     * If there are in-flight promises then those will be returned instead.
+     *
+     * @function fetch
+     * @argument {string}  type
+     * @argument {integer} id
+     * @argument {boolean} findOne
+     * @return {Object|Array via Ember.Promise}
      */
-    fetch: function( type, id, findOne ){
- 
-        if( id ){
+    fetch: function( type, id, findOne ) {
+        if ( id ) {
             return  this.fetchById( type, id );
         }
 
-        if( findOne ){
+        if ( findOne ) {
             return this.fetchOne( type );
         }
 
         return this.fetchAll( type );
     },
 
-    fetchOne: function( type ){
-        var record,
-            promise = this._getPromises( type ).get( 'ids.0' );
+    /**
+     * Returns a record wrapped in a promise.
+     *
+     * If there is an in-flight promise then it will be returned instead.
+     *
+     * @function fetchOne
+     * @argument {string} type
+     * @return {Ember.Promise|false}
+     */
+    fetchOne: function( type ) {
+        var promise = this._getPromises( type ).get( 'ids.0' ),
+            record;
 
-        if( promise ){
+        if ( promise ) {
             return promise;
         }
 
         record = this._getRecords( type ).get( 'records.0' );
 
-        if( ! record ){
+        if ( !record ) {
             return false;
         }
-        
+
         return Ember.ObjectProxy.createWithMixins( Ember.PromiseProxyMixin )
             .set( 'promise', new Ember.RSVP.Promise.resolve( record ) );
-
     },
 
     /**
-     * fetchById will return an object promise for this single record
-     * If there is an inflight promise for this record that will be returned instead
+     * Return an object promise for this single record
      *
-     * @param type
-     * @param id 
-     * @return {Object}
+     * If there is an in-flight promise for this record that will be returned instead
+     *
+     * @function fetchById
+     * @argument {string}  type
+     * @argument {integer} id
+     * @return {Ember.Promise|false}
      */
     fetchById: function( type, id ) {
-        var record,
-            promise = this._getPromiseById( type, id );
+        var promise = this._getPromiseById( type, id ),
+            record;
 
-        if( promise ){
+        if ( promise ) {
             return promise;
         }
 
         record = this._getRecordById( type, id );
 
-        if( ! record ){
+        if ( ! record ) {
             return false;
         }
 
         return Ember.ObjectProxy.createWithMixins( Ember.PromiseProxyMixin )
             .set( 'promise', new Ember.RSVP.Promise.resolve( record ) );
     },
-    
+
     /**
-     * fetchAll will return an array promise with all the records for this type
-     * If there is an inflight array promise then that will be returned instead.
+     * Return an array promise with all the records for this type
      *
-     * @param type 
-     * @return {Array}
+     * If there is an in-flight array promise then that will be returned instead.
+     *
+     * @function fetchAll
+     * @argument {string}  type
+     * @return {Ember.Array via Ember.Promise|false}
      */
     fetchAll: function( type ) {
-        var self = this,
-            records,
-            findAllPromise = this._getAllPromise( type );
+        var findAllPromise = this._getAllPromise( type ),
+            self           = this,
+            records;
 
-        if( findAllPromise ){
+        if ( findAllPromise ) {
             return findAllPromise;
         }
 
         records = self._getAllRecords( type );
 
-        if( ! records ){
+        if ( ! records ) {
             return false;
         }
 
@@ -260,44 +284,45 @@ export default Ember.Object.extend({
     },
 
     /**
-     * addToCache is the standard entry point for the store to add things to the cache
+     * Standard entry point for the store to add things to the cache
      *
-     * @param type
-     * @param id
-     * @param findOne
-     * @param result 
-     * @return {Object|Array}
+     * @function addToCache
+     * @argument {string}     type
+     * @argument {integer}    id
+     * @argument {boolean}    findOne
+     * @argument {Ember.RSVP} result
+     * @return {Object|Array via Ember.Promise}
      */
-    addToCache: function( type, id, findOne, result ){
+    addToCache: function( type, id, findOne, result ) {
 
-        if( id || findOne ){
-            
+        if ( id || findOne ) {
             id = id || 0;
 
-            if( result.then ){
+            if ( result.then ) {
                 return this.addPromise( type, id, result );
             } else {
                 return this.addRecord( type, result );
             }
         }
-        
+
         return this.addAllPromise( type, result );
     },
 
     /**
-     * addPromise adds a promise that will resolve to a single record
+     * Adds a promise that will resolve to a single record
      *
-     * @param type
-     * @param id
-     * @param promise 
-     * @return {Object} ObjectProxy|PromiseProxyMixin
+     * @function addPromise
+     * @argument {string}     type
+     * @argument {integer}    id
+     * @argument {Ember.RSVP} promise
+     * @return   {Object} ObjectProxy|PromiseProxyMixin
      */
-    addPromise: function( type, id, promise ){
+    addPromise: function( type, id, promise ) {
         var self = this;
 
         this._getPromises( type ).set( 'ids.'+ id, promise );
 
-        promise.then( function( record ){
+        promise.then( function( record ) {
             self.addRecord( type, record );
             delete self._getPromises( type ).get( 'ids' )[ id ];
         });
@@ -306,21 +331,22 @@ export default Ember.Object.extend({
     },
 
     /**
-     * addAllPromise adds a `find all` promise that will resolve to an array of records
+     * Adds a `find all` promise that will resolve to an array of records
      *
-     * @param type
-     * @param promise 
+     * @function addAllPromise
+     * @argument {string}     type
+     * @argument {Ember.RSVP} promise
      * @return {Array} ArrayProxy|PromiseProxyMixin
      */
-    addAllPromise: function( type, promise ){
+    addAllPromise: function( type, promise ) {
         var self = this;
-        
+
         this._getPromises( type ).set( 'all', promise );
-        
-        promise.then( function( records ){
+
+        promise.then( function( records ) {
             self.addRecords( type, records );
             self._getPromises( type ).set( 'all', undefined );
-        }, function(){
+        }, function() {
             self._getPromises( type ).set( 'all', undefined );
         });
 
@@ -328,65 +354,68 @@ export default Ember.Object.extend({
     },
 
     /**
-     * addRecord
+     * Add record to cache
      *
-     * @param type
-     * @param record 
-     * @return {Object}
+     * @function addRecord
+     * @argument {string} type
+     * @argument {Ember.Object} record
+     * @return {void}
      */
     addRecord: function( type, record ) {
         var typeRecords = this._getRecords( type ),
-            oldRecord = typeRecords.ids[ id ],
-            id = record.get( 'id' ) || 0;
+            oldRecord   = typeRecords.ids[ id ],
+            id          = record.get( 'id' ) || 0;
 
-        if( oldRecord ){
-            this.removeRecord( type, oldRecord ); 
+        if ( oldRecord ) {
+            this.removeRecord( type, oldRecord );
         }
 
         typeRecords.ids[ id ] = record;
         typeRecords.records.push( record );
-
-        return record;
     },
 
     /**
-     * addRecords
+     * Add multiple records to cache
      *
-     * @param type
-     * @param records 
-     * @return {Array}
+     * @function addRecords
+     * @argument {string} type
+     * @argument {array}  records
+     * @return   {void}
      */
     addRecords: function( type, records ) {
         var self = this;
 
-        return records.map( function( record ) {
+        records.map( function( record ) {
             return self.addRecord( type, record );
         });
     },
 
     /**
-     * removeRecord
+     * Remove record from cache
      *
-     * @param type
-     * @param record 
+     * @function removeRecord
+     * @argument {string} type
+     * @argument {Ember.Object} record
+     * @return   {void}
      */
     removeRecord: function( type, record ) {
         var typeRecords = this._getRecords( type ),
-            id = record.get( 'id' ) || 0,
-            idx = typeRecords.records.indexOf( record );
+            id          = record.get( 'id' ) || 0,
+            idx         = typeRecords.records.indexOf( record );
 
-        if( typeRecords ){
+        if ( typeRecords ) {
             delete typeRecords.ids[ id ];
-            typeRecords.records = typeRecords.records.splice(idx, 1);
+            typeRecords.records = typeRecords.records.splice( idx, 1 );
         }
-
     },
 
     /**
-     * removeRecords
+     * Remove multiple records
      *
-     * @param type
-     * @param records 
+     * @function removeRecords
+     * @argument {string} type
+     * @argument {array}  records
+     * @return   {void}
      */
     removeRecords: function( type, records ) {
         var self = this;
@@ -397,13 +426,13 @@ export default Ember.Object.extend({
     },
 
     /**
-     * clearCache
+     * Clear the cache
      *
-     * @param type 
+     * @function clearCache
+     * @argument {string} type
      */
-    clearCache: function( type ){
+    clearCache: function( type ) {
         this._initializeRecords( type );
         this._initializePromises( type );
     }
-
 });
