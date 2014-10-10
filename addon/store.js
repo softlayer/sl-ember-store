@@ -200,11 +200,11 @@ export default Ember.Object.extend({
      * Create a new record, it will not have been saved via an adapter yet
      *
      * @function  createRecord
-     * @argument  {string} type         lower case name of model class
+     * @argument  {string} type         name of model class
      * @return    {Ember.ObjectProxy}   model object, instance of Ember.ObjectProxy
      */
     createRecord: function( type, content ) {
-        var factory = this.modelFor( type ),
+        var factory = this.modelFor( type.toLowerCase() ),
             record  = factory.create({
                 container: this.get( 'container' )
             });
