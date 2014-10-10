@@ -57,13 +57,18 @@ export default Ember.Object.extend({
      * Returns the model class for a given model type
      *
      * @function modelFor
-     * @argument {string}     type lower case name of the model class
-     * @throws {Ember.assert} If [this condition is met]
-     * @return {function}     model constructor
+     * @argument {string}     type  name of the model class
+     * @throws   {Ember.assert}
+     * @return   {function}   model constructor
      */
     modelFor: function( type ) {
-        var normalizedKey = this.container.normalize( 'model:'+type ),
-            factory       = this.container.lookupFactory( normalizedKey );
+        var normalizedKey,
+            factory;
+
+        type = type.toLowerCase();
+
+        normalizedKey = this.container.normalize( 'model:'+type );
+        factory       = this.container.lookupFactory( normalizedKey );
 
         Ember.assert( "No model was found for `"+type+"`", factory );
 
