@@ -79,11 +79,13 @@ export default Ember.Object.extend({
      * Sets the metadata object for the specified model type
      *
      * @function metaForType
-     * @argument {string} type the lowercase model name
-     * @argument {object} metadata the metadata to save
+     * @argument {string} type      the model name
+     * @argument {object} metadata  the metadata to save
      * @return   {void}
      */
     metaForType: function( type, metadata ) {
+        type = type.toLowerCase();
+
         this.set( '_metadataCache.'+type, metadata );
     },
 
