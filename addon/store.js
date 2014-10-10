@@ -5,17 +5,6 @@ import cache from './cache';
 export default Ember.Object.extend({
 
     /**
-     * Initialize the cache
-     *
-     * @function  setupcache
-     * @observers 'init'
-     * @return    {void}
-     */
-    setupcache: function() {
-        this.set( '_cache', cache.create() );
-    }.on( 'init' ),
-
-    /**
      * Array of functions to be run before an adapter runs a query
      *
      * @property {array} preQueryHooks
@@ -34,6 +23,37 @@ export default Ember.Object.extend({
     postQueryHooks: Ember.A([]),
 
     /**
+     * Stores all the metadata for all the models
+     *
+     * @private
+     * @property {object} _metadataCache
+     * @type     {Ember.Object}
+     * @default  {Ember.Object}
+     */
+    _metadataCache: {},
+
+    /**
+     * The inflection dictionary for nonstandard words
+     *
+     * @private
+     * @property {object} _inflectionDict
+     * @type     {Ember.Object}
+     * @default  {Ember.Object}
+     */
+    _inflectionDict: {},
+
+    /**
+     * Initialize the cache
+     *
+     * @function  setupcache
+     * @observers 'init'
+     * @return    {void}
+     */
+    setupcache: function() {
+        this.set( '_cache', cache.create() );
+    }.on( 'init' ),
+
+    /**
      * Returns the model class for a given model type
      *
      * @function modelFor
@@ -49,16 +69,6 @@ export default Ember.Object.extend({
 
         return factory;
     },
-
-    /**
-     * Stores all the metadata for all the models
-     *
-     * @private
-     * @property {object} _metadataCache
-     * @type     {Ember.Object}
-     * @default  {Ember.Object}
-     */
-    _metadataCache: {},
 
     /**
      * Sets the metadata object for the specified model type
@@ -82,16 +92,6 @@ export default Ember.Object.extend({
     metadataFor: function( type ) {
         return this.get( '_metadataCache.'+type );
     },
-
-    /**
-     * The inflection dictionary for nonstandard words
-     *
-     * @private
-     * @property {object} _inflectionDict
-     * @type     {Ember.Object}
-     * @default  {Ember.Object}
-     */
-    _inflectionDict: {},
 
     /**
      * Pluralize the provided word
@@ -189,40 +189,6 @@ export default Ember.Object.extend({
     },
 
     /**
-     * Private find method
-     *
-     * @function  __find
-     * @private
-     * @argument  {string} type            lowercase model name
-     * @argument  {integer / string} id    record identifier
-     * @argument  {object} options         objects containing all options for query
-     * @argument  {boolean} findOne        force the retrieval of a single record
-     * @return                             an ember object / array proxy with the promise proxy mixin
-     */
-    __find: function( type, id, options, findOne ) {
-        var cache  = this.get( '_cache' ),
-            reload = options && options.reload,
-            result;
-
-        if ( reload || !cache.isCached( type, id, findOne ) ) {
-            result = this.adapterFor( type ).find( type, id, options, findOne );
-
-            if ( !id || !findOne ) {
-                cache.clearCache( type );
-
-            } else {
-                cache.removeRecord( type, id || 0 );
-            }
-
-            cache.addToCache( type, id, findOne, result );
-
-            return result;
-        }
-
-        return cache.fetch( type, id, findOne );
-    },
-
-    /**
      * Create a new record, it will not have been saved via an adapter yet
      *
      * @function  createRecord
@@ -290,5 +256,39 @@ export default Ember.Object.extend({
         if ( Ember.isArray( postQueryHooks ) ) {
             postQueryHooks.forEach( function( f ){ f( response ); } );
         }
+    },
+
+    /**
+     * Private find method
+     *
+     * @function  __find
+     * @private
+     * @argument  {string} type            lowercase model name
+     * @argument  {integer / string} id    record identifier
+     * @argument  {object} options         objects containing all options for query
+     * @argument  {boolean} findOne        force the retrieval of a single record
+     * @return                             an ember object / array proxy with the promise proxy mixin
+     */
+    __find: function( type, id, options, findOne ) {
+        var cache  = this.get( '_cache' ),
+            reload = options && options.reload,
+            result;
+
+        if ( reload || !cache.isCached( type, id, findOne ) ) {
+            result = this.adapterFor( type ).find( type, id, options, findOne );
+
+            if ( !id || !findOne ) {
+                cache.clearCache( type );
+
+            } else {
+                cache.removeRecord( type, id || 0 );
+            }
+
+            cache.addToCache( type, id, findOne, result );
+
+            return result;
+        }
+
+        return cache.fetch( type, id, findOne );
     }
 });
