@@ -7,7 +7,6 @@ export default Ember.Object.extend( ModelizeMixin, {
     /**
      * Run Pre Query Hooks
      *
-     * @public
      * @function runPreQueryHooks
      * @argument {object} query an object containing data about the query to be run
      * @return   { void}
@@ -19,7 +18,6 @@ export default Ember.Object.extend( ModelizeMixin, {
     /**
      * Run Post Query Hooks
      *
-     * @public
      * @function runPostQueryHooks
      * @argument {object} response an object containing the reponse data
      * @return   { void}
@@ -31,7 +29,6 @@ export default Ember.Object.extend( ModelizeMixin, {
     /**
      * Placeholder function for find() to be overwritten by child classes
      *
-     * @public
      * @function find
      * @throws {Ember.assert}
      * @return   {void}
