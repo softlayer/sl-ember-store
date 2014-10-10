@@ -152,14 +152,13 @@ export default Ember.Object.extend({
      * Returns the configured adapter for the specified model type
      *
      * @function  adapterFor
-     * @argument  {string} type the lower case name of the model class
-     * @return    {object} the adapter singleton
+     * @argument  {string} type  the name of the model class
+     * @return    {object}       the adapter singleton
      */
     adapterFor: function( type ) {
-        var adapterType = this.modelFor(type).adapter,
-            adapter     = this.container.lookup( 'adapter:'+adapterType );
+        var adapterType = this.modelFor( type.toLowerCase() ).adapter;
 
-        return adapter;
+        return this.container.lookup( 'adapter:'+adapterType );
     },
 
     /**
