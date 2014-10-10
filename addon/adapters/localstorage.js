@@ -253,6 +253,7 @@ var LocalStorageAdapter = Adapter.extend({
     /**
      * Return the records for a specific model url
      *
+     * @private
      * @function _getRecords
      * @argument {object} db the object to find the records on
      * @argument {string} url the key
@@ -272,6 +273,7 @@ var LocalStorageAdapter = Adapter.extend({
     /**
      * Return the record index for the specified ID
      *
+     * @private
      * @function _getRecordIndexById
      * @argument {Array}   records  array to search
      * @argument {integer} id       id to search for
@@ -294,6 +296,7 @@ var LocalStorageAdapter = Adapter.extend({
     /**
      * Normalize a url for use as a key
      *
+     * @private
      * @function _normalizeUrl
      * @argument {string}  url
      * @return {string}    normalized url
