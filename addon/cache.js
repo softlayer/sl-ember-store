@@ -266,16 +266,15 @@ export default Ember.Object.extend({
      */
     fetchAll: function( type ) {
         var findAllPromise = this._getAllPromise( type ),
-            self           = this,
             records;
 
         if ( findAllPromise ) {
             return findAllPromise;
         }
 
-        records = self._getAllRecords( type );
+        records = this._getAllRecords( type );
 
-        if ( ! records ) {
+        if ( !records ) {
             return false;
         }
 
