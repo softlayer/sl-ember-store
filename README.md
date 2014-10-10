@@ -286,3 +286,26 @@ Foo.reopenClass({
 
 Notice that the url variable is still needed as it will be used to store this model's records under the adapter's
 namespace in localStorage.
+
+
+---
+
+# Versioning
+Employs [Semantic Versioning 2.0.0](http://semver.org/)
+
+---
+
+# Contribution
+[See CONTRIBUTING.md](CONTRIBUTING.md)
+
+---
+
+# Copyright and License
+sl-model and its source files are Copyright © 2014 [SoftLayer Technologies, Inc.](http://www.softlayer.com/) The
+software is [MIT Licensed](LICENSE.md)
+
+---
+
+# Warranty
+This software is provided “as is” and without any express or implied warranties, including, without limitation, the
+implied warranties of merchantability and fitness for a particular purpose.
