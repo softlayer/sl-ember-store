@@ -167,12 +167,12 @@ export default Ember.Object.extend({
      * Does not use an id to perform a lookup (use the options object instead).
      *
      * @function  findOne
-     * @argument  {string} type    lower case name of the model
+     * @argument  {string} type    name of the model
      * @argument  {object} options hash of options to be passed on to the adapter
      * @return    {Ember.ObjectProxy}
      */
     findOne: function( type, options ) {
-        return this.__find( type, null, options, true );
+        return this.__find( type.toLowerCase(), null, options, true );
     },
 
     /**
