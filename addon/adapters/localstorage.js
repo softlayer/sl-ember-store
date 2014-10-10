@@ -71,7 +71,7 @@ var LocalStorageAdapter = Adapter.extend({
                 }
             }
 
-            if ( ! response ) {
+            if ( !response ) {
                 reject();
             }
 

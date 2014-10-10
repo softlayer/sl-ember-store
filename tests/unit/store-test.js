@@ -1,21 +1,30 @@
 import Ember from 'ember';
 import { test, moduleFor } from 'ember-qunit';
-import Foo from 'dummy/models/foo';
-import Bar from 'dummy/models/bar';
 import Store from 'sl-model/store';
+import Model from 'sl-model/model';
 
-var store,
+var Foo,
+    Bar,
+    store,
     AjaxAdapter,
-    LocalstorageAdapter;
+    ajaxAdapter,
+    LocalstorageAdapter,
+    queryHook;
 
 module( 'Unit - sl-model/store', {
 
     setup: function(){
-        Foo.reopenClass({url:'/foo'});
-
+        Foo = Model.extend();
+        Bar = Model.extend();
         Bar.reopenClass({ adapter: 'localstorage' });
         
-        AjaxAdapter = Ember.Object.extend({ type: 'ajax', __find: function(){}, find: function(){ return Ember.Object.create(); }  });
+        AjaxAdapter = Ember.Object.extend({ 
+            type: 'ajax', 
+            __find: function(){}, 
+            find: function(){ 
+                return Ember.RSVP.resolve( [ Ember.Object.create() ] ); 
+            }  
+        });
         
         LocalstorageAdapter = Ember.Object.extend({ type: 'localstorage' });
 
@@ -43,8 +52,25 @@ module( 'Unit - sl-model/store', {
 
         store.container.registry.push( { key: 'model:foo', factory: Foo } );
         store.container.registry.push( { key: 'model:bar', factory: Bar } );
+        
+        ajaxAdapter = store.container.lookup('adapter:ajax');
+
+
+        //sinon spies
+        sinon.spy( store, '__find' );
+        sinon.spy( store, 'modelFor' );
+        sinon.spy( store, 'adapterFor' );
+        sinon.spy( ajaxAdapter, 'find' );
+        sinon.spy( Foo, 'create' );
+        queryHook = sinon.spy();
     },
     teardown: function(){
+        store.__find.restore();
+        store.modelFor.restore();
+        store.adapterFor.restore();
+        ajaxAdapter.find.restore();
+        Foo.create.restore();
+        queryHook.reset();
     }
 });
 
@@ -68,8 +94,6 @@ test( 'findOne: should call __find with correct args', function(){
     var options = { "otherId":1 },
         args;
 
-    store.__find = sinon.spy();
-
     store.findOne( 'foo', options );
 
     ok( store.__find.calledWith( 'foo', null, options, true ) );
@@ -77,54 +101,58 @@ test( 'findOne: should call __find with correct args', function(){
 
 test( 'find should call __find with numeric id', function(){
     var options = { "otherId": 1 };
-    store.__find = sinon.spy();
     store.find( 'foo', 1, options );
     ok( store.__find.calledWith( 'foo', 1, options, false ) );
 });
 
 test( 'find should call __find with object for first param', function(){
     var options = { "otherId": 1 };
-    store.__find = sinon.spy();
     store.find( 'foo', options );
     ok( store.__find.calledWith( 'foo', null, options, false ) );
 });
 
 test( 'find should call __find with only the type', function(){
-    store.__find = sinon.spy();
     store.find( 'foo' );
     ok( store.__find.calledWith( 'foo', null, null, false ) );
 });
 
 test( '__find should have called modelFor', function(){
-    sinon.spy( store, 'modelFor' );
     store.__find( 'foo', 1, {}, false );
     ok( store.modelFor.calledWith( 'foo' ) );
 });
 
 test( '__find should have called adapterFor', function(){
-    sinon.spy( store, 'adapterFor' );
     store.__find( 'foo', 1, {}, false );
     ok( store.adapterFor.calledWith( 'foo' ) );
 });
 
 test( '__find should have called AjaxAdapter.find', function(){
-    var ajaxAdapter = store.container.lookup('adapter:ajax');
-    sinon.spy( ajaxAdapter, 'find' );
     store.__find( 'foo', 1, {}, false );
-    ok( ajaxAdapter.find.calledWith( Foo, 1, {}, false ) );
+    ok( ajaxAdapter.find.calledWith( 'foo', 1, {}, false ) );
 });
 
 test( 'createRecord should have called modelFor', function(){
+    store.createRecord( 'foo' );
+    ok( store.modelFor.calledWith( 'foo' ) );
 });
 
 test( 'createRecord should have called Foo.create once', function(){
+    store.createRecord( 'foo' );
+    ok( Foo.create.calledOnce );
 });
 
 test( 'createRecord should have called Foo.create with an object container', function(){
+    store.createRecord( 'foo' );
+    ok( Foo.create.calledWith( { container: store.container } ) );
 });
 
 test( 'registerPreQueryHook should add an entry to preQueryHooks', function(){
+    store.registerPreQueryHook( queryHook );
+    ok( store.get( 'preQueryHooks' ).length === 1 );
 });
 
 test( 'runPreQueryHooks should run query hook once', function(){
+    store.registerPostQueryHook( queryHook );
+    store.runPostQueryHooks();
+    ok( queryHook.calledOnce );
 });
