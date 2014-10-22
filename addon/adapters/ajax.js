@@ -115,15 +115,18 @@ export default Adapter.extend({
      * @return {Ember.RSVP} Promise
      */
     deleteRecord: function( url, id ) {
-
-        Ember.assert( 'A url is required to delete a model', url );
-
-        return icAjax.request({
+        var queryObj = {
             url     : url,
             type    : 'DELETE',
             data    : JSON.stringify({ id: id }),
             context : this
-        })
+        };
+
+        Ember.assert( 'A url is required to delete a model', url );
+
+        this.runPreQueryHooks( queryObj );
+
+        return icAjax.request( queryObj )
         .finally( function ajaxAdapterDeleteFinally( response ) {
             this.runPostQueryHooks( response );
         }.bind( this ) , 'sl-model.ajaxAdapter:deleteRecord - always' );
@@ -140,16 +143,19 @@ export default Adapter.extend({
      * @return {Ember.RSVP} Promise
      */
      save: function( url, content ) {
-        var promise;
+        var promise,
+            queryObj = {
+                url     : url,
+                type    : 'POST',
+                data    : JSON.stringify( content ),
+                context : this
+            };
 
         Ember.assert( 'A url property is required to save a model', url );
 
-        promise = icAjax.request({
-            url     : url,
-            type    : 'POST',
-            data    : JSON.stringify( content ),
-            context : this
-        })
+        this.runPreQueryHooks( queryObj );
+
+        promise = icAjax.request( queryObj )
             .then( function ajaxAdapterSaveResponse( response ) {
                 // run the modelize mixin to map keys to models
                 return this.modelize( response );
