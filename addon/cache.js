@@ -199,16 +199,15 @@ export default Ember.Object.extend({
      * @return   {Object} ObjectProxy|PromiseProxyMixin
      */
     addPromise: function( type, id, promise ) {
-        var self = this;
-
         this._getPromises( type ).set( 'ids.'+ id, promise );
 
         promise.then( function( record ) {
-                self.addRecord( type, record );
-                delete self._getPromises( type ).get( 'ids' )[ id ];
-        }, function(){
-                delete self._getPromises( type ).get( 'ids' )[ id ];
-        });
+            this.addRecord( type, record );
+            delete this._getPromises( type ).get( 'ids' )[ id ];
+        }.bind(this))
+        .catch( function(){
+            delete this._getPromises( type ).get( 'ids' )[ id ];
+        }.bind(this));
 
         return promise;
     },
@@ -222,16 +221,15 @@ export default Ember.Object.extend({
      * @return {Array} ArrayProxy|PromiseProxyMixin
      */
     addAllPromise: function( type, promise ) {
-        var self = this;
-
         this._getPromises( type ).set( 'all', promise );
 
         promise.then( function( records ) {
-            self.addRecords( type, records );
-            self._getPromises( type ).set( 'all', undefined );
-        }, function() {
-            self._getPromises( type ).set( 'all', undefined );
-        });
+            this.addRecords( type, records );
+            this._getPromises( type ).set( 'all', undefined );
+        }.bind(this))
+        .catch( function(){
+            this._getPromises( type ).set( 'all', undefined );
+        }.bind(this));
 
         return promise;
     },
@@ -266,11 +264,9 @@ export default Ember.Object.extend({
      * @return   {void}
      */
     addRecords: function( type, records ) {
-        var self = this;
-
         records.map( function( record ) {
-            self.addRecord( type, record );
-        });
+            this.addRecord( type, record );
+        }.bind(this));
     },
 
     /**
@@ -301,11 +297,9 @@ export default Ember.Object.extend({
      * @return   {void}
      */
     removeRecords: function( type, records ) {
-        var self = this;
-
         records.map( function( record ) {
-            self.removeRecord( type, record );
-        });
+            this.removeRecord( type, record );
+        }.bind(this));
     },
 
     /**
