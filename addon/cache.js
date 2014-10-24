@@ -106,7 +106,7 @@ export default Ember.Object.extend({
         }
 
         return Ember.ObjectProxy.createWithMixins( Ember.PromiseProxyMixin )
-            .set( 'promise', new Ember.RSVP.Promise.resolve( record ) );
+            .set( 'promise', Ember.RSVP.Promise.resolve( record ) );
     },
 
     /**
@@ -134,7 +134,7 @@ export default Ember.Object.extend({
         }
 
         return Ember.ObjectProxy.createWithMixins( Ember.PromiseProxyMixin )
-            .set( 'promise', new Ember.RSVP.Promise.resolve( record ) );
+            .set( 'promise', Ember.RSVP.Promise.resolve( record ) );
     },
 
     /**
@@ -156,12 +156,12 @@ export default Ember.Object.extend({
 
         records = this._getAllRecords( type );
 
-        if ( !records ) {
+        if ( !records.length ) {
             return false;
         }
 
         return Ember.ArrayProxy.createWithMixins( Ember.PromiseProxyMixin )
-            .set( 'promise', new Ember.RSVP.Promise.resolve( records ) );
+            .set( 'promise', Ember.RSVP.Promise.resolve( records ) );
     },
 
     /**
@@ -204,8 +204,10 @@ export default Ember.Object.extend({
         this._getPromises( type ).set( 'ids.'+ id, promise );
 
         promise.then( function( record ) {
-            self.addRecord( type, record );
-            delete self._getPromises( type ).get( 'ids' )[ id ];
+                self.addRecord( type, record );
+                delete self._getPromises( type ).get( 'ids' )[ id ];
+        }, function(){
+                delete self._getPromises( type ).get( 'ids' )[ id ];
         });
 
         return promise;
@@ -244,8 +246,8 @@ export default Ember.Object.extend({
      */
     addRecord: function( type, record ) {
         var typeRecords = this._getRecords( type ),
-            oldRecord   = typeRecords.ids[ id ],
-            id          = record.get( 'id' ) || 0;
+            id          = record.get( 'id' ) || 0,
+            oldRecord   = typeRecords.ids[ id ];
 
         if ( oldRecord ) {
             this.removeRecord( type, oldRecord );
@@ -267,7 +269,7 @@ export default Ember.Object.extend({
         var self = this;
 
         records.map( function( record ) {
-            return self.addRecord( type, record );
+            self.addRecord( type, record );
         });
     },
 
@@ -387,7 +389,7 @@ export default Ember.Object.extend({
     _initializePromises: function( type ) {
         this.set( '_promises.'+type, Ember.Object.create({
             all : null,
-            ids : Ember.A([])
+            ids : Ember.Object.create()
         }));
     },
 
@@ -420,7 +422,7 @@ export default Ember.Object.extend({
      * @return   {Ember.Object}
      */
     _getPromiseById: function( type, id ) {
-        return this.get( '_promise.'+type+'.ids.'+id );
+        return this.get( '_promises.'+type+'.ids.'+id );
     },
 
     /**
