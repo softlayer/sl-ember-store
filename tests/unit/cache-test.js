@@ -341,7 +341,7 @@ test( '_setupCache', function(){
 test( '_initializeRecords', function(){
     cache._initializeRecords( 'test' );
     equal( cache._records.test.records.length, 0, 'sets up `test` records array' );
-    equal( cache._records.test.ids.length, 0, 'sets up `test` records array' );
+    ok( cache._records.test.ids instanceof Ember.Object, 'sets up `test` records object' );
 });
 
 test( '_getRecords, none', function(){
