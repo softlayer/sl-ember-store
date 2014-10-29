@@ -56,7 +56,7 @@ export default Ember.Object.extend({
             return !!this.fetchOne( type );
         }
 
-        return !!( this._getAllPromise( type ) || this._getAllRecords( type ).length );
+        return !!( this._getAllPromise( type ) || this._getAllRecords( type ).all );
     },
 
     /**
@@ -269,6 +269,11 @@ export default Ember.Object.extend({
         }.bind(this));
     },
 
+    addAllRecords: function( type, records ) {
+        this.addRecords( type, records );
+        this._getRecords( type ).set( 'all', true );
+    },
+
     /**
      * Remove record from cache
      *
@@ -323,8 +328,9 @@ export default Ember.Object.extend({
      */
     _initializeRecords: function( type ) {
         this.set( '_records.'+type, Ember.Object.create({
+            all     : false,
             records : Ember.A([]),
-            ids     : Ember.A([])
+            ids     : Ember.Object.create()
         }));
     },
 
