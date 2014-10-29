@@ -1,0 +1,29 @@
+<h2>Single Model</h2>
+<p>This record is loaded in our route's model hook with the following code:</p>
+<code>this.store.find( 'foo', params.model_id );</code>
+<p>The model is loaded by the store via the ajax adapter.  The `/foo?id=1` 
+resource contains an embedded `bar` record, and this record is automatically 
+created as an instance of the `Bar` model.</p>
+<h3>Foo Model</h3>
+<ul>
+    <li>ID: {{model.id}}</li>
+    <li>Text: {{model.text}}</li>
+    <ul>
+        <h3>Bar Model</h3>
+        <li>ID: {{model.bar.id}}</li>
+        <li>Text: {{model.bar.text}}</li>
+    </ul>
+</ul>
+<p>The original json string for this resource:</p>
+<pre>
+{
+    id: 1,
+    text: 'This is foo record with id: 1',
+    bar: {
+        id: 1,
+        text: 'This is a bar record with id: 1'
+    }
+}
+</pre>
+
+<p>{{#link-to 'arrayOfModels'}}All Records{{/link-to}}</p>

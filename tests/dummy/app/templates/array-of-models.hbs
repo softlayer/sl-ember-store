@@ -1,0 +1,20 @@
+<h2>Array of Models</h2>
+<p>These records are loaded in our route's model hook with the following code:</p>
+<code>this.store.find('foo');</code>
+<p>These records are loaded by the store via the ajax adapter.  The `/foo` 
+resource contains foo records with embedded `bar` records.  These records are automatically 
+created as an instance of the `Bar` model.</p>
+
+{{#each model in controller}}
+<h3>Foo Model</h3>
+<ul>
+    <li>ID: {{#link-to 'singleModel' model.id }}{{model.id}}{{/link-to}}</li>
+    <li>Text: {{model.text}}</li>
+    <ul>
+        <h3>Bar Model</h3>
+        <li>ID: {{model.bar.id}}</li>
+        <li>Text: {{model.bar.text}}</li>
+    </ul>
+</ul>
+
+{{/each}}

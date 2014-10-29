@@ -6,6 +6,8 @@ var Router = Ember.Router.extend({
 });
 
 Router.map(function() {
+    this.route( 'singleModel', { path: '/singleModel/:model_id' } );
+    this.route( 'arrayOfModels', { path: '/arrayOfModels' } ); 
 });
 
 export default Router;

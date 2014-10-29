@@ -4,10 +4,7 @@ var Foo = SlModel.extend({
 });
 
 Foo.reopenClass({
-    url: '/api/foo',
-    serializer: function( result ){
-        return result.foo;
-    }
+    url: '/foo'
 });
 
 export default Foo;
