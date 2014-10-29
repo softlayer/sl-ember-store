@@ -33,16 +33,6 @@ export default Ember.Object.extend({
     _metadataCache: {},
 
     /**
-     * The inflection dictionary for nonstandard words
-     *
-     * @private
-     * @property {object} _inflectionDict
-     * @type     {Ember.Object}
-     * @default  {Ember.Object}
-     */
-    _inflectionDict: {},
-
-    /**
      * Initialize the cache
      *
      * @function  setupcache
@@ -100,52 +90,6 @@ export default Ember.Object.extend({
         type = type.toLowerCase();
 
         return this.get( '_metadataCache.'+type );
-    },
-
-    /**
-     * Pluralize the provided word
-     *
-     * @function pluralize
-     * @argument {string} word
-     * @return   {string}
-     */
-    pluralize: function( word ) {
-        return this.get( '_inflectionDict.'+word ) || word.match(/s$/) ? word+'es' : word+'s';
-    },
-
-    /**
-     * Singularize the provided word
-     *
-     * @function singularize
-     * @argument {string} word
-     * @return   {string}
-     */
-    singularize: function( word ) {
-        var inflectionDict = this.get( '_inflectionDict' ),
-            foundDef       = inflectionDict.keys().reduce( function( word, key ) {
-                var def      = inflectionDict.get( key ),
-                    defRegex = new RegExp( '^'+word );
-
-                if ( defRegex.test( def ) ) {
-                    return def;
-                }
-
-                return word;
-            });
-
-        return foundDef || word.replace( /s$/, '' );
-    },
-
-    /**
-     * Set pluralized word value
-     *
-     * @function defineInflection
-     * @argument {string} word
-     * @argument {string} pluralizedWord
-     * @return   {void}
-     */
-    defineInflection: function( word, pluralizedWord ) {
-        this.set( '_inflectionDict.'+word, pluralizedWord );
     },
 
     /**
