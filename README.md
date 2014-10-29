@@ -122,6 +122,9 @@ export default Foo;
 Models should always have a `url` specified.  Further urls can be specified in the `endpoints` object.  Urls and
 Serializers can be specified on a per endpoint/action basis and will default to the top level url and serializer.
 
+If you find you need an `inflection` service to support your api, we recommend
+you use [Ember-Inflector](https://github.com/stefanpenner/ember-inflector).  You
+can then use `Ember.Inflector` in your serializers and models.
 
 ## Route
 
