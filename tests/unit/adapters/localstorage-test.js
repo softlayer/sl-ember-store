@@ -161,3 +161,30 @@ asyncTest( 'delete', function(){
             });
         });
 });
+
+asyncTest( 'quota test', function(){
+    var fooContent = { id: 1, test: [] },
+        foo,
+        r;
+    
+    for( var i = 0; i < 10000000; i++){
+        fooContent.test[i] = '01000001000000000100010';
+    }
+
+    //make sure we actually test the browser's localstorage
+    getLocalStorageSpy.restore();
+    
+    foo = Foo.create( fooContent );
+    
+    r = localstorageadapter.save( '/foo', foo );
+
+    r.then(
+        function( result ){
+            ok( false, 'Promise did not get rejected!');
+            start();
+        },
+        function( result ){
+            equal( result, 'localStorage quota exceeded', 'Promise gets rejected for exceeding quota' );
+            start();
+        });
+});

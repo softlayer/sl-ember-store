@@ -142,7 +142,9 @@ var LocalStorageAdapter = Adapter.extend({
                 reject( errorData );
             }
 
-            this._dbWrite( db );
+            if( ! this._dbWrite( db ) ){
+                reject( 'localStorage quota exceeded' );
+            }
 
             resolve();
 
@@ -169,7 +171,7 @@ var LocalStorageAdapter = Adapter.extend({
 
         Ember.assert( 'A url is required to save a model', url );
 
-        promise = new Ember.RSVP.Promise( function( resolve ) {
+        promise = new Ember.RSVP.Promise( function( resolve, reject ) {
             var db,
                 records,
                 recordIndex;
@@ -186,7 +188,9 @@ var LocalStorageAdapter = Adapter.extend({
 
             records.push( content );
 
-            this._dbWrite( db );
+            if( ! this._dbWrite( db ) ){
+                reject( 'localStorage quota exceeded' );
+            }
 
             resolve( content );
 
@@ -247,7 +251,15 @@ var LocalStorageAdapter = Adapter.extend({
      * @return {void}
      */
     _dbWrite: function( db ) {
-        this._getLocalStorage().setItem( this.getNamespace(), JSON.stringify( db ) );
+        try {
+                this._getLocalStorage().setItem( this.getNamespace(), JSON.stringify( db ) );
+        } catch(domException) {
+            if (domException.name === 'QuotaExceededError' ||
+                domException.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
+                return false;
+            }
+        }
+        return true;
     },
 
     /**
