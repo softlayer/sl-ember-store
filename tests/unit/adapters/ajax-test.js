@@ -50,14 +50,27 @@ module( 'Unit - sl-model/adapter/ajax', {
         defineFixture( '/foo', {
             response: { id: 1, test: 'foo', 'bar': { id: 1, quiz: 'bar' } },
             jqXHR: {},
-            testStatus: 'success'
+            textStatus: 'success'
+        });
+        defineFixture( '/fooFail', {
+            errorThrown: 'this is an error msg',
+            jqXHR: {},
+            textStatus: 'error'
         });
         defineFixture( '/bar', {
             response:  [ { id: 1, quiz: 'bar' }, { id: 2, quiz: 'bar2' } ],
             jqXHR: {},
-            testStatus: 'success'
+            textStatus: 'success'
         });
-        Foo.reopenClass( { url: '/foo'});
+        Foo.reopenClass( { 
+            url: '/foo', 
+            endpoints: {
+                fail: {
+                    url: '/fooFail'
+                }
+            }
+        });
+
         Bar.reopenClass( { url: '/bar'});
 
         //spies
@@ -120,6 +133,21 @@ asyncTest( '__find array of model', function(){
     response.then( function(){
         ok( response.content[0] instanceof Bar, 'should return an array of Bar models' );
         ok( response.content[1] instanceof Bar, 'should return an array of Bar models' );
+        start();
+    });
+});
+
+
+asyncTest( 'find should throw error if request fails', function(){
+    var options = { endpoint: 'fail' },
+        promise = ajaxadapter.find( 'foo', null, options, false );
+
+    promise.then( function( result ){
+        ok( false, 'find did not throw an error!' );
+        start();
+    }, 
+    function( result ){
+        equal( result.textStatus, 'error', 'find did throw error' );
         start();
     });
 });

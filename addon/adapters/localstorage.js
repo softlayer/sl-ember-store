@@ -67,12 +67,12 @@ var LocalStorageAdapter = Adapter.extend({
             else {
                 response = records;
                 if ( ! response.length ) {
-                    reject();
+                    reject( { textStatus: 'error', errorThrown: 'Not Found' });
                 }
             }
 
             if ( !response ) {
-                reject();
+                reject( { textStatus: 'error', errorThrown: 'Not Found' });
             }
 
             response = model.callSerializerForEndpointAction( options.endpoint, 'get', response, store );
@@ -121,8 +121,8 @@ var LocalStorageAdapter = Adapter.extend({
         promise = new Ember.RSVP.Promise( function( resolve, reject ) {
             var db,
                 records,
-                errorData,
-                recordIndex;
+                recordIndex,
+                exception = {};
 
             db = this._getDb();
 
@@ -134,16 +134,11 @@ var LocalStorageAdapter = Adapter.extend({
                 records.splice( recordIndex, 1 );
 
             } else {
-                errorData = {
-                    statusCode : 404,
-                    statusText : 'id: '+id+' not found at '+url,
-                    message    : 'The record with id: `'+id+'` was not found at url:'+url
-                };
-                reject( errorData );
+                reject( { textStatus: 'error', errorThrown: 'Not Found' } );
             }
 
-            if( ! this._dbWrite( db ) ){
-                reject( 'localStorage quota exceeded' );
+            if( ! this._dbWrite( db, exception ) ){
+                reject( { textStatus: 'error', errorThrown: exception.msg } );
             }
 
             resolve();
@@ -174,7 +169,8 @@ var LocalStorageAdapter = Adapter.extend({
         promise = new Ember.RSVP.Promise( function( resolve, reject ) {
             var db,
                 records,
-                recordIndex;
+                recordIndex,
+                exception = {};
 
             db = this._getDb();
 
@@ -188,8 +184,8 @@ var LocalStorageAdapter = Adapter.extend({
 
             records.push( content );
 
-            if( ! this._dbWrite( db ) ){
-                reject( 'localStorage quota exceeded' );
+            if( ! this._dbWrite( db, exception ) ){
+                reject( { textStatus: 'error', errorThrown: exception.msg } );
             }
 
             resolve( content );
@@ -250,14 +246,12 @@ var LocalStorageAdapter = Adapter.extend({
      * @argument {object} db
      * @return {void}
      */
-    _dbWrite: function( db ) {
+    _dbWrite: function( db, exception ) {
         try {
-                this._getLocalStorage().setItem( this.getNamespace(), JSON.stringify( db ) );
+            this._getLocalStorage().setItem( this.getNamespace(), JSON.stringify( db ) );
         } catch(domException) {
-            if (domException.name === 'QuotaExceededError' ||
-                domException.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
-                return false;
-            }
+            exception.msg = domException.message;
+            return false;
         }
         return true;
     },

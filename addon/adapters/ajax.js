@@ -84,13 +84,8 @@ export default Adapter.extend({
             }.bind( this ) , null, 'sl-model.ajaxAdapter:find - then' )
 
             .catch( function ajaxAdapterFindCatch( response ) {
-                var errorData = {
-                    'statusCode' : response.status,
-                    'statusText' : response.statusText,
-                    'message'    : response.responseJSON && response.responseJSON.error || 'Service Unavailable'
-                };
 
-                throw errorData;
+                throw response;
 
             }.bind( this ), 'sl-model.ajaxAdapter:find - catch' )
 

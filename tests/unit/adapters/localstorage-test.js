@@ -184,7 +184,7 @@ asyncTest( 'quota test', function(){
             start();
         },
         function( result ){
-            equal( result, 'localStorage quota exceeded', 'Promise gets rejected for exceeding quota' );
+            equal( result.textStatus, 'error', 'Promise gets rejected for exceeding quota' );
             start();
         });
 });
