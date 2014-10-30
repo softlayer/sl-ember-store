@@ -153,7 +153,7 @@ can then use `Ember.Inflector` in your serializers and models.
 ### Local Storage Adapter
 The `localstorage` adapter works in much the same way as the ajax adapter.  It returns Object and Array proxies,
 with the promise proxy mixin applied.  In the case of errors the promise will get rejected with an error object
-similar to the `ic-ajax` error object, minuse the `jqXHR` key and object.
+similar to the `ic-ajax` error object, minus the `jqXHR` key and object.
 
 #### If you installed *sl-model* as an Ember CLI Addon
 
