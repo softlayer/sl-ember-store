@@ -81,9 +81,30 @@ import SlModel from 'sl-model';
 var Foo = SlModel.extend({ });
 ```
 
+## Using Adapters:
+Sl-Model has two adapters out of the box: ajax and localstorage.  You can specify your adapter in your model by reopening it's class:
+```javascript
+Foo.reopenClass({
+    adapter: 'ajax'
+});
+```
+Models have `ajax` specified as default, so you don't need to do this unless you want to use a different adapter.
+
+SL-Model adapters always return [Ember Promise Proxies](http://emberjs.com/api/classes/Ember.PromiseProxyMixin.html).
+If you request a single object then you will get an `Ember.ObjectProxy` with the promise proxy mixin applied.  Requests for
+Multiple records will return an `Ember.ArrayProxy` with the promise proxiy mixin applied.
+
+### Ajax adapter
+The `ajax` adapter uses [ic-ajax](https://github.com/instructure/ic-ajax) to make `xhr` requests to your remote api.
+Successful responses will be serialized and then applied to a new created instance of your model.
+In the case of an error, the promise will be rejected and you will be provided with the exact response provided
+by `ic-ajax`.
+
 ### Urls, Endpoints, Serializers:
 
-You can setup a single url if your api is restful or multiple endpoints if you need fine grain control.
+When using the `ajax` adapter you can setup a single url if your api is restful or 
+multiple endpoints if you need fine grain control.  Multiple endpoints come
+in handy if your api isn't so restful.
 
 The base level `url` and `serializer` will be used by default.  Override them or add different ones at any endpoint.
 Endpoints that return multiple records should only return an array.  You can add any metadata for those queries to the
@@ -108,16 +129,19 @@ Foo.reopenClass({
             },
             post: '/superFooPost'
         },
-        'superDuperFoo': '/supdupfoo',
         'boringFoo': {
             url: '/boringFoo',
             serializer: someSerializer
-        }
+        },
+        'superBoringFoo': '/superBoringFoo',
     }
 });
 
 export default Foo;
 ```
+In the example above, the `superFoo:post` endpoint will use the default serializer.  
+All http verbs on the `boringfoo` endpoint will use the `someSerializer` function as their serializer.
+All http verbs on the `superBoringFoo` endpoint will use the default serializer.
 
 Models should always have a `url` specified.  Further urls can be specified in the `endpoints` object.  Urls and
 Serializers can be specified on a per endpoint/action basis and will default to the top level url and serializer.
@@ -126,7 +150,65 @@ If you find you need an `inflection` service to support your api, we recommend
 you use [Ember-Inflector](https://github.com/stefanpenner/ember-inflector).  You
 can then use `Ember.Inflector` in your serializers and models.
 
-## Route
+### Local Storage Adapter
+The `localstorage` adapter works in much the same way as the ajax adapter.  It returns Object and Array proxies,
+with the promise proxy mixin applied.  In the case of errors the promise will get rejected with an error object
+similar to the `ic-ajax` error object, minus the `jqXHR` key and object.
+
+#### If you installed *sl-model* as an Ember CLI Addon
+
+The localStorage adapter is initialized by default with your project's namespace.
+
+If you want to change the default namespace then you will want to create an initializer:
+
+    ember g localstorage-initializer
+
+Now edit the file that was generated in `app/initializers/localstorage-initializer.js` and define the `namespace` value.
+
+```javascript
+module SlModel from 'sl-model';
+
+export default {
+    name: 'sl-model-localstorage',
+
+    after: 'sl-model',
+
+    initialize: function( container ) {
+        var localStorageAdapter = SlModel.LocalstorageAdapter;
+
+        localStorageAdapter.reopenClass({
+            namespace: '<namespace>'
+        });
+
+        container.register( 'adapter:localstorage', localStorageAdapter );
+    }
+};
+```
+
+#### If you are manually importing *sl-model*
+
+You will want to create an initializer:
+
+    ember g initializer localstorage-initializer <namespace>
+
+
+#### Assign the localstorage adapter to your models
+
+```javascript
+Foo.reopenClass({
+    adapter: 'localstorage',
+    url: '/foo'
+});
+```
+
+Notice that the url variable is still needed as it will be used to store this model's records under the adapter's
+namespace in localStorage.
+
+### Error handling
+
+Both the `ajax` adapter and the `localstorage` adapter 
+
+## Usage in Routes
 
 In your routes, simply use the `store` variable that is injected into every route and controller.  Store has the
 `find`, `findOne`, `createRecord`, and `metadataFor` methods.  Some example use cases:
@@ -181,9 +263,7 @@ If you want to load a particular record via an `id` then pass the `id` in as the
     this.store.find( 'foo', 23 );
 ```
 
-
-
-## Controller
+## Usage in Controllers
 In your controller you have access to the `store` too.  You can create an options object to handle extra parameters for
 to be added onto the url being queried.  Simply list the parameters in an object on the `data` key.
 
@@ -236,60 +316,6 @@ export default {
     }
 };
 ```
-
----
-
-# Local Storage Adapter
-
-## If you installed *sl-model* as an Ember CLI Addon
-
-The localStorage adapter is initialized by default with your project's namespace.
-
-If you want to change the default namespace then you will want to create an initializer:
-
-    ember g localstorage-initializer
-
-Now edit the file that was generated in `app/initializers/localstorage-initializer.js` and define the `namespace` value.
-
-```javascript
-module SlModel from 'sl-model';
-
-export default {
-    name: 'sl-model-localstorage',
-
-    after: 'sl-model',
-
-    initialize: function( container ) {
-        var localStorageAdapter = SlModel.LocalstorageAdapter;
-
-        localStorageAdapter.reopenClass({
-            namespace: '<namespace>'
-        });
-
-        container.register( 'adapter:localstorage', localStorageAdapter );
-    }
-};
-```
-
-## If you are manually importing *sl-model*
-
-You will want to create an initializer:
-
-    ember g initializer localstorage-initializer <namespace>
-
-
-## Assign the localstorage adapter to your models
-
-```javascript
-Foo.reopenClass({
-    adapter: 'localstorage',
-    url: '/foo'
-});
-```
-
-Notice that the url variable is still needed as it will be used to store this model's records under the adapter's
-namespace in localStorage.
-
 
 ---
 
