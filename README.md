@@ -139,7 +139,7 @@ Foo.reopenClass({
 
 export default Foo;
 ```
-In the example above, the `superFoo:post` endpoing will use the default serializer.  
+In the example above, the `superFoo:post` endpoint will use the default serializer.  
 All http verbs on the `boringfoo` endpoint will use the `someSerializer` function as their serializer.
 All http verbs on the `superBoringFoo` endpoint will use the default serializer.
 
