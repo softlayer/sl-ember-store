@@ -24,6 +24,8 @@ var LocalStorageAdapter = Adapter.extend({
             promise,
             queryObj;
 
+        Ember.assert( 'Type is required', type && Ember.typeOf(type) === 'string' );
+
         options = options || {};
 
         url = model.getUrlForEndpointAction( options.endpoint, 'get' );
@@ -80,7 +82,7 @@ var LocalStorageAdapter = Adapter.extend({
             response = this.modelize( response );
 
             if ( results instanceof Ember.ArrayProxy ) {
-                finalResult = Ember.A([]);
+                finalResult = [];
                 Ember.makeArray( response ).forEach( function ( child ) {
                     finalResult.pushObject( store.createRecord( type, child ) );
                 }, this );
@@ -270,7 +272,7 @@ var LocalStorageAdapter = Adapter.extend({
             records  = db[ modelKey ];
 
         if ( !records ) {
-            records = db[ modelKey ] = Ember.A([]);
+            records = db[ modelKey ] = [];
         }
 
         return records;

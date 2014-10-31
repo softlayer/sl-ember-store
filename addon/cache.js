@@ -329,7 +329,7 @@ export default Ember.Object.extend({
     _initializeRecords: function( type ) {
         this.set( '_records.'+type, Ember.Object.create({
             all     : false,
-            records : Ember.A([]),
+            records : [],
             ids     : Ember.Object.create()
         }));
     },

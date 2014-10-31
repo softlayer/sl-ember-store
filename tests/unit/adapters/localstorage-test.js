@@ -131,11 +131,12 @@ asyncTest( 'save', function(){
     
     response = localstorageadapter.save( '/foo', foo );
     response.then( function(){
+        var fooRecords = JSON.parse(localStorage.getItem('sl-model')).foo,
+            fooRecord = fooRecords.findBy( 'id', 2 );
+
         ok( requestSpy.calledOnce, 'request was called once');
         ok( response.then, 'response is a promise' );
 
-        var fooRecords = Ember.A( JSON.parse(localStorage.getItem('sl-model')).foo ),
-            fooRecord = fooRecords.findBy( 'id', 2 );
         equal( fooRecord.id, 2, 'should have added the record to the mock ls object' );
         start();
     });
@@ -153,7 +154,7 @@ asyncTest( 'delete', function(){
             response.then( function(){
                 ok( response.then, 'response is a promise' );
 
-                var fooRecords = Ember.A( JSON.parse(localStorage.getItem('sl-model')).foo ),
+                var fooRecords = [ JSON.parse(localStorage.getItem('sl-model')).foo ],
                     fooRecord = fooRecords.findBy( 'id', 2 );
 
                 equal( fooRecord, undefined, 'should have deleted the record to the mock ls object' );

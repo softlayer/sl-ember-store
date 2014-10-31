@@ -11,7 +11,7 @@ export default Ember.Object.extend({
      * @type     {Ember.Array}
      * @default  {array}
      */
-    preQueryHooks: Ember.A([]),
+    preQueryHooks: [],
 
     /**
      * Array of functions to be run after an adapter runs a query
@@ -20,7 +20,7 @@ export default Ember.Object.extend({
      * @type     {Ember.Array}
      * @default  {array}
      */
-    postQueryHooks: Ember.A([]),
+    postQueryHooks: [],
 
     /**
      * Stores all the metadata for all the models

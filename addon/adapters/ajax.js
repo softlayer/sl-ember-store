@@ -18,13 +18,14 @@ export default Adapter.extend({
      * @return   { ObjectProxy | ArrayProxy } The record or array of records requested
      */
     find: function ( type, id, options, findOne ) {
-
         var store = this.get( 'store' ),
             model = store.modelFor( type ),
             url,
             results,
             promise,
             queryObj;
+
+        Ember.assert( 'Type is required', type && Ember.typeOf(type) === 'string' );
 
         options = options || {};
 
@@ -70,7 +71,7 @@ export default Adapter.extend({
                         throw { message: 'No objects found' };
                     }
 
-                    tmpResult = Ember.A([]);
+                    tmpResult = [];
                     Ember.makeArray( response ).forEach( function ( child ) {
                         tmpResult.pushObject( store.createRecord( type, child ) );
                     }, this );
