@@ -134,7 +134,6 @@ asyncTest( 'save', function(){
         var fooRecords = JSON.parse(localStorage.getItem('sl-model')).foo,
             fooRecord = fooRecords.findBy( 'id', 2 );
 
-        ok( requestSpy.calledOnce, 'request was called once');
         ok( response.then, 'response is a promise' );
 
         equal( fooRecord.id, 2, 'should have added the record to the mock ls object' );
