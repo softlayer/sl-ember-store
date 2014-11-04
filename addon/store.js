@@ -55,8 +55,6 @@ export default Ember.Object.extend({
         var normalizedKey,
             factory;
 
-        type = type.toLowerCase();
-
         normalizedKey = this.container.normalize( 'model:'+type );
         factory       = this.container.lookupFactory( normalizedKey );
 
@@ -74,7 +72,6 @@ export default Ember.Object.extend({
      * @return   {void}
      */
     metaForType: function( type, metadata ) {
-        type = type.toLowerCase();
 
         this.set( '_metadataCache.'+type, metadata );
     },
@@ -87,7 +84,6 @@ export default Ember.Object.extend({
      * @return   {object}       the metadata object that was saved with metaForType
      */
     metadataFor: function( type ) {
-        type = type.toLowerCase();
 
         return this.get( '_metadataCache.'+type );
     },
@@ -100,7 +96,7 @@ export default Ember.Object.extend({
      * @return    {object}       the adapter singleton
      */
     adapterFor: function( type ) {
-        var adapterType = this.modelFor( type.toLowerCase() ).adapter;
+        var adapterType = this.modelFor( type ).adapter;
 
         return this.container.lookup( 'adapter:'+adapterType );
     },
@@ -116,14 +112,14 @@ export default Ember.Object.extend({
      * @return    {Ember.ObjectProxy}
      */
     findOne: function( type, options ) {
-        return this.__find( type.toLowerCase(), null, options, true );
+        return this.__find( type, null, options, true );
     },
 
     /**
      * Find a/an record(s) using an id or options
      *
      * @function  find
-     * @argument  {string}  type     lower case name of the model class
+     * @argument  {string}  type     name of the model class
      * @argument  {integer} id
      * @argument  {object}  options  hash of options to be passed on to the adapter
      * @return {object / array}      an object or an array depending on whether you specified an id
@@ -148,7 +144,7 @@ export default Ember.Object.extend({
      * @return    {Ember.ObjectProxy}   model object, instance of Ember.ObjectProxy
      */
     createRecord: function( type, content ) {
-        var factory = this.modelFor( type.toLowerCase() ),
+        var factory = this.modelFor( type ),
             record  = factory.create({
                 container: this.get( 'container' )
             });
@@ -215,7 +211,7 @@ export default Ember.Object.extend({
      *
      * @function  __find
      * @private
-     * @argument  {string} type            lowercase model name
+     * @argument  {string} type             model name
      * @argument  {integer / string} id    record identifier
      * @argument  {object} options         objects containing all options for query
      * @argument  {boolean} findOne        force the retrieval of a single record
