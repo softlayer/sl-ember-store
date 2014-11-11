@@ -92,11 +92,12 @@ var LocalStorageAdapter = Adapter.extend({
 
             resolve( finalResult );
 
-        }.bind( this ), 'sl-model.localstorageAdapter:find - Promise' );
-
-        promise.finally( function lsAdapaterFindFinally( response ) {
+        }.bind( this ), 'sl-model.localstorageAdapter:find - Promise' )
+        
+        .then( function lsAdapaterFindThen( response ) {
             this.runPostQueryHooks( response );
-        }.bind( this ), 'sl-model.localstorageAdapter:find - finally');
+            return response;
+        }.bind( this ), 'sl-model.localstorageAdapter:find - then');
 
         //set the promise on the promiseProxy
         results.set( 'promise', promise );
@@ -145,10 +146,11 @@ var LocalStorageAdapter = Adapter.extend({
 
             resolve();
 
-        }.bind( this ));
+        }.bind( this ))
 
-        promise.finally( function lsAdapterDeleteFinally( response ) {
+        .then( function lsAdapterDeleteFinally( response ) {
             this.runPostQueryHooks( response );
+            return response;
         }.bind( this ) , 'sl-model.localstorageAdapter:deleteRecord - always' );
 
         return promise;
@@ -192,10 +194,10 @@ var LocalStorageAdapter = Adapter.extend({
 
             resolve( content );
 
-        }.bind( this ));
-
-        promise.finally( function lsAdapterSaveFinally( response ) {
+        }.bind( this ))
+        .then( function lsAdapterSaveFinally( response ) {
             this.runPostQueryHooks( response );
+            return response;
         }.bind( this ) , 'sl-model.localstorageAdapter:saveRecord - always' );
 
         return promise;

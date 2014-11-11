@@ -87,7 +87,7 @@ asyncTest( '__find single model with id', function(){
     equal(requestSpy.args[0][0], 'sl-model', 'calls request with correct args' );
     ok( response.then, 'response is a promise' );
     ok( Ember.PromiseProxyMixin.detect( response ), 'response is a promise' );
-    response.then(function(){
+    response.then(function( result ){
         ok( response.get( 'content' ) instanceof Foo, 'response content is instace of Foo' );
         start();
     });

@@ -80,19 +80,11 @@ export default Adapter.extend({
                     tmpResult = store.createRecord( type, response );
                 }
 
+                this.runPostQueryHooks( tmpResult );
+
                 return tmpResult;
 
-            }.bind( this ) , null, 'sl-model.ajaxAdapter:find - then' )
-
-            .catch( function ajaxAdapterFindCatch( response ) {
-
-                throw response;
-
-            }.bind( this ), 'sl-model.ajaxAdapter:find - catch' )
-
-            .finally( function ajaxAdapaterFindFinally( response ) {
-                this.runPostQueryHooks( response );
-            }.bind( this ), 'sl-model.ajaxAdapter:find - finally' );
+            }.bind( this ) , null, 'sl-model.ajaxAdapter:find - then' );
 
         //set the promise on the promiseProxy
         results.set( 'promise', promise );
@@ -123,9 +115,9 @@ export default Adapter.extend({
         this.runPreQueryHooks( queryObj );
 
         return icAjax.request( queryObj )
-        .finally( function ajaxAdapterDeleteFinally( response ) {
+        .then( function ajaxAdapterDeleteFinally( response ) {
             this.runPostQueryHooks( response );
-        }.bind( this ) , 'sl-model.ajaxAdapter:deleteRecord - always' );
+        }.bind( this ) , 'sl-model.ajaxAdapter:deleteRecord' );
     },
 
     /**
@@ -153,8 +145,10 @@ export default Adapter.extend({
 
         promise = icAjax.request( queryObj )
             .then( function ajaxAdapterSaveResponse( response ) {
+                var modelized = this.modelize( response );
                 // run the modelize mixin to map keys to models
-                return this.modelize( response );
+                this.runPostQueryHooks( modelized );
+                return modelized;
             }.bind( this ), null, 'sl-model:save - then' )
 
             .catch( function ajaxAdapterSaveCatch( jqxhr ) {
@@ -164,15 +158,10 @@ export default Adapter.extend({
                     'message'    : jqxhr.responseJSON && jqxhr.responseJSON.error || 'Service Unavailable',
                     'details'    : jqxhr.responseJSON && jqxhr.responseJSON.details || 'Service Unavailable'
                 };
-
+                
                 return errorData;
 
-            }.bind( this ), 'sl-model:save - catch' )
-
-            .finally( function ajaxAdapterSaveFinally( response ) {
-                this.runPostQueryHooks( response );
-
-            }.bind( this ), 'sl-model.ajaxAdapter:save - finally' );
+            }.bind( this ), 'sl-model:save - catch' );
 
         return promise;
      }
