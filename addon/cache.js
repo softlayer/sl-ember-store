@@ -186,7 +186,11 @@ export default Ember.Object.extend({
             }
         }
 
-        return this.addAllPromise( type, result );
+        if( result.then ){
+            return this.addAllPromise( type, result );
+        } else {
+            return this.addAllRecords( type, result );
+        }
     },
 
     /**
@@ -269,6 +273,11 @@ export default Ember.Object.extend({
         }.bind(this));
     },
 
+    /**
+     * add all records for a type
+     * @param {string} type    type of model
+     * @param {array} records array of model records
+     */
     addAllRecords: function( type, records ) {
         this.addRecords( type, records );
         this._getRecords( type ).set( 'all', true );
