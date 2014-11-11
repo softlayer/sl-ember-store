@@ -6,7 +6,7 @@ var cache,
     fetchByIdSpy,
     fetchOneSpy,
     _getAllPromiseSpy,
-    _getAllRecordSpy;
+    _getRecordSpy;
 
 module( 'Unit - sl-model/cache', {
     setup: function(){
@@ -14,13 +14,13 @@ module( 'Unit - sl-model/cache', {
         fetchByIdSpy = sinon.spy( cache, 'fetchById' );
         fetchOneSpy = sinon.spy( cache, 'fetchOne' );
         _getAllPromiseSpy = sinon.spy( cache, '_getAllPromise' );
-        _getAllRecordSpy = sinon.spy( cache, '_getAllRecords' );
+        _getRecordSpy = sinon.spy( cache, '_getRecords' );
     },
     teardown: function(){
         fetchByIdSpy.restore();
         fetchOneSpy.restore();
         _getAllPromiseSpy.restore();
-        _getAllRecordSpy.restore();
+        _getRecordSpy.restore();
     } 
 }); 
 
@@ -38,8 +38,8 @@ test( 'isCached, all', function(){
     cache.isCached( 'test' );
     ok( _getAllPromiseSpy.calledOnce, 'get all called once');
     equal( _getAllPromiseSpy.args[0][0], 'test', 'get all called with correct type' );
-    ok( _getAllRecordSpy.calledOnce, 'get all called once');
-    equal( _getAllRecordSpy.args[0][0], 'test', 'get all called with correct type' );
+    ok( _getRecordSpy.calledOnce, 'get all called once');
+    equal( _getRecordSpy.args[0][0], 'test', 'get all called with correct type' );
 });
 
 test( 'clearCache', function(){
@@ -53,7 +53,6 @@ test( 'clearCache', function(){
 });
 
 test( 'removeRecord', function(){
-    sinon.spy( cache, '_getRecords' );
     cache.removeRecord( 'test', Ember.Object.create() );
     ok( cache._getRecords.calledOnce, '_getRecords called once' );
     ok( cache._getRecords.calledWith( 'test' ), '_getRecords called with correct arg');  
@@ -97,7 +96,6 @@ asyncTest( 'addPromise, resolve', function(){
         rPromise;        
 
     sinon.spy( cache, '_getPromises' );
-    sinon.spy( cache, '_getRecords' );
 
     rPromise = cache.addPromise( 'test', 1, testPromise );
     ok( cache._getPromises.calledOnce, '_getPromises called once' );
@@ -120,7 +118,6 @@ asyncTest( 'addPromise, reject', function(){
         rPromise;        
 
     sinon.spy( cache, '_getPromises' );
-    sinon.spy( cache, '_getRecords' );
 
     rPromise = cache.addPromise( 'test', 1, testPromise );
     ok( cache._getPromises.calledOnce, '_getPromises called once' );
@@ -224,8 +221,8 @@ test( 'fetch, all', function(){
     cache.fetch( 'test' );
     ok( _getAllPromiseSpy.calledOnce, 'get all called once');
     equal( _getAllPromiseSpy.args[0][0], 'test', 'get all called with correct type' );
-    ok( _getAllRecordSpy.calledOnce, 'get all called once');
-    equal( _getAllRecordSpy.args[0][0], 'test', 'get all called with correct type' );
+    ok( _getRecordSpy.calledOnce, 'get all called once');
+    equal( _getRecordSpy.args[0][0], 'test', 'get all called with correct type' );
 });
 
 
@@ -255,11 +252,9 @@ asyncTest( 'fetchOne - record', function(){
 
     cache.addRecord( 'test', testRecord );
 
-    sinon.spy( cache, '_getRecords' );
-
     var response = cache.fetchOne( 'test' );
 
-    ok( cache._getRecords.calledOnce, 'getRecords called once' );
+    ok( cache._getRecords.called, 'getRecords called once' );
 
     response.then( function(){
         equal( response.get('content'), testRecord, 'fetchOne returned the correct record' );
@@ -324,7 +319,7 @@ asyncTest( 'fetchAll - record', function(){
     var testRecord = Ember.Object.create({ id: 1});
     cache.addRecords( 'test', [ testRecord ] );
     var response = cache.fetchAll( 'test' );
-    ok( cache._getAllRecords.calledOnce, 'calls _getAllRecords once' );
+    ok( cache._getRecords.called, 'calls _getAllRecordsCached once' );
     response.then( function(){
         equal( response.get( 'content.0' ), testRecord, 'returns the test record in an array' );
         start();
@@ -367,15 +362,15 @@ test( '_getRecordById, found', function(){
     equal( response, testRecord, 'returns the correct record' );
 });
 
-test( '_getAllRecords, empty', function(){
-    var response = cache._getAllRecords( 'test' );
+test( '_getRecords, empty', function(){
+    var response = cache._getRecords( 'test' ).records;
     equal( response.length, 0,  'returns an empty array' );
 });
 
-test( '_getAllRecords, some', function(){
+test( '_getRecords, some', function(){
     var testRecord = Ember.Object.create({id:1});
     cache.addRecord( 'test', testRecord);
-    var response = cache._getAllRecords( 'test' );
+    var response = cache._getRecords( 'test' ).records;
     equal( response[0], testRecord, 'returns the test record in an array' ); 
 });
 

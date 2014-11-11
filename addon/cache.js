@@ -56,7 +56,7 @@ export default Ember.Object.extend({
             return !!this.fetchOne( type );
         }
 
-        return !!( this._getAllPromise( type ) || this._getAllRecords( type ).all );
+        return !!( this._getAllPromise( type ) || this._getAllRecordsCached( type ) );
     },
 
     /**
@@ -154,7 +154,7 @@ export default Ember.Object.extend({
             return findAllPromise;
         }
 
-        records = this._getAllRecords( type );
+        records = this._getRecords( type ).records;
 
         if ( !records.length ) {
             return false;
@@ -379,12 +379,12 @@ export default Ember.Object.extend({
      * Get all records
      *
      * @private
-     * @function _getAllRecords
+     * @function _getAllRecordsCached
      * @argument {string} type
      * @return   {Ember.Object}
      */
-    _getAllRecords: function( type ) {
-        return this._getRecords( type ).records;
+    _getAllRecordsCached: function( type ) {
+        return this._getRecords( type ).all;
     },
 
     /**
