@@ -228,7 +228,7 @@ export default Ember.Object.extend({
         this._getPromises( type ).set( 'all', promise );
 
         promise.then( function( records ) {
-            this.addRecords( type, records );
+            this.addAllRecords( type, records );
             this._getPromises( type ).set( 'all', undefined );
         }.bind(this))
         .catch( function(){
