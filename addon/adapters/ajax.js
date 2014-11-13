@@ -2,22 +2,24 @@ import Ember from 'ember';
 import Adapter from '../adapter';
 module icAjax from 'ic-ajax';
 
-/** @module SL-Model/adapters/ajax */
+/**
+ * @module adapters
+ * @class  ajax
+ */
 export default Adapter.extend({
 
     /**
      * Find record(s)
      *
-     * @public
      * @function find
-     * @argument {string} type    model name
-     * @argument {int}    id      record id
-     * @argument {object} options hash of options
-     * @argument {bool}   findOne force return of single record
-     * @throws {Ember.assert}
-     * @return   { ObjectProxy | ArrayProxy } The record or array of records requested
+     * @param    {string} type    model name
+     * @param    {int}    id      record id
+     * @param    {object} options hash of options
+     * @param    {bool}   findOne force return of single record
+     * @throws   {Ember.assert}
+     * @returns  {ObjectProxy | ArrayProxy} The record or array of records requested
      */
-    find: function ( type, id, options, findOne ) {
+    find: function( type, id, options, findOne ) {
         var store = this.get( 'store' ),
             model = store.modelFor( type ),
             url,
@@ -95,12 +97,11 @@ export default Adapter.extend({
     /**
      * Delete record
      *
-     * @public
      * @function deleteRecord
-     * @argument {string} url  the url to send the DELETE command to
-     * @argument {integer} id
-     * @throws {Ember.assert}
-     * @return {Ember.RSVP} Promise
+     * @param    {string} url  the url to send the DELETE command to
+     * @param    {integer} id
+     * @throws   {Ember.assert}
+     * @returns  {Ember.RSVP} Promise
      */
     deleteRecord: function( url, id ) {
         var queryObj = {
@@ -123,12 +124,11 @@ export default Adapter.extend({
     /**
      * Save record
      *
-     * @public
      * @function save
-     * @argument {string} url  the url to send the POST command to
-     * @argument {object} content  data to save
-     * @throws {Ember.assert}
-     * @return {Ember.RSVP} Promise
+     * @param    {string} url  the url to send the POST command to
+     * @param    {object} content  data to save
+     * @throws   {Ember.assert}
+     * @returns  {Ember.RSVP} Promise
      */
      save: function( url, content ) {
         var promise,
@@ -158,7 +158,7 @@ export default Adapter.extend({
                     'message'    : jqxhr.responseJSON && jqxhr.responseJSON.error || 'Service Unavailable',
                     'details'    : jqxhr.responseJSON && jqxhr.responseJSON.details || 'Service Unavailable'
                 };
-                
+
                 return errorData;
 
             }.bind( this ), 'sl-model:save - catch' );

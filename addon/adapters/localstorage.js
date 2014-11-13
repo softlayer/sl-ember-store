@@ -1,20 +1,22 @@
 import Ember from 'ember';
 import Adapter from '../adapter';
 
-/** @module SL-Model/adapters/localstorage */
+/**
+ * @module adapters
+ * @class  localstorage
+ */
 var LocalStorageAdapter = Adapter.extend({
 
     /**
      * Find record(s)
      *
-     * @public
      * @function find
-     * @argument {string} type    model name
-     * @argument {int}    id      record id
-     * @argument {object} options hash of options
-     * @argument {bool}   findOne force return of single record
-     * @throws {Ember.assert}
-     * @return   { ObjectProxy | ArrayProxy } The record or array of records requested
+     * @param    {string} type    model name
+     * @param    {int}    id      record id
+     * @param    {object} options hash of options
+     * @param    {bool}   findOne force return of single record
+     * @throws   {Ember.assert}
+     * @returns  {ObjectProxy | ArrayProxy} The record or array of records requested
      */
     find: function ( type, id, options, findOne ) {
         var store = this.get( 'store' ),
@@ -32,12 +34,12 @@ var LocalStorageAdapter = Adapter.extend({
 
         Ember.assert( 'A url is required to find a model', url );
 
-        if ( ! Ember.isNone( id ) ) {
+        if ( !Ember.isNone( id ) ) {
             options.data    = options.data || {};
             options.data.id = parseInt( id, 10 );
         }
 
-        //set up the results, either an object or an array proxy w/ promise mixin
+        // Set up the results, either an object or an array proxy w/ promise mixin)
         results = ( ( options.data && options.data.id  ) || findOne ) ?
             Ember.ObjectProxy.createWithMixins( Ember.PromiseProxyMixin ) :
             Ember.ArrayProxy.createWithMixins( Ember.PromiseProxyMixin );
@@ -60,13 +62,11 @@ var LocalStorageAdapter = Adapter.extend({
 
             if ( options.data && options.data.id ) {
                 response = records.findBy( 'id', options.data.id );
-            }
-            else if ( findOne ) {
-                // we aren't doing queries based on options at this time,
+            } else if ( findOne ) {
+                // We aren't doing queries based on options at this time,
                 // can add here in the future if needed.
-                response = records[0];
-            }
-            else {
+                response = records[ 0 ];
+            } else {
                 response = records;
                 if ( ! response.length ) {
                     reject( { textStatus: 'error', errorThrown: 'Not Found' });
@@ -86,18 +86,18 @@ var LocalStorageAdapter = Adapter.extend({
                 Ember.makeArray( response ).forEach( function ( child ) {
                     finalResult.pushObject( store.createRecord( type, child ) );
                 }, this );
-            }else{
+            } else {
                 finalResult = store.createRecord( type, response );
             }
 
             resolve( finalResult );
 
         }.bind( this ), 'sl-model.localstorageAdapter:find - Promise' )
-        
-        .then( function lsAdapaterFindThen( response ) {
+
+        .then( function lsAdapterFindThen( response ) {
             this.runPostQueryHooks( response );
             return response;
-        }.bind( this ), 'sl-model.localstorageAdapter:find - then');
+        }.bind( this ), 'sl-model.localstorageAdapter:find - then' );
 
         //set the promise on the promiseProxy
         results.set( 'promise', promise );
@@ -109,12 +109,11 @@ var LocalStorageAdapter = Adapter.extend({
     /**
      * Delete record
      *
-     * @public
      * @function deleteRecord
-     * @argument {string} url  the url to send the DELETE command to
-     * @argument {integer} id
-     * @throws {Ember.assert}
-     * @return {Ember.RSVP} Promise
+     * @param    {string} url  the url to send the DELETE command to
+     * @param    {integer} id
+     * @throws   {Ember.assert}
+     * @returns  {Ember.RSVP} Promise
      */
     deleteRecord: function( url, id ) {
         var promise;
@@ -140,7 +139,7 @@ var LocalStorageAdapter = Adapter.extend({
                 reject( { textStatus: 'error', errorThrown: 'Not Found' } );
             }
 
-            if( ! this._dbWrite( db, exception ) ){
+            if ( !this._dbWrite( db, exception ) ) {
                 reject( { textStatus: 'error', errorThrown: exception.msg } );
             }
 
@@ -159,11 +158,10 @@ var LocalStorageAdapter = Adapter.extend({
     /**
      * Save record
      *
-     * @public
      * @function save
-     * @argument {string} url  the url to send the POST command to
-     * @argument {object} content  data to save
-     * @return {Ember.RSVP} Promise
+     * @param    {string} url  the url to send the POST command to
+     * @param    {object} content  data to save
+     * @returns  {Ember.RSVP} Promise
      */
     save: function( url, content ) {
         var promise;
@@ -207,7 +205,7 @@ var LocalStorageAdapter = Adapter.extend({
      * Return the adapter's namespace
      *
      * @function getNamespace
-     * @return {string} namespace
+     * @returns  {string} namespace
      */
     getNamespace: function() {
         return this.constructor.namespace;
@@ -220,7 +218,7 @@ var LocalStorageAdapter = Adapter.extend({
      *
      * @private
      * @function _getLocalStorage
-     * @return {object} localStorage or mockup
+     * @returns  {object} localStorage or mockup
      */
     _getLocalStorage: function() {
         return window.localStorage;
@@ -231,10 +229,11 @@ var LocalStorageAdapter = Adapter.extend({
      *
      * @private
      * @function _getDb
-     * @return {object}
+     * @returns  {object}
      */
     _getDb: function() {
         var lsDb = this._getLocalStorage().getItem( this.getNamespace() );
+
         if ( lsDb ) {
             return JSON.parse( lsDb );
         }
@@ -247,13 +246,13 @@ var LocalStorageAdapter = Adapter.extend({
      *
      * @private
      * @function _dbWrite
-     * @argument {object} db
-     * @return {void}
+     * @param    {object} db
+     * @returns  {void}
      */
     _dbWrite: function( db, exception ) {
         try {
             this._getLocalStorage().setItem( this.getNamespace(), JSON.stringify( db ) );
-        } catch(domException) {
+        } catch( domException ) {
             exception.msg = domException.message;
             return false;
         }
@@ -265,9 +264,9 @@ var LocalStorageAdapter = Adapter.extend({
      *
      * @private
      * @function _getRecords
-     * @argument {object} db the object to find the records on
-     * @argument {string} url the key
-     * @return {array} records
+     * @param    {object} db the object to find the records on
+     * @param    {string} url the key
+     * @returns  {array} records
      */
     _getRecords: function( db, url ) {
         var modelKey = this._normalizeUrl( url ),
@@ -285,9 +284,9 @@ var LocalStorageAdapter = Adapter.extend({
      *
      * @private
      * @function _getRecordIndexById
-     * @argument {Array}   records  array to search
-     * @argument {integer} id       id to search for
-     * @return {integer}   -1 if not found
+     * @param    {Array}   records  array to search
+     * @param    {integer} id       id to search for
+     * @returns  {integer}   -1 if not found
      */
     _getRecordIndexById: function( records, id ) {
         var recordIndex = -1;
@@ -308,8 +307,8 @@ var LocalStorageAdapter = Adapter.extend({
      *
      * @private
      * @function _normalizeUrl
-     * @argument {string}  url
-     * @return {string}    normalized url
+     * @param    {string}  url
+     * @returns  {string}    normalized url
      */
     _normalizeUrl: function( url ) {
         return url.replace( /^\//, '' ).replace( '\/', '_' );
