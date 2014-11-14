@@ -186,7 +186,7 @@ var LocalStorageAdapter = Adapter.extend({
 
             records.push( content );
 
-            if( ! this._dbWrite( db, exception ) ){
+            if( ! this._dbWrite( db, exception ) ) {
                 reject( { textStatus: 'error', errorThrown: exception.msg } );
             }
 

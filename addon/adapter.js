@@ -24,7 +24,7 @@ export default Ember.Object.extend( ModelizeMixin, {
      * @param    {object} response - An object containing the reponse data
      * @returns  {void}
      */
-    runPostQueryHooks: function( response ){
+    runPostQueryHooks: function( response ) {
         this.get( 'container' ).lookup( 'store:main' ).runPostQueryHooks( response );
     },
 

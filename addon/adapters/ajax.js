@@ -56,7 +56,7 @@ export default Adapter.extend({
 
         promise = icAjax.request( queryObj )
 
-            .then( function ajaxAdapterFindTransformResponse( response ){
+            .then( function ajaxAdapterFindTransformResponse( response ) {
 
                 var tmpResult;
 
@@ -69,7 +69,7 @@ export default Adapter.extend({
 
                 if ( results instanceof Ember.ArrayProxy ) {
                     //reject if the response if empty
-                    if( ! response.length ){
+                    if( ! response.length ) {
                         throw { message: 'No objects found' };
                     }
 
