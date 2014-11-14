@@ -2,30 +2,30 @@ import Ember from 'ember';
 
 var get = Ember.get;
 
-/** @module SL-Model/model */
+/**
+ * @class model
+ */
 var Model =  Ember.ObjectProxy.extend({
 
      /**
      * Save the contents via the configured adapter
      *
      * @function save
-     * @argument {object} optional options
+     * @param    {object} options
      * @throws   {Ember.assert}
-     * @return   {object} jqXHR from jQuery.ajax()
+     * @returns  {object} jqXHR from jQuery.ajax()
      */
     save: function( options ) {
         var data,
             endpoint;
 
         options = options || {};
-
-        endpoint  = this.constructor.getUrlForEndpointAction( options.endpoint, 'post' );
-
+        endpoint = this.constructor.getUrlForEndpointAction( options.endpoint, 'post' );
         data = this.get( 'content' );
 
-        Ember.assert( 'Endpoint must be configured on '+this.toString()+' before calling save.', endpoint );
+        Ember.assert( 'Endpoint must be configured on ' + this.toString() + ' before calling save.', endpoint );
 
-        return this.container.lookup( 'adapter:'+this.constructor.adapter ).save( endpoint, data )
+        return this.container.lookup( 'adapter:' + this.constructor.adapter ).save( endpoint, data )
             .then( function( response ) {
                 this.set( 'content', response );
                 return this;
@@ -36,18 +36,17 @@ var Model =  Ember.ObjectProxy.extend({
      * Delete the record via the configured adapter
      *
      * @function deleteRecord
-     * @argument {object} optional options
+     * @param    {object} options
      * @throws   {Ember.assert}
-     * @return   {object} jqXHR from jQuery.ajax()
+     * @returns  {object} jqXHR from jQuery.ajax()
      */
     deleteRecord: function( options ) {
         var endpoint;
 
         options = options || {};
+        endpoint = this.constructor.getUrlForEndpointAction( options.endpoint, 'delete' );
 
-        endpoint  = this.constructor.getUrlForEndpointAction( options.endpoint, 'delete' );
-
-        Ember.assert( 'Enpoint must be configured on '+this.toString()+' before calling deleteRecord.', endpoint );
+        Ember.assert( 'Enpoint must be configured on ' + this.toString() + ' before calling deleteRecord.', endpoint );
 
         return this.container.lookup( 'adapter:'+this.constructor.adapter ).deleteRecord( endpoint, this.get( 'id' ) )
             .then( function() {
@@ -62,7 +61,6 @@ Model.reopenClass({
      * Default url for this class
      *
      * @property {string} url
-     * @type     {string}
      * @default  null
      */
     url: null,
@@ -71,8 +69,8 @@ Model.reopenClass({
      * Default serializer
      *
      * @function serializer
-     * @argument  {object} response  data to be serialized
-     * @return {object} serialized data
+     * @param    {object} response - Data to be serialized
+     * @returns  {object} Serialized data
      */
     serializer: function( response ) {
         return response;
@@ -84,7 +82,6 @@ Model.reopenClass({
      * Possible values are: 'ajax' or 'localstorage'
      *
      * @property {string} adapter
-     * @type     {string}
      * @default  'ajax'
      */
     adapter: 'ajax',
@@ -93,10 +90,10 @@ Model.reopenClass({
      * resolves the url by walking down the endpoints object and defaulting to the root:url string
      *
      * @function getUrlForEndpointAction
-     * @argument {string}  endpoint  the endpoint, leave blank or null for default
-     * @argument {string}  action    the action, leave blank or null for default
+     * @param    {string} endpoint - The endpoint, leave blank or null for default
+     * @param    {string} action   - The action, leave blank or null for default
      * @throwns  {Ember.assert}
-     * @return   {string}            resolved url
+     * @returns  {string} The resolved URL
      */
     getUrlForEndpointAction: function( endpoint, action ) {
         var resolvedEndpoint,
@@ -104,7 +101,8 @@ Model.reopenClass({
 
         endpoint = endpoint || 'default';
 
-        testEndpoint = get( this, 'endpoints.'+endpoint+'.'+action ) || get( this, 'endpoints.'+endpoint ) || {};
+        testEndpoint = get( this, 'endpoints.' + endpoint + '.' + action ) ||
+            get( this, 'endpoints.' + endpoint ) || {};
 
         if ( typeof testEndpoint === 'string' ) {
             resolvedEndpoint = testEndpoint;
@@ -112,7 +110,7 @@ Model.reopenClass({
             resolvedEndpoint = get( testEndpoint, 'url' ) || get( this, 'url' );
         }
 
-        Ember.assert( 'A url needs to be set for '+this.toString(), resolvedEndpoint );
+        Ember.assert( 'A url needs to be set for ' + this.toString(), resolvedEndpoint );
 
         return resolvedEndpoint;
     },
@@ -121,12 +119,12 @@ Model.reopenClass({
      * Calls the serializer for the specified endpoint and actions
      *
      * @function callSerializerForEndpointAction
-     * @argument {string}  endpoint  the endpoint, leave blank or null for default
-     * @argument {string}  action    the action, leave blank or null for default
-     * @argument {object}  data      the data to be serialized
-     * @argument {sl-Model/store}    store     the app's store, use to store metadata
+     * @param    {string}         endpoint - The endpoint, leave blank or null for default
+     * @param    {string}         action   - The action, leave blank or null for default
+     * @param    {object}         data     - The data to be serialized
+     * @param    {sl-Model/store} store    - The app's store, use to store metadata
      * @throws   {Ember.assert}
-     * @return   {Ember.Object}      the serialized data
+     * @returns  {Ember.Object} The serialized data
      */
     callSerializerForEndpointAction: function( endpoint, action, data, store ) {
         var resolvedSerializer,
@@ -134,8 +132,8 @@ Model.reopenClass({
             defaultSerializer;
 
         endpoint = endpoint || 'default';
-        testEndpoint = get( this, 'endpoints.'+endpoint+'.'+action ) || get( this, 'endpoints.'+endpoint ) || {};
-        defaultSerializer = get( this, 'endpoints.default.'+action+'.serializer' ) ||
+        testEndpoint = get( this, 'endpoints.' + endpoint + '.' + action ) || get( this, 'endpoints.' + endpoint ) || {};
+        defaultSerializer = get( this, 'endpoints.default.' + action + '.serializer' ) ||
             get( this, 'endpoints.default.serializer' ) ||
             get( this, 'serializer' );
 
@@ -145,7 +143,7 @@ Model.reopenClass({
             resolvedSerializer = get( testEndpoint, 'serializer' ) || defaultSerializer;
         }
 
-        Ember.assert( 'A serializer needs to be set for '+this.toString(), resolvedSerializer );
+        Ember.assert( 'A serializer needs to be set for ' + this.toString(), resolvedSerializer );
 
         return resolvedSerializer.call( this, data, store );
     }

@@ -11,10 +11,10 @@ var LocalStorageAdapter = Adapter.extend({
      * Find record(s)
      *
      * @function find
-     * @param    {string} type    model name
-     * @param    {int}    id      record id
-     * @param    {object} options hash of options
-     * @param    {bool}   findOne force return of single record
+     * @param    {string} type    - Model name
+     * @param    {int}    id      - Record ID
+     * @param    {object} options - Hash of options
+     * @param    {bool}   findOne - Force return of single record
      * @throws   {Ember.assert}
      * @returns  {ObjectProxy | ArrayProxy} The record or array of records requested
      */
@@ -110,8 +110,8 @@ var LocalStorageAdapter = Adapter.extend({
      * Delete record
      *
      * @function deleteRecord
-     * @param    {string} url  the url to send the DELETE command to
-     * @param    {integer} id
+     * @param    {string}  url - The URL to send the DELETE request to
+     * @param    {integer} id  - The ID of the record to delete
      * @throws   {Ember.assert}
      * @returns  {Ember.RSVP} Promise
      */
@@ -159,8 +159,8 @@ var LocalStorageAdapter = Adapter.extend({
      * Save record
      *
      * @function save
-     * @param    {string} url  the url to send the POST command to
-     * @param    {object} content  data to save
+     * @param    {string} url     - The URL to send the POST request to
+     * @param    {object} content - The data to save
      * @returns  {Ember.RSVP} Promise
      */
     save: function( url, content ) {
@@ -205,7 +205,7 @@ var LocalStorageAdapter = Adapter.extend({
      * Return the adapter's namespace
      *
      * @function getNamespace
-     * @returns  {string} namespace
+     * @returns  {string} Namespace
      */
     getNamespace: function() {
         return this.constructor.namespace;
@@ -229,7 +229,7 @@ var LocalStorageAdapter = Adapter.extend({
      *
      * @private
      * @function _getDb
-     * @returns  {object}
+     * @returns  {object} The database instance data
      */
     _getDb: function() {
         var lsDb = this._getLocalStorage().getItem( this.getNamespace() );
@@ -246,8 +246,9 @@ var LocalStorageAdapter = Adapter.extend({
      *
      * @private
      * @function _dbWrite
-     * @param    {object} db
-     * @returns  {void}
+     * @param    {object} db        - The database instance data
+     * @param    {object} exception - Passed-on exception data
+     * @returns  {boolean} Whether the write operation was successful (true) or not (false)
      */
     _dbWrite: function( db, exception ) {
         try {
@@ -256,6 +257,7 @@ var LocalStorageAdapter = Adapter.extend({
             exception.msg = domException.message;
             return false;
         }
+
         return true;
     },
 
@@ -264,9 +266,9 @@ var LocalStorageAdapter = Adapter.extend({
      *
      * @private
      * @function _getRecords
-     * @param    {object} db the object to find the records on
-     * @param    {string} url the key
-     * @returns  {array} records
+     * @param    {object} db  - The object to find the records on
+     * @param    {string} url - The key
+     * @returns  {array} Records for the specified URL
      */
     _getRecords: function( db, url ) {
         var modelKey = this._normalizeUrl( url ),
@@ -284,9 +286,9 @@ var LocalStorageAdapter = Adapter.extend({
      *
      * @private
      * @function _getRecordIndexById
-     * @param    {Array}   records  array to search
-     * @param    {integer} id       id to search for
-     * @returns  {integer}   -1 if not found
+     * @param    {Array}   records - Array to search
+     * @param    {integer} id      - ID to search for
+     * @returns  {integer} -1 if not found
      */
     _getRecordIndexById: function( records, id ) {
         var recordIndex = -1;
@@ -307,8 +309,8 @@ var LocalStorageAdapter = Adapter.extend({
      *
      * @private
      * @function _normalizeUrl
-     * @param    {string}  url
-     * @returns  {string}    normalized url
+     * @param    {string} url - The URL string to normalize
+     * @returns  {string} Normalized url
      */
     _normalizeUrl: function( url ) {
         return url.replace( /^\//, '' ).replace( '\/', '_' );

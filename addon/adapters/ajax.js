@@ -12,10 +12,10 @@ export default Adapter.extend({
      * Find record(s)
      *
      * @function find
-     * @param    {string} type    model name
-     * @param    {int}    id      record id
-     * @param    {object} options hash of options
-     * @param    {bool}   findOne force return of single record
+     * @param    {string} type    - Model name
+     * @param    {int}    id      - Record ID
+     * @param    {object} options - Hash of options
+     * @param    {bool}   findOne - Force return of single record
      * @throws   {Ember.assert}
      * @returns  {ObjectProxy | ArrayProxy} The record or array of records requested
      */
@@ -98,8 +98,8 @@ export default Adapter.extend({
      * Delete record
      *
      * @function deleteRecord
-     * @param    {string} url  the url to send the DELETE command to
-     * @param    {integer} id
+     * @param    {string}  url - The URL to send the DELETE command to
+     * @param    {integer} id  - The model record's ID
      * @throws   {Ember.assert}
      * @returns  {Ember.RSVP} Promise
      */
@@ -125,8 +125,8 @@ export default Adapter.extend({
      * Save record
      *
      * @function save
-     * @param    {string} url  the url to send the POST command to
-     * @param    {object} content  data to save
+     * @param    {string} url     - The URL to send the POST command to
+     * @param    {object} content - Data to save
      * @throws   {Ember.assert}
      * @returns  {Ember.RSVP} Promise
      */

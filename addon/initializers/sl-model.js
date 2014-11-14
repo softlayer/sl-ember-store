@@ -2,8 +2,19 @@ import Store from '../store';
 import AjaxAdapter from '../adapters/ajax';
 import LocalstorageAdapter from '../adapters/localstorage';
 
-/** @module sl-model/initializers/sl-model */
-export default function ( container, application ) {
+/**
+ * @module initializers
+ */
+
+/*
+ * Register sl-model objects to consuming application
+ *
+ * @function
+ * @param    {Ember.ContainerView} container
+ * @param    {Ember.Application}   application
+ * @returns  {void}
+ */
+export default function( container, application ) {
     var localstorageAdapter = LocalstorageAdapter.extend();
 
     localstorageAdapter.reopenClass({
