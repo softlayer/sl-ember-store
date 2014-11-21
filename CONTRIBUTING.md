@@ -109,13 +109,13 @@ All inline documentation is written using [JSDoc](http://usejsdoc.org/). Follow 
 new documentation:
 
     1. All code blocks must be fenced.
-    3. All code blocks must be valid code for syntax highlighting.
-    4. All examples in code blocks must be aligned.
-    5. Use two spaces between the code and the example: `foo(); // result`.
-    6. All references to code words must be enclosed in backticks.
-    7. Prefer a single space between sentences.
-    8. Wrap long markdown blocks > 120 characters.
-    9. Don't include blank lines after `@param` definitions.
+    2 All code blocks must be valid code for syntax highlighting.
+    3. All examples in code blocks must be aligned.
+    4. Use two spaces between the code and the example: `foo(); // result`.
+    5. All references to code words must be enclosed in backticks.
+    6. Prefer a single space between sentences.
+    7. Wrap long markdown blocks > 120 characters.
+    8. Don't include blank lines after `@param` definitions.
 
 
 #### Code Words ####
