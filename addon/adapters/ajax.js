@@ -55,21 +55,19 @@ export default Adapter.extend({
         this.runPreQueryHooks( queryObj );
 
         promise = icAjax.request( queryObj )
-
             .then( function ajaxAdapterFindTransformResponse( response ) {
-
                 var tmpResult;
 
-                // since serializer will probably be overwritten by a child class,
+                // Since serializer will probably be overwritten by a child class,
                 // need to make sure it is called in the proper context so _super functionality will work
                 response = model.callSerializerForEndpointAction( options.endpoint, 'get', response, store );
 
-                //run the modelize mixin to map keys to models
+                // Run the modelize mixin to map keys to models
                 response = this.modelize( response );
 
                 if ( results instanceof Ember.ArrayProxy ) {
-                    //reject if the response if empty
-                    if( ! response.length ) {
+                    // Reject if the response if empty
+                    if( !response.length ) {
                         throw { message: 'No objects found' };
                     }
 
@@ -77,18 +75,16 @@ export default Adapter.extend({
                     Ember.makeArray( response ).forEach( function ( child ) {
                         tmpResult.pushObject( store.createRecord( type, child ) );
                     }, this );
-
-                }else{
+                } else {
                     tmpResult = store.createRecord( type, response );
                 }
 
                 this.runPostQueryHooks( tmpResult );
 
                 return tmpResult;
+            }.bind( this ), null, 'sl-model.ajaxAdapter:find - then' );
 
-            }.bind( this ) , null, 'sl-model.ajaxAdapter:find - then' );
-
-        //set the promise on the promiseProxy
+        // Set the promise on the promiseProxy
         results.set( 'promise', promise );
 
         return results;
@@ -116,9 +112,9 @@ export default Adapter.extend({
         this.runPreQueryHooks( queryObj );
 
         return icAjax.request( queryObj )
-        .then( function ajaxAdapterDeleteFinally( response ) {
-            this.runPostQueryHooks( response );
-        }.bind( this ) , 'sl-model.ajaxAdapter:deleteRecord' );
+            .then( function ajaxAdapterDeleteFinally( response ) {
+                this.runPostQueryHooks( response );
+            }.bind( this ) , 'sl-model.ajaxAdapter:deleteRecord' );
     },
 
     /**

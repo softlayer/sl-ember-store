@@ -6,8 +6,8 @@ module.exports = {
             adapter = options.entity.options.adapter;
 
         return {
-            url: url ? "url    : '"+url+"'"+( adapter ? ',':'' ) : '',
-            adapter: adapter ? "\n    adapter: '"+adapter+"'" : ''
-        }
+            url: url ? "url    : '" + url + "'" + ( adapter ? ',' : '' ) : '',
+            adapter: adapter ? "\n    adapter: '" + adapter + "'" : ''
+        };
     }
 };
