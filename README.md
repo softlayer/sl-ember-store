@@ -7,7 +7,7 @@ License: [MIT](LICENSE.md)
 
 ---
 
-# Is currently a BETA release.
+### Is currently in BETA
 
 ---
 
