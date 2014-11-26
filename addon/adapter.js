@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import ModelizeMixin from 'sl-modelize/mixins/modelize';
+import ModelizeMixin from 'sl-ember-modelize/mixins/modelize';
 
 /**
  * @class adapter

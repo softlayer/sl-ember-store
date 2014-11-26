@@ -1,5 +1,5 @@
-# sl-model Changelog
+# sl-ember-model Changelog
 
-### 1.0.0
+### 0.1.0
 
 * Initial release

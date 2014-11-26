@@ -1,7 +1,7 @@
 import { test } from 'ember-qunit';
-import moduleForSlModel from '../../helpers/module-for-sl-model';
+import moduleForSlEmberModel from '../../helpers/module-for-sl-ember-model';
 
-moduleForSlModel('<%= dasherizedModuleName %>', '<%= classifiedModuleName %>', {
+moduleForSlEmberModel('<%= dasherizedModuleName %>', '<%= classifiedModuleName %>', {
 
 });
 

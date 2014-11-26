@@ -82,7 +82,7 @@ export default Adapter.extend({
                 this.runPostQueryHooks( tmpResult );
 
                 return tmpResult;
-            }.bind( this ), null, 'sl-model.ajaxAdapter:find - then' );
+            }.bind( this ), null, 'sl-ember--model.ajaxAdapter:find - then' );
 
         // Set the promise on the promiseProxy
         results.set( 'promise', promise );
@@ -114,7 +114,7 @@ export default Adapter.extend({
         return icAjax.request( queryObj )
             .then( function ajaxAdapterDeleteFinally( response ) {
                 this.runPostQueryHooks( response );
-            }.bind( this ) , 'sl-model.ajaxAdapter:deleteRecord' );
+            }.bind( this ) , 'sl-ember-model.ajaxAdapter:deleteRecord' );
     },
 
     /**
@@ -145,7 +145,7 @@ export default Adapter.extend({
                 // run the modelize mixin to map keys to models
                 this.runPostQueryHooks( modelized );
                 return modelized;
-            }.bind( this ), null, 'sl-model:save - then' )
+            }.bind( this ), null, 'sl-ember-model:save - then' )
 
             .catch( function ajaxAdapterSaveCatch( jqxhr ) {
                 var errorData = {
@@ -157,7 +157,7 @@ export default Adapter.extend({
 
                 return errorData;
 
-            }.bind( this ), 'sl-model:save - catch' );
+            }.bind( this ), 'sl-ember-model:save - catch' );
 
         return promise;
      }

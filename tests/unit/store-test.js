@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import { test, moduleFor } from 'ember-qunit';
-import Store from 'sl-model/store';
-import Model from 'sl-model/model';
+import Store from 'sl-ember-model/store';
+import Model from 'sl-ember-model/model';
 
 var Foo,
     Bar,
@@ -11,7 +11,7 @@ var Foo,
     LocalstorageAdapter,
     queryHook;
 
-module( 'Unit - sl-model/store', {
+module( 'Unit - sl-ember-model/store', {
 
     setup: function() {
         Foo = Model.extend();

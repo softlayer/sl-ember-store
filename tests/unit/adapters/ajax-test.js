@@ -1,9 +1,9 @@
 import Ember from 'ember';
 import { test, moduleFor } from 'ember-qunit';
-import Model from 'sl-model/model';
-import Adapter from 'sl-model/adapter';
-import Store from 'sl-model/store';
-import Ajaxadapter from 'sl-model/adapters/ajax';
+import Model from 'sl-ember-model/model';
+import Adapter from 'sl-ember-model/adapter';
+import Store from 'sl-ember-model/store';
+import Ajaxadapter from 'sl-ember-model/adapters/ajax';
 module icAjax from 'ic-ajax';
 
 var ajaxadapter,
@@ -13,7 +13,7 @@ var ajaxadapter,
     response,
     requestSpy;
 
-module( 'Unit - sl-model/adapter/ajax', {
+module( 'Unit - sl-ember-model/adapter/ajax', {
     setup: function() {
         var container = {
                 registry: [],
@@ -36,14 +36,14 @@ module( 'Unit - sl-model/adapter/ajax', {
 
         ajaxadapter = Ajaxadapter.create({
             container: container,
-            store: Store.create({ container:container }) 
+            store: Store.create({ container:container })
         });
         //register mock data
         ajaxadapter.container.cache['store:main']={
             runPostQueryHooks: sinon.spy(),
             runPreQueryHooks: sinon.spy()
         };
-        
+
         ajaxadapter.container.registry.push( { key: 'model:foo', factory: Foo } );
         ajaxadapter.container.registry.push( { key: 'model:bar', factory: Bar } );
 
@@ -62,8 +62,8 @@ module( 'Unit - sl-model/adapter/ajax', {
             jqXHR: {},
             textStatus: 'success'
         });
-        Foo.reopenClass( { 
-            url: '/foo', 
+        Foo.reopenClass( {
+            url: '/foo',
             endpoints: {
                 fail: {
                     url: '/fooFail'
@@ -126,7 +126,7 @@ asyncTest( '__find array of model', function(){
     var options =  {data: {main: true }};
     //request
     response = ajaxadapter.find( 'bar', null, options, false );
-    
+
     ajaxTestSuite();
 
     ok( response instanceof Ember.ArrayProxy, 'should return an instance of Ember.ArrayProxy' );
@@ -145,7 +145,7 @@ asyncTest( 'find should throw error if request fails', function(){
     promise.then( function( result ){
         ok( false, 'find did not throw an error!' );
         start();
-    }, 
+    },
     function( result ){
         equal( result.textStatus, 'error', 'find did throw error' );
         start();

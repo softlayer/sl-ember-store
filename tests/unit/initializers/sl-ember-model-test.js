@@ -1,14 +1,14 @@
 import Ember from 'ember';
 import { test, moduleForComponent } from 'ember-qunit';
 import startApp from '../../helpers/start-app';
-import Store from 'sl-model/store';
-import AjaxAdapter from 'sl-model/adapters/ajax';
-import LocalstorageAdapter from 'sl-model/adapters/localstorage';
+import Store from 'sl-ember-model/store';
+import AjaxAdapter from 'sl-ember-model/adapters/ajax';
+import LocalstorageAdapter from 'sl-ember-model/adapters/localstorage';
 
 var App,
     container;
 
-module( 'Unit - initializer: sl-model;', {
+module( 'Unit - initializer: sl-ember-model', {
     setup: function() {
         App = startApp();
         container = App.__container__;
@@ -26,7 +26,7 @@ test( 'LocalStorage adapter gets namespace set', function(){
 
 test( 'store:main gets registered', function(){
     var store = container.lookupFactory( 'store:main' );
-    ok( Store.detect( store ) );    
+    ok( Store.detect( store ) );
 });
 
 test( 'adapter:ajax gets registered', function(){

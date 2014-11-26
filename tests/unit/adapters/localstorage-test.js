@@ -1,9 +1,9 @@
 import Ember from 'ember';
 import { test, moduleFor } from 'ember-qunit';
-import Model from 'sl-model/model';
-import Adapter from 'sl-model/adapter';
-import Store from 'sl-model/store';
-import LocalStorageAdapter from 'sl-model/adapters/localstorage';
+import Model from 'sl-ember-model/model';
+import Adapter from 'sl-ember-model/adapter';
+import Store from 'sl-ember-model/store';
+import LocalStorageAdapter from 'sl-ember-model/adapters/localstorage';
 
 var localstorageadapter,
     localStorageBackup,
@@ -16,7 +16,7 @@ var localstorageadapter,
     Foo = Model.extend(),
     Bar = Model.extend();
 
-module( 'Unit - sl-model/adapter/localstorage', {
+module( 'Unit - sl-ember-model/adapter/localstorage', {
     setup: function() {
        localStorage = {
             _ns: 'testLSObject',
@@ -47,7 +47,7 @@ module( 'Unit - sl-model/adapter/localstorage', {
         };
         localstorageadapter = LocalStorageAdapter.create({
             container: container,
-            store: Store.create({ container:container }) 
+            store: Store.create({ container:container })
         });
 
         //register mock data
@@ -61,19 +61,19 @@ module( 'Unit - sl-model/adapter/localstorage', {
 
         localstorageadapter.container.registry.push( { key: 'model:foo', factory: Foo } );
         localstorageadapter.container.registry.push( { key: 'model:bar', factory: Bar } );
-        
+
         getLocalStorageSpy = sinon.stub( localstorageadapter, '_getLocalStorage', function(){
             return localStorage;
         });
-       
+
         localstorageadapter.save( '/foo',  {id: 1, test: 'foo', 'bar': { id: 1, quiz: 'bar' } } );
         localstorageadapter.save( '/bar', { id: 1, quiz: 'bar' } );
         localstorageadapter.save( '/bar', { id: 2, quiz: 'bar2' } );
- 
+
     //spies
         requestSpy = sinon.spy( localStorage, 'getItem' );
         saveSpy = sinon.spy( localStorage, 'setItem' );
-     
+
     },
     teardown: function() {
         localStorage.getItem.restore();
@@ -84,7 +84,7 @@ module( 'Unit - sl-model/adapter/localstorage', {
 
 asyncTest( '__find single model with id', function(){
     response = localstorageadapter.find( 'foo', 1, { label: '1' } );
-    equal(requestSpy.args[0][0], 'sl-model', 'calls request with correct args' );
+    equal(requestSpy.args[0][0], 'sl-ember-model', 'calls request with correct args' );
     ok( response.then, 'response is a promise' );
     ok( Ember.PromiseProxyMixin.detect( response ), 'response is a promise' );
     response.then(function( result ){
@@ -98,8 +98,8 @@ asyncTest( '__find single model with no id', function(){
 
     response = localstorageadapter.find( 'foo', null, options, true );
 
-    equal(requestSpy.args[0][0], 'sl-model', 'calls request with correct args' );
-    
+    equal(requestSpy.args[0][0], 'sl-ember-model', 'calls request with correct args' );
+
     ok( response.then, 'response is a promise' );
 
     ok( Ember.PromiseProxyMixin.detect( response ), 'response is a promise' );
@@ -115,9 +115,9 @@ asyncTest( '__find array of models', function(){
     var options =  {data: {main: true }};
 
     response = localstorageadapter.find( 'bar', null, options, false );
-    
+
     ok( Ember.PromiseProxyMixin.detect( response ), 'response is a promise' );
-    
+
     response.then(function(){
         ok( response.get( 'content.0' ) instanceof Bar, 'response content is instace of Bar' );
         ok( response.get( 'content.1' ) instanceof Bar, 'response content is instace of Bar' );
@@ -128,10 +128,10 @@ asyncTest( '__find array of models', function(){
 asyncTest( 'save', function(){
     var fooContent = { id: 2, test: 'foo', 'bar': { id: 1, quiz: 'bar2' } },
         foo = Foo.create( fooContent );
-    
+
     response = localstorageadapter.save( '/foo', foo );
     response.then( function(){
-        var fooRecords = JSON.parse(localStorage.getItem('sl-model')).foo,
+        var fooRecords = JSON.parse(localStorage.getItem('sl-ember-model')).foo,
             fooRecord = fooRecords.findBy( 'id', 2 );
 
         ok( response.then, 'response is a promise' );
@@ -153,7 +153,7 @@ asyncTest( 'delete', function(){
             response.then( function(){
                 ok( response.then, 'response is a promise' );
 
-                var fooRecords = [ JSON.parse(localStorage.getItem('sl-model')).foo ],
+                var fooRecords = [ JSON.parse(localStorage.getItem('sl-ember-model')).foo ],
                     fooRecord = fooRecords.findBy( 'id', 2 );
 
                 equal( fooRecord, undefined, 'should have deleted the record to the mock ls object' );
@@ -166,16 +166,16 @@ asyncTest( 'quota test', function(){
     var fooContent = { id: 1, test: [] },
         foo,
         r;
-    
+
     for( var i = 0; i < 10000000; i++){
         fooContent.test[i] = '01000001000000000100010';
     }
 
     //make sure we actually test the browser's localstorage
     getLocalStorageSpy.restore();
-    
+
     foo = Foo.create( fooContent );
-    
+
     r = localstorageadapter.save( '/foo', foo );
 
     r.then(

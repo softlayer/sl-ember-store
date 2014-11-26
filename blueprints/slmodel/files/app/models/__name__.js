@@ -1,6 +1,6 @@
-import SlModel from 'sl-model/model';
+import SlEmberModel from 'sl-ember-model/model';
 
-var <%= classifiedModuleName %> = SlModel.extend({
+var <%= classifiedModuleName %> = SlEmberModel.extend({
 
 });
 

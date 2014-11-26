@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import { test, moduleFor } from 'ember-qunit';
-import Adapter from 'sl-model/adapter';
+import Adapter from 'sl-ember-model/adapter';
 
 var adapter,
     store = {
@@ -8,7 +8,7 @@ var adapter,
         runPreQueryHooks: sinon.spy()
     };
 
-module( 'Unit - sl-modle/adapter', {
+module( 'Unit - sl-ember-model/adapter', {
     setup: function() {
         adapter = Adapter.create({
             container:{
@@ -35,11 +35,11 @@ test( 'runPreQueryHooks should not have run postqueryhook', function() {
     adapter.runPreQueryHooks();
     equal( store.runPostQueryHooks.callCount,0 );
 });
- 
+
 test( 'runPostQueryHooks should run the postqueryhook once', function() {
      adapter.runPostQueryHooks();
      ok( store.runPostQueryHooks.calledOnce );
-});   
+});
 test( 'runPostQueryHooks should not have run the prequeryhook', function() {
      adapter.runPostQueryHooks();
      equal( store.runPreQueryHooks.callCount,0 );

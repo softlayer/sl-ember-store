@@ -1,23 +1,24 @@
 
-Ember CLI version: **0.1.1**
+Ember CLI version: **0.1.2**
 
-NPM package name: **sl-model**
+NPM package name: **sl-ember-model**
 
 License: [MIT](LICENSE.md)
 
 ---
 
-# What sl-model is
+# Is currently a BETA release.
+
+---
+
+# What sl-ember-model is
 
 A library for managing model data in your Ember.js applications. It is designed to be agnostic to the underlying
-persistence mechanism, so it works just as well with JSON APIs over HTTP as it does with streaming WebSockets or local
-storage.
+persistence mechanism, so it works just as well with JSON APIs over HTTP as it does with streaming WebSockets or local storage.
 
 This library **does not** support relationships or manage data state such as how Ember Data does.
 
-What this library **DOES** do is allow you to work with models that do not have to be pre-defined.  Having a dependency
-on [sl-modelize](https://github.com/softlayer/sl-modelize), this libary is able to dynamically set data returned from an
-endpoint onto the correct model objects without having any knowledge of the data it will be receiving.
+What this library **DOES** do is allow you to work with models that do not have to be pre-defined.  Having a dependency on [sl-ember-modelize](https://github.com/softlayer/sl-ember-modelize), this libary is able to dynamically set data returned from an endpoint onto the correct model objects without having any knowledge of the data it will be receiving.
 
 ---
 
@@ -43,17 +44,15 @@ For more information on using ember-cli, visit [http://www.ember-cli.com/](http:
 ## Install this addon as a Node module
 
 ```
-npm install sl-model
+npm install --save-dev sl-ember-model
 ```
 
 ## Instantiating the Store
 
-In *sl-model*, the store is responsible for managing the lifecycle of your models. Every time you need a model or a
-collection of models, you'll ask the store for it.
+In *sl-ember-model*, the store is responsible for managing the lifecycle of your models. Every time you need a model or a collection of models, you'll ask the store for it.
 
-To create a store, you don't need to do anything. Just by loading the *sl-model* library all of the routes and
-controllers in your application will get a new store property. This property is an instance of *SL-Model/Store* that
-will be shared across all of the routes and controllers in your app.
+To create a store, you don't need to do anything. Just by loading the *sl-ember-model* library all of the routes and
+controllers in your application will get a new store property. This property is an instance of *sl-ember-model/Store* that will be shared across all of the routes and controllers in your app.
 
 
 ## Defining Your Models
@@ -76,21 +75,23 @@ First create a new model in your */models* folder:
 Add inside that file:
 
 ```javascript
-import SlModel from 'sl-model';
+import SlModel from 'sl-ember-model';
 
 var Foo = SlModel.extend({ });
 ```
 
 ## Using Adapters:
-Sl-Model has two adapters out of the box: ajax and localstorage.  You can specify your adapter in your model by reopening it's class:
+Sl-Ember-Model has two adapters out of the box: ajax and localstorage.  You can specify your adapter in your model by reopening it's class:
+
 ```javascript
 Foo.reopenClass({
     adapter: 'ajax'
 });
 ```
+
 Models have `ajax` specified as default, so you don't need to do this unless you want to use a different adapter.
 
-SL-Model adapters always return [Ember Promise Proxies](http://emberjs.com/api/classes/Ember.PromiseProxyMixin.html).
+SL-Ember-Model adapters always return [Ember Promise Proxies](http://emberjs.com/api/classes/Ember.PromiseProxyMixin.html).
 If you request a single object then you will get an `Ember.ObjectProxy` with the promise proxy mixin applied.  Requests for
 Multiple records will return an `Ember.ArrayProxy` with the promise proxiy mixin applied.
 
@@ -102,13 +103,10 @@ by `ic-ajax`.
 
 ### Urls, Endpoints, Serializers:
 
-When using the `ajax` adapter you can setup a single url if your api is restful or 
-multiple endpoints if you need fine grain control.  Multiple endpoints come
-in handy if your api isn't so restful.
+When using the `ajax` adapter you can setup a single url if your api is restful or  multiple endpoints if you need fine grain control.  Multiple endpoints come in handy if your api isn't so restful.
 
 The base level `url` and `serializer` will be used by default.  Override them or add different ones at any endpoint.
-Endpoints that return multiple records should only return an array.  You can add any metadata for those queries to the
-store via the `metaForType` function.
+Endpoints that return multiple records should only return an array.  You can add any metadata for those queries to the store via the `metaForType` function.
 
 ```javascript
 Foo.reopenClass({
@@ -139,9 +137,9 @@ Foo.reopenClass({
 
 export default Foo;
 ```
-In the example above, the `superFoo:post` endpoint will use the default serializer.  
-All http verbs on the `boringfoo` endpoint will use the `someSerializer` function as their serializer.
-All http verbs on the `superBoringFoo` endpoint will use the default serializer.
+In the example above, the `superFoo:post` endpoint will use the default serializer.
+All HTTP verbs on the `boringfoo` endpoint will use the `someSerializer` function as their serializer.
+All HTTP verbs on the `superBoringFoo` endpoint will use the default serializer.
 
 Models should always have a `url` specified.  Further urls can be specified in the `endpoints` object.  Urls and
 Serializers can be specified on a per endpoint/action basis and will default to the top level url and serializer.
@@ -155,7 +153,7 @@ The `localstorage` adapter works in much the same way as the ajax adapter.  It r
 with the promise proxy mixin applied.  In the case of errors the promise will get rejected with an error object
 similar to the `ic-ajax` error object, minus the `jqXHR` key and object.
 
-#### If you installed *sl-model* as an Ember CLI Addon
+#### If you installed *sl-ember-model* as an Ember CLI Addon
 
 The localStorage adapter is initialized by default with your project's namespace.
 
@@ -166,12 +164,12 @@ If you want to change the default namespace then you will want to create an init
 Now edit the file that was generated in `app/initializers/localstorage-initializer.js` and define the `namespace` value.
 
 ```javascript
-module SlModel from 'sl-model';
+module SlModel from 'sl-ember-model';
 
 export default {
-    name: 'sl-model-localstorage',
+    name: 'sl-ember-model-localstorage',
 
-    after: 'sl-model',
+    after: 'sl-ember-model',
 
     initialize: function( container ) {
         var localStorageAdapter = SlModel.LocalstorageAdapter;
@@ -185,7 +183,7 @@ export default {
 };
 ```
 
-#### If you are manually importing *sl-model*
+#### If you are manually importing *sl-ember-model*
 
 You will want to create an initializer:
 
@@ -206,7 +204,7 @@ namespace in localStorage.
 
 ### Error handling
 
-Both the `ajax` adapter and the `localstorage` adapter 
+Both the `ajax` adapter and the `localstorage` adapter
 
 ## Usage in Routes
 
@@ -295,9 +293,9 @@ application's initializers folder:
 
 ```javascript
 export default {
-    name: 'sl-model-hooks',
+    name: 'sl-ember-model-hooks',
 
-    after: 'sl-model',
+    after: 'sl-ember-model',
 
     initialize: function( container ) {
         container.lookup( 'store:main' ).registerPostQueryHook(
@@ -330,8 +328,7 @@ Employs [Semantic Versioning 2.0.0](http://semver.org/)
 ---
 
 # Copyright and License
-sl-model and its source files are Copyright © 2014 [SoftLayer Technologies, Inc.](http://www.softlayer.com/) The
-software is [MIT Licensed](LICENSE.md)
+sl-ember-model and its source files are Copyright © 2014 [SoftLayer Technologies, Inc.](http://www.softlayer.com/) The software is [MIT Licensed](LICENSE.md)
 
 ---
 

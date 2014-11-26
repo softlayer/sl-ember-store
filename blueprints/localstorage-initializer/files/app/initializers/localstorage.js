@@ -1,11 +1,11 @@
-module SlModelLocalstorageAdapter from 'sl-model/adapters/localstorage';
+module SlEmberModelLocalstorageAdapter from 'sl-ember-model/adapters/localstorage';
 
 export default {
-    name: 'sl-model-localstorage',
-    after: 'sl-model',
+    name: 'sl-ember-model-localstorage',
+    after: 'sl-ember-model',
 
     initialize: function( container ) {
-        var localStorageAdapter = SlModelLocalstorageAdapter.extend();
+        var localStorageAdapter = SlEmberModelLocalstorageAdapter.extend();
 
         localStorageAdapter.reopenClass({
             namespace: '<%= namespace %>'

@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import { test, moduleFor } from 'ember-qunit';
-import Cache from 'sl-model/cache';
+import Cache from 'sl-ember-model/cache';
 
 var cache,
     fetchByIdSpy,
@@ -8,7 +8,7 @@ var cache,
     _getAllPromiseSpy,
     _getRecordSpy;
 
-module( 'Unit - sl-model/cache', {
+module( 'Unit - sl-ember-model/cache', {
     setup: function(){
         cache = Cache.create();
         fetchByIdSpy = sinon.spy( cache, 'fetchById' );
@@ -21,8 +21,8 @@ module( 'Unit - sl-model/cache', {
         fetchOneSpy.restore();
         _getAllPromiseSpy.restore();
         _getRecordSpy.restore();
-    } 
-}); 
+    }
+});
 
 test( 'isCached, id', function(){
     cache.isCached( 'test', 1 );
@@ -55,7 +55,7 @@ test( 'clearCache', function(){
 test( 'removeRecord', function(){
     cache.removeRecord( 'test', Ember.Object.create() );
     ok( cache._getRecords.calledOnce, '_getRecords called once' );
-    ok( cache._getRecords.calledWith( 'test' ), '_getRecords called with correct arg');  
+    ok( cache._getRecords.calledWith( 'test' ), '_getRecords called with correct arg');
 });
 
 test( 'removeRecords', function(){
@@ -93,7 +93,7 @@ asyncTest( 'addPromise, resolve', function(){
         testPromise = new Ember.RSVP.Promise( function( resolve ){
            setTimeout( resolve( testRecord ), 1000);
         }),
-        rPromise;        
+        rPromise;
 
     sinon.spy( cache, '_getPromises' );
 
@@ -106,7 +106,7 @@ asyncTest( 'addPromise, resolve', function(){
         equal( cache.get( '_promises.test.ids.1' ), undefined, 'promise was removed from cache' );
         ok( cache._getRecords.calledOnce, '_getRecords called once' );
         equal( cache.get( '_records.test.ids.1' ), testRecord, 'record was added to record cache' );
-        start(); 
+        start();
     });
 
 });
@@ -115,7 +115,7 @@ asyncTest( 'addPromise, reject', function(){
         testPromise = new Ember.RSVP.Promise( function( resolve, reject ){
            setTimeout( reject( testRecord ), 1000);
         }),
-        rPromise;        
+        rPromise;
 
     sinon.spy( cache, '_getPromises' );
 
@@ -128,7 +128,7 @@ asyncTest( 'addPromise, reject', function(){
         equal( cache.get( '_promises.test.ids.1' ), undefined, 'promise was removed from cache' );
         ok( !cache._getRecords.called, '_getRecords not called' );
         equal( cache.get( '_records.test.ids.1' ), undefined, 'record was not added to record cache' );
-        start(); 
+        start();
     });
 
 });
@@ -139,7 +139,7 @@ asyncTest( 'addAllPromise, resolve', function(){
         testPromise = new Ember.RSVP.Promise( function( resolve ){
            setTimeout( resolve( [ testRecord ]  ), 100);
         }),
-        rPromise;        
+        rPromise;
 
     sinon.spy( cache, '_getPromises' );
     sinon.spy( cache, 'addRecords' );
@@ -160,7 +160,7 @@ asyncTest( 'addAllPromise, reject', function(){
         testPromise = new Ember.RSVP.Promise( function( resolve, reject ){
            setTimeout( reject( [ testRecord ]  ), 100);
         }),
-        rPromise;        
+        rPromise;
 
     sinon.spy( cache, '_getPromises' );
     sinon.spy( cache, 'addRecords' );
@@ -181,7 +181,7 @@ test( 'addRecord', function(){
     var testRecord2 =  Ember.Object.create({ id: 1, test: 'test2' });
 
     sinon.spy( cache, 'removeRecord' );
-    
+
     cache.addRecord( 'test', testRecord );
 
     equal( cache.get( '_records.test.ids.1' ), testRecord, 'testRecord added to record cache' );
@@ -189,20 +189,20 @@ test( 'addRecord', function(){
     ok( ! cache.removeRecord.called, 'removeRecord was not called on initial add');
 
     cache.addRecord( 'test', testRecord2 );
-    
+
     ok( cache.removeRecord.called, 'removeRecord was called on 2nd add');
-    
+
     equal( cache.get( '_records.test.ids.1' ), testRecord2, 'testRecord2 replaced old record in cache' );
 });
 
 test( 'addRecords', function(){
     var testRecord =  Ember.Object.create({ id: 1, test: 'test' });
     var testRecord2 =  Ember.Object.create({ id: 2, test: 'test2' });
-   
+
     sinon.spy( cache, 'addRecord' );
 
     cache.addRecords( 'test', [ testRecord, testRecord2 ] );
-    
+
     equal( cache.addRecord.callCount, 2, 'addRecord called for each record' );
 
 });
@@ -230,17 +230,17 @@ asyncTest( 'fetchOne - promise', function(){
     var testRecord = Ember.Object.create({ id: 1});
 
     cache.addPromise( 'test', 1, Ember.RSVP.Promise.resolve( testRecord ) )
-    .then( function(){ 
-        
-        sinon.spy( cache, '_getPromises' );    
-        
+    .then( function(){
+
+        sinon.spy( cache, '_getPromises' );
+
         var response = cache.fetchOne( 'test' );
 
         ok( cache._getPromises.calledOnce, 'getPromise called once' );
 
         response.then( function(){
-            equal( response.get('content'), testRecord, 'fetchOne returned correct record' ); 
-        
+            equal( response.get('content'), testRecord, 'fetchOne returned correct record' );
+
             start();
         });
     });
@@ -267,17 +267,17 @@ asyncTest( 'fetchById - promise', function(){
     var testRecord = Ember.Object.create({ id: 1});
 
     cache.addPromise( 'test', 1, Ember.RSVP.Promise.resolve( testRecord ) )
-    .then( function(){ 
-        
-        sinon.spy( cache, '_getPromiseById' );    
-        
+    .then( function(){
+
+        sinon.spy( cache, '_getPromiseById' );
+
         var response = cache.fetchById( 'test', 1 );
 
         ok( cache._getPromiseById.calledOnce, 'getPromiseById called once' );
 
         response.then( function(){
-            equal( response.get('content'), testRecord, 'fetchById returned correct record' ); 
-        
+            equal( response.get('content'), testRecord, 'fetchById returned correct record' );
+
             start();
         });
     });
@@ -288,16 +288,16 @@ asyncTest( 'fetchById - record', function(){
     var testRecord = Ember.Object.create({ id: 1});
 
     cache.addRecord( 'test', testRecord );
-        
-    sinon.spy( cache, '_getRecordById' );    
-    
+
+    sinon.spy( cache, '_getRecordById' );
+
     var response = cache.fetchById( 'test', 1 );
 
     ok( cache._getRecordById.calledOnce, 'getRecordById called once' );
 
     response.then( function(){
-        equal( response.get('content'), testRecord, 'fetchById returned correct record' ); 
-    
+        equal( response.get('content'), testRecord, 'fetchById returned correct record' );
+
         start();
     });
 
@@ -306,7 +306,7 @@ asyncTest( 'fetchById - record', function(){
 test( 'fetchAll - promise', function(){
 
     var testRecord = Ember.Object.create({ id: 1});
-    var testPromise =  Ember.RSVP.Promise.resolve( [ testRecord] ); 
+    var testPromise =  Ember.RSVP.Promise.resolve( [ testRecord] );
 
     cache.addAllPromise( 'test', testPromise);
     var response = cache.fetchAll( 'test', testPromise );
@@ -371,7 +371,7 @@ test( '_getRecords, some', function(){
     var testRecord = Ember.Object.create({id:1});
     cache.addRecord( 'test', testRecord);
     var response = cache._getRecords( 'test' ).records;
-    equal( response[0], testRecord, 'returns the test record in an array' ); 
+    equal( response[0], testRecord, 'returns the test record in an array' );
 });
 
 test( '_initializePromises', function(){
@@ -384,7 +384,7 @@ test( '_getPromises, empty', function(){
     sinon.spy( cache, '_initializePromises' );
     var response = cache._getPromises('test');
     ok( cache._initializePromises.calledOnce, 'calls initializePromises' );
-    
+
 });
 
 test( '_getPromises, some', function(){
@@ -413,7 +413,7 @@ test( '_getAllPromise, some', function(){
     var testRecord = Ember.Object.create({id:1}),
         testPromise = Ember.RSVP.Promise.resolve( [ testRecord ] );
 
-    cache.addAllPromise( 'test', testPromise ); 
+    cache.addAllPromise( 'test', testPromise );
 
     var response = cache._getAllPromise( 'test' );
 

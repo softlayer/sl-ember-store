@@ -1,5 +1,5 @@
 'use strict';
 
 module.exports = {
-  name: 'sl-model'
+  name: 'sl-ember-model'
 };

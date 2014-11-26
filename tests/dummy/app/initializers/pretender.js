@@ -35,16 +35,16 @@ export function initialize(/* container, application */) {
             var id = request.queryParams.id && ( parseInt( request.queryParams.id ) - 1 );
 
             if( request.queryParams.id ){
-                return [ 
-                    200, 
-                    { "Content-Type":"application/json" }, 
+                return [
+                    200,
+                    { "Content-Type":"application/json" },
                     JSON.stringify( fooRecords[ id ] )
                 ];
             }
-            
+
             return [
                 200,
-                { "Content-Type":"application/json" }, 
+                { "Content-Type":"application/json" },
                 JSON.stringify( fooRecords )
             ];
             });
@@ -53,6 +53,6 @@ export function initialize(/* container, application */) {
 
 export default {
   name: 'pretender',
-  after: 'sl-model',
+  after: 'sl-ember-model',
   initialize: initialize
 };
