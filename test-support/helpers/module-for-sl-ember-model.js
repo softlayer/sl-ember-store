@@ -7,8 +7,7 @@ export default function moduleForSlEmberModel(name, description, callbacks) {
 
     moduleFor('model:' + name, description, callbacks, function(container, context, defaultSubject) {
 
-        container.register('store:main', import Store from 'sl-ember-store/store';
- );
+        container.register('store:main', Store );
 
         context.__setup_properties__.store = function(){
             return container.lookup('store:main');
