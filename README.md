@@ -18,7 +18,7 @@ persistence mechanism, so it works just as well with JSON APIs over HTTP as it d
 
 This library **does not** support relationships or manage data state such as how Ember Data does.
 
-What this library **DOES** do is allow you to work with models that do not have to be pre-defined.  Having a dependency on [sl-ember-storeize](https://github.com/softlayer/sl-ember-storeize), this libary is able to dynamically set data returned from an endpoint onto the correct model objects without having any knowledge of the data it will be receiving.
+What this library **DOES** do is allow you to work with models that do not have to be pre-defined.  Having a dependency on [sl-ember-modelize](https://github.com/softlayer/sl-ember-modelize), this libary is able to dynamically set data returned from an endpoint onto the correct model objects without having any knowledge of the data it will be receiving.
 
 ---
 
@@ -81,7 +81,7 @@ var Foo = Model.extend({ });
 ```
 
 ## Using Adapters:
-sl-ember-store has two adapters out of the box: ajax and localstorage.  You can specify your adapter in your model by reopening it's class:
+Sl-ember-store has two adapters out of the box: ajax and localstorage.  You can specify your adapter in your model by reopening it's class:
 
 ```javascript
 Foo.reopenClass({

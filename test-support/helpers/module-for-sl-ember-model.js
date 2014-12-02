@@ -1,13 +1,14 @@
 import { moduleFor } from 'ember-qunit';
 import Ember from 'ember';
-import SlEmberModelStore from 'sl-ember-store/store';
+import Store from 'sl-ember-store/store';
 
 
 export default function moduleForSlEmberModel(name, description, callbacks) {
 
     moduleFor('model:' + name, description, callbacks, function(container, context, defaultSubject) {
 
-        container.register('store:main', SlEmberModelStore );
+        container.register('store:main', import Store from 'sl-ember-store/store';
+ );
 
         context.__setup_properties__.store = function(){
             return container.lookup('store:main');
