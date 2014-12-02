@@ -1,7 +1,7 @@
 
 Ember CLI version: **0.1.3**
 
-NPM package name: **sl-ember-model**
+NPM package name: **sl-ember-store**
 
 License: [MIT](LICENSE.md)
 
@@ -11,14 +11,14 @@ License: [MIT](LICENSE.md)
 
 ---
 
-# What sl-ember-model is
+# What sl-ember-store is
 
 A library for managing model data in your Ember.js applications. It is designed to be agnostic to the underlying
 persistence mechanism, so it works just as well with JSON APIs over HTTP as it does with streaming WebSockets or local storage.
 
 This library **does not** support relationships or manage data state such as how Ember Data does.
 
-What this library **DOES** do is allow you to work with models that do not have to be pre-defined.  Having a dependency on [sl-ember-modelize](https://github.com/softlayer/sl-ember-modelize), this libary is able to dynamically set data returned from an endpoint onto the correct model objects without having any knowledge of the data it will be receiving.
+What this library **DOES** do is allow you to work with models that do not have to be pre-defined.  Having a dependency on [sl-ember-storeize](https://github.com/softlayer/sl-ember-storeize), this libary is able to dynamically set data returned from an endpoint onto the correct model objects without having any knowledge of the data it will be receiving.
 
 ---
 
@@ -44,25 +44,25 @@ For more information on using ember-cli, visit [http://www.ember-cli.com/](http:
 ## Install this addon as a Node module
 
 ```
-npm install --save-dev sl-ember-model
+npm install --save-dev sl-ember-store
 ```
 
 ## Instantiating the Store
 
-In *sl-ember-model*, the store is responsible for managing the lifecycle of your models. Every time you need a model or a collection of models, you'll ask the store for it.
+In *sl-ember-store*, the store is responsible for managing the lifecycle of your models. Every time you need a model or a collection of models, you'll ask the store for it.
 
-To create a store, you don't need to do anything. Just by loading the *sl-ember-model* library all of the routes and
-controllers in your application will get a new store property. This property is an instance of *sl-ember-model/Store* that will be shared across all of the routes and controllers in your app.
+To create a store, you don't need to do anything. Just by loading the *sl-ember-store* library all of the routes and
+controllers in your application will get a new store property. This property is an instance of *sl-ember-store/Store* that will be shared across all of the routes and controllers in your app.
 
 
 ## Defining Your Models
 
 ### Using the generator
 
-To add a model to your project, simple do `ember g slmodel <modelname>`.  You can also specify the url and/or the
+To add a model to your project, simple do `ember g model <modelname>`.  You can also specify the url and/or the
 adapter by appending the options:
 
-    ember g slmodel <modelname> url:<url> adapter:<adapter>
+    ember g model <modelname> url:<url> adapter:<adapter>
 
 More on these options later.
 
@@ -75,13 +75,13 @@ First create a new model in your */models* folder:
 Add inside that file:
 
 ```javascript
-import SlModel from 'sl-ember-model';
+import Model from 'sl-ember-store/model';
 
-var Foo = SlModel.extend({ });
+var Foo = Model.extend({ });
 ```
 
 ## Using Adapters:
-Sl-Ember-Model has two adapters out of the box: ajax and localstorage.  You can specify your adapter in your model by reopening it's class:
+sl-ember-store has two adapters out of the box: ajax and localstorage.  You can specify your adapter in your model by reopening it's class:
 
 ```javascript
 Foo.reopenClass({
@@ -91,7 +91,7 @@ Foo.reopenClass({
 
 Models have `ajax` specified as default, so you don't need to do this unless you want to use a different adapter.
 
-SL-Ember-Model adapters always return [Ember Promise Proxies](http://emberjs.com/api/classes/Ember.PromiseProxyMixin.html).
+sl-ember-store adapters always return [Ember Promise Proxies](http://emberjs.com/api/classes/Ember.PromiseProxyMixin.html).
 If you request a single object then you will get an `Ember.ObjectProxy` with the promise proxy mixin applied.  Requests for
 Multiple records will return an `Ember.ArrayProxy` with the promise proxiy mixin applied.
 
@@ -153,7 +153,7 @@ The `localstorage` adapter works in much the same way as the ajax adapter.  It r
 with the promise proxy mixin applied.  In the case of errors the promise will get rejected with an error object
 similar to the `ic-ajax` error object, minus the `jqXHR` key and object.
 
-#### If you installed *sl-ember-model* as an Ember CLI Addon
+#### If you installed *sl-ember-store* as an Ember CLI Addon
 
 The localStorage adapter is initialized by default with your project's namespace.
 
@@ -164,15 +164,15 @@ If you want to change the default namespace then you will want to create an init
 Now edit the file that was generated in `app/initializers/localstorage-initializer.js` and define the `namespace` value.
 
 ```javascript
-module SlModel from 'sl-ember-model';
+import LocalstorageAdapter from 'sl-ember-store/adapters/localstorage';
 
 export default {
-    name: 'sl-ember-model-localstorage',
+    name: 'sl-ember-store-localstorage',
 
-    after: 'sl-ember-model',
+    after: 'sl-ember-store',
 
     initialize: function( container ) {
-        var localStorageAdapter = SlModel.LocalstorageAdapter;
+        var localStorageAdapter = LocalstorageAdapter;
 
         localStorageAdapter.reopenClass({
             namespace: '<namespace>'
@@ -183,7 +183,7 @@ export default {
 };
 ```
 
-#### If you are manually importing *sl-ember-model*
+#### If you are manually importing *sl-ember-store*
 
 You will want to create an initializer:
 
@@ -293,9 +293,9 @@ application's initializers folder:
 
 ```javascript
 export default {
-    name: 'sl-ember-model-hooks',
+    name: 'sl-ember-store-hooks',
 
-    after: 'sl-ember-model',
+    after: 'sl-ember-store',
 
     initialize: function( container ) {
         container.lookup( 'store:main' ).registerPostQueryHook(
@@ -328,7 +328,7 @@ Employs [Semantic Versioning 2.0.0](http://semver.org/)
 ---
 
 # Copyright and License
-sl-ember-model and its source files are Copyright © 2014 [SoftLayer Technologies, Inc.](http://www.softlayer.com/) The software is [MIT Licensed](LICENSE.md)
+sl-ember-store and its source files are Copyright © 2014 [SoftLayer Technologies, Inc.](http://www.softlayer.com/) The software is [MIT Licensed](LICENSE.md)
 
 ---
 

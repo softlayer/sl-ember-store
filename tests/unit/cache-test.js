@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import { test, moduleFor } from 'ember-qunit';
-import Cache from 'sl-ember-model/cache';
+import Cache from 'sl-ember-store/cache';
 
 var cache,
     fetchByIdSpy,
@@ -8,7 +8,7 @@ var cache,
     _getAllPromiseSpy,
     _getRecordSpy;
 
-module( 'Unit - sl-ember-model/cache', {
+module( 'Unit - sl-ember-store/cache', {
     setup: function(){
         cache = Cache.create();
         fetchByIdSpy = sinon.spy( cache, 'fetchById' );

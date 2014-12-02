@@ -1,9 +1,9 @@
 import Ember from 'ember';
 import { test, moduleFor } from 'ember-qunit';
-import Model from 'sl-ember-model/model';
-import Adapter from 'sl-ember-model/adapter';
-import Store from 'sl-ember-model/store';
-import LocalStorageAdapter from 'sl-ember-model/adapters/localstorage';
+import Model from 'sl-ember-store/model';
+import Adapter from 'sl-ember-store/adapter';
+import Store from 'sl-ember-store/store';
+import LocalStorageAdapter from 'sl-ember-store/adapters/localstorage';
 
 var localstorageadapter,
     localStorageBackup,
@@ -16,7 +16,7 @@ var localstorageadapter,
     Foo = Model.extend(),
     Bar = Model.extend();
 
-module( 'Unit - sl-ember-model/adapter/localstorage', {
+module( 'Unit - sl-ember-store/adapter/localstorage', {
     setup: function() {
        localStorage = {
             _ns: 'testLSObject',
@@ -84,7 +84,7 @@ module( 'Unit - sl-ember-model/adapter/localstorage', {
 
 asyncTest( '__find single model with id', function(){
     response = localstorageadapter.find( 'foo', 1, { label: '1' } );
-    equal(requestSpy.args[0][0], 'sl-ember-model', 'calls request with correct args' );
+    equal(requestSpy.args[0][0], 'sl-ember-store', 'calls request with correct args' );
     ok( response.then, 'response is a promise' );
     ok( Ember.PromiseProxyMixin.detect( response ), 'response is a promise' );
     response.then(function( result ){
@@ -98,7 +98,7 @@ asyncTest( '__find single model with no id', function(){
 
     response = localstorageadapter.find( 'foo', null, options, true );
 
-    equal(requestSpy.args[0][0], 'sl-ember-model', 'calls request with correct args' );
+    equal(requestSpy.args[0][0], 'sl-ember-store', 'calls request with correct args' );
 
     ok( response.then, 'response is a promise' );
 
@@ -131,7 +131,7 @@ asyncTest( 'save', function(){
 
     response = localstorageadapter.save( '/foo', foo );
     response.then( function(){
-        var fooRecords = JSON.parse(localStorage.getItem('sl-ember-model')).foo,
+        var fooRecords = JSON.parse(localStorage.getItem('sl-ember-store')).foo,
             fooRecord = fooRecords.findBy( 'id', 2 );
 
         ok( response.then, 'response is a promise' );
@@ -153,7 +153,7 @@ asyncTest( 'delete', function(){
             response.then( function(){
                 ok( response.then, 'response is a promise' );
 
-                var fooRecords = [ JSON.parse(localStorage.getItem('sl-ember-model')).foo ],
+                var fooRecords = [ JSON.parse(localStorage.getItem('sl-ember-store')).foo ],
                     fooRecord = fooRecords.findBy( 'id', 2 );
 
                 equal( fooRecord, undefined, 'should have deleted the record to the mock ls object' );

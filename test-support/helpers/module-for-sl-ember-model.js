@@ -1,6 +1,6 @@
 import { moduleFor } from 'ember-qunit';
 import Ember from 'ember';
-import SlEmberModelStore from 'sl-ember-model/store';
+import SlEmberModelStore from 'sl-ember-store/store';
 
 
 export default function moduleForSlEmberModel(name, description, callbacks) {

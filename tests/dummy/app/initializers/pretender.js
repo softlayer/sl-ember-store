@@ -53,6 +53,6 @@ export function initialize(/* container, application */) {
 
 export default {
   name: 'pretender',
-  after: 'sl-ember-model',
+  after: 'sl-ember-store',
   initialize: initialize
 };

@@ -1,14 +1,14 @@
 import Ember from 'ember';
 import { test, moduleForComponent } from 'ember-qunit';
 import startApp from '../../helpers/start-app';
-import Store from 'sl-ember-model/store';
-import AjaxAdapter from 'sl-ember-model/adapters/ajax';
-import LocalstorageAdapter from 'sl-ember-model/adapters/localstorage';
+import Store from 'sl-ember-store/store';
+import AjaxAdapter from 'sl-ember-store/adapters/ajax';
+import LocalstorageAdapter from 'sl-ember-store/adapters/localstorage';
 
 var App,
     container;
 
-module( 'Unit - initializer: sl-ember-model', {
+module( 'Unit - initializer: sl-ember-store', {
     setup: function() {
         App = startApp();
         container = App.__container__;

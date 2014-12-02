@@ -7,9 +7,9 @@ import LocalstorageAdapter from '../adapters/localstorage';
  */
 
 /*
- * Register sl-ember-model objects to consuming application
+ * Register sl-ember-store objects to consuming application
  *
- * @function sl-ember-model
+ * @function sl-ember-store
  * @param    {Ember.ContainerView} container
  * @param    {Ember.Application}   application
  * @returns  {void}

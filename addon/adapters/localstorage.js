@@ -92,12 +92,12 @@ var LocalStorageAdapter = Adapter.extend({
 
             resolve( finalResult );
 
-        }.bind( this ), 'sl-ember-model.localstorageAdapter:find - Promise' )
+        }.bind( this ), 'sl-ember-store.localstorageAdapter:find - Promise' )
 
         .then( function lsAdapterFindThen( response ) {
             this.runPostQueryHooks( response );
             return response;
-        }.bind( this ), 'sl-ember-model.localstorageAdapter:find - then' );
+        }.bind( this ), 'sl-ember-store.localstorageAdapter:find - then' );
 
         //set the promise on the promiseProxy
         results.set( 'promise', promise );
@@ -150,7 +150,7 @@ var LocalStorageAdapter = Adapter.extend({
         .then( function lsAdapterDeleteFinally( response ) {
             this.runPostQueryHooks( response );
             return response;
-        }.bind( this ) , 'sl-ember-model.localstorageAdapter:deleteRecord - always' );
+        }.bind( this ) , 'sl-ember-store.localstorageAdapter:deleteRecord - always' );
 
         return promise;
     },
@@ -196,7 +196,7 @@ var LocalStorageAdapter = Adapter.extend({
         .then( function lsAdapterSaveFinally( response ) {
             this.runPostQueryHooks( response );
             return response;
-        }.bind( this ) , 'sl-ember-model.localstorageAdapter:saveRecord - always' );
+        }.bind( this ) , 'sl-ember-store.localstorageAdapter:saveRecord - always' );
 
         return promise;
     },
@@ -318,7 +318,7 @@ var LocalStorageAdapter = Adapter.extend({
 });
 
 LocalStorageAdapter.reopenClass({
-    namespace: 'sl-ember-model'
+    namespace: 'sl-ember-store'
 });
 
 export default LocalStorageAdapter;

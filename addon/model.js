@@ -29,7 +29,7 @@ var Model =  Ember.ObjectProxy.extend({
             .then( function( response ) {
                 this.set( 'content', response );
                 return this;
-            }.bind( this ), null, 'sl-ember-model.model:save' );
+            }.bind( this ), null, 'sl-ember-store.model:save' );
     },
 
     /**
@@ -51,7 +51,7 @@ var Model =  Ember.ObjectProxy.extend({
         return this.container.lookup( 'adapter:'+this.constructor.adapter ).deleteRecord( endpoint, this.get( 'id' ) )
             .then( function() {
                 Ember.run( this, 'destroy' );
-            }.bind( this ), null, 'sl-ember-model.model:deleteRecord' );
+            }.bind( this ), null, 'sl-ember-store.model:deleteRecord' );
     }
 });
 
@@ -122,7 +122,7 @@ Model.reopenClass({
      * @param    {string}         endpoint - The endpoint, leave blank or null for default
      * @param    {string}         action   - The action, leave blank or null for default
      * @param    {object}         data     - The data to be serialized
-     * @param    {sl-ember-model/store} store    - The app's store, use to store metadata
+     * @param    {sl-ember-store/store} store    - The app's store, use to store metadata
      * @throws   {Ember.assert}
      * @returns  {Ember.Object} The serialized data
      */

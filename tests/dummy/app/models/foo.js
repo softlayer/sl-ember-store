@@ -1,6 +1,6 @@
-import SlEmberModel from 'sl-ember-model/model';
+import Model from 'sl-ember-store/model';
 
-var Foo = SlEmberModel.extend({
+var Foo = Model.extend({
 });
 
 Foo.reopenClass({
