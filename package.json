@@ -1,5 +1,7 @@
 {
   "name": "sl-ember-model",
+  "version": "0.1.0",
+  "description": "Ember CLI Addon - Data Model",
   "directories": {
     "doc": "doc",
     "test": "tests"
