@@ -81,7 +81,7 @@ var Foo = Model.extend({ });
 ```
 
 ## Using Adapters:
-Sl-ember-store has two adapters out of the box: ajax and localstorage.  You can specify your adapter in your model by reopening it's class:
+sl-ember-store has two adapters out of the box: ajax and localstorage.  You can specify your adapter in your model by reopening it's class:
 
 ```javascript
 Foo.reopenClass({
