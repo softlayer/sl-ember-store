@@ -1,6 +1,7 @@
 /* global require, module */
 
-var EmberAddon = require('ember-cli/lib/broccoli/ember-addon');
+var EmberAddon = require('ember-cli/lib/broccoli/ember-addon'),
+    isProduction = ( process.env.EMBER_ENV || 'development' ) === 'production';
 
 app = new EmberAddon();
 
@@ -18,7 +19,10 @@ app = new EmberAddon();
 // please specify an object with the list of modules as keys
 // along with the exports of each module as its value.
 
-app.import( app.bowerDirectory + '/sinonjs/sinon.js', { type: 'test' } );
-app.import( app.bowerDirectory + '/sinon-qunit/lib/sinon-qunit.js', { type: 'test' } );
+// Development dependencies
+if ( !isProduction ) {
+    app.import( app.bowerDirectory + '/sinonjs/sinon.js', { type: 'test' } );
+    app.import( app.bowerDirectory + '/sinon-qunit/lib/sinon-qunit.js', { type: 'test' } );
+}
 
 module.exports = app.toTree();
