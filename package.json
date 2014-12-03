@@ -42,9 +42,9 @@
   "ember-addon": {
     "configPath": "tests/dummy/config"
   },
-  "authors": [
-    "Matthew Marcum <mmarcum@softlayer.com>",
-    "Jeremy Brown <jebrown@softlayer.com>",
+  "contributors": [
+    "Matthew Marcum <mmarcum@softlayer.com> (http://strangelooper.com)",
+    "Jeremy Brown <jeremy@notmessenger.com> (http://www.notmessenger.com)",
     "Ryan Edgell <redgell@softlayer.com>"
   ],
   "keywords": [
