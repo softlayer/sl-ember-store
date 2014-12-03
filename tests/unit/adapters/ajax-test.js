@@ -1,9 +1,9 @@
 import Ember from 'ember';
 import { test, moduleFor } from 'ember-qunit';
-import Model from 'sl-ember-model/model';
-import Adapter from 'sl-ember-model/adapter';
-import Store from 'sl-ember-model/store';
-import Ajaxadapter from 'sl-ember-model/adapters/ajax';
+import Model from 'sl-ember-store/model';
+import Adapter from 'sl-ember-store/adapter';
+import Store from 'sl-ember-store/store';
+import Ajaxadapter from 'sl-ember-store/adapters/ajax';
 module icAjax from 'ic-ajax';
 
 var ajaxadapter,
@@ -13,7 +13,7 @@ var ajaxadapter,
     response,
     requestSpy;
 
-module( 'Unit - sl-ember-model/adapter/ajax', {
+module( 'Unit - sl-ember-store/adapter/ajax', {
     setup: function() {
         var container = {
                 registry: [],

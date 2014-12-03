@@ -1,10 +1,10 @@
 #### International Business machines, Inc.
 ##### Software Grant and Corporate Contributor License Agreement ("Agreement")
 
-http://www.github.com/softlayer/sl-ember-model
+http://www.github.com/softlayer/sl-ember-store
 
 
-Thank you for your interest in IBM’s sl-ember-model project (“the Project").
+Thank you for your interest in IBM’s sl-ember-store project (“the Project").
 In order to clarify the intellectual property license granted with Contributions
 from any person or entity, IBM must have a Contributor License Agreement (CLA)
 on file that has been signed by each Contributor, indicating agreement to the

@@ -2,7 +2,7 @@ import Ember from 'ember';
 import { test, moduleFor } from 'ember-qunit';
 import Foo from 'dummy/models/foo';
 import Bar from 'dummy/models/bar';
-import Model from 'sl-ember-model/model';
+import Model from 'sl-ember-store/model';
 
 var foo,
     bar,
@@ -34,7 +34,7 @@ var foo,
         }
     });
 
-module( 'Unit - sl-ember-model/model', {
+module( 'Unit - sl-ember-store/model', {
     setup: function() {
 
         Foo.reopenClass({

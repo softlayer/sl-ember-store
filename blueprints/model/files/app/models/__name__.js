@@ -1,4 +1,4 @@
-import SlEmberModel from 'sl-ember-model/model';
+import SlEmberModel from 'sl-ember-store/model';
 
 var <%= classifiedModuleName %> = SlEmberModel.extend({
 

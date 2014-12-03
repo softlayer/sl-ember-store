@@ -1,6 +1,6 @@
 import Ember from 'ember';
 import { test, moduleFor } from 'ember-qunit';
-import Adapter from 'sl-ember-model/adapter';
+import Adapter from 'sl-ember-store/adapter';
 
 var adapter,
     store = {
@@ -8,7 +8,7 @@ var adapter,
         runPreQueryHooks: sinon.spy()
     };
 
-module( 'Unit - sl-ember-model/adapter', {
+module( 'Unit - sl-ember-store/adapter', {
     setup: function() {
         adapter = Adapter.create({
             container:{
