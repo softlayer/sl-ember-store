@@ -2,10 +2,6 @@
   "name": "sl-ember-store",
   "version": "0.2.0",
   "description": "Ember CLI Addon - Data Model",
-  "directories": {
-    "doc": "doc",
-    "test": "tests"
-  },
   "scripts": {
     "start": "ember server",
     "build": "ember build",
