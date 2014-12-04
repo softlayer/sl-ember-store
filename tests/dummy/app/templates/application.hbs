@@ -1,3 +1,70 @@
-<h1 id='title'>Welcome to {{#link-to "index"}}sl-ember-store{{/link-to}}!</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="keywords" content="ember, ember cli, translate, translation, dictionary">
+<meta name="description" content="An Ember CLI Addon to provide a model layer for an Ember application.">
+<meta name="author" content="SoftLayer, an IBM Company">
 
-{{outlet}}
+<link type="image/png" href="images/favicon.png" rel="icon">
+<title>sl-ember-store</title>
+
+<link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+<link href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<br>
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group pull-right">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-reorder"></i> <span class="caret"></span>
+                </button>
+
+                <ul class="dropdown-menu" role="menu">
+                <li><a href="/sl-ember-store"><i class="fa fa-home"></i> Home</a></li>
+                <li><a href="http://github.com/softlayer/sl-ember-store/blob/master/README.md"><i class="fa fa-wrench"></i> Get Started</a></li>
+                <li><a href="http://github.com/softlayer/sl-ember-store/blob/master/CONTRIBUTING.md"><i class="fa fa-cog"></i> Contribution Guide</a></li>
+                <li><a href="http://github.com/softlayer/sl-ember-store/stargazers"><i class="fa fa-star"></i> Star Our Repo</a></li>
+                <li><a href="http://github.com/softlayer/sl-ember-store/fork"><i class="fa fa-code-fork"></i> Fork Our Repo</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1>{{#link-to "index"}}Demo Application{{/link-to}}</h1>
+            <p class="lead">View the source code of the dummy application for syntax employed in this demo</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            {{#link-to "singleModel" 1}}Single model example{{/link-to}}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            {{#link-to "arrayOfModels"}}Array of models example{{/link-to}}
+        </div>
+    </div>
+
+    {{outlet}}
+
+    <br><br>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <p>npm install sl-ember-store</p>
+            <p><a href="https://github.com/softlayer/sl-ember-store/blob/master/LICENSE.md">MIT Licensed</a></p>
+        </div>
+    </div>
+</div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
