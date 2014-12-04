@@ -22,15 +22,21 @@ What this library **DOES** do is allow you to work with models that do not have 
 
 ---
 
-# Working Demo
+# Demo
 
-## Installation
+## Live
+
+[http://softlayer.github.io/sl-ember-store/dist](http://softlayer.github.io/sl-ember-store/dist)
+
+## Development Environment
+
+### Installation
 
 * `git clone` this repository
 * `npm install`
 * `bower install`
 
-## Running
+### Running
 
 * `ember server`
 * View the demo at http://localhost:4200
