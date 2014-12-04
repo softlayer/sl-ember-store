@@ -1,20 +1,63 @@
-<h2>Array of Models</h2>
-<p>These records are loaded in our route's model hook with the following code:</p>
-<code>this.store.find('foo');</code>
-<p>These records are loaded by the store via the ajax adapter.  The `/foo` 
-resource contains foo records with embedded `bar` records.  These records are automatically 
-created as an instance of the `Bar` model.</p>
+<div class="row">
+    <div class="col-md-12">
 
-{{#each model in controller}}
-<h3>Foo Model</h3>
-<ul>
-    <li>ID: {{#link-to 'singleModel' model.id }}{{model.id}}{{/link-to}}</li>
-    <li>Text: {{model.text}}</li>
-    <ul>
-        <h3>Bar Model</h3>
-        <li>ID: {{model.bar.id}}</li>
-        <li>Text: {{model.bar.text}}</li>
-    </ul>
-</ul>
+        <h2>Array of Models</h2>
 
-{{/each}}
+        <p>These records are loaded in our route's model hook with the following code:</p>
+
+        <code>this.store.find('foo');</code>
+
+        <br><br>
+        <p>These records are loaded by the store via the ajax adapter.  The "/foo" resource contains foo records with embedded "bar" records.  These records are automatically  created as an instance of the "Bar" model.</p>
+
+        <br>
+        {{#each model in controller}}
+            <h4>Foo Model</h4>
+
+            <ul>
+            <li>ID: {{#link-to 'singleModel' model.id }}{{model.id}}{{/link-to}}</li>
+            <li>Text: {{model.text}}</li>
+                <ul>
+                <h4>Bar Model</h4>
+                <li>ID: {{model.bar.id}}</li>
+                <li>Text: {{model.bar.text}}</li>
+                </ul>
+            </ul>
+        {{/each}}
+
+
+        <br>
+        <p>The original JSON for this resource:</p>
+
+        <pre>
+{
+    id: 1,
+    text: 'This is foo record with id: 1',
+    bar: {
+        id: 1,
+        text: 'This is a bar record with id: 1'
+    }
+},
+{
+    id: 2,
+    text: 'This is foo record #2',
+    bar: {
+        id: 2,
+        text: 'This is a bar record with id: 2'
+    }
+
+},
+{
+    id: 3,
+    text: 'This is foo record #3',
+    bar: {
+        id: 3,
+        text: 'This is a bar record with id: 3'
+    }
+
+}
+</pre>
+
+
+    </div>
+</div>
