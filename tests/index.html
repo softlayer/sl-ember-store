@@ -24,11 +24,15 @@
         overflow: auto;
         z-index: 9999;
         border: 1px solid #ccc;
+        opacity: 0.4;
       }
       #ember-testing {
         zoom: 50%;
       }
     </style>
+
+    {{content-for 'head-footer'}}
+    {{content-for 'test-head-footer'}}
   </head>
   <body>
 
@@ -39,5 +43,8 @@
     <script src="assets/dummy.js"></script>
     <script src="testem.js"></script>
     <script src="assets/test-loader.js"></script>
+
+    {{content-for 'body-footer'}}
+    {{content-for 'test-body-footer'}}
   </body>
 </html>
