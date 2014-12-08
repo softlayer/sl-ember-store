@@ -1,5 +1,6 @@
 
 module.exports = {
+    description: 'Generates a model.',
     locals: function( options ){
         var locals  = {},
             url     = options.entity.options.url,
