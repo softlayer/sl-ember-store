@@ -6,6 +6,6 @@ moduleForModel('<%= dasherizedModuleName %>', '<%= classifiedModuleName %>', {
 });
 
 test('it exists', function() {
-  var model = this.subject();
-  ok(model);
+    var model = this.subject();
+    ok(model);
 });
