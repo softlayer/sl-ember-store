@@ -1,3 +1,49 @@
-<h1 id='title'>Welcome to {{#link-to "index"}}sl-ember-store{{/link-to}}!</h1>
+<br>
+<div class="container">
 
-{{outlet}}
+    <div class="row">
+        <div class="col-md-12">
+            <div class="btn-group pull-right">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-reorder"></i> <span class="caret"></span>
+                </button>
+
+                <ul class="dropdown-menu" role="menu">
+                <li><a href="/sl-ember-store"><i class="fa fa-home"></i> Home</a></li>
+                <li><a href="https://github.com/softlayer/sl-ember-store/blob/master/README.md"><i class="fa fa-wrench"></i> Get Started</a></li>
+                <li><a href="https://github.com/softlayer/sl-ember-store/blob/master/CONTRIBUTING.md"><i class="fa fa-cog"></i> Contribution Guide</a></li>
+                <li><a href="https://github.com/softlayer/sl-ember-store/stargazers"><i class="fa fa-star"></i> Star Our Repo</a></li>
+                <li><a href="https://github.com/softlayer/sl-ember-store/fork"><i class="fa fa-code-fork"></i> Fork Our Repo</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1>{{#link-to "index"}}Demo Application{{/link-to}}</h1>
+            <p class="lead">View the source code of the dummy application for syntax employed in this demo</p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            {{#link-to "singleModel" 1}}Single model example{{/link-to}}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            {{#link-to "arrayOfModels"}}Array of models example{{/link-to}}
+        </div>
+    </div>
+
+    {{outlet}}
+
+    <br><br>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <p>npm install sl-ember-store</p>
+            <p><a href="https://github.com/softlayer/sl-ember-store/blob/master/LICENSE.md">MIT Licensed</a></p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
