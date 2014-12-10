@@ -47,7 +47,16 @@ export function initialize(/* container, application */) {
                 { "Content-Type":"application/json" },
                 JSON.stringify( fooRecords )
             ];
-            });
+        });
+        this.post( '/foo', function(request){
+            var record = JSON.parse( request.requestBody );
+            fooRecords[ record.id ]= record;
+            return [
+                200,
+                { "Content-Type":"application/json" },
+                JSON.stringify( record )
+            ];
+        });
     });
 }
 
