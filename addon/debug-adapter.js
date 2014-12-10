@@ -2,10 +2,11 @@ import Model from "./model";
 
 export default Ember.DataAdapter.extend({
 
-    detect: function(klass) {
-        return klass !== Model && Model.detect(klass);
-    },
-
+    /**
+     * Returns the columns for a specific model type
+     * @param  {Object} type Model Class
+     * @return {Array}      Array of objs describing model columns
+     */
     columnsForType: function( type ) {
         var columns = [],
             type = type._debugContainerKey.replace( 'model:',''),
@@ -20,11 +21,21 @@ export default Ember.DataAdapter.extend({
         return columns;
     },
 
+    /**
+     * Returns the array of records for the model type
+     * @param {Object} type Model Class
+     * @return {Array} array of model records
+     */
     getRecords: function( type ){
         var type = type._debugContainerKey.replace( 'model:','');
         return this.get( 'store' )._cache._getRecords( type ).records;
     },
 
+    /**
+     * Returns the values for the columns in a record
+     * @param  {Object} record
+     * @return {Object}        The values for the keys of this record
+     */
     getRecordColumnValues: function( record ){
         var values = {};
 
@@ -37,6 +48,12 @@ export default Ember.DataAdapter.extend({
         return values;
     },
 
+    /**
+     * Sets up observers for records
+     * @param  {Object} record
+     * @param  {Function} recordUpdated callback when a record is updated
+     * @return {Function}               callback when a record is destroyed
+     */
     observeRecord: function( record, recordUpdated ){
         var releaseMethods = Ember.A(),
             self = this,
