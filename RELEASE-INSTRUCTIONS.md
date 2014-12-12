@@ -43,6 +43,7 @@ Then follow these steps:
 * Switch to the `gh-pages` branch
 * Replace the same files listed above with their copies
 * Within the *index.html* file, replace the following href values:
+    * `favicon.png` with `sl-ember-store/favicon.png`
     * `assets/vendor.css` with `sl-ember-store/assets/vendor.css`
     * `assets/dummy.css` with `sl-ember-store/assets/dummy.css`
     * `assets/vendor.js` with `sl-ember-store/assets/vendor.js`
