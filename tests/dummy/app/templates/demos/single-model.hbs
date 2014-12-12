@@ -28,11 +28,11 @@
 
         <pre>
 {
-    id: 1,
-    text: 'This is foo record with id: 1',
+    id: {{model.id}},
+    text: '{{model.text}}',
     bar: {
-        id: 1,
-        text: 'This is a bar record with id: 1'
+        id: {{model.bar.id}},
+        text: '{{model.bar.text}}'
     }
 }
 </pre>
