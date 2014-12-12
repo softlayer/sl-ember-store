@@ -42,10 +42,10 @@ Then follow these steps:
     * */dist/assets/vendor.js*
 * Switch to the `gh-pages` branch
 * Replace the same files listed above with their copies
-* Within the */dist/index.html* file, replace the following href values:
-    * `assets/vendor.css` with `sl-ember-store/dist/assets/vendor.css`
-    * `assets/dummy.css` with `sl-ember-store/dist/assets/dummy.css`
-    * `assets/vendor.js` with `sl-ember-store/dist/assets/vendor.js`
-    * `assets/dummy.js` with `sl-ember-store/dist/assets/dummy.js`
-* Also within the */dist/index.html* file, in the `<meta name="dummy/config/environment"...` tag, replace the `locationType` value from `auto` to `hash`
+* Within the *index.html* file, replace the following href values:
+    * `assets/vendor.css` with `sl-ember-store/assets/vendor.css`
+    * `assets/dummy.css` with `sl-ember-store/assets/dummy.css`
+    * `assets/vendor.js` with `sl-ember-store/assets/vendor.js`
+    * `assets/dummy.js` with `sl-ember-store/assets/dummy.js`
+* Also within the *index.html* file, in the `<meta name="dummy/config/environment"...` tag, replace the `locationType` value from `auto` to `hash`
 * Commit and push the changes
