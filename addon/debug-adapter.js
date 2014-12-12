@@ -1,4 +1,4 @@
-import Model from "./model";
+import Ember from 'ember';
 
 export default Ember.DataAdapter.extend({
 
@@ -7,9 +7,9 @@ export default Ember.DataAdapter.extend({
      * @param  {Object} type Model Class
      * @return {Array}      Array of objs describing model columns
      */
-    columnsForType: function( type ) {
+    columnsForType: function( typeClass ) {
         var columns = [],
-            type = type._debugContainerKey.replace( 'model:',''),
+            type = typeClass._debugContainerKey.replace( 'model:',''),
             record = this.get( 'store' )._cache._getRecords( type ).records[0];
 
         if( record ){
@@ -26,8 +26,8 @@ export default Ember.DataAdapter.extend({
      * @param {Object} type Model Class
      * @return {Array} array of model records
      */
-    getRecords: function( type ){
-        var type = type._debugContainerKey.replace( 'model:','');
+    getRecords: function( typeClass ){
+        var type = typeClass._debugContainerKey.replace( 'model:','');
         return this.get( 'store' )._cache._getRecords( type ).records;
     },
 
