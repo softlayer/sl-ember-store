@@ -15,12 +15,12 @@ module('Acceptance: ArrayOfModels', {
 });
 
 test('visiting /arrayOfModels', function() {
-  visit('/arrayOfModels');
+  visit('/demos/arrayOfModels');
 
   andThen(function() {
-    var arrayModelController = App.__container__.lookup('controller:arrayOfModels');
-    equal(currentPath(), 'arrayOfModels');
-    ok( arrayModelController.get('model.0') instanceof Foo, 'Controllers model is instance of Foo' ); 
- 
+    var arrayModelController = App.__container__.lookup('controller:demos/arrayOfModels');
+    equal(currentPath(), 'demos.arrayOfModels');
+    ok( arrayModelController.get('model.0') instanceof Foo, 'Controllers model is instance of Foo' );
+
   });
 });

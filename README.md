@@ -212,10 +212,13 @@ namespace in localStorage.
 
 Both the `ajax` adapter and the `localstorage` adapter
 
-## Usage in Routes
+## Using the `store`
 
-In your routes, simply use the `store` variable that is injected into every route and controller.  Store has the
-`find`, `findOne`, `createRecord`, and `metadataFor` methods.  Some example use cases:
+The `store` variable is injected into every route and controller and is the entry-point into the Sl-Ember-Store system.  Store has the
+`find`, `findOne`, `createRecord`, and `metadataFor` methods.  
+
+
+### Some example use cases in a route:
 
 `find`:
 
@@ -226,8 +229,24 @@ model: function() {
 ```
 
 ```javascript
-setupController: function() {
-    this.set( 'model', this.store.find( 'foo' ) );
+model: function() {
+    //load foo with id 23
+    return this.store.find( 'foo', 23 );
+}
+```
+
+```javascript
+model: function() {
+    //send query params to the server: ?start=0&limit=25
+    return this.store.find( 'foo', { data: { start: 0, limit: 25 }} );
+}
+```
+
+
+```javascript
+setupController: function( controller, model ) {
+    //would cause the route to skip the loading state and transition immediately to route while model is loading
+    controller.set( 'model', this.store.find( 'foo' ) );
 }
 ```
 
@@ -235,6 +254,7 @@ setupController: function() {
 
 ```javascript
 model: function() {
+    //would return the first record from the cache or make a request for the first record
     return this.store.findOne( 'foo' );
 }
 ```
@@ -254,41 +274,61 @@ model: function() {
     var model = this.store.find( 'foo' );
 
     model.then( function() {
-        this.controllerFor( 'foo/index' ).setProperties( this.store.metadataFor( 'foo' ) );
+        this.controller.setProperties( this.store.metadataFor( 'foo' ) );
     }.bind( this ) );
 
     return model;
 }
 ```
 
-If you want to load a particular record via an `id` then pass the `id` in as the second parameter to `store.find`:
-
-```javascript
-    this.store.find( 'foo', 23 );
-```
-
-## Usage in Controllers
-In your controller you have access to the `store` too.  You can create an options object to handle extra parameters for
-to be added onto the url being queried.  Simply list the parameters in an object on the `data` key.
+### Some example use cases in a controller
 
 ```javascript
 actions: {
+    //change to a different page
     changePage: function( page ) {
-        var model = this.store.find( 'device', { data: { page: page } } );
+        var model;
+
+        if( this.isPageLoaded( page ) ){
+            //records are in cache
+            model = this.store.find( 'device' ).then( function( records ){
+                        //extract just the records for this page
+                        return this.getPage( records, page );
+                    });
+        } else {
+            //records are requested and will be added to cache, only the records 
+            //returned by the request will be present here
+            model = this.store.find( 'device', { data: { page: page } } );
+        }
 
         model.then( function() {
+            this.pageIsLoaded( page );
             this.set( 'currentPage', page );
+            this.set( 'model', model );
+        }.bind(this) );
+    },
+    reloadModel: function() {
+        //a request will be made just for this page, the cache will be cleared
+        var model = this.store.find( 'device', { 
+            reload: true, 
+            data: { page: this.get( 'currentPage' ) } } );
+
+        model.then( function() {
             this.set( 'model', model );
         }.bind(this) );
     }
 }
 ```
 
-The options object can also take a `reload` parameter to bypass the caching mechanism:
+### Options parameter in the `store.find` method
 
-```javascript
-this.store.find( 'device', { reload: true } );
-```
+The `store.find` method can take up to three parameters.  The first parameter is always the model type.  The second parameter can either be a number or an object.  In the case of a number it is interpreted as an id and a single record will be returned.  In the case of an object it will be parsed as the `options` object.  If the second parameter is a number, then the third parameter (if present) will be the `options` object.  The `options` object has three importan keys:
+
+    * reload    Boolean flag, clears the cache and loads data from the adapter
+    * add       Boolean flag, load data from the adapter
+    * data      Object, load data from the adapter with these key/value pairs
+
+It is up to the specified adapter to determine how the `data` key/value pairs will be utilized.  The built in `ajax` adapter send these key/value pairs as query parameters.  The `localstorage` adapter does not make use of them.  The `add` and `reload` flags control how the store utilizes the cache.  In the case of `add` the records are requested from the adapter then added to the cache.  Records of the same `id` will get replaced.  In the case of `reload` the records are requested from the adapter, the cache is cleared, then the new records are added to the cache.  If only the `data` property is set on the `options` parameter then the request will be handled the same as if `add` had been specified.
 
 ---
 

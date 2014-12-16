@@ -5,8 +5,8 @@ export default Ember.DataAdapter.extend({
 
     /**
      * detect if a class is a model
-     * @param  {Object} klass 
-     * @return {boolean}       is Model and ancestor of `klass` 
+     * @param  {Object} klass
+     * @return {boolean}       is Model and ancestor of `klass`
      */
     detect: function(klass) {
         return klass !== Model && Model.detect(klass);

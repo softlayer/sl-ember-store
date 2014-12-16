@@ -5,7 +5,7 @@ import Cache from 'sl-ember-store/cache';
 var cache,
     fetchByIdSpy,
     fetchOneSpy,
-    _getAllPromiseSpy,
+    _getManyPromiseSpy,
     _getRecordSpy;
 
 module( 'Unit - sl-ember-store/cache', {
@@ -13,13 +13,13 @@ module( 'Unit - sl-ember-store/cache', {
         cache = Cache.create();
         fetchByIdSpy = sinon.spy( cache, 'fetchById' );
         fetchOneSpy = sinon.spy( cache, 'fetchOne' );
-        _getAllPromiseSpy = sinon.spy( cache, '_getAllPromise' );
+        _getManyPromiseSpy = sinon.spy( cache, '_getManyPromise' );
         _getRecordSpy = sinon.spy( cache, '_getRecords' );
     },
     teardown: function(){
         fetchByIdSpy.restore();
         fetchOneSpy.restore();
-        _getAllPromiseSpy.restore();
+        _getManyPromiseSpy.restore();
         _getRecordSpy.restore();
     }
 });
@@ -36,8 +36,8 @@ test( 'isCached, one', function(){
 });
 test( 'isCached, all', function(){
     cache.isCached( 'test' );
-    ok( _getAllPromiseSpy.calledOnce, 'get all called once');
-    equal( _getAllPromiseSpy.args[0][0], 'test', 'get all called with correct type' );
+    ok( _getManyPromiseSpy.calledOnce, 'get all called once');
+    equal( _getManyPromiseSpy.args[0][0], 'test', 'get all called with correct type' );
     ok( _getRecordSpy.calledOnce, 'get all called once');
     equal( _getRecordSpy.args[0][0], 'test', 'get all called with correct type' );
 });
@@ -75,10 +75,10 @@ test( 'addToCache, single promise', function(){
 
 test( 'addToCache, all promise', function(){
     var result =  new Ember.RSVP.Promise(function( resolve ){ resolve( [ Ember.Object.create() ] ); });
-    sinon.spy( cache, 'addAllPromise');
+    sinon.spy( cache, 'addManyPromise');
     cache.addToCache( 'test', false, false, result );
-    ok( cache.addAllPromise.calledOnce, 'addAllPromise called once' );
-    ok( cache.addAllPromise.calledWith( 'test' ), 'addAllPromise called with correct args' );
+    ok( cache.addManyPromise.calledOnce, 'addManyPromise called once' );
+    ok( cache.addManyPromise.calledWith( 'test' ), 'addManyPromise called with correct args' );
 });
 
 test( 'addToCache, record', function(){
@@ -134,7 +134,7 @@ asyncTest( 'addPromise, reject', function(){
 });
 
 
-asyncTest( 'addAllPromise, resolve', function(){
+asyncTest( 'addManyPromise, resolve', function(){
     var testRecord =  Ember.Object.create({ id: 1, test: 'test' }),
         testPromise = new Ember.RSVP.Promise( function( resolve ){
            setTimeout( resolve( [ testRecord ]  ), 100);
@@ -144,18 +144,18 @@ asyncTest( 'addAllPromise, resolve', function(){
     sinon.spy( cache, '_getPromises' );
     sinon.spy( cache, 'addRecords' );
 
-    rPromise = cache.addAllPromise( 'test', testPromise );
-    ok( cache._getPromises.calledOnce, '_getPromises called once' );
-    equal( cache.get( '_promises.test.all' ), testPromise, 'promise was added to promise cache' );
+    rPromise = cache.addManyPromise( 'test', testPromise );
+    ok( cache._getPromises.called >= 1, '_getPromises called at least once' );
+    equal( cache.get( '_promises.test.many.firstObject' ), testPromise, 'promise was added to promise cache' );
     rPromise.then( function(){
-        equal( cache.get( '_promises.test.all' ), undefined, 'promise was removed from promise cache' );
+        equal( cache.get( '_promises.test.many.length' ), 0, 'promise was removed from promise cache' );
         ok( cache.addRecords.calledOnce, 'addrecords called once' );
         equal( cache.get( '_records.test.ids.1'), testRecord, 'record was added to record cache' );
         start();
     });
 });
 
-asyncTest( 'addAllPromise, reject', function(){
+asyncTest( 'addManyPromise, reject', function(){
     var testRecord =  Ember.Object.create({ id: 1, test: 'test' }),
         testPromise = new Ember.RSVP.Promise( function( resolve, reject ){
            setTimeout( reject( [ testRecord ]  ), 100);
@@ -165,11 +165,11 @@ asyncTest( 'addAllPromise, reject', function(){
     sinon.spy( cache, '_getPromises' );
     sinon.spy( cache, 'addRecords' );
 
-    rPromise = cache.addAllPromise( 'test', testPromise );
-    ok( cache._getPromises.calledOnce, '_getPromises called once' );
-    equal( cache.get( '_promises.test.all' ), testPromise, 'promise was added to promise cache' );
+    rPromise = cache.addManyPromise( 'test', testPromise );
+    ok( cache._getPromises.called >= 1, '_getPromises called at least once' );
+    equal( cache.get( '_promises.test.many.firstObject' ), testPromise, 'promise was added to promise cache' );
     rPromise.finally( function(){
-        equal( cache.get( '_promises.test.all' ), undefined, 'promise was removed from promise cache' );
+        equal( cache.get( '_promises.test.many.length' ), 0, 'promise was removed from promise cache' );
         ok( !cache.addRecords.calledOnce, 'addrecords not called once' );
         equal( cache.get( '_records.test.ids.1'), undefined, 'record was added to record cache' );
         start();
@@ -219,8 +219,8 @@ test( 'fetch, one', function(){
 });
 test( 'fetch, all', function(){
     cache.fetch( 'test' );
-    ok( _getAllPromiseSpy.calledOnce, 'get all called once');
-    equal( _getAllPromiseSpy.args[0][0], 'test', 'get all called with correct type' );
+    ok( _getManyPromiseSpy.calledOnce, 'get all called once');
+    equal( _getManyPromiseSpy.args[0][0], 'test', 'get all called with correct type' );
     ok( _getRecordSpy.calledOnce, 'get all called once');
     equal( _getRecordSpy.args[0][0], 'test', 'get all called with correct type' );
 });
@@ -303,23 +303,23 @@ asyncTest( 'fetchById - record', function(){
 
 });
 
-test( 'fetchAll - promise', function(){
+test( 'fetchMany - promise', function(){
 
     var testRecord = Ember.Object.create({ id: 1});
     var testPromise =  Ember.RSVP.Promise.resolve( [ testRecord] );
 
-    cache.addAllPromise( 'test', testPromise);
-    var response = cache.fetchAll( 'test', testPromise );
-    ok( cache._getAllPromise.calledOnce, 'calls _getAllPromise once' );
-    equal( response, testPromise, 'returns the test promise' );
+    cache.addManyPromise( 'test', testPromise);
+    var response = cache.fetchMany( 'test' );
+    ok( cache._getManyPromise.calledOnce, 'calls _getManyPromise once' );
+    ok( response, testPromise, 'returns the test promise' );
 });
 
-asyncTest( 'fetchAll - record', function(){
+asyncTest( 'fetchMany - record', function(){
 
     var testRecord = Ember.Object.create({ id: 1});
     cache.addRecords( 'test', [ testRecord ] );
-    var response = cache.fetchAll( 'test' );
-    ok( cache._getRecords.called, 'calls _getAllRecordsCached once' );
+    var response = cache.fetchMany( 'test' );
+    ok( cache._getRecords.called, 'calls _getManyRecordsCached once' );
     response.then( function(){
         equal( response.get( 'content.0' ), testRecord, 'returns the test record in an array' );
         start();
@@ -376,7 +376,7 @@ test( '_getRecords, some', function(){
 
 test( '_initializePromises', function(){
     cache._initializePromises( 'test' );
-    equal( cache._promises.test.all, null, 'test all promise is null ');
+    equal( cache._promises.test.many.firstObject, null, 'test all promise is null ');
     equal( Object.keys(cache._promises.test.ids).length, 0, 'test promise object is empty' );
 });
 
@@ -405,17 +405,38 @@ test( '_getPromiseById, some', function(){
     equal( response, testPromise, 'promise should be found' );
 });
 
-test( '_getAllPromise, none', function(){
-    var response = cache._getAllPromise( 'test' );
+test( '_getManyPromise, none', function(){
+    var response = cache._getManyPromise( 'test' );
     equal( response, undefined, 'response should be undefined' );
 });
-test( '_getAllPromise, some', function(){
+asyncTest( '_getManyPromise, some', function(){
     var testRecord = Ember.Object.create({id:1}),
         testPromise = Ember.RSVP.Promise.resolve( [ testRecord ] );
 
-    cache.addAllPromise( 'test', testPromise );
+    cache.addManyPromise( 'test', testPromise );
 
-    var response = cache._getAllPromise( 'test' );
+    var response = cache._getManyPromise( 'test' );
 
-    equal( testPromise, response, 'should return promise' );
+    response.then( function( records ){
+        equal( testRecord, records[0], 'should return promise' );
+        start();
+    });
+});
+
+asyncTest( '_getManyPromise, more', function(){
+    var testRecord = Ember.Object.create({id:1}),
+        testRecord2 = Ember.Object.create({id:2}),
+        testPromise = Ember.RSVP.Promise.resolve( [ testRecord ] ),
+        testPromise2 = Ember.RSVP.Promise.resolve( [ testRecord2 ] );
+
+    cache.addManyPromise( 'test', testPromise );
+    cache.addManyPromise( 'test', testPromise2 );
+
+    var response = cache._getManyPromise( 'test' );
+
+    response.then( function( records ){
+        equal( testRecord, records[0], 'first record should be testRecord' );
+        equal( testRecord2, records[1], 'first record should be testRecord' );
+        start();
+    });
 });

@@ -3,12 +3,12 @@
 
         <h2>Array of Models</h2>
 
-        <p>These records are loaded in our route's model hook with the following code:</p>
+        <p>These records can be loaded in our route's model hook with the following code:</p>
 
         <code>this.store.find('foo');</code>
 
         <br><br>
-        <p>These records are loaded by the store via the ajax adapter.  The "/foo" resource contains foo records with embedded "bar" records.  These records are automatically  created as an instance of the "Bar" model.</p>
+        <p>The `foo` model has its adapter set to the ajax adapter*.  The "/foo" resource contains foo records with embedded "bar" records.  These records are automatically created as an instance of the "Bar" model when the data is returned from the adapter.</p>
 
         <br>
         {{#each model in controller}}
@@ -17,12 +17,14 @@
             <ul>
             <li>{{#link-to 'demos.singleModel' model.id }}ID: {{model.id}}{{/link-to}}</li>
             <li>Text: {{model.text}}</li>
+            {{#if model.bar.id}}
                 <ul>
                 <h4>Bar Model</h4>
                 <li>ID: {{model.bar.id}}</li>
                 <li>Text: {{model.bar.text}}</li>
                 </ul>
             </ul>
+            {{/if}}
         {{/each}}
 
 
@@ -56,8 +58,64 @@
     }
 
 }
-</pre>
+        </pre>
+        <p>* We are actually using <a href="https://github.com/rwjblue/ember-cli-pretender">Pretender</a> to mockup our data, this lib is greate for static gh-pages!.</p>
 
+        <h3>Cacheing and Options</h3>
 
+        <p>Our store implements a simple cacheing layer.  The cacheing layer recoginzes requests for multiple records and will check to see if one has already been made.  If so then it returns the records in its cache.  However, you may wish to over-ride this default behavior and fetch the records again through the adapter.  This can be accomplished by passing a flag through the `store.find` method's `options` parameter.</p>
+
+        <p>When fetching many records there are two flags you can pass along in the `options` object to control how your records are cached:
+            <dl>
+                <dt>options.reload</dt><dd>Clear the cache for this record type and load new records from the adapter</dd>
+                <dt>options.add</dt><dd>Request new records from the adapter and add them to the cache</dd>
+            </dl>
+
+        Additionally there is a third key on the options object:
+            <dl>
+                <dt>options.data</dt><dd>An object of key/value pairs that will be passed to the adapter
+            </dl>
+       In the case of the ajax adapter these key/value pairs will be transformed into query parameters.</p>
+
+        <p>Earlier I said that these records can be loaded with <code>this.store.find('foo')</code>.  While that is true, the code we actually used was <code>this.store.find( 'foo', { data: { start: 0, length: 3} } )</code>.  This only loaded a subset of the records available.  The following two buttons will demonstrate the functionality of the `reload` and `add` flags:</p>
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="list-group">
+                <li class="list-group-item"><button class="btn btn-primary" {{action "addSomeRecords"}}>Add Some Records</button> will run <code>this.store.find( 'foo', { add: true, data: { start: 3, length: 6 } } ) </code></li>
+                <li class="list-group-item"><button class="btn btn-primary" {{action "addAllRecords"}}>Add All Records</button> will run <code>this.store.find( 'foo', { add: true } ) //server responds with all records</code></li>
+                <li class="list-group-item"><button class="btn btn-primary" {{action "reloadFirstRecords"}}>Reload First Records</button> will run to <code>this.store.find( 'foo', { reload: true, data: { start: 0, length: 3} } )</code></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <ul class="list-group">
+                    <li class="list-group-item">Total records on server: <span class="badge">{{model2meta.total}}</span></li>
+                    <li class="list-group-item">Total records in cache: <span class="badge">{{model2CachedTotalCount}}</span></li>
+                    <li class="list-group-item">Total records in controller: <span class="badge">{{model2.length}}</span></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+
+                {{#each model in controller.model2}}
+                    <h4>Foo Model</h4>
+
+                    <ul>
+                    <li>{{#link-to 'demos.singleModel' model.id }}ID: {{model.id}}{{/link-to}}</li>
+                    <li>Text: {{model.text}}</li>
+                    {{#if model.bar.id}}
+                        <ul>
+                        <h4>Bar Model</h4>
+                        <li>ID: {{model.bar.id}}</li>
+                        <li>Text: {{model.bar.text}}</li>
+                        </ul>
+                    </ul>
+                    {{/if}}
+                {{/each}}
+            </div>
+        </div>
+        <p>If you specify `options.data` key value pairs without specifying `add` or `reload` then we assume `add` by default.</p>
     </div>
 </div>
