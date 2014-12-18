@@ -15,11 +15,11 @@ module( 'Acceptance: SingleModel', {
 });
 
 test('visiting /singleModel', function() {
-  visit('/singleModel/1');
+  visit('/demos/singleModel/1');
 
   andThen(function() {
-    var singleModelController = App.__container__.lookup('controller:singleModel');
-    equal(currentPath(), 'singleModel');
-    ok( singleModelController.get('model') instanceof Foo, 'Controllers model is instance of Foo' ); 
+    var singleModelController = App.__container__.lookup('controller:demos/singleModel');
+    equal(currentPath(), 'demos.singleModel');
+    ok( singleModelController.get('model') instanceof Foo, 'Controllers model is instance of Foo' );
   });
 });

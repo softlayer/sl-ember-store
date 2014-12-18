@@ -26,26 +26,55 @@ var fooRecords = [
             text: 'This is a bar record with id: 3'
         }
 
+    },
+    {
+        id: 4,
+        text: 'This is foo record with id: 4',
+        bar: {
+            id: 4,
+            text: 'This is a bar record with id: 4'
+        }
+    },
+    {
+        id: 5,
+        text: 'This is foo record #5',
+        bar: {
+            id: 5,
+            text: 'This is a bar record with id: 5'
+        }
+
+    },
+    {
+        id: 6,
+        text: 'This is foo record #6',
+        bar: {
+            id: 6,
+            text: 'This is a bar record with id: 6'
+        }
+
     }
 ];
 
 export function initialize(/* container, application */) {
     new Pretender(function(){
         this.get( '/foo', function(request){
-            var id = request.queryParams.id && ( parseInt( request.queryParams.id ) - 1 );
+            var id = request.queryParams.id && ( parseInt( request.queryParams.id ) - 1 ),
+                start = request.queryParams.start || 0,
+                length = request.queryParams.length || fooRecords.length,
+                results = fooRecords.slice( start, length );
 
             if( request.queryParams.id ){
                 return [
                     200,
                     { "Content-Type":"application/json" },
-                    JSON.stringify( fooRecords[ id ] )
+                    JSON.stringify( { foo: fooRecords[ id ] } )
                 ];
             }
 
             return [
                 200,
                 { "Content-Type":"application/json" },
-                JSON.stringify( fooRecords )
+                JSON.stringify( { foo: results, meta: { total: fooRecords.length } })
             ];
         });
         this.post( '/foo', function(request){

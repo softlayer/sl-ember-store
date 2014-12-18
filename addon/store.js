@@ -110,12 +110,13 @@ export default Ember.Object.extend({
     },
 
     /**
-     * Find a/an record(s) using an id or options
+     * Find (a) record(s) using an id or options
      *
      * @function find
      * @param    {string}  type    - Name of the model class
      * @param    {integer} id      - ID of the record
-     * @param    {object}  options - Hash of options to be passed on to the adapter
+     * @param    {object}  options - Hash of options to be passed on to the adapter, alternatively can be passed
+     * in as the second param for find:many queries
      * @returns  {object / array} An object or an array depending on whether you specified an ID
      */
     find: function( type, id, options ) {
@@ -216,18 +217,17 @@ export default Ember.Object.extend({
      * @returns  {Ember.Object} An ember object / array proxy with the promise proxy mixin
      */
     __find: function( type, id, options, findOne ) {
-        var cache  = this.get( '_cache' ),
-            reload = options && options.reload,
+        var cache           = this.get( '_cache' ),
+            reload          = options && options.reload,
+            add             = options && options.add,
+            loadFromServer  = reload || add || ( options && options.data ),
             result;
 
-        if ( reload || !cache.isCached( type, id, findOne ) ) {
+        if ( loadFromServer || !cache.isCached( type, id, findOne ) ) {
             result = this.adapterFor( type ).find( type, id, options, findOne );
 
-            if ( !id || !findOne ) {
+            if ( reload ) {
                 cache.clearCache( type );
-
-            } else {
-                cache.removeRecord( type, id || 0 );
             }
 
             cache.addToCache( type, id, findOne, result );

@@ -56,7 +56,7 @@ export default Ember.Object.extend({
             return !!this.fetchOne( type );
         }
 
-        return !!( this._getAllPromise( type ) || this._getAllRecordsCached( type ) );
+        return !!( this._getManyPromise( type ) || this._getManyRecordsCached( type ) );
     },
 
     /**
@@ -79,7 +79,7 @@ export default Ember.Object.extend({
             return this.fetchOne( type );
         }
 
-        return this.fetchAll( type );
+        return this.fetchMany( type );
     },
 
     /**
@@ -142,16 +142,16 @@ export default Ember.Object.extend({
      *
      * If there is an in-flight array promise then that will be returned instead.
      *
-     * @function fetchAll
+     * @function fetchMany
      * @param    {string} type
      * @returns  {Ember.Array|false}
      */
-    fetchAll: function( type ) {
-        var findAllPromise = this._getAllPromise( type ),
+    fetchMany: function( type ) {
+        var findManyPromise = this._getManyPromise( type ),
             records;
 
-        if ( findAllPromise ) {
-            return findAllPromise;
+        if ( findManyPromise ) {
+            return findManyPromise;
         }
 
         records = this._getRecords( type ).records;
@@ -187,9 +187,9 @@ export default Ember.Object.extend({
         }
 
         if ( result.then ) {
-            return this.addAllPromise( type, result );
+            return this.addManyPromise( type, result );
         } else {
-            return this.addAllRecords( type, result );
+            return this.addManyRecords( type, result );
         }
     },
 
@@ -219,20 +219,20 @@ export default Ember.Object.extend({
     /**
      * Adds a `find all` promise that will resolve to an array of records
      *
-     * @function addAllPromise
+     * @function addManyPromise
      * @param    {string}     type
      * @param    {Ember.RSVP} promise
      * @returns  {Ember.Array} ArrayProxy or PromiseProxyMixin
      */
-    addAllPromise: function( type, promise ) {
-        this._getPromises( type ).set( 'all', promise );
+    addManyPromise: function( type, promise ) {
+        this._getPromises( type ).get( 'many' ).addObject( promise );
 
         promise.then( function( records ) {
-            this.addAllRecords( type, records );
-            this._getPromises( type ).set( 'all', undefined );
+            this.addManyRecords( type, records );
+            this._getPromises( type ).get( 'many' ).removeObject( promise );
         }.bind(this))
         .catch( function() {
-            this._getPromises( type ).set( 'all', undefined );
+            this._getPromises( type ).get( 'many' ).removeObject( promise );
         }.bind(this));
 
         return promise;
@@ -268,7 +268,7 @@ export default Ember.Object.extend({
      * @returns  {void}
      */
     addRecords: function( type, records ) {
-        records.map( function( record ) {
+        records.forEach( function( record ) {
             this.addRecord( type, record );
         }.bind( this ) );
     },
@@ -276,12 +276,12 @@ export default Ember.Object.extend({
     /**
      * add all records for a type
      *
-     * @function addAllRecords
+     * @function addManyRecords
      * @param    {string} type    - Type of model
      * @param    {array}  records - Array of model records
      * @returns  {void}
      */
-    addAllRecords: function( type, records ) {
+    addManyRecords: function( type, records ) {
         this.addRecords( type, records );
         this._getRecords( type ).set( 'all', true );
     },
@@ -301,7 +301,7 @@ export default Ember.Object.extend({
 
         if ( typeRecords ) {
             delete typeRecords.ids[ id ];
-            typeRecords.records = typeRecords.records.splice( idx, 1 );
+            typeRecords.records.splice( idx, 1 );
         }
     },
 
@@ -383,11 +383,11 @@ export default Ember.Object.extend({
      * Get all records
      *
      * @private
-     * @function _getAllRecordsCached
+     * @function _getManyRecordsCached
      * @param    {string} type
      * @returns  {Ember.Object}
      */
-    _getAllRecordsCached: function( type ) {
+    _getManyRecordsCached: function( type ) {
         return this._getRecords( type ).all;
     },
 
@@ -401,7 +401,7 @@ export default Ember.Object.extend({
      */
     _initializePromises: function( type ) {
         this.set( '_promises.' + type, Ember.Object.create({
-            all : null,
+            many : Ember.ArrayProxy.create( { content: [] } ),
             ids : Ember.Object.create()
         }));
     },
@@ -432,7 +432,7 @@ export default Ember.Object.extend({
      * @function _getPromiseById
      * @param    {string}  type
      * @param    {integer} id
-     * @returns  {Ember.Object}
+     * @returns  {Promise}
      */
     _getPromiseById: function( type, id ) {
         return this.get( '_promises.' + type + '.ids.' + id );
@@ -442,12 +442,28 @@ export default Ember.Object.extend({
      * Get all promises
      *
      * @private
-     * @function getAllPromise
+     * @function getManyPromise
      * @param    {string} type
-     * @returns  {Ember.Object}
+     * @returns  {Promise}
      */
-    _getAllPromise: function( type ) {
-        return this.get( '_promises.' + type + '.all' );
+    _getManyPromise: function( type ) {
+        var promises = this.get( '_promises.' + type + '.many' );
+
+        if( promises && promises.get( 'length' ) ){
+            return Ember.RSVP.allSettled( promises.get( 'content' ) ).then(
+                function( results ){
+                    var records = [];
+                    results.forEach( function( result ){
+                        if( result.state === 'fulfilled' ){
+                            records = records.concat( result.value );
+                        }
+                    });
+                    return records;
+                }
+            );
+        }
+
+        return undefined;
     }
 
 });

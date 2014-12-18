@@ -40,7 +40,7 @@ test( 'adapter:localstorage gets registered', function(){
 });
 
 test( 'store gets injected into controllers, routes, adapters', function(){
-    var appRoute = container.lookup( 'route:application' ),
+    var appRoute = container.lookup( 'route:demos/single-model' ),
         appController,
         ajaxAdapter = container.lookup( 'adapter:ajax' ),
         store = container.lookup( 'store:main' );
