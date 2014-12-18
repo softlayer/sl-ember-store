@@ -117,7 +117,7 @@ var runningTests = false;
 })();
 
 ;/*!
- * jQuery JavaScript Library v1.11.1
+ * jQuery JavaScript Library v1.11.2
  * http://jquery.com/
  *
  * Includes Sizzle.js
@@ -127,7 +127,7 @@ var runningTests = false;
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2014-05-01T17:42Z
+ * Date: 2014-12-17T15:27Z
  */
 
 (function( global, factory ) {
@@ -182,7 +182,7 @@ var support = {};
 
 
 var
-	version = "1.11.1",
+	version = "1.11.2",
 
 	// Define a local copy of jQuery
 	jQuery = function( selector, context ) {
@@ -387,7 +387,8 @@ jQuery.extend({
 		// parseFloat NaNs numeric-cast false positives (null|true|false|"")
 		// ...but misinterprets leading-number strings, particularly hex literals ("0x...")
 		// subtraction forces infinities to NaN
-		return !jQuery.isArray( obj ) && obj - parseFloat( obj ) >= 0;
+		// adding 1 corrects loss of precision from parseFloat (#15100)
+		return !jQuery.isArray( obj ) && (obj - parseFloat( obj ) + 1) >= 0;
 	},
 
 	isEmptyObject: function( obj ) {
@@ -702,14 +703,14 @@ function isArraylike( obj ) {
 }
 var Sizzle =
 /*!
- * Sizzle CSS Selector Engine v1.10.19
+ * Sizzle CSS Selector Engine v2.2.0-pre
  * http://sizzlejs.com/
  *
- * Copyright 2013 jQuery Foundation, Inc. and other contributors
+ * Copyright 2008, 2014 jQuery Foundation, Inc. and other contributors
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2014-04-18
+ * Date: 2014-12-16
  */
 (function( window ) {
 
@@ -736,7 +737,7 @@ var i,
 	contains,
 
 	// Instance-specific data
-	expando = "sizzle" + -(new Date()),
+	expando = "sizzle" + 1 * new Date(),
 	preferredDoc = window.document,
 	dirruns = 0,
 	done = 0,
@@ -751,7 +752,6 @@ var i,
 	},
 
 	// General-purpose constants
-	strundefined = typeof undefined,
 	MAX_NEGATIVE = 1 << 31,
 
 	// Instance methods
@@ -761,12 +761,13 @@ var i,
 	push_native = arr.push,
 	push = arr.push,
 	slice = arr.slice,
-	// Use a stripped-down indexOf if we can't use a native one
-	indexOf = arr.indexOf || function( elem ) {
+	// Use a stripped-down indexOf as it's faster than native
+	// http://jsperf.com/thor-indexof-vs-for/5
+	indexOf = function( list, elem ) {
 		var i = 0,
-			len = this.length;
+			len = list.length;
 		for ( ; i < len; i++ ) {
-			if ( this[i] === elem ) {
+			if ( list[i] === elem ) {
 				return i;
 			}
 		}
@@ -806,6 +807,7 @@ var i,
 		")\\)|)",
 
 	// Leading and non-escaped trailing whitespace, capturing some non-whitespace characters preceding the latter
+	rwhitespace = new RegExp( whitespace + "+", "g" ),
 	rtrim = new RegExp( "^" + whitespace + "+|((?:^|[^\\\\])(?:\\\\.)*)" + whitespace + "+$", "g" ),
 
 	rcomma = new RegExp( "^" + whitespace + "*," + whitespace + "*" ),
@@ -857,6 +859,14 @@ var i,
 				String.fromCharCode( high + 0x10000 ) :
 				// Supplemental Plane codepoint (surrogate pair)
 				String.fromCharCode( high >> 10 | 0xD800, high & 0x3FF | 0xDC00 );
+	},
+
+	// Used for iframes
+	// See setDocument()
+	// Removing the function wrapper causes a "Permission Denied"
+	// error in IE
+	unloadHandler = function() {
+		setDocument();
 	};
 
 // Optimize for push.apply( _, NodeList )
@@ -899,19 +909,18 @@ function Sizzle( selector, context, results, seed ) {
 
 	context = context || document;
 	results = results || [];
+	nodeType = context.nodeType;
 
-	if ( !selector || typeof selector !== "string" ) {
+	if ( typeof selector !== "string" || !selector ||
+		nodeType !== 1 && nodeType !== 9 && nodeType !== 11 ) {
+
 		return results;
 	}
 
-	if ( (nodeType = context.nodeType) !== 1 && nodeType !== 9 ) {
-		return [];
-	}
+	if ( !seed && documentIsHTML ) {
 
-	if ( documentIsHTML && !seed ) {
-
-		// Shortcuts
-		if ( (match = rquickExpr.exec( selector )) ) {
+		// Try to shortcut find operations when possible (e.g., not under DocumentFragment)
+		if ( nodeType !== 11 && (match = rquickExpr.exec( selector )) ) {
 			// Speed-up: Sizzle("#ID")
 			if ( (m = match[1]) ) {
 				if ( nodeType === 9 ) {
@@ -943,7 +952,7 @@ function Sizzle( selector, context, results, seed ) {
 				return results;
 
 			// Speed-up: Sizzle(".CLASS")
-			} else if ( (m = match[3]) && support.getElementsByClassName && context.getElementsByClassName ) {
+			} else if ( (m = match[3]) && support.getElementsByClassName ) {
 				push.apply( results, context.getElementsByClassName( m ) );
 				return results;
 			}
@@ -953,7 +962,7 @@ function Sizzle( selector, context, results, seed ) {
 		if ( support.qsa && (!rbuggyQSA || !rbuggyQSA.test( selector )) ) {
 			nid = old = expando;
 			newContext = context;
-			newSelector = nodeType === 9 && selector;
+			newSelector = nodeType !== 1 && selector;
 
 			// qSA works strangely on Element-rooted queries
 			// We can work around this by specifying an extra ID on the root
@@ -1140,7 +1149,7 @@ function createPositionalPseudo( fn ) {
  * @returns {Element|Object|Boolean} The input node if acceptable, otherwise a falsy value
  */
 function testContext( context ) {
-	return context && typeof context.getElementsByTagName !== strundefined && context;
+	return context && typeof context.getElementsByTagName !== "undefined" && context;
 }
 
 // Expose support vars for convenience
@@ -1164,9 +1173,8 @@ isXML = Sizzle.isXML = function( elem ) {
  * @returns {Object} Returns the current document
  */
 setDocument = Sizzle.setDocument = function( node ) {
-	var hasCompare,
-		doc = node ? node.ownerDocument || node : preferredDoc,
-		parent = doc.defaultView;
+	var hasCompare, parent,
+		doc = node ? node.ownerDocument || node : preferredDoc;
 
 	// If no document and documentElement is available, return
 	if ( doc === document || doc.nodeType !== 9 || !doc.documentElement ) {
@@ -1176,9 +1184,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 	// Set our document
 	document = doc;
 	docElem = doc.documentElement;
-
-	// Support tests
-	documentIsHTML = !isXML( doc );
+	parent = doc.defaultView;
 
 	// Support: IE>8
 	// If iframe document is assigned to "document" variable and if iframe has been reloaded,
@@ -1187,21 +1193,22 @@ setDocument = Sizzle.setDocument = function( node ) {
 	if ( parent && parent !== parent.top ) {
 		// IE11 does not have attachEvent, so all must suffer
 		if ( parent.addEventListener ) {
-			parent.addEventListener( "unload", function() {
-				setDocument();
-			}, false );
+			parent.addEventListener( "unload", unloadHandler, false );
 		} else if ( parent.attachEvent ) {
-			parent.attachEvent( "onunload", function() {
-				setDocument();
-			});
+			parent.attachEvent( "onunload", unloadHandler );
 		}
 	}
+
+	/* Support tests
+	---------------------------------------------------------------------- */
+	documentIsHTML = !isXML( doc );
 
 	/* Attributes
 	---------------------------------------------------------------------- */
 
 	// Support: IE<8
-	// Verify that getAttribute really returns attributes and not properties (excepting IE8 booleans)
+	// Verify that getAttribute really returns attributes and not properties
+	// (excepting IE8 booleans)
 	support.attributes = assert(function( div ) {
 		div.className = "i";
 		return !div.getAttribute("className");
@@ -1216,17 +1223,8 @@ setDocument = Sizzle.setDocument = function( node ) {
 		return !div.getElementsByTagName("*").length;
 	});
 
-	// Check if getElementsByClassName can be trusted
-	support.getElementsByClassName = rnative.test( doc.getElementsByClassName ) && assert(function( div ) {
-		div.innerHTML = "<div class='a'></div><div class='a i'></div>";
-
-		// Support: Safari<4
-		// Catch class over-caching
-		div.firstChild.className = "i";
-		// Support: Opera<10
-		// Catch gEBCN failure to find non-leading classes
-		return div.getElementsByClassName("i").length === 2;
-	});
+	// Support: IE<9
+	support.getElementsByClassName = rnative.test( doc.getElementsByClassName );
 
 	// Support: IE<10
 	// Check if getElementById returns elements by name
@@ -1240,7 +1238,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 	// ID find and filter
 	if ( support.getById ) {
 		Expr.find["ID"] = function( id, context ) {
-			if ( typeof context.getElementById !== strundefined && documentIsHTML ) {
+			if ( typeof context.getElementById !== "undefined" && documentIsHTML ) {
 				var m = context.getElementById( id );
 				// Check parentNode to catch when Blackberry 4.6 returns
 				// nodes that are no longer in the document #6963
@@ -1261,7 +1259,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 		Expr.filter["ID"] =  function( id ) {
 			var attrId = id.replace( runescape, funescape );
 			return function( elem ) {
-				var node = typeof elem.getAttributeNode !== strundefined && elem.getAttributeNode("id");
+				var node = typeof elem.getAttributeNode !== "undefined" && elem.getAttributeNode("id");
 				return node && node.value === attrId;
 			};
 		};
@@ -1270,14 +1268,20 @@ setDocument = Sizzle.setDocument = function( node ) {
 	// Tag
 	Expr.find["TAG"] = support.getElementsByTagName ?
 		function( tag, context ) {
-			if ( typeof context.getElementsByTagName !== strundefined ) {
+			if ( typeof context.getElementsByTagName !== "undefined" ) {
 				return context.getElementsByTagName( tag );
+
+			// DocumentFragment nodes don't have gEBTN
+			} else if ( support.qsa ) {
+				return context.querySelectorAll( tag );
 			}
 		} :
+
 		function( tag, context ) {
 			var elem,
 				tmp = [],
 				i = 0,
+				// By happy coincidence, a (broken) gEBTN appears on DocumentFragment nodes too
 				results = context.getElementsByTagName( tag );
 
 			// Filter out possible comments
@@ -1295,7 +1299,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 
 	// Class
 	Expr.find["CLASS"] = support.getElementsByClassName && function( className, context ) {
-		if ( typeof context.getElementsByClassName !== strundefined && documentIsHTML ) {
+		if ( documentIsHTML ) {
 			return context.getElementsByClassName( className );
 		}
 	};
@@ -1324,13 +1328,15 @@ setDocument = Sizzle.setDocument = function( node ) {
 			// setting a boolean content attribute,
 			// since its presence should be enough
 			// http://bugs.jquery.com/ticket/12359
-			div.innerHTML = "<select msallowclip=''><option selected=''></option></select>";
+			docElem.appendChild( div ).innerHTML = "<a id='" + expando + "'></a>" +
+				"<select id='" + expando + "-\f]' msallowcapture=''>" +
+				"<option selected=''></option></select>";
 
 			// Support: IE8, Opera 11-12.16
 			// Nothing should be selected when empty strings follow ^= or $= or *=
 			// The test attribute must be unknown in Opera but "safe" for WinRT
 			// http://msdn.microsoft.com/en-us/library/ie/hh465388.aspx#attribute_section
-			if ( div.querySelectorAll("[msallowclip^='']").length ) {
+			if ( div.querySelectorAll("[msallowcapture^='']").length ) {
 				rbuggyQSA.push( "[*^$]=" + whitespace + "*(?:''|\"\")" );
 			}
 
@@ -1340,11 +1346,23 @@ setDocument = Sizzle.setDocument = function( node ) {
 				rbuggyQSA.push( "\\[" + whitespace + "*(?:value|" + booleans + ")" );
 			}
 
+			// Support: Chrome<29, Android<4.2+, Safari<7.0+, iOS<7.0+, PhantomJS<1.9.7+
+			if ( !div.querySelectorAll( "[id~=" + expando + "-]" ).length ) {
+				rbuggyQSA.push("~=");
+			}
+
 			// Webkit/Opera - :checked should return selected option elements
 			// http://www.w3.org/TR/2011/REC-css3-selectors-20110929/#checked
 			// IE8 throws error here and will not see later tests
 			if ( !div.querySelectorAll(":checked").length ) {
 				rbuggyQSA.push(":checked");
+			}
+
+			// Support: Safari 8+, iOS 8+
+			// https://bugs.webkit.org/show_bug.cgi?id=136851
+			// In-page `selector#id sibing-combinator selector` fails
+			if ( !div.querySelectorAll( "a#" + expando + "+*" ).length ) {
+				rbuggyQSA.push(".#.+[+~]");
 			}
 		});
 
@@ -1462,7 +1480,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 
 			// Maintain original order
 			return sortInput ?
-				( indexOf.call( sortInput, a ) - indexOf.call( sortInput, b ) ) :
+				( indexOf( sortInput, a ) - indexOf( sortInput, b ) ) :
 				0;
 		}
 
@@ -1489,7 +1507,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 				aup ? -1 :
 				bup ? 1 :
 				sortInput ?
-				( indexOf.call( sortInput, a ) - indexOf.call( sortInput, b ) ) :
+				( indexOf( sortInput, a ) - indexOf( sortInput, b ) ) :
 				0;
 
 		// If the nodes are siblings, we can do a quick check
@@ -1552,7 +1570,7 @@ Sizzle.matchesSelector = function( elem, expr ) {
 					elem.document && elem.document.nodeType !== 11 ) {
 				return ret;
 			}
-		} catch(e) {}
+		} catch (e) {}
 	}
 
 	return Sizzle( expr, document, null, [ elem ] ).length > 0;
@@ -1771,7 +1789,7 @@ Expr = Sizzle.selectors = {
 			return pattern ||
 				(pattern = new RegExp( "(^|" + whitespace + ")" + className + "(" + whitespace + "|$)" )) &&
 				classCache( className, function( elem ) {
-					return pattern.test( typeof elem.className === "string" && elem.className || typeof elem.getAttribute !== strundefined && elem.getAttribute("class") || "" );
+					return pattern.test( typeof elem.className === "string" && elem.className || typeof elem.getAttribute !== "undefined" && elem.getAttribute("class") || "" );
 				});
 		},
 
@@ -1793,7 +1811,7 @@ Expr = Sizzle.selectors = {
 					operator === "^=" ? check && result.indexOf( check ) === 0 :
 					operator === "*=" ? check && result.indexOf( check ) > -1 :
 					operator === "$=" ? check && result.slice( -check.length ) === check :
-					operator === "~=" ? ( " " + result + " " ).indexOf( check ) > -1 :
+					operator === "~=" ? ( " " + result.replace( rwhitespace, " " ) + " " ).indexOf( check ) > -1 :
 					operator === "|=" ? result === check || result.slice( 0, check.length + 1 ) === check + "-" :
 					false;
 			};
@@ -1913,7 +1931,7 @@ Expr = Sizzle.selectors = {
 							matched = fn( seed, argument ),
 							i = matched.length;
 						while ( i-- ) {
-							idx = indexOf.call( seed, matched[i] );
+							idx = indexOf( seed, matched[i] );
 							seed[ idx ] = !( matches[ idx ] = matched[i] );
 						}
 					}) :
@@ -1952,6 +1970,8 @@ Expr = Sizzle.selectors = {
 				function( elem, context, xml ) {
 					input[0] = elem;
 					matcher( input, null, xml, results );
+					// Don't keep the element (issue #299)
+					input[0] = null;
 					return !results.pop();
 				};
 		}),
@@ -1963,6 +1983,7 @@ Expr = Sizzle.selectors = {
 		}),
 
 		"contains": markFunction(function( text ) {
+			text = text.replace( runescape, funescape );
 			return function( elem ) {
 				return ( elem.textContent || elem.innerText || getText( elem ) ).indexOf( text ) > -1;
 			};
@@ -2384,7 +2405,7 @@ function setMatcher( preFilter, selector, matcher, postFilter, postFinder, postS
 				i = matcherOut.length;
 				while ( i-- ) {
 					if ( (elem = matcherOut[i]) &&
-						(temp = postFinder ? indexOf.call( seed, elem ) : preMap[i]) > -1 ) {
+						(temp = postFinder ? indexOf( seed, elem ) : preMap[i]) > -1 ) {
 
 						seed[temp] = !(results[temp] = elem);
 					}
@@ -2419,13 +2440,16 @@ function matcherFromTokens( tokens ) {
 			return elem === checkContext;
 		}, implicitRelative, true ),
 		matchAnyContext = addCombinator( function( elem ) {
-			return indexOf.call( checkContext, elem ) > -1;
+			return indexOf( checkContext, elem ) > -1;
 		}, implicitRelative, true ),
 		matchers = [ function( elem, context, xml ) {
-			return ( !leadingRelative && ( xml || context !== outermostContext ) ) || (
+			var ret = ( !leadingRelative && ( xml || context !== outermostContext ) ) || (
 				(checkContext = context).nodeType ?
 					matchContext( elem, context, xml ) :
 					matchAnyContext( elem, context, xml ) );
+			// Avoid hanging onto element (issue #299)
+			checkContext = null;
+			return ret;
 		} ];
 
 	for ( ; i < len; i++ ) {
@@ -2675,7 +2699,7 @@ select = Sizzle.select = function( selector, context, results, seed ) {
 // Sort stability
 support.sortStable = expando.split("").sort( sortOrder ).join("") === expando;
 
-// Support: Chrome<14
+// Support: Chrome 14-35+
 // Always assume duplicates if they aren't passed to the comparison function
 support.detectDuplicates = !!hasDuplicate;
 
@@ -6233,7 +6257,14 @@ var getStyles, curCSS,
 
 if ( window.getComputedStyle ) {
 	getStyles = function( elem ) {
-		return elem.ownerDocument.defaultView.getComputedStyle( elem, null );
+		// Support: IE<=11+, Firefox<=30+ (#15098, #14150)
+		// IE throws on elements created in popups
+		// FF meanwhile throws on frame elements through "defaultView.getComputedStyle"
+		if ( elem.ownerDocument.defaultView.opener ) {
+			return elem.ownerDocument.defaultView.getComputedStyle( elem, null );
+		}
+
+		return window.getComputedStyle( elem, null );
 	};
 
 	curCSS = function( elem, name, computed ) {
@@ -6481,6 +6512,8 @@ function addGetHookIf( conditionFn, hookFn ) {
 
 			reliableMarginRightVal =
 				!parseFloat( ( window.getComputedStyle( contents, null ) || {} ).marginRight );
+
+			div.removeChild( contents );
 		}
 
 		// Support: IE8
@@ -9188,7 +9221,8 @@ jQuery.extend({
 		}
 
 		// We can fire global events as of now if asked to
-		fireGlobals = s.global;
+		// Don't fire events if jQuery.event is undefined in an AMD-usage scenario (#15118)
+		fireGlobals = jQuery.event && s.global;
 
 		// Watch for a new set of requests
 		if ( fireGlobals && jQuery.active++ === 0 ) {
@@ -9447,13 +9481,6 @@ jQuery.each( [ "get", "post" ], function( i, method ) {
 	};
 });
 
-// Attach a bunch of functions for handling common AJAX events
-jQuery.each( [ "ajaxStart", "ajaxStop", "ajaxComplete", "ajaxError", "ajaxSuccess", "ajaxSend" ], function( i, type ) {
-	jQuery.fn[ type ] = function( fn ) {
-		return this.on( type, fn );
-	};
-});
-
 
 jQuery._evalUrl = function( url ) {
 	return jQuery.ajax({
@@ -9679,8 +9706,9 @@ var xhrId = 0,
 
 // Support: IE<10
 // Open requests must be manually aborted on unload (#5280)
-if ( window.ActiveXObject ) {
-	jQuery( window ).on( "unload", function() {
+// See https://support.microsoft.com/kb/2856746 for more info
+if ( window.attachEvent ) {
+	window.attachEvent( "onunload", function() {
 		for ( var key in xhrCallbacks ) {
 			xhrCallbacks[ key ]( undefined, true );
 		}
@@ -10110,6 +10138,16 @@ jQuery.fn.load = function( url, params, callback ) {
 
 	return this;
 };
+
+
+
+
+// Attach a bunch of functions for handling common AJAX events
+jQuery.each( [ "ajaxStart", "ajaxStop", "ajaxComplete", "ajaxError", "ajaxSuccess", "ajaxSend" ], function( i, type ) {
+	jQuery.fn[ type ] = function( fn ) {
+		return this.on( type, fn );
+	};
+});
 
 
 
@@ -64797,14 +64835,14 @@ eval("define(\"sl-ember-store/adapter\", \n  [\"ember\",\"sl-ember-modelize/mixi
 
 ;eval("define(\"sl-ember-store/adapters/localstorage\", \n  [\"ember\",\"sl-ember-store/adapter\",\"exports\"],\n  function(__dependency1__, __dependency2__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    var Adapter = __dependency2__[\"default\"];\n\n    /**\n     * @module adapters\n     * @class  localstorage\n     */\n    var LocalStorageAdapter = Adapter.extend({\n\n        /**\n         * Find record(s)\n         *\n         * @function find\n         * @param    {string} type    - Model name\n         * @param    {int}    id      - Record ID\n         * @param    {object} options - Hash of options\n         * @param    {bool}   findOne - Force return of single record\n         * @throws   {Ember.assert}\n         * @returns  {ObjectProxy | ArrayProxy} The record or array of records requested\n         */\n        find: function ( type, id, options, findOne ) {\n            var store = this.get( \'store\' ),\n                model = store.modelFor( type ),\n                url,\n                results,\n                promise,\n                queryObj;\n\n            Ember.assert( \'Type is required\', type && Ember.typeOf(type) === \'string\' );\n\n            options = options || {};\n\n            url = model.getUrlForEndpointAction( options.endpoint, \'get\' );\n\n            Ember.assert( \'A url is required to find a model\', url );\n\n            if ( !Ember.isNone( id ) ) {\n                options.data    = options.data || {};\n                options.data.id = parseInt( id, 10 );\n            }\n\n            // Set up the results, either an object or an array proxy w/ promise mixin)\n            results = ( ( options.data && options.data.id  ) || findOne ) ?\n                Ember.ObjectProxy.createWithMixins( Ember.PromiseProxyMixin ) :\n                Ember.ArrayProxy.createWithMixins( Ember.PromiseProxyMixin );\n\n            queryObj = {\n                id: id\n            };\n\n            this.runPreQueryHooks( queryObj );\n\n            promise = new Ember.RSVP.Promise( function( resolve, reject) {\n                var db,\n                    records,\n                    response,\n                    finalResult;\n\n                db = this._getDb();\n\n                records = this._getRecords( db, url );\n\n                if ( options.data && options.data.id ) {\n                    response = records.findBy( \'id\', options.data.id );\n                } else if ( findOne ) {\n                    // We aren\'t doing queries based on options at this time,\n                    // can add here in the future if needed.\n                    response = records[ 0 ];\n                } else {\n                    response = records;\n                    if ( ! response.length ) {\n                        reject( { textStatus: \'error\', errorThrown: \'Not Found\' });\n                    }\n                }\n\n                if ( !response ) {\n                    reject( { textStatus: \'error\', errorThrown: \'Not Found\' });\n                }\n\n                response = model.callSerializerForEndpointAction( options.endpoint, \'get\', response, store );\n\n                response = this.modelize( response );\n\n                if ( results instanceof Ember.ArrayProxy ) {\n                    finalResult = [];\n                    Ember.makeArray( response ).forEach( function ( child ) {\n                        finalResult.pushObject( store.createRecord( type, child ) );\n                    }, this );\n                } else {\n                    finalResult = store.createRecord( type, response );\n                }\n\n                resolve( finalResult );\n\n            }.bind( this ), \'sl-ember-store.localstorageAdapter:find - Promise\' )\n\n            .then( function lsAdapterFindThen( response ) {\n                this.runPostQueryHooks( response );\n                return response;\n            }.bind( this ), \'sl-ember-store.localstorageAdapter:find - then\' );\n\n            //set the promise on the promiseProxy\n            results.set( \'promise\', promise );\n\n            return results;\n\n        },\n\n        /**\n         * Delete record\n         *\n         * @function deleteRecord\n         * @param    {string}  url - The URL to send the DELETE request to\n         * @param    {integer} id  - The ID of the record to delete\n         * @throws   {Ember.assert}\n         * @returns  {Ember.RSVP} Promise\n         */\n        deleteRecord: function( url, id ) {\n            var promise;\n\n            Ember.assert( \'A url is required to delete a model\', url );\n\n            promise = new Ember.RSVP.Promise( function( resolve, reject ) {\n                var db,\n                    records,\n                    recordIndex,\n                    exception = {};\n\n                db = this._getDb();\n\n                records = this._getRecords( db, url );\n\n                recordIndex = this._getRecordIndexById( records, id );\n\n                if ( recordIndex >= 0 ) {\n                    records.splice( recordIndex, 1 );\n\n                } else {\n                    reject( { textStatus: \'error\', errorThrown: \'Not Found\' } );\n                }\n\n                if ( !this._dbWrite( db, exception ) ) {\n                    reject( { textStatus: \'error\', errorThrown: exception.msg } );\n                }\n\n                resolve();\n\n            }.bind( this ))\n\n            .then( function lsAdapterDeleteFinally( response ) {\n                this.runPostQueryHooks( response );\n                return response;\n            }.bind( this ) , \'sl-ember-store.localstorageAdapter:deleteRecord - always\' );\n\n            return promise;\n        },\n\n        /**\n         * Save record\n         *\n         * @function save\n         * @param    {string} url     - The URL to send the POST request to\n         * @param    {object} content - The data to save\n         * @returns  {Ember.RSVP} Promise\n         */\n        save: function( url, content ) {\n            var promise;\n\n            Ember.assert( \'A url is required to save a model\', url );\n\n            promise = new Ember.RSVP.Promise( function( resolve, reject ) {\n                var db,\n                    records,\n                    recordIndex,\n                    exception = {};\n\n                db = this._getDb();\n\n                records = this._getRecords( db, url );\n\n                recordIndex = this._getRecordIndexById( records, content.id );\n\n                if ( recordIndex >= 0 ) {\n                    records.splice( recordIndex, 1 );\n                }\n\n                records.push( content );\n\n                if( ! this._dbWrite( db, exception ) ) {\n                    reject( { textStatus: \'error\', errorThrown: exception.msg } );\n                }\n\n                resolve( content );\n\n            }.bind( this ))\n            .then( function lsAdapterSaveFinally( response ) {\n                this.runPostQueryHooks( response );\n                return response;\n            }.bind( this ) , \'sl-ember-store.localstorageAdapter:saveRecord - always\' );\n\n            return promise;\n        },\n\n        /**\n         * Return the adapter\'s namespace\n         *\n         * @function getNamespace\n         * @returns  {string} Namespace\n         */\n        getNamespace: function() {\n            return this.constructor.namespace;\n        },\n\n        /**\n         * Return localStorage object\n         *\n         * Useful for testing\n         *\n         * @private\n         * @function _getLocalStorage\n         * @returns  {object} localStorage or mockup\n         */\n        _getLocalStorage: function() {\n            return window.localStorage;\n        },\n\n        /**\n         * Get the DB off of localStorage\n         *\n         * @private\n         * @function _getDb\n         * @returns  {object} The database instance data\n         */\n        _getDb: function() {\n            var lsDb = this._getLocalStorage().getItem( this.getNamespace() );\n\n            if ( lsDb ) {\n                return JSON.parse( lsDb );\n            }\n\n            return {};\n        },\n\n        /**\n         * Write the DB to localStorage\n         *\n         * @private\n         * @function _dbWrite\n         * @param    {object} db        - The database instance data\n         * @param    {object} exception - Passed-on exception data\n         * @returns  {boolean} Whether the write operation was successful (true) or not (false)\n         */\n        _dbWrite: function( db, exception ) {\n            try {\n                this._getLocalStorage().setItem( this.getNamespace(), JSON.stringify( db ) );\n            } catch( domException ) {\n                exception.msg = domException.message;\n                return false;\n            }\n\n            return true;\n        },\n\n        /**\n         * Return the records for a specific model url\n         *\n         * @private\n         * @function _getRecords\n         * @param    {object} db  - The object to find the records on\n         * @param    {string} url - The key\n         * @returns  {array} Records for the specified URL\n         */\n        _getRecords: function( db, url ) {\n            var modelKey = this._normalizeUrl( url ),\n                records  = db[ modelKey ];\n\n            if ( !records ) {\n                records = db[ modelKey ] = [];\n            }\n\n            return records;\n        },\n\n        /**\n         * Return the record index for the specified ID\n         *\n         * @private\n         * @function _getRecordIndexById\n         * @param    {Array}   records - Array to search\n         * @param    {integer} id      - ID to search for\n         * @returns  {integer} -1 if not found\n         */\n        _getRecordIndexById: function( records, id ) {\n            var recordIndex = -1;\n\n            if ( Array.isArray( records ) ) {\n                records.forEach( function( item, index ) {\n                    if ( item.id === id ) {\n                        recordIndex = index;\n                    }\n                });\n            }\n\n            return recordIndex;\n        },\n\n        /**\n         * Normalize a url for use as a key\n         *\n         * @private\n         * @function _normalizeUrl\n         * @param    {string} url - The URL string to normalize\n         * @returns  {string} Normalized url\n         */\n        _normalizeUrl: function( url ) {\n            return url.replace( /^\\//, \'\' ).replace( \'\\/\', \'_\' );\n        }\n    });\n\n    LocalStorageAdapter.reopenClass({\n        namespace: \'sl-ember-store\'\n    });\n\n    __exports__[\"default\"] = LocalStorageAdapter;\n  });//# sourceURL=sl-ember-store/adapters/localstorage.js");
 
-;eval("define(\"sl-ember-store/cache\", \n  [\"ember\",\"exports\"],\n  function(__dependency1__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n\n    /**\n     * @class cache\n     */\n    __exports__[\"default\"] = Ember.Object.extend({\n\n        /*\n         * The record cache\n         *\n         * @private\n         * @property {Ember.Object} _records\n         * @default  null\n         */\n        _records: null,\n\n        /*\n         * The promise cache\n         *\n         * @private\n         * @property {Ember.Object} _promises\n         * @default  null\n         */\n        _promises: null,\n\n        /**\n         * Initialize the cache properties\n         *\n         * @private\n         * @function _setupCache\n         * @observes \"init\" event\n         * @returns  {void}\n         */\n        _setupCache: function() {\n            this.setProperties({\n                \'_records\'  : Ember.Object.create(),\n                \'_promises\' : Ember.Object.create()\n            });\n        }.on( \'init\' ),\n\n        /**\n         * Checks both caches to see if a record exists\n         *\n         * @function isCached\n         * @param    {string}  type    - The model type of the record to check\n         * @param    {integer} id      - The record ID to check for cached status\n         * @param    {boolean} findOne - Whether to check a single record (true)\n         * @returns  {boolean} Whether the record is cached (true) or not (false)\n         */\n        isCached: function( type, id, findOne ) {\n            if ( id ) {\n                return !!this.fetchById( type, id );\n            }\n\n            if ( findOne ) {\n                return !!this.fetchOne( type );\n            }\n\n            return !!( this._getAllPromise( type ) || this._getAllRecordsCached( type ) );\n        },\n\n        /**\n         * Returns a record or array of records wrapped in a promise.\n         *\n         * If there are in-flight promises then those will be returned instead.\n         *\n         * @function fetch\n         * @param    {string}  type\n         * @param    {integer} id\n         * @param    {boolean} findOne\n         * @returns  {Ember.Object|Ember.Array}\n         */\n        fetch: function( type, id, findOne ) {\n            if ( id ) {\n                return  this.fetchById( type, id );\n            }\n\n            if ( findOne ) {\n                return this.fetchOne( type );\n            }\n\n            return this.fetchAll( type );\n        },\n\n        /**\n         * Returns a record wrapped in a promise.\n         *\n         * If there is an in-flight promise then it will be returned instead.\n         *\n         * @function fetchOne\n         * @param    {string} type\n         * @returns  {Ember.Promise|false}\n         */\n        fetchOne: function( type ) {\n            var promise = this._getPromises( type ).get( \'ids.0\' ),\n                record;\n\n            if ( promise ) {\n                return promise;\n            }\n\n            record = this._getRecords( type ).get( \'records.0\' );\n\n            if ( !record ) {\n                return false;\n            }\n\n            return Ember.ObjectProxy.createWithMixins( Ember.PromiseProxyMixin )\n                .set( \'promise\', Ember.RSVP.Promise.resolve( record ) );\n        },\n\n        /**\n         * Return an object promise for this single record\n         *\n         * If there is an in-flight promise for this record that will be returned instead\n         *\n         * @function fetchById\n         * @param    {string}  type\n         * @param    {integer} id\n         * @returns  {Ember.Promise|false}\n         */\n        fetchById: function( type, id ) {\n            var promise = this._getPromiseById( type, id ),\n                record;\n\n            if ( promise ) {\n                return promise;\n            }\n\n            record = this._getRecordById( type, id );\n\n            if ( !record ) {\n                return false;\n            }\n\n            return Ember.ObjectProxy.createWithMixins( Ember.PromiseProxyMixin )\n                .set( \'promise\', Ember.RSVP.Promise.resolve( record ) );\n        },\n\n        /**\n         * Return an array promise with all the records for this type\n         *\n         * If there is an in-flight array promise then that will be returned instead.\n         *\n         * @function fetchAll\n         * @param    {string} type\n         * @returns  {Ember.Array|false}\n         */\n        fetchAll: function( type ) {\n            var findAllPromise = this._getAllPromise( type ),\n                records;\n\n            if ( findAllPromise ) {\n                return findAllPromise;\n            }\n\n            records = this._getRecords( type ).records;\n\n            if ( !records.length ) {\n                return false;\n            }\n\n            return Ember.ArrayProxy.createWithMixins( Ember.PromiseProxyMixin )\n                .set( \'promise\', Ember.RSVP.Promise.resolve( records ) );\n        },\n\n        /**\n         * Standard entry point for the store to add things to the cache\n         *\n         * @function addToCache\n         * @param    {string}     type\n         * @param    {integer}    id\n         * @param    {boolean}    findOne\n         * @param    {Ember.RSVP} result\n         * @returns  {Ember.Object|Ember.Array}\n         */\n        addToCache: function( type, id, findOne, result ) {\n\n            if ( id || findOne ) {\n                id = id || 0;\n\n                if ( result.then ) {\n                    return this.addPromise( type, id, result );\n                } else {\n                    return this.addRecord( type, result );\n                }\n            }\n\n            if ( result.then ) {\n                return this.addAllPromise( type, result );\n            } else {\n                return this.addAllRecords( type, result );\n            }\n        },\n\n        /**\n         * Adds a promise that will resolve to a single record\n         *\n         * @function addPromise\n         * @param    {string}     type\n         * @param    {integer}    id\n         * @param    {Ember.RSVP} promise\n         * @returns  {Ember.Object} ObjectProxy or PromiseProxyMixin\n         */\n        addPromise: function( type, id, promise ) {\n            this._getPromises( type ).set( \'ids.\' + id, promise );\n\n            promise.then( function( record ) {\n                this.addRecord( type, record );\n                delete this._getPromises( type ).get( \'ids\' )[ id ];\n            }.bind( this ) )\n            .catch( function() {\n                delete this._getPromises( type ).get( \'ids\' )[ id ];\n            }.bind( this ) );\n\n            return promise;\n        },\n\n        /**\n         * Adds a `find all` promise that will resolve to an array of records\n         *\n         * @function addAllPromise\n         * @param    {string}     type\n         * @param    {Ember.RSVP} promise\n         * @returns  {Ember.Array} ArrayProxy or PromiseProxyMixin\n         */\n        addAllPromise: function( type, promise ) {\n            this._getPromises( type ).set( \'all\', promise );\n\n            promise.then( function( records ) {\n                this.addAllRecords( type, records );\n                this._getPromises( type ).set( \'all\', undefined );\n            }.bind(this))\n            .catch( function() {\n                this._getPromises( type ).set( \'all\', undefined );\n            }.bind(this));\n\n            return promise;\n        },\n\n        /**\n         * Add record to cache\n         *\n         * @function addRecord\n         * @param    {string} type\n         * @param    {Ember.Object} record\n         * @returns  {void}\n         */\n        addRecord: function( type, record ) {\n            var typeRecords = this._getRecords( type ),\n                id          = record.get( \'id\' ) || 0,\n                oldRecord   = typeRecords.ids[ id ];\n\n            if ( oldRecord ) {\n                this.removeRecord( type, oldRecord );\n            }\n\n            typeRecords.ids[ id ] = record;\n            typeRecords.records.push( record );\n        },\n\n        /**\n         * Add multiple records to cache\n         *\n         * @function addRecords\n         * @param    {string} type\n         * @param    {array}  records\n         * @returns  {void}\n         */\n        addRecords: function( type, records ) {\n            records.map( function( record ) {\n                this.addRecord( type, record );\n            }.bind( this ) );\n        },\n\n        /**\n         * add all records for a type\n         *\n         * @function addAllRecords\n         * @param    {string} type    - Type of model\n         * @param    {array}  records - Array of model records\n         * @returns  {void}\n         */\n        addAllRecords: function( type, records ) {\n            this.addRecords( type, records );\n            this._getRecords( type ).set( \'all\', true );\n        },\n\n        /**\n         * Remove record from cache\n         *\n         * @function removeRecord\n         * @param    {string}       type\n         * @param    {Ember.Object} record\n         * @returns  {void}\n         */\n        removeRecord: function( type, record ) {\n            var typeRecords = this._getRecords( type ),\n                id          = record.get( \'id\' ) || 0,\n                idx         = typeRecords.records.indexOf( record );\n\n            if ( typeRecords ) {\n                delete typeRecords.ids[ id ];\n                typeRecords.records = typeRecords.records.splice( idx, 1 );\n            }\n        },\n\n        /**\n         * Remove multiple records\n         *\n         * @function removeRecords\n         * @param    {string} type\n         * @param    {array}  records\n         * @returns  {void}\n         */\n        removeRecords: function( type, records ) {\n            records.map( function( record ) {\n                this.removeRecord( type, record );\n            }.bind( this ) );\n        },\n\n        /**\n         * Clear the cache\n         *\n         * @function clearCache\n         * @param    {string} type\n         * @returns  {void}\n         */\n        clearCache: function( type ) {\n            this._initializeRecords( type );\n            this._initializePromises( type );\n        },\n\n        /**\n         * Initialize entry in records cache\n         *\n         * @private\n         * @function _initializeRecords\n         * @param    {string} type\n         * @returns  {void}\n         */\n        _initializeRecords: function( type ) {\n            this.set( \'_records.\'+type, Ember.Object.create({\n                all     : false,\n                records : [],\n                ids     : Ember.Object.create()\n            }));\n        },\n\n        /**\n         * Return the record cache\n         *\n         * @private\n         * @function _getRecords\n         * @param    {string} type\n         * @returns  {Ember.Object}\n         */\n        _getRecords: function( type ) {\n            var typeRecords = this.get( \'_records.\' + type );\n\n            if ( !typeRecords ) {\n                this._initializeRecords( type );\n                typeRecords = this.get( \'_records.\' + type );\n            }\n\n            return typeRecords;\n        },\n\n        /**\n         * Return record for specified ID\n         *\n         * @private\n         * @function _getRecordById\n         * @param    {string} type\n         * @param    {integer} id\n         * @returns  {Ember.Object}\n         */\n        _getRecordById: function( type, id ) {\n            return this._getRecords( type ).ids[ id ];\n        },\n\n        /**\n         * Get all records\n         *\n         * @private\n         * @function _getAllRecordsCached\n         * @param    {string} type\n         * @returns  {Ember.Object}\n         */\n        _getAllRecordsCached: function( type ) {\n            return this._getRecords( type ).all;\n        },\n\n        /**\n         * Initialize entry in promises cache\n         *\n         * @private\n         * @function _initializePromises\n         * @param    {string} type\n         * @returns  {void}\n         */\n        _initializePromises: function( type ) {\n            this.set( \'_promises.\' + type, Ember.Object.create({\n                all : null,\n                ids : Ember.Object.create()\n            }));\n        },\n\n        /**\n         * Return the promise cache\n         *\n         * @private\n         * @function _getPromises\n         * @param    {string} type\n         * @returns  {Ember.Object}\n         */\n        _getPromises: function( type ) {\n            var typePromises = this.get( \'_promises.\' + type );\n\n            if ( !typePromises ) {\n                this._initializePromises( type );\n                typePromises = this.get( \'_promises.\' + type );\n            }\n\n            return typePromises;\n        },\n\n        /**\n         * Return promise for specified ID\n         *\n         * @private\n         * @function _getPromiseById\n         * @param    {string}  type\n         * @param    {integer} id\n         * @returns  {Ember.Object}\n         */\n        _getPromiseById: function( type, id ) {\n            return this.get( \'_promises.\' + type + \'.ids.\' + id );\n        },\n\n        /**\n         * Get all promises\n         *\n         * @private\n         * @function getAllPromise\n         * @param    {string} type\n         * @returns  {Ember.Object}\n         */\n        _getAllPromise: function( type ) {\n            return this.get( \'_promises.\' + type + \'.all\' );\n        }\n\n    });\n  });//# sourceURL=sl-ember-store/cache.js");
+;eval("define(\"sl-ember-store/cache\", \n  [\"ember\",\"exports\"],\n  function(__dependency1__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n\n    /**\n     * @class cache\n     */\n    __exports__[\"default\"] = Ember.Object.extend({\n\n        /*\n         * The record cache\n         *\n         * @private\n         * @property {Ember.Object} _records\n         * @default  null\n         */\n        _records: null,\n\n        /*\n         * The promise cache\n         *\n         * @private\n         * @property {Ember.Object} _promises\n         * @default  null\n         */\n        _promises: null,\n\n        /**\n         * Initialize the cache properties\n         *\n         * @private\n         * @function _setupCache\n         * @observes \"init\" event\n         * @returns  {void}\n         */\n        _setupCache: function() {\n            this.setProperties({\n                \'_records\'  : Ember.Object.create(),\n                \'_promises\' : Ember.Object.create()\n            });\n        }.on( \'init\' ),\n\n        /**\n         * Checks both caches to see if a record exists\n         *\n         * @function isCached\n         * @param    {string}  type    - The model type of the record to check\n         * @param    {integer} id      - The record ID to check for cached status\n         * @param    {boolean} findOne - Whether to check a single record (true)\n         * @returns  {boolean} Whether the record is cached (true) or not (false)\n         */\n        isCached: function( type, id, findOne ) {\n            if ( id ) {\n                return !!this.fetchById( type, id );\n            }\n\n            if ( findOne ) {\n                return !!this.fetchOne( type );\n            }\n\n            return !!( this._getManyPromise( type ) || this._getManyRecordsCached( type ) );\n        },\n\n        /**\n         * Returns a record or array of records wrapped in a promise.\n         *\n         * If there are in-flight promises then those will be returned instead.\n         *\n         * @function fetch\n         * @param    {string}  type\n         * @param    {integer} id\n         * @param    {boolean} findOne\n         * @returns  {Ember.Object|Ember.Array}\n         */\n        fetch: function( type, id, findOne ) {\n            if ( id ) {\n                return  this.fetchById( type, id );\n            }\n\n            if ( findOne ) {\n                return this.fetchOne( type );\n            }\n\n            return this.fetchMany( type );\n        },\n\n        /**\n         * Returns a record wrapped in a promise.\n         *\n         * If there is an in-flight promise then it will be returned instead.\n         *\n         * @function fetchOne\n         * @param    {string} type\n         * @returns  {Ember.Promise|false}\n         */\n        fetchOne: function( type ) {\n            var promise = this._getPromises( type ).get( \'ids.0\' ),\n                record;\n\n            if ( promise ) {\n                return promise;\n            }\n\n            record = this._getRecords( type ).get( \'records.0\' );\n\n            if ( !record ) {\n                return false;\n            }\n\n            return Ember.ObjectProxy.createWithMixins( Ember.PromiseProxyMixin )\n                .set( \'promise\', Ember.RSVP.Promise.resolve( record ) );\n        },\n\n        /**\n         * Return an object promise for this single record\n         *\n         * If there is an in-flight promise for this record that will be returned instead\n         *\n         * @function fetchById\n         * @param    {string}  type\n         * @param    {integer} id\n         * @returns  {Ember.Promise|false}\n         */\n        fetchById: function( type, id ) {\n            var promise = this._getPromiseById( type, id ),\n                record;\n\n            if ( promise ) {\n                return promise;\n            }\n\n            record = this._getRecordById( type, id );\n\n            if ( !record ) {\n                return false;\n            }\n\n            return Ember.ObjectProxy.createWithMixins( Ember.PromiseProxyMixin )\n                .set( \'promise\', Ember.RSVP.Promise.resolve( record ) );\n        },\n\n        /**\n         * Return an array promise with all the records for this type\n         *\n         * If there is an in-flight array promise then that will be returned instead.\n         *\n         * @function fetchMany\n         * @param    {string} type\n         * @returns  {Ember.Array|false}\n         */\n        fetchMany: function( type ) {\n            var findManyPromise = this._getManyPromise( type ),\n                records;\n\n            if ( findManyPromise ) {\n                return findManyPromise;\n            }\n\n            records = this._getRecords( type ).records;\n\n            if ( !records.length ) {\n                return false;\n            }\n\n            return Ember.ArrayProxy.createWithMixins( Ember.PromiseProxyMixin )\n                .set( \'promise\', Ember.RSVP.Promise.resolve( records ) );\n        },\n\n        /**\n         * Standard entry point for the store to add things to the cache\n         *\n         * @function addToCache\n         * @param    {string}     type\n         * @param    {integer}    id\n         * @param    {boolean}    findOne\n         * @param    {Ember.RSVP} result\n         * @returns  {Ember.Object|Ember.Array}\n         */\n        addToCache: function( type, id, findOne, result ) {\n\n            if ( id || findOne ) {\n                id = id || 0;\n\n                if ( result.then ) {\n                    return this.addPromise( type, id, result );\n                } else {\n                    return this.addRecord( type, result );\n                }\n            }\n\n            if ( result.then ) {\n                return this.addManyPromise( type, result );\n            } else {\n                return this.addManyRecords( type, result );\n            }\n        },\n\n        /**\n         * Adds a promise that will resolve to a single record\n         *\n         * @function addPromise\n         * @param    {string}     type\n         * @param    {integer}    id\n         * @param    {Ember.RSVP} promise\n         * @returns  {Ember.Object} ObjectProxy or PromiseProxyMixin\n         */\n        addPromise: function( type, id, promise ) {\n            this._getPromises( type ).set( \'ids.\' + id, promise );\n\n            promise.then( function( record ) {\n                this.addRecord( type, record );\n                delete this._getPromises( type ).get( \'ids\' )[ id ];\n            }.bind( this ) )\n            .catch( function() {\n                delete this._getPromises( type ).get( \'ids\' )[ id ];\n            }.bind( this ) );\n\n            return promise;\n        },\n\n        /**\n         * Adds a `find all` promise that will resolve to an array of records\n         *\n         * @function addManyPromise\n         * @param    {string}     type\n         * @param    {Ember.RSVP} promise\n         * @returns  {Ember.Array} ArrayProxy or PromiseProxyMixin\n         */\n        addManyPromise: function( type, promise ) {\n            this._getPromises( type ).get( \'many\' ).addObject( promise );\n\n            promise.then( function( records ) {\n                this.addManyRecords( type, records );\n                this._getPromises( type ).get( \'many\' ).removeObject( promise );\n            }.bind(this))\n            .catch( function() {\n                this._getPromises( type ).get( \'many\' ).removeObject( promise );\n            }.bind(this));\n\n            return promise;\n        },\n\n        /**\n         * Add record to cache\n         *\n         * @function addRecord\n         * @param    {string} type\n         * @param    {Ember.Object} record\n         * @returns  {void}\n         */\n        addRecord: function( type, record ) {\n            var typeRecords = this._getRecords( type ),\n                id          = record.get( \'id\' ) || 0,\n                oldRecord   = typeRecords.ids[ id ];\n\n            if ( oldRecord ) {\n                this.removeRecord( type, oldRecord );\n            }\n\n            typeRecords.ids[ id ] = record;\n            typeRecords.records.push( record );\n        },\n\n        /**\n         * Add multiple records to cache\n         *\n         * @function addRecords\n         * @param    {string} type\n         * @param    {array}  records\n         * @returns  {void}\n         */\n        addRecords: function( type, records ) {\n            records.forEach( function( record ) {\n                this.addRecord( type, record );\n            }.bind( this ) );\n        },\n\n        /**\n         * add all records for a type\n         *\n         * @function addManyRecords\n         * @param    {string} type    - Type of model\n         * @param    {array}  records - Array of model records\n         * @returns  {void}\n         */\n        addManyRecords: function( type, records ) {\n            this.addRecords( type, records );\n            this._getRecords( type ).set( \'all\', true );\n        },\n\n        /**\n         * Remove record from cache\n         *\n         * @function removeRecord\n         * @param    {string}       type\n         * @param    {Ember.Object} record\n         * @returns  {void}\n         */\n        removeRecord: function( type, record ) {\n            var typeRecords = this._getRecords( type ),\n                id          = record.get( \'id\' ) || 0,\n                idx         = typeRecords.records.indexOf( record );\n\n            if ( typeRecords ) {\n                delete typeRecords.ids[ id ];\n                typeRecords.records.splice( idx, 1 );\n            }\n        },\n\n        /**\n         * Remove multiple records\n         *\n         * @function removeRecords\n         * @param    {string} type\n         * @param    {array}  records\n         * @returns  {void}\n         */\n        removeRecords: function( type, records ) {\n            records.map( function( record ) {\n                this.removeRecord( type, record );\n            }.bind( this ) );\n        },\n\n        /**\n         * Clear the cache\n         *\n         * @function clearCache\n         * @param    {string} type\n         * @returns  {void}\n         */\n        clearCache: function( type ) {\n            this._initializeRecords( type );\n            this._initializePromises( type );\n        },\n\n        /**\n         * Initialize entry in records cache\n         *\n         * @private\n         * @function _initializeRecords\n         * @param    {string} type\n         * @returns  {void}\n         */\n        _initializeRecords: function( type ) {\n            this.set( \'_records.\'+type, Ember.Object.create({\n                all     : false,\n                records : [],\n                ids     : Ember.Object.create()\n            }));\n        },\n\n        /**\n         * Return the record cache\n         *\n         * @private\n         * @function _getRecords\n         * @param    {string} type\n         * @returns  {Ember.Object}\n         */\n        _getRecords: function( type ) {\n            var typeRecords = this.get( \'_records.\' + type );\n\n            if ( !typeRecords ) {\n                this._initializeRecords( type );\n                typeRecords = this.get( \'_records.\' + type );\n            }\n\n            return typeRecords;\n        },\n\n        /**\n         * Return record for specified ID\n         *\n         * @private\n         * @function _getRecordById\n         * @param    {string} type\n         * @param    {integer} id\n         * @returns  {Ember.Object}\n         */\n        _getRecordById: function( type, id ) {\n            return this._getRecords( type ).ids[ id ];\n        },\n\n        /**\n         * Get all records\n         *\n         * @private\n         * @function _getManyRecordsCached\n         * @param    {string} type\n         * @returns  {Ember.Object}\n         */\n        _getManyRecordsCached: function( type ) {\n            return this._getRecords( type ).all;\n        },\n\n        /**\n         * Initialize entry in promises cache\n         *\n         * @private\n         * @function _initializePromises\n         * @param    {string} type\n         * @returns  {void}\n         */\n        _initializePromises: function( type ) {\n            this.set( \'_promises.\' + type, Ember.Object.create({\n                many : Ember.ArrayProxy.create( { content: [] } ),\n                ids : Ember.Object.create()\n            }));\n        },\n\n        /**\n         * Return the promise cache\n         *\n         * @private\n         * @function _getPromises\n         * @param    {string} type\n         * @returns  {Ember.Object}\n         */\n        _getPromises: function( type ) {\n            var typePromises = this.get( \'_promises.\' + type );\n\n            if ( !typePromises ) {\n                this._initializePromises( type );\n                typePromises = this.get( \'_promises.\' + type );\n            }\n\n            return typePromises;\n        },\n\n        /**\n         * Return promise for specified ID\n         *\n         * @private\n         * @function _getPromiseById\n         * @param    {string}  type\n         * @param    {integer} id\n         * @returns  {Promise}\n         */\n        _getPromiseById: function( type, id ) {\n            return this.get( \'_promises.\' + type + \'.ids.\' + id );\n        },\n\n        /**\n         * Get all promises\n         *\n         * @private\n         * @function getManyPromise\n         * @param    {string} type\n         * @returns  {Promise}\n         */\n        _getManyPromise: function( type ) {\n            var promises = this.get( \'_promises.\' + type + \'.many\' );\n\n            if( promises && promises.get( \'length\' ) ){\n                return Ember.RSVP.allSettled( promises.get( \'content\' ) ).then(\n                    function( results ){\n                        var records = [];\n                        results.forEach( function( result ){\n                            if( result.state === \'fulfilled\' ){\n                                records = records.concat( result.value );\n                            }\n                        });\n                        return records;\n                    }\n                );\n            }\n\n            return undefined;\n        }\n\n    });\n  });//# sourceURL=sl-ember-store/cache.js");
 
-;eval("define(\"sl-ember-store/debug-adapter\", \n  [\"ember\",\"exports\"],\n  function(__dependency1__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n\n    __exports__[\"default\"] = Ember.DataAdapter.extend({\n\n        /**\n         * Returns the columns for a specific model type\n         * @param  {Object} type Model Class\n         * @return {Array}      Array of objs describing model columns\n         */\n        columnsForType: function( typeClass ) {\n            var columns = [],\n                type = typeClass._debugContainerKey.replace( \'model:\',\'\'),\n                record = this.get( \'store\' )._cache._getRecords( type ).records[0];\n\n            if( record ){\n                Ember.keys( record.content ).forEach( function( key ){\n                    columns.push( { name: key, desc: key });\n                });\n            }\n\n            return columns;\n        },\n\n        /**\n         * Returns the array of records for the model type\n         * @param {Object} type Model Class\n         * @return {Array} array of model records\n         */\n        getRecords: function( typeClass ){\n            var type = typeClass._debugContainerKey.replace( \'model:\',\'\');\n            return this.get( \'store\' )._cache._getRecords( type ).records;\n        },\n\n        /**\n         * Returns the values for the columns in a record\n         * @param  {Object} record\n         * @return {Object}        The values for the keys of this record\n         */\n        getRecordColumnValues: function( record ){\n            var values = {};\n\n            if( record ){\n                Ember.keys( record.content ).forEach( function( key ){\n                    values[ key ] = Ember.get( record, key );\n                });\n            }\n\n            return values;\n        },\n\n        /**\n         * Sets up observers for records\n         * @param  {Object} record\n         * @param  {Function} recordUpdated callback when a record is updated\n         * @return {Function}               callback when a record is destroyed\n         */\n        observeRecord: function( record, recordUpdated ){\n            var releaseMethods = Ember.A(),\n                self = this,\n                keysToObserve = Ember.keys( record.content );\n\n            keysToObserve.forEach(function(key) {\n                var handler = function() {\n                    recordUpdated(self.wrapRecord(record));\n                };\n                Ember.addObserver(record, key, handler);\n                releaseMethods.push(function() {\n                    Ember.removeObserver(record, key, handler);\n                });\n            });\n\n            var release = function() {\n                releaseMethods.forEach(function(fn) { fn(); } );\n            };\n\n            return release;\n        }\n\n    });\n  });//# sourceURL=sl-ember-store/debug-adapter.js");
+;eval("define(\"sl-ember-store/debug-adapter\", \n  [\"ember\",\"sl-ember-store/model\",\"exports\"],\n  function(__dependency1__, __dependency2__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    var Model = __dependency2__[\"default\"];\n\n    __exports__[\"default\"] = Ember.DataAdapter.extend({\n\n        /**\n         * detect if a class is a model\n         * @param  {Object} klass\n         * @return {boolean}       is Model and ancestor of `klass`\n         */\n        detect: function(klass) {\n            return klass !== Model && Model.detect(klass);\n        },\n\n        /**\n         * Returns the columns for a specific model type\n         * @param  {Object} type Model Class\n         * @return {Array}      Array of objs describing model columns\n         */\n        columnsForType: function( typeClass ) {\n            var columns = [],\n                type = typeClass._debugContainerKey.replace( \'model:\',\'\'),\n                record = this.get( \'store\' )._cache._getRecords( type ).records[0];\n\n            if( record ){\n                Ember.keys( record.content ).forEach( function( key ){\n                    columns.push( { name: key, desc: key });\n                });\n            }\n\n            return columns;\n        },\n\n        /**\n         * Returns the array of records for the model type\n         * @param {Object} type Model Class\n         * @return {Array} array of model records\n         */\n        getRecords: function( typeClass ){\n            var type = typeClass._debugContainerKey.replace( \'model:\',\'\');\n            return this.get( \'store\' )._cache._getRecords( type ).records;\n        },\n\n        /**\n         * Returns the values for the columns in a record\n         * @param  {Object} record\n         * @return {Object}        The values for the keys of this record\n         */\n        getRecordColumnValues: function( record ){\n            var values = {};\n\n            if( record ){\n                Ember.keys( record.content ).forEach( function( key ){\n                    values[ key ] = Ember.get( record, key );\n                });\n            }\n\n            return values;\n        },\n\n        /**\n         * Sets up observers for records\n         * @param  {Object} record\n         * @param  {Function} recordUpdated callback when a record is updated\n         * @return {Function}               callback when a record is destroyed\n         */\n        observeRecord: function( record, recordUpdated ){\n            var releaseMethods = Ember.A(),\n                self = this,\n                keysToObserve = Ember.keys( record.content );\n\n            keysToObserve.forEach(function(key) {\n                var handler = function() {\n                    recordUpdated(self.wrapRecord(record));\n                };\n                Ember.addObserver(record, key, handler);\n                releaseMethods.push(function() {\n                    Ember.removeObserver(record, key, handler);\n                });\n            });\n\n            var release = function() {\n                releaseMethods.forEach(function(fn) { fn(); } );\n            };\n\n            return release;\n        }\n\n    });\n  });//# sourceURL=sl-ember-store/debug-adapter.js");
+
+;eval("define(\"sl-ember-store/model\", \n  [\"ember\",\"exports\"],\n  function(__dependency1__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n\n    var get = Ember.get;\n\n    /**\n     * @class model\n     */\n    var Model =  Ember.ObjectProxy.extend({\n\n         /**\n         * Save the contents via the configured adapter\n         *\n         * @function save\n         * @param    {object} options\n         * @throws   {Ember.assert}\n         * @returns  {object} jqXHR from jQuery.ajax()\n         */\n        save: function( options ) {\n            var data,\n                endpoint;\n\n            options = options || {};\n            endpoint = this.constructor.getUrlForEndpointAction( options.endpoint, \'post\' );\n            data = this.get( \'content\' );\n\n            Ember.assert( \'Endpoint must be configured on \' + this.toString() + \' before calling save.\', endpoint );\n\n            return this.container.lookup( \'adapter:\' + this.constructor.adapter ).save( endpoint, data )\n                .then( function( response ) {\n                    this.set( \'content\', response );\n                    return this;\n                }.bind( this ), null, \'sl-ember-store.model:save\' );\n        },\n\n        /**\n         * Delete the record via the configured adapter\n         *\n         * @function deleteRecord\n         * @param    {object} options\n         * @throws   {Ember.assert}\n         * @returns  {object} jqXHR from jQuery.ajax()\n         */\n        deleteRecord: function( options ) {\n            var endpoint;\n\n            options = options || {};\n            endpoint = this.constructor.getUrlForEndpointAction( options.endpoint, \'delete\' );\n\n            Ember.assert( \'Enpoint must be configured on \' + this.toString() + \' before calling deleteRecord.\', endpoint );\n\n            return this.container.lookup( \'adapter:\'+this.constructor.adapter ).deleteRecord( endpoint, this.get( \'id\' ) )\n                .then( function() {\n                    Ember.run( this, \'destroy\' );\n                }.bind( this ), null, \'sl-ember-store.model:deleteRecord\' );\n        }\n    });\n\n    Model.reopenClass({\n\n        /**\n         * Default url for this class\n         *\n         * @property {string} url\n         * @default  null\n         */\n        url: null,\n\n        /**\n         * Default serializer\n         *\n         * @function serializer\n         * @param    {object} response - Data to be serialized\n         * @returns  {object} Serialized data\n         */\n        serializer: function( response ) {\n            return response;\n        },\n\n        /**\n         * Default adapter\n         *\n         * Possible values are: \'ajax\' or \'localstorage\'\n         *\n         * @property {string} adapter\n         * @default  \'ajax\'\n         */\n        adapter: \'ajax\',\n\n        /**\n         * resolves the url by walking down the endpoints object and defaulting to the root:url string\n         *\n         * @function getUrlForEndpointAction\n         * @param    {string} endpoint - The endpoint, leave blank or null for default\n         * @param    {string} action   - The action, leave blank or null for default\n         * @throwns  {Ember.assert}\n         * @returns  {string} The resolved URL\n         */\n        getUrlForEndpointAction: function( endpoint, action ) {\n            var resolvedEndpoint,\n                testEndpoint;\n\n            endpoint = endpoint || \'default\';\n\n            testEndpoint = get( this, \'endpoints.\' + endpoint + \'.\' + action ) ||\n                get( this, \'endpoints.\' + endpoint ) || {};\n\n            if ( typeof testEndpoint === \'string\' ) {\n                resolvedEndpoint = testEndpoint;\n            } else {\n                resolvedEndpoint = get( testEndpoint, \'url\' ) || get( this, \'url\' );\n            }\n\n            Ember.assert( \'A url needs to be set for \' + this.toString(), resolvedEndpoint );\n\n            return resolvedEndpoint;\n        },\n\n        /**\n         * Calls the serializer for the specified endpoint and actions\n         *\n         * @function callSerializerForEndpointAction\n         * @param    {string}         endpoint - The endpoint, leave blank or null for default\n         * @param    {string}         action   - The action, leave blank or null for default\n         * @param    {object}         data     - The data to be serialized\n         * @param    {sl-ember-store/store} store    - The app\'s store, use to store metadata\n         * @throws   {Ember.assert}\n         * @returns  {Ember.Object} The serialized data\n         */\n        callSerializerForEndpointAction: function( endpoint, action, data, store ) {\n            var resolvedSerializer,\n                testEndpoint,\n                defaultSerializer;\n\n            endpoint = endpoint || \'default\';\n            testEndpoint = get( this, \'endpoints.\' + endpoint + \'.\' + action ) || get( this, \'endpoints.\' + endpoint ) || {};\n            defaultSerializer = get( this, \'endpoints.default.\' + action + \'.serializer\' ) ||\n                get( this, \'endpoints.default.serializer\' ) ||\n                get( this, \'serializer\' );\n\n            if ( typeof testEndpoint === \'string\' ) {\n                resolvedSerializer = defaultSerializer;\n            } else {\n                resolvedSerializer = get( testEndpoint, \'serializer\' ) || defaultSerializer;\n            }\n\n            Ember.assert( \'A serializer needs to be set for \' + this.toString(), resolvedSerializer );\n\n            return resolvedSerializer.call( this, data, store );\n        }\n    });\n\n    __exports__[\"default\"] = Model;\n  });//# sourceURL=sl-ember-store/model.js");
 
 ;eval("define(\"sl-ember-store/initializers/sl-ember-store\", \n  [\"sl-ember-store/store\",\"sl-ember-store/adapters/ajax\",\"sl-ember-store/adapters/localstorage\",\"sl-ember-store/debug-adapter\",\"exports\"],\n  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {\n    \"use strict\";\n    var Store = __dependency1__[\"default\"];\n    var AjaxAdapter = __dependency2__[\"default\"];\n    var LocalstorageAdapter = __dependency3__[\"default\"];\n    var DebugAdapter = __dependency4__[\"default\"];\n\n    /**\n     * @module initializers\n     */\n\n    /*\n     * Register sl-ember-store objects to consuming application\n     *\n     * @function sl-ember-store\n     * @param    {Ember.ContainerView} container\n     * @param    {Ember.Application}   application\n     * @returns  {void}\n     */\n    __exports__[\"default\"] = function( container, application ) {\n        var localstorageAdapter = LocalstorageAdapter.extend();\n\n        localstorageAdapter.reopenClass({\n            namespace: container.lookup( \'application:main\' ).get( \'modulePrefix\' )\n        });\n\n        container.register( \'data-adapter:main\', DebugAdapter );\n        container.register( \'store:main\', Store );\n        container.register( \'adapter:ajax\', AjaxAdapter );\n        container.register( \'adapter:localstorage\', localstorageAdapter );\n\n        application.inject( \'controller\', \'store\', \'store:main\' );\n        application.inject( \'route\', \'store\', \'store:main\' );\n        application.inject( \'adapter\', \'store\', \'store:main\' );\n        application.inject( \'data-adapter\', \'store\', \'store:main\' );\n    }\n  });//# sourceURL=sl-ember-store/initializers/sl-ember-store.js");
 
-;eval("define(\"sl-ember-store/store\", \n  [\"ember\",\"sl-ember-store/cache\",\"exports\"],\n  function(__dependency1__, __dependency2__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    var cache = __dependency2__[\"default\"];\n\n    /**\n     * @class store\n     */\n    __exports__[\"default\"] = Ember.Object.extend({\n\n        /**\n         * Array of functions to be run before an adapter runs a query\n         *\n         * @property {Ember.Array} preQueryHooks\n         * @default  {array}\n         */\n        preQueryHooks: [],\n\n        /**\n         * Array of functions to be run after an adapter runs a query\n         *\n         * @property {Ember.Array} postQueryHooks\n         * @default  {array}\n         */\n        postQueryHooks: [],\n\n        /**\n         * Stores all the metadata for all the models\n         *\n         * @private\n         * @property {Ember.Object} _metadataCache\n         * @default  {object}\n         */\n        _metadataCache: {},\n\n        /**\n         * Initialize the cache\n         *\n         * @function  setupcache\n         * @observers \"init\" event\n         * @returns   {void}\n         */\n        setupcache: function() {\n            this.set( \'_cache\', cache.create() );\n        }.on( \'init\' ),\n\n        /**\n         * Returns the model class for a given model type\n         *\n         * @function modelFor\n         * @param    {string} type - Name of the model class\n         * @throws   {Ember.assert}\n         * @returns  {function} Model constructor\n         */\n        modelFor: function( type ) {\n            var normalizedKey = this.container.normalize( \'model:\' + type ),\n                factory       = this.container.lookupFactory( normalizedKey );\n\n            Ember.assert( \'No model was found for `\' + type + \'`\', factory );\n\n            return factory;\n        },\n\n        /**\n         * Sets the metadata object for the specified model type\n         *\n         * @function metaForType\n         * @param    {string} type     - The model name\n         * @param    {object} metadata - The metadata to save\n         * @returns  {void}\n         */\n        metaForType: function( type, metadata ) {\n            this.set( \'_metadataCache.\' + type, metadata );\n        },\n\n        /**\n         * Returns the metadata object for the specified model type\n         *\n         * @function metadataFor\n         * @param    {string} type - The model name\n         * @returns  {object} The metadata object that was saved with metaForType\n         */\n        metadataFor: function( type ) {\n            return this.get( \'_metadataCache.\' + type );\n        },\n\n        /**\n         * Returns the configured adapter for the specified model type\n         *\n         * @function adapterFor\n         * @param    {string} type - The name of the model class\n         * @returns  {object} The adapter singleton\n         */\n        adapterFor: function( type ) {\n            var adapterType = this.modelFor( type ).adapter;\n\n            return this.container.lookup( \'adapter:\' + adapterType );\n        },\n\n        /**\n         * Returns an object proxy\n         *\n         * Does not use an id to perform a lookup (use the options object instead).\n         *\n         * @function findOne\n         * @param    {string} type    - Name of the model\n         * @param    {object} options - Hash of options to be passed on to the adapter\n         * @returns  {Ember.ObjectProxy}\n         */\n        findOne: function( type, options ) {\n            return this.__find( type, null, options, true );\n        },\n\n        /**\n         * Find a/an record(s) using an id or options\n         *\n         * @function find\n         * @param    {string}  type    - Name of the model class\n         * @param    {integer} id      - ID of the record\n         * @param    {object}  options - Hash of options to be passed on to the adapter\n         * @returns  {object / array} An object or an array depending on whether you specified an ID\n         */\n        find: function( type, id, options ) {\n            if ( typeof id === \'object\' && typeof options === \'undefined\' ) {\n                return this.__find( type, null, id, false );\n            }\n\n            if ( typeof id === \'undefined\' && typeof options === \'undefined\' ) {\n                return this.__find( type, null, null, false );\n            }\n\n            return this.__find( type, id, options, false );\n        },\n\n        /**\n         * Create a new record, it will not have been saved via an adapter yet\n         *\n         * @function createRecord\n         * @param    {string} type - Name of model class\n         * @returns  {Ember.ObjectProxy} Model object, instance of Ember.ObjectProxy\n         */\n        createRecord: function( type, content ) {\n            var factory = this.modelFor( type ),\n                record  = factory.create({\n                    container: this.get( \'container\' )\n                });\n\n            record.set( \'content\', content || {} );\n\n            return record;\n        },\n\n        /**\n         * Add a function to the prequery hooks array\n         *\n         * @function registerPreQueryHook\n         * @param    {function} hookFunction\n         * @returns  {void}\n         */\n        registerPreQueryHook: function( hookFunction ) {\n            this.get( \'preQueryHooks\' ).push( hookFunction );\n        },\n\n        /**\n         * Call the pre query hooks with the query\n         *\n         * @function runPreQueryHooks\n         * @param    {object} query\n         * @returns  {void}\n         */\n        runPreQueryHooks: function( query ) {\n            var preQueryHooks = this.get( \'preQueryHooks\' );\n\n            if ( Ember.isArray( preQueryHooks ) ) {\n                preQueryHooks.forEach( function( hookFunction ) {\n                    hookFunction( query );\n                });\n            }\n        },\n\n        /**\n         * Add a function to the postquery array\n         *\n         * @function registerPostQueryHook\n         * @param    {function} hookFunction - A function to be run after a query\n         * @returns  {void}\n         */\n        registerPostQueryHook: function( hookFunction ) {\n            this.get( \'postQueryHooks\' ).push( hookFunction );\n        },\n\n        /**\n         * Call the post query hooks with the response obj\n         *\n         * @function runPostQueryHooks\n         * @param    {object} response - The response from the adapter\n         * @returns  {void}\n         */\n        runPostQueryHooks: function( response ) {\n            var postQueryHooks = this.get( \'postQueryHooks\' );\n\n            if ( Ember.isArray( postQueryHooks ) ) {\n                postQueryHooks.forEach( function( hookFunction ) {\n                    hookFunction( response );\n                });\n            }\n        },\n\n        /**\n         * Private find method\n         *\n         * @private\n         * @function __find\n         * @param    {string}         type    - Model name\n         * @param    {integer|string} id      - Record identifier\n         * @param    {object}         options - Objects containing all options for query\n         * @param    {boolean}        findOne - Whether to force the retrieval of a single record (true)\n         * @returns  {Ember.Object} An ember object / array proxy with the promise proxy mixin\n         */\n        __find: function( type, id, options, findOne ) {\n            var cache  = this.get( \'_cache\' ),\n                reload = options && options.reload,\n                result;\n\n            if ( reload || !cache.isCached( type, id, findOne ) ) {\n                result = this.adapterFor( type ).find( type, id, options, findOne );\n\n                if ( !id || !findOne ) {\n                    cache.clearCache( type );\n\n                } else {\n                    cache.removeRecord( type, id || 0 );\n                }\n\n                cache.addToCache( type, id, findOne, result );\n\n                return result;\n            }\n\n            return cache.fetch( type, id, findOne );\n        }\n    });\n  });//# sourceURL=sl-ember-store/store.js");
-
-;eval("define(\"sl-ember-store/model\", \n  [\"ember\",\"exports\"],\n  function(__dependency1__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n\n    var get = Ember.get;\n\n    /**\n     * @class model\n     */\n    var Model =  Ember.ObjectProxy.extend({\n\n         /**\n         * Save the contents via the configured adapter\n         *\n         * @function save\n         * @param    {object} options\n         * @throws   {Ember.assert}\n         * @returns  {object} jqXHR from jQuery.ajax()\n         */\n        save: function( options ) {\n            var data,\n                endpoint;\n\n            options = options || {};\n            endpoint = this.constructor.getUrlForEndpointAction( options.endpoint, \'post\' );\n            data = this.get( \'content\' );\n\n            Ember.assert( \'Endpoint must be configured on \' + this.toString() + \' before calling save.\', endpoint );\n\n            return this.container.lookup( \'adapter:\' + this.constructor.adapter ).save( endpoint, data )\n                .then( function( response ) {\n                    this.set( \'content\', response );\n                    return this;\n                }.bind( this ), null, \'sl-ember-store.model:save\' );\n        },\n\n        /**\n         * Delete the record via the configured adapter\n         *\n         * @function deleteRecord\n         * @param    {object} options\n         * @throws   {Ember.assert}\n         * @returns  {object} jqXHR from jQuery.ajax()\n         */\n        deleteRecord: function( options ) {\n            var endpoint;\n\n            options = options || {};\n            endpoint = this.constructor.getUrlForEndpointAction( options.endpoint, \'delete\' );\n\n            Ember.assert( \'Enpoint must be configured on \' + this.toString() + \' before calling deleteRecord.\', endpoint );\n\n            return this.container.lookup( \'adapter:\'+this.constructor.adapter ).deleteRecord( endpoint, this.get( \'id\' ) )\n                .then( function() {\n                    Ember.run( this, \'destroy\' );\n                }.bind( this ), null, \'sl-ember-store.model:deleteRecord\' );\n        }\n    });\n\n    Model.reopenClass({\n\n        /**\n         * Default url for this class\n         *\n         * @property {string} url\n         * @default  null\n         */\n        url: null,\n\n        /**\n         * Default serializer\n         *\n         * @function serializer\n         * @param    {object} response - Data to be serialized\n         * @returns  {object} Serialized data\n         */\n        serializer: function( response ) {\n            return response;\n        },\n\n        /**\n         * Default adapter\n         *\n         * Possible values are: \'ajax\' or \'localstorage\'\n         *\n         * @property {string} adapter\n         * @default  \'ajax\'\n         */\n        adapter: \'ajax\',\n\n        /**\n         * resolves the url by walking down the endpoints object and defaulting to the root:url string\n         *\n         * @function getUrlForEndpointAction\n         * @param    {string} endpoint - The endpoint, leave blank or null for default\n         * @param    {string} action   - The action, leave blank or null for default\n         * @throwns  {Ember.assert}\n         * @returns  {string} The resolved URL\n         */\n        getUrlForEndpointAction: function( endpoint, action ) {\n            var resolvedEndpoint,\n                testEndpoint;\n\n            endpoint = endpoint || \'default\';\n\n            testEndpoint = get( this, \'endpoints.\' + endpoint + \'.\' + action ) ||\n                get( this, \'endpoints.\' + endpoint ) || {};\n\n            if ( typeof testEndpoint === \'string\' ) {\n                resolvedEndpoint = testEndpoint;\n            } else {\n                resolvedEndpoint = get( testEndpoint, \'url\' ) || get( this, \'url\' );\n            }\n\n            Ember.assert( \'A url needs to be set for \' + this.toString(), resolvedEndpoint );\n\n            return resolvedEndpoint;\n        },\n\n        /**\n         * Calls the serializer for the specified endpoint and actions\n         *\n         * @function callSerializerForEndpointAction\n         * @param    {string}         endpoint - The endpoint, leave blank or null for default\n         * @param    {string}         action   - The action, leave blank or null for default\n         * @param    {object}         data     - The data to be serialized\n         * @param    {sl-ember-store/store} store    - The app\'s store, use to store metadata\n         * @throws   {Ember.assert}\n         * @returns  {Ember.Object} The serialized data\n         */\n        callSerializerForEndpointAction: function( endpoint, action, data, store ) {\n            var resolvedSerializer,\n                testEndpoint,\n                defaultSerializer;\n\n            endpoint = endpoint || \'default\';\n            testEndpoint = get( this, \'endpoints.\' + endpoint + \'.\' + action ) || get( this, \'endpoints.\' + endpoint ) || {};\n            defaultSerializer = get( this, \'endpoints.default.\' + action + \'.serializer\' ) ||\n                get( this, \'endpoints.default.serializer\' ) ||\n                get( this, \'serializer\' );\n\n            if ( typeof testEndpoint === \'string\' ) {\n                resolvedSerializer = defaultSerializer;\n            } else {\n                resolvedSerializer = get( testEndpoint, \'serializer\' ) || defaultSerializer;\n            }\n\n            Ember.assert( \'A serializer needs to be set for \' + this.toString(), resolvedSerializer );\n\n            return resolvedSerializer.call( this, data, store );\n        }\n    });\n\n    __exports__[\"default\"] = Model;\n  });//# sourceURL=sl-ember-store/model.js");
+;eval("define(\"sl-ember-store/store\", \n  [\"ember\",\"sl-ember-store/cache\",\"exports\"],\n  function(__dependency1__, __dependency2__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    var cache = __dependency2__[\"default\"];\n\n    /**\n     * @class store\n     */\n    __exports__[\"default\"] = Ember.Object.extend({\n\n        /**\n         * Array of functions to be run before an adapter runs a query\n         *\n         * @property {Ember.Array} preQueryHooks\n         * @default  {array}\n         */\n        preQueryHooks: [],\n\n        /**\n         * Array of functions to be run after an adapter runs a query\n         *\n         * @property {Ember.Array} postQueryHooks\n         * @default  {array}\n         */\n        postQueryHooks: [],\n\n        /**\n         * Stores all the metadata for all the models\n         *\n         * @private\n         * @property {Ember.Object} _metadataCache\n         * @default  {object}\n         */\n        _metadataCache: {},\n\n        /**\n         * Initialize the cache\n         *\n         * @function  setupcache\n         * @observers \"init\" event\n         * @returns   {void}\n         */\n        setupcache: function() {\n            this.set( \'_cache\', cache.create() );\n        }.on( \'init\' ),\n\n        /**\n         * Returns the model class for a given model type\n         *\n         * @function modelFor\n         * @param    {string} type - Name of the model class\n         * @throws   {Ember.assert}\n         * @returns  {function} Model constructor\n         */\n        modelFor: function( type ) {\n            var normalizedKey = this.container.normalize( \'model:\' + type ),\n                factory       = this.container.lookupFactory( normalizedKey );\n\n            Ember.assert( \'No model was found for `\' + type + \'`\', factory );\n\n            return factory;\n        },\n\n        /**\n         * Sets the metadata object for the specified model type\n         *\n         * @function metaForType\n         * @param    {string} type     - The model name\n         * @param    {object} metadata - The metadata to save\n         * @returns  {void}\n         */\n        metaForType: function( type, metadata ) {\n            this.set( \'_metadataCache.\' + type, metadata );\n        },\n\n        /**\n         * Returns the metadata object for the specified model type\n         *\n         * @function metadataFor\n         * @param    {string} type - The model name\n         * @returns  {object} The metadata object that was saved with metaForType\n         */\n        metadataFor: function( type ) {\n            return this.get( \'_metadataCache.\' + type );\n        },\n\n        /**\n         * Returns the configured adapter for the specified model type\n         *\n         * @function adapterFor\n         * @param    {string} type - The name of the model class\n         * @returns  {object} The adapter singleton\n         */\n        adapterFor: function( type ) {\n            var adapterType = this.modelFor( type ).adapter;\n\n            return this.container.lookup( \'adapter:\' + adapterType );\n        },\n\n        /**\n         * Returns an object proxy\n         *\n         * Does not use an id to perform a lookup (use the options object instead).\n         *\n         * @function findOne\n         * @param    {string} type    - Name of the model\n         * @param    {object} options - Hash of options to be passed on to the adapter\n         * @returns  {Ember.ObjectProxy}\n         */\n        findOne: function( type, options ) {\n            return this.__find( type, null, options, true );\n        },\n\n        /**\n         * Find (a) record(s) using an id or options\n         *\n         * @function find\n         * @param    {string}  type    - Name of the model class\n         * @param    {integer} id      - ID of the record\n         * @param    {object}  options - Hash of options to be passed on to the adapter, alternatively can be passed\n         * in as the second param for find:many queries\n         * @returns  {object / array} An object or an array depending on whether you specified an ID\n         */\n        find: function( type, id, options ) {\n            if ( typeof id === \'object\' && typeof options === \'undefined\' ) {\n                return this.__find( type, null, id, false );\n            }\n\n            if ( typeof id === \'undefined\' && typeof options === \'undefined\' ) {\n                return this.__find( type, null, null, false );\n            }\n\n            return this.__find( type, id, options, false );\n        },\n\n        /**\n         * Create a new record, it will not have been saved via an adapter yet\n         *\n         * @function createRecord\n         * @param    {string} type - Name of model class\n         * @returns  {Ember.ObjectProxy} Model object, instance of Ember.ObjectProxy\n         */\n        createRecord: function( type, content ) {\n            var factory = this.modelFor( type ),\n                record  = factory.create({\n                    container: this.get( \'container\' )\n                });\n\n            record.set( \'content\', content || {} );\n\n            return record;\n        },\n\n        /**\n         * Add a function to the prequery hooks array\n         *\n         * @function registerPreQueryHook\n         * @param    {function} hookFunction\n         * @returns  {void}\n         */\n        registerPreQueryHook: function( hookFunction ) {\n            this.get( \'preQueryHooks\' ).push( hookFunction );\n        },\n\n        /**\n         * Call the pre query hooks with the query\n         *\n         * @function runPreQueryHooks\n         * @param    {object} query\n         * @returns  {void}\n         */\n        runPreQueryHooks: function( query ) {\n            var preQueryHooks = this.get( \'preQueryHooks\' );\n\n            if ( Ember.isArray( preQueryHooks ) ) {\n                preQueryHooks.forEach( function( hookFunction ) {\n                    hookFunction( query );\n                });\n            }\n        },\n\n        /**\n         * Add a function to the postquery array\n         *\n         * @function registerPostQueryHook\n         * @param    {function} hookFunction - A function to be run after a query\n         * @returns  {void}\n         */\n        registerPostQueryHook: function( hookFunction ) {\n            this.get( \'postQueryHooks\' ).push( hookFunction );\n        },\n\n        /**\n         * Call the post query hooks with the response obj\n         *\n         * @function runPostQueryHooks\n         * @param    {object} response - The response from the adapter\n         * @returns  {void}\n         */\n        runPostQueryHooks: function( response ) {\n            var postQueryHooks = this.get( \'postQueryHooks\' );\n\n            if ( Ember.isArray( postQueryHooks ) ) {\n                postQueryHooks.forEach( function( hookFunction ) {\n                    hookFunction( response );\n                });\n            }\n        },\n\n        /**\n         * Private find method\n         *\n         * @private\n         * @function __find\n         * @param    {string}         type    - Model name\n         * @param    {integer|string} id      - Record identifier\n         * @param    {object}         options - Objects containing all options for query\n         * @param    {boolean}        findOne - Whether to force the retrieval of a single record (true)\n         * @returns  {Ember.Object} An ember object / array proxy with the promise proxy mixin\n         */\n        __find: function( type, id, options, findOne ) {\n            var cache           = this.get( \'_cache\' ),\n                reload          = options && options.reload,\n                add             = options && options.add,\n                loadFromServer  = reload || add || ( options && options.data ),\n                result;\n\n            if ( loadFromServer || !cache.isCached( type, id, findOne ) ) {\n                result = this.adapterFor( type ).find( type, id, options, findOne );\n\n                if ( reload ) {\n                    cache.clearCache( type );\n                }\n\n                cache.addToCache( type, id, findOne, result );\n\n                return result;\n            }\n\n            return cache.fetch( type, id, findOne );\n        }\n    });\n  });//# sourceURL=sl-ember-store/store.js");
 
 ;eval("define(\"sl-ember-store\", [\"sl-ember-store/index\",\"exports\"], function(__index__, __exports__) {\n  \"use strict\";\n  Object.keys(__index__).forEach(function(key){\n    __exports__[key] = __index__[key];\n  });\n});\n//# sourceURL=__reexport.js");
