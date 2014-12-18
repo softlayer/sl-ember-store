@@ -59,25 +59,29 @@
 
 }
         </pre>
-        <p>* We are actually using <a href="https://github.com/rwjblue/ember-cli-pretender">Pretender</a> to mockup our data, this lib is greate for static gh-pages!.</p>
+        <p>* We are actually using <a href="https://github.com/rwjblue/ember-cli-pretender">Pretender</a> to mockup our data. This library is great for static gh-pages!</p>
 
         <h3>Cacheing and Options</h3>
 
-        <p>Our store implements a simple cacheing layer.  The cacheing layer recoginzes requests for multiple records and will check to see if one has already been made.  If so then it returns the records in its cache.  However, you may wish to over-ride this default behavior and fetch the records again through the adapter.  This can be accomplished by passing a flag through the `store.find` method's `options` parameter.</p>
+        <p>Our store implements a simple cacheing layer.  The cacheing layer recoginzes requests for multiple records and will check to see if one has already been made.  If so then it returns the records in its cache.  However, you may wish to override this default behavior and fetch the records again through the adapter.  This can be accomplished by passing a flag through the <code>store.find</code> method's <code>options</code> parameter.</p>
 
-        <p>When fetching many records there are two flags you can pass along in the `options` object to control how your records are cached:
+        <p>When fetching many records there are two flags you can pass along in the <code>options</code> object to control how your records are cached:
             <dl>
-                <dt>options.reload</dt><dd>Clear the cache for this record type and load new records from the adapter</dd>
-                <dt>options.add</dt><dd>Request new records from the adapter and add them to the cache</dd>
+                <dt>options.reload</dt>
+                <dd>Clear the cache for this record type and load new records from the adapter</dd>
+
+                <dt>options.add</dt>
+                <dd>Request new records from the adapter and add them to the cache</dd>
             </dl>
 
-        Additionally there is a third key on the options object:
+        <p>Additionally there is a third key on the options object:</p>
             <dl>
-                <dt>options.data</dt><dd>An object of key/value pairs that will be passed to the adapter
+                <dt>options.data</dt>
+                <dd>An object of key/value pairs that will be passed to the adapter
             </dl>
        In the case of the ajax adapter these key/value pairs will be transformed into query parameters.</p>
 
-        <p>Earlier I said that these records can be loaded with <code>this.store.find('foo')</code>.  While that is true, the code we actually used was <code>this.store.find( 'foo', { data: { start: 0, length: 3} } )</code>.  This only loaded a subset of the records available.  The following two buttons will demonstrate the functionality of the `reload` and `add` flags:</p>
+        <p>Earlier I said that these records can be loaded with <code>this.store.find('foo')</code>.  While that is true, the code we actually used was <code>this.store.find( 'foo', { data: { start: 0, length: 3} } )</code>.  This only loaded a subset of the records available.  The following two buttons will demonstrate the functionality of the <code>reload</code> and <code>add</code> flags:</p>
         <div class="row">
             <div class="col-md-12">
                 <ul class="list-group">
@@ -116,6 +120,6 @@
                 {{/each}}
             </div>
         </div>
-        <p>If you specify `options.data` key value pairs without specifying `add` or `reload` then we assume `add` by default.</p>
+        <p>If you specify <code>options.data</code> key value pairs without specifying <code>add</code> or <code>reload</code> then we assume <code>add</code> by default.</p>
     </div>
 </div>
