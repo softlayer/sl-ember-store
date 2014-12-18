@@ -1,5 +1,16 @@
 # sl-ember-store Changelog
 
+### 0.4.0
+
+* [#77](https://github.com/softlayer/sl-ember-store/pull/77) [BUGFIX] Ember Inspector now correctly recognizes this addon's models
+* [#77](https://github.com/softlayer/sl-ember-store/pull/77) [ENHANCEMENT] Update cacheing to allow addition as well as replacement of cache for 'find all' operations
+* [#82](https://github.com/softlayer/sl-ember-store/pull/82) [INTERNAL] Add entry in .gitignore for Vim swap files
+* [#83](https://github.com/softlayer/sl-ember-store/pull/83) [DOCUMENTATION] Update link to live demo application in README.md
+* [#86](https://github.com/softlayer/sl-ember-store/pull/86) [BUGFIX] Remove use of content-for hooks to populate meta data in demo application
+* [#88](https://github.com/softlayer/sl-ember-store/pull/88) [BREAKING ENHANCEMENT] Upgrade sl-ember-modelize dependency to v1.3.0
+
+[View complete changeset](https://github.com/softlayer/sl-ember-store/compare/v0.3.0...v0.4.0)
+
 ### 0.3.0
 
 * [#63](https://github.com/softlayer/sl-ember-store/pull/63) [BUGFIX] Fix generator test
