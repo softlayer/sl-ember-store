@@ -26,7 +26,7 @@ What this library **DOES** do is allow you to work with models that do not have 
 
 ## Live
 
-[http://softlayer.github.io/sl-ember-store/dist](http://softlayer.github.io/sl-ember-store/dist)
+[http://softlayer.github.io/sl-ember-store/#/demos](http://softlayer.github.io/sl-ember-store/#/demos)
 
 ## Development Environment
 
@@ -215,7 +215,7 @@ Both the `ajax` adapter and the `localstorage` adapter
 ## Using the `store`
 
 The `store` variable is injected into every route and controller and is the entry-point into the Sl-Ember-Store system.  Store has the
-`find`, `findOne`, `createRecord`, and `metadataFor` methods.  
+`find`, `findOne`, `createRecord`, and `metadataFor` methods.
 
 
 ### Some example use cases in a route:
@@ -296,7 +296,7 @@ actions: {
                         return this.getPage( records, page );
                     });
         } else {
-            //records are requested and will be added to cache, only the records 
+            //records are requested and will be added to cache, only the records
             //returned by the request will be present here
             model = this.store.find( 'device', { data: { page: page } } );
         }
@@ -309,8 +309,8 @@ actions: {
     },
     reloadModel: function() {
         //a request will be made just for this page, the cache will be cleared
-        var model = this.store.find( 'device', { 
-            reload: true, 
+        var model = this.store.find( 'device', {
+            reload: true,
             data: { page: this.get( 'currentPage' ) } } );
 
         model.then( function() {
