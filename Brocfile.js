@@ -1,11 +1,11 @@
 /* jshint node: true */
 /* global require, module */
 
-var EmberAddon = require('ember-cli/lib/broccoli/ember-addon'),
-    isProduction = ( process.env.EMBER_ENV || 'development' ) === 'production';
-
-app = new EmberAddon();
-
+var EmberAddon   = require( 'ember-cli/lib/broccoli/ember-addon' ),
+    replace      = require( 'broccoli-string-replace' ),
+    isProduction = ( process.env.EMBER_ENV || 'development' ) === 'production',
+    app          = new EmberAddon(),
+    tree;
 
 // Use `app.import` to add additional libraries to the generated
 // output files.
@@ -26,4 +26,18 @@ if ( !isProduction ) {
     app.import( app.bowerDirectory + '/sinon-qunit/lib/sinon-qunit.js', { type: 'test' } );
 }
 
-module.exports = app.toTree();
+tree = replace( app.toTree(), {
+    files: [ 'index.html' ],
+    patterns: [
+        {
+            match: /REPLACE_META_DESCRIPTION/g,
+            replacement: require('./package.json')['description']
+        },
+        {
+            match: /REPLACE_META_KEYWORDS/g,
+            replacement: require('./package.json')['keywords'].join( ', ' ) + ', ember, ember cli'
+        }
+    ]
+});
+
+module.exports = tree;
