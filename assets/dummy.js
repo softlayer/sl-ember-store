@@ -1,199 +1,2780 @@
-eval("//# sourceURL=vendor/ember-cli/loader.js");
-
-;eval("define(\"dummy/Ember CLI QUnit/tests/ember-cli-qunit/adapter.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-cli-qunit\');\n    test(\'ember-cli-qunit/adapter.js should pass jshint\', function() { \n      ok(true, \'ember-cli-qunit/adapter.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/Ember CLI QUnit/tests/ember-cli-qunit/adapter.jshint.js");
-
-;eval("define(\"dummy/Ember CLI QUnit/tests/ember-cli-qunit/adapters/ajax.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-cli-qunit/adapters\');\n    test(\'ember-cli-qunit/adapters/ajax.js should pass jshint\', function() { \n      ok(true, \'ember-cli-qunit/adapters/ajax.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/Ember CLI QUnit/tests/ember-cli-qunit/adapters/ajax.jshint.js");
-
-;eval("define(\"dummy/Ember CLI QUnit/tests/ember-cli-qunit/adapters/localstorage.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-cli-qunit/adapters\');\n    test(\'ember-cli-qunit/adapters/localstorage.js should pass jshint\', function() { \n      ok(true, \'ember-cli-qunit/adapters/localstorage.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/Ember CLI QUnit/tests/ember-cli-qunit/adapters/localstorage.jshint.js");
-
-;eval("define(\"dummy/Ember CLI QUnit/tests/ember-cli-qunit/cache.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-cli-qunit\');\n    test(\'ember-cli-qunit/cache.js should pass jshint\', function() { \n      ok(true, \'ember-cli-qunit/cache.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/Ember CLI QUnit/tests/ember-cli-qunit/cache.jshint.js");
-
-;eval("define(\"dummy/Ember CLI QUnit/tests/ember-cli-qunit/debug-adapter.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-cli-qunit\');\n    test(\'ember-cli-qunit/debug-adapter.js should pass jshint\', function() { \n      ok(true, \'ember-cli-qunit/debug-adapter.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/Ember CLI QUnit/tests/ember-cli-qunit/debug-adapter.jshint.js");
-
-;eval("define(\"dummy/Ember CLI QUnit/tests/ember-cli-qunit/initializers/sl-ember-store.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-cli-qunit/initializers\');\n    test(\'ember-cli-qunit/initializers/sl-ember-store.js should pass jshint\', function() { \n      ok(true, \'ember-cli-qunit/initializers/sl-ember-store.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/Ember CLI QUnit/tests/ember-cli-qunit/initializers/sl-ember-store.jshint.js");
-
-;eval("define(\"dummy/Ember CLI QUnit/tests/ember-cli-qunit/model.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-cli-qunit\');\n    test(\'ember-cli-qunit/model.js should pass jshint\', function() { \n      ok(true, \'ember-cli-qunit/model.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/Ember CLI QUnit/tests/ember-cli-qunit/model.jshint.js");
-
-;eval("define(\"dummy/Ember CLI QUnit/tests/ember-cli-qunit/store.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-cli-qunit\');\n    test(\'ember-cli-qunit/store.js should pass jshint\', function() { \n      ok(true, \'ember-cli-qunit/store.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/Ember CLI QUnit/tests/ember-cli-qunit/store.jshint.js");
-
-;eval("define(\"dummy/app\", \n  [\"ember\",\"ember/resolver\",\"ember/load-initializers\",\"dummy/config/environment\",\"exports\"],\n  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    var Resolver = __dependency2__[\"default\"];\n    var loadInitializers = __dependency3__[\"default\"];\n    var config = __dependency4__[\"default\"];\n\n    Ember.MODEL_FACTORY_INJECTIONS = true;\n\n    var App = Ember.Application.extend({\n      modulePrefix: config.modulePrefix,\n      podModulePrefix: config.podModulePrefix,\n      Resolver: Resolver\n    });\n\n    loadInitializers(App, config.modulePrefix);\n\n    __exports__[\"default\"] = App;\n  });//# sourceURL=dummy/app.js");
-
-;eval("define(\"dummy/ember-cli-pretender/tests/ember-cli-pretender/adapter.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-cli-pretender\');\n    test(\'ember-cli-pretender/adapter.js should pass jshint\', function() { \n      ok(true, \'ember-cli-pretender/adapter.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/ember-cli-pretender/tests/ember-cli-pretender/adapter.jshint.js");
-
-;eval("define(\"dummy/ember-cli-pretender/tests/ember-cli-pretender/adapters/ajax.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-cli-pretender/adapters\');\n    test(\'ember-cli-pretender/adapters/ajax.js should pass jshint\', function() { \n      ok(true, \'ember-cli-pretender/adapters/ajax.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/ember-cli-pretender/tests/ember-cli-pretender/adapters/ajax.jshint.js");
-
-;eval("define(\"dummy/ember-cli-pretender/tests/ember-cli-pretender/adapters/localstorage.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-cli-pretender/adapters\');\n    test(\'ember-cli-pretender/adapters/localstorage.js should pass jshint\', function() { \n      ok(true, \'ember-cli-pretender/adapters/localstorage.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/ember-cli-pretender/tests/ember-cli-pretender/adapters/localstorage.jshint.js");
-
-;eval("define(\"dummy/ember-cli-pretender/tests/ember-cli-pretender/cache.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-cli-pretender\');\n    test(\'ember-cli-pretender/cache.js should pass jshint\', function() { \n      ok(true, \'ember-cli-pretender/cache.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/ember-cli-pretender/tests/ember-cli-pretender/cache.jshint.js");
-
-;eval("define(\"dummy/ember-cli-pretender/tests/ember-cli-pretender/debug-adapter.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-cli-pretender\');\n    test(\'ember-cli-pretender/debug-adapter.js should pass jshint\', function() { \n      ok(true, \'ember-cli-pretender/debug-adapter.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/ember-cli-pretender/tests/ember-cli-pretender/debug-adapter.jshint.js");
-
-;eval("define(\"dummy/ember-cli-pretender/tests/ember-cli-pretender/initializers/sl-ember-store.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-cli-pretender/initializers\');\n    test(\'ember-cli-pretender/initializers/sl-ember-store.js should pass jshint\', function() { \n      ok(true, \'ember-cli-pretender/initializers/sl-ember-store.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/ember-cli-pretender/tests/ember-cli-pretender/initializers/sl-ember-store.jshint.js");
-
-;eval("define(\"dummy/ember-cli-pretender/tests/ember-cli-pretender/model.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-cli-pretender\');\n    test(\'ember-cli-pretender/model.js should pass jshint\', function() { \n      ok(true, \'ember-cli-pretender/model.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/ember-cli-pretender/tests/ember-cli-pretender/model.jshint.js");
-
-;eval("define(\"dummy/ember-cli-pretender/tests/ember-cli-pretender/store.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-cli-pretender\');\n    test(\'ember-cli-pretender/store.js should pass jshint\', function() { \n      ok(true, \'ember-cli-pretender/store.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/ember-cli-pretender/tests/ember-cli-pretender/store.jshint.js");
-
-;eval("define(\"dummy/ember-export-application-global/tests/ember-export-application-global/adapter.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-export-application-global\');\n    test(\'ember-export-application-global/adapter.js should pass jshint\', function() { \n      ok(true, \'ember-export-application-global/adapter.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/ember-export-application-global/tests/ember-export-application-global/adapter.jshint.js");
-
-;eval("define(\"dummy/ember-export-application-global/tests/ember-export-application-global/adapters/ajax.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-export-application-global/adapters\');\n    test(\'ember-export-application-global/adapters/ajax.js should pass jshint\', function() { \n      ok(true, \'ember-export-application-global/adapters/ajax.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/ember-export-application-global/tests/ember-export-application-global/adapters/ajax.jshint.js");
-
-;eval("define(\"dummy/ember-export-application-global/tests/ember-export-application-global/adapters/localstorage.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-export-application-global/adapters\');\n    test(\'ember-export-application-global/adapters/localstorage.js should pass jshint\', function() { \n      ok(true, \'ember-export-application-global/adapters/localstorage.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/ember-export-application-global/tests/ember-export-application-global/adapters/localstorage.jshint.js");
-
-;eval("define(\"dummy/ember-export-application-global/tests/ember-export-application-global/cache.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-export-application-global\');\n    test(\'ember-export-application-global/cache.js should pass jshint\', function() { \n      ok(true, \'ember-export-application-global/cache.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/ember-export-application-global/tests/ember-export-application-global/cache.jshint.js");
-
-;eval("define(\"dummy/ember-export-application-global/tests/ember-export-application-global/debug-adapter.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-export-application-global\');\n    test(\'ember-export-application-global/debug-adapter.js should pass jshint\', function() { \n      ok(true, \'ember-export-application-global/debug-adapter.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/ember-export-application-global/tests/ember-export-application-global/debug-adapter.jshint.js");
-
-;eval("define(\"dummy/ember-export-application-global/tests/ember-export-application-global/initializers/sl-ember-store.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-export-application-global/initializers\');\n    test(\'ember-export-application-global/initializers/sl-ember-store.js should pass jshint\', function() { \n      ok(true, \'ember-export-application-global/initializers/sl-ember-store.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/ember-export-application-global/tests/ember-export-application-global/initializers/sl-ember-store.jshint.js");
-
-;eval("define(\"dummy/ember-export-application-global/tests/ember-export-application-global/model.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-export-application-global\');\n    test(\'ember-export-application-global/model.js should pass jshint\', function() { \n      ok(true, \'ember-export-application-global/model.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/ember-export-application-global/tests/ember-export-application-global/model.jshint.js");
-
-;eval("define(\"dummy/ember-export-application-global/tests/ember-export-application-global/store.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - ember-export-application-global\');\n    test(\'ember-export-application-global/store.js should pass jshint\', function() { \n      ok(true, \'ember-export-application-global/store.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/ember-export-application-global/tests/ember-export-application-global/store.jshint.js");
-
-;eval("define(\"dummy/initializers/export-application-global\", \n  [\"ember\",\"dummy/config/environment\",\"exports\"],\n  function(__dependency1__, __dependency2__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    var config = __dependency2__[\"default\"];\n\n    function initialize(container, application) {\n      var classifiedName = Ember.String.classify(config.modulePrefix);\n\n      if (config.exportApplicationGlobal) {\n        window[classifiedName] = application;\n      }\n    };\n    __exports__.initialize = initialize;\n    __exports__[\"default\"] = {\n      name: \'export-application-global\',\n\n      initialize: initialize\n    };\n  });//# sourceURL=dummy/initializers/export-application-global.js");
-
-;eval("define(\"dummy/initializers/pretender\", \n  [\"pretender\",\"exports\"],\n  function(__dependency1__, __exports__) {\n    \"use strict\";\n    var Pretender = __dependency1__[\"default\"];\n\n    var fooRecords = [\n        {\n            id: 1,\n            text: \'This is foo record with id: 1\',\n            bar: {\n                id: 1,\n                text: \'This is a bar record with id: 1\'\n            }\n        },\n        {\n            id: 2,\n            text: \'This is foo record #2\',\n            bar: {\n                id: 2,\n                text: \'This is a bar record with id: 2\'\n            }\n\n        },\n        {\n            id: 3,\n            text: \'This is foo record #3\',\n            bar: {\n                id: 3,\n                text: \'This is a bar record with id: 3\'\n            }\n\n        },\n        {\n            id: 4,\n            text: \'This is foo record with id: 4\',\n            bar: {\n                id: 4,\n                text: \'This is a bar record with id: 4\'\n            }\n        },\n        {\n            id: 5,\n            text: \'This is foo record #5\',\n            bar: {\n                id: 5,\n                text: \'This is a bar record with id: 5\'\n            }\n\n        },\n        {\n            id: 6,\n            text: \'This is foo record #6\',\n            bar: {\n                id: 6,\n                text: \'This is a bar record with id: 6\'\n            }\n\n        }\n    ];\n\n    function initialize(/* container, application */) {\n        new Pretender(function(){\n            this.get( \'/foo\', function(request){\n                var id = request.queryParams.id && ( parseInt( request.queryParams.id ) - 1 ),\n                    start = request.queryParams.start || 0,\n                    length = request.queryParams.length || fooRecords.length,\n                    results = fooRecords.slice( start, length );\n\n                if( request.queryParams.id ){\n                    return [\n                        200,\n                        { \"Content-Type\":\"application/json\" },\n                        JSON.stringify( { foo: fooRecords[ id ] } )\n                    ];\n                }\n\n                return [\n                    200,\n                    { \"Content-Type\":\"application/json\" },\n                    JSON.stringify( { foo: results, meta: { total: fooRecords.length } })\n                ];\n            });\n            this.post( \'/foo\', function(request){\n                var record = JSON.parse( request.requestBody );\n                fooRecords[ record.id ]= record;\n                return [\n                    200,\n                    { \"Content-Type\":\"application/json\" },\n                    JSON.stringify( record )\n                ];\n            });\n        });\n    }\n\n    __exports__.initialize = initialize;__exports__[\"default\"] = {\n      name: \'pretender\',\n      after: \'sl-ember-store\',\n      initialize: initialize\n    };\n  });//# sourceURL=dummy/initializers/pretender.js");
-
-;eval("define(\"dummy/initializers/sl-ember-store\", \n  [\"sl-ember-store/initializers/sl-ember-store\",\"exports\"],\n  function(__dependency1__, __exports__) {\n    \"use strict\";\n    var initializer = __dependency1__[\"default\"];\n\n    __exports__[\"default\"] = {\n\n        name: \'sl-ember-store\',\n\n        initialize: initializer\n    };\n  });//# sourceURL=dummy/initializers/sl-ember-store.js");
-
-;eval("define(\"dummy/live-reload-middleware/tests/live-reload-middleware/adapter.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - live-reload-middleware\');\n    test(\'live-reload-middleware/adapter.js should pass jshint\', function() { \n      ok(true, \'live-reload-middleware/adapter.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/live-reload-middleware/tests/live-reload-middleware/adapter.jshint.js");
-
-;eval("define(\"dummy/live-reload-middleware/tests/live-reload-middleware/adapters/ajax.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - live-reload-middleware/adapters\');\n    test(\'live-reload-middleware/adapters/ajax.js should pass jshint\', function() { \n      ok(true, \'live-reload-middleware/adapters/ajax.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/live-reload-middleware/tests/live-reload-middleware/adapters/ajax.jshint.js");
-
-;eval("define(\"dummy/live-reload-middleware/tests/live-reload-middleware/adapters/localstorage.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - live-reload-middleware/adapters\');\n    test(\'live-reload-middleware/adapters/localstorage.js should pass jshint\', function() { \n      ok(true, \'live-reload-middleware/adapters/localstorage.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/live-reload-middleware/tests/live-reload-middleware/adapters/localstorage.jshint.js");
-
-;eval("define(\"dummy/live-reload-middleware/tests/live-reload-middleware/cache.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - live-reload-middleware\');\n    test(\'live-reload-middleware/cache.js should pass jshint\', function() { \n      ok(true, \'live-reload-middleware/cache.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/live-reload-middleware/tests/live-reload-middleware/cache.jshint.js");
-
-;eval("define(\"dummy/live-reload-middleware/tests/live-reload-middleware/debug-adapter.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - live-reload-middleware\');\n    test(\'live-reload-middleware/debug-adapter.js should pass jshint\', function() { \n      ok(true, \'live-reload-middleware/debug-adapter.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/live-reload-middleware/tests/live-reload-middleware/debug-adapter.jshint.js");
-
-;eval("define(\"dummy/live-reload-middleware/tests/live-reload-middleware/initializers/sl-ember-store.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - live-reload-middleware/initializers\');\n    test(\'live-reload-middleware/initializers/sl-ember-store.js should pass jshint\', function() { \n      ok(true, \'live-reload-middleware/initializers/sl-ember-store.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/live-reload-middleware/tests/live-reload-middleware/initializers/sl-ember-store.jshint.js");
-
-;eval("define(\"dummy/live-reload-middleware/tests/live-reload-middleware/model.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - live-reload-middleware\');\n    test(\'live-reload-middleware/model.js should pass jshint\', function() { \n      ok(true, \'live-reload-middleware/model.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/live-reload-middleware/tests/live-reload-middleware/model.jshint.js");
-
-;eval("define(\"dummy/live-reload-middleware/tests/live-reload-middleware/store.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - live-reload-middleware\');\n    test(\'live-reload-middleware/store.js should pass jshint\', function() { \n      ok(true, \'live-reload-middleware/store.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/live-reload-middleware/tests/live-reload-middleware/store.jshint.js");
-
-;eval("define(\"dummy/models/bar\", \n  [\"sl-ember-store/model\",\"exports\"],\n  function(__dependency1__, __exports__) {\n    \"use strict\";\n    var Model = __dependency1__[\"default\"];\n\n    var Bar = Model.extend({\n    });\n\n\n    __exports__[\"default\"] = Bar;\n  });//# sourceURL=dummy/models/bar.js");
-
-;eval("define(\"dummy/models/car\", \n  [\"sl-ember-store/model\",\"exports\"],\n  function(__dependency1__, __exports__) {\n    \"use strict\";\n    var Model = __dependency1__[\"default\"];\n\n    var Car = Model.extend({\n    });\n\n    Car.reopenClass({\n        url: \'/api/car\',\n        serializer: function( result ){\n            return result.car;\n        }\n    });\n\n    __exports__[\"default\"] = Car;\n  });//# sourceURL=dummy/models/car.js");
-
-;eval("define(\"dummy/models/foo\", \n  [\"sl-ember-store/model\",\"exports\"],\n  function(__dependency1__, __exports__) {\n    \"use strict\";\n    var Model = __dependency1__[\"default\"];\n\n    var Foo = Model.extend({\n    });\n\n    Foo.reopenClass({\n        url: \'/foo\',\n        serializer: function( data, store ){\n        	if( data.meta ){\n        		store.metaForType( \'foo\', data.meta );\n        	}\n\n        	return data.foo;\n        }\n    });\n\n    __exports__[\"default\"] = Foo;\n  });//# sourceURL=dummy/models/foo.js");
-
-;eval("define(\"dummy/router\", \n  [\"ember\",\"dummy/config/environment\",\"exports\"],\n  function(__dependency1__, __dependency2__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    var config = __dependency2__[\"default\"];\n\n    var Router = Ember.Router.extend({\n      location: config.locationType\n    });\n\n    Router.map(function() {\n        this.route( \'index\', { path: \'/\' });\n\n        this.resource( \'demos\', function() {\n            this.route( \'singleModel\', { path: \'/singleModel/:model_id\' } );\n            this.route( \'arrayOfModels\', { path: \'/arrayOfModels\' } );\n        });\n    });\n\n    __exports__[\"default\"] = Router;\n  });//# sourceURL=dummy/router.js");
-
-;eval("define(\"dummy/routes/demos/array-of-models\", \n  [\"ember\",\"exports\"],\n  function(__dependency1__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    __exports__[\"default\"] = Ember.Route.extend({\n        actions: {\n            addSomeRecords: function(){\n                this.loadRecords( { add: true, data: { start: 3, length: 6 } } );            \n            },\n            loadSomeRecords: function(){\n                this.loadRecords( { data: { start: 3, length: 6 } } );            \n            },\n            addAllRecords: function(){\n                this.loadRecords( { add: true } );            \n            },\n            reloadFirstRecords: function(){\n                this.loadRecords( { reload: true, data: { start: 0, length: 3 } } );            \n            },\n        },\n\n        loadRecords: function( options ){\n            var controller = this.controller,\n                records = this.store.find( \'foo\', options );            \n\n            controller.set( \'model2\', records );\n\n            records.then( function(){\n                controller.set( \'model2meta\', this.store.metadataFor( \'foo\' ) );\n                this.store.find( \'foo\' ).then( function( records ){\n                    controller.set( \'model2CachedTotalCount\', records.length );    \n                });\n            }.bind( this ));      \n        },\n\n        model: function( ){\n            var initialRequest = this.store.find( \'foo\', null, { data: { start: 0, length: 3 } } );\n\n            return initialRequest;\n        },\n\n        setupController: function( controller, model ){\n            controller.set( \'model\', model );\n            controller.set( \'model2\', model );\n            controller.set( \'model2CachedTotalCount\', model.length );\n            controller.set( \'model2meta\', this.store.metadataFor( \'foo\' ) );\n        }\n    });\n  });//# sourceURL=dummy/routes/demos/array-of-models.js");
-
-;eval("define(\"dummy/routes/demos/single-model\", \n  [\"ember\",\"exports\"],\n  function(__dependency1__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    __exports__[\"default\"] = Ember.Route.extend({\n        model: function( params ){\n            return this.store.find( \'foo\', params.model_id );\n        }\n    });\n  });//# sourceURL=dummy/routes/demos/single-model.js");
-
-;eval("define(\"dummy/sl-ember-modelize/tests/sl-ember-modelize/adapter.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - sl-ember-modelize\');\n    test(\'sl-ember-modelize/adapter.js should pass jshint\', function() { \n      ok(true, \'sl-ember-modelize/adapter.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/sl-ember-modelize/tests/sl-ember-modelize/adapter.jshint.js");
-
-;eval("define(\"dummy/sl-ember-modelize/tests/sl-ember-modelize/adapters/ajax.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - sl-ember-modelize/adapters\');\n    test(\'sl-ember-modelize/adapters/ajax.js should pass jshint\', function() { \n      ok(true, \'sl-ember-modelize/adapters/ajax.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/sl-ember-modelize/tests/sl-ember-modelize/adapters/ajax.jshint.js");
-
-;eval("define(\"dummy/sl-ember-modelize/tests/sl-ember-modelize/adapters/localstorage.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - sl-ember-modelize/adapters\');\n    test(\'sl-ember-modelize/adapters/localstorage.js should pass jshint\', function() { \n      ok(true, \'sl-ember-modelize/adapters/localstorage.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/sl-ember-modelize/tests/sl-ember-modelize/adapters/localstorage.jshint.js");
-
-;eval("define(\"dummy/sl-ember-modelize/tests/sl-ember-modelize/cache.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - sl-ember-modelize\');\n    test(\'sl-ember-modelize/cache.js should pass jshint\', function() { \n      ok(true, \'sl-ember-modelize/cache.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/sl-ember-modelize/tests/sl-ember-modelize/cache.jshint.js");
-
-;eval("define(\"dummy/sl-ember-modelize/tests/sl-ember-modelize/debug-adapter.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - sl-ember-modelize\');\n    test(\'sl-ember-modelize/debug-adapter.js should pass jshint\', function() { \n      ok(true, \'sl-ember-modelize/debug-adapter.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/sl-ember-modelize/tests/sl-ember-modelize/debug-adapter.jshint.js");
-
-;eval("define(\"dummy/sl-ember-modelize/tests/sl-ember-modelize/initializers/sl-ember-store.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - sl-ember-modelize/initializers\');\n    test(\'sl-ember-modelize/initializers/sl-ember-store.js should pass jshint\', function() { \n      ok(true, \'sl-ember-modelize/initializers/sl-ember-store.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/sl-ember-modelize/tests/sl-ember-modelize/initializers/sl-ember-store.jshint.js");
-
-;eval("define(\"dummy/sl-ember-modelize/tests/sl-ember-modelize/model.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - sl-ember-modelize\');\n    test(\'sl-ember-modelize/model.js should pass jshint\', function() { \n      ok(true, \'sl-ember-modelize/model.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/sl-ember-modelize/tests/sl-ember-modelize/model.jshint.js");
-
-;eval("define(\"dummy/sl-ember-modelize/tests/sl-ember-modelize/store.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - sl-ember-modelize\');\n    test(\'sl-ember-modelize/store.js should pass jshint\', function() { \n      ok(true, \'sl-ember-modelize/store.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/sl-ember-modelize/tests/sl-ember-modelize/store.jshint.js");
-
-;eval("define(\"dummy/sl-ember-store/tests/sl-ember-store/adapter.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - sl-ember-store\');\n    test(\'sl-ember-store/adapter.js should pass jshint\', function() { \n      ok(true, \'sl-ember-store/adapter.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/sl-ember-store/tests/sl-ember-store/adapter.jshint.js");
-
-;eval("define(\"dummy/sl-ember-store/tests/sl-ember-store/adapters/ajax.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - sl-ember-store/adapters\');\n    test(\'sl-ember-store/adapters/ajax.js should pass jshint\', function() { \n      ok(true, \'sl-ember-store/adapters/ajax.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/sl-ember-store/tests/sl-ember-store/adapters/ajax.jshint.js");
-
-;eval("define(\"dummy/sl-ember-store/tests/sl-ember-store/adapters/localstorage.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - sl-ember-store/adapters\');\n    test(\'sl-ember-store/adapters/localstorage.js should pass jshint\', function() { \n      ok(true, \'sl-ember-store/adapters/localstorage.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/sl-ember-store/tests/sl-ember-store/adapters/localstorage.jshint.js");
-
-;eval("define(\"dummy/sl-ember-store/tests/sl-ember-store/cache.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - sl-ember-store\');\n    test(\'sl-ember-store/cache.js should pass jshint\', function() { \n      ok(true, \'sl-ember-store/cache.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/sl-ember-store/tests/sl-ember-store/cache.jshint.js");
-
-;eval("define(\"dummy/sl-ember-store/tests/sl-ember-store/debug-adapter.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - sl-ember-store\');\n    test(\'sl-ember-store/debug-adapter.js should pass jshint\', function() { \n      ok(true, \'sl-ember-store/debug-adapter.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/sl-ember-store/tests/sl-ember-store/debug-adapter.jshint.js");
-
-;eval("define(\"dummy/sl-ember-store/tests/sl-ember-store/initializers/sl-ember-store.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - sl-ember-store/initializers\');\n    test(\'sl-ember-store/initializers/sl-ember-store.js should pass jshint\', function() { \n      ok(true, \'sl-ember-store/initializers/sl-ember-store.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/sl-ember-store/tests/sl-ember-store/initializers/sl-ember-store.jshint.js");
-
-;eval("define(\"dummy/sl-ember-store/tests/sl-ember-store/model.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - sl-ember-store\');\n    test(\'sl-ember-store/model.js should pass jshint\', function() { \n      ok(true, \'sl-ember-store/model.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/sl-ember-store/tests/sl-ember-store/model.jshint.js");
-
-;eval("define(\"dummy/sl-ember-store/tests/sl-ember-store/store.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - sl-ember-store\');\n    test(\'sl-ember-store/store.js should pass jshint\', function() { \n      ok(true, \'sl-ember-store/store.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/sl-ember-store/tests/sl-ember-store/store.jshint.js");
-
-;eval("define(\"dummy/templates/application\", \n  [\"ember\",\"exports\"],\n  function(__dependency1__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    __exports__[\"default\"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {\n    this.compilerInfo = [4,\'>= 1.0.0\'];\n    helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};\n      var buffer = \'\', stack1, helper, options, self=this, helperMissing=helpers.helperMissing;\n\n    function program1(depth0,data) {\n      \n      \n      data.buffer.push(\"<i class=\\\"fa fa-home\\\"></i> Home\");\n      }\n\n      data.buffer.push(\"<br>\\n<div class=\\\"container\\\">\\n\\n    <div class=\\\"row\\\">\\n        <div class=\\\"col-md-12\\\">\\n            <div class=\\\"btn-group pull-right\\\">\\n                <button type=\\\"button\\\" class=\\\"btn btn-default dropdown-toggle\\\" data-toggle=\\\"dropdown\\\" aria-expanded=\\\"false\\\">\\n                    <i class=\\\"fa fa-reorder\\\"></i> <span class=\\\"caret\\\"></span>\\n                </button>\\n\\n                <ul class=\\\"dropdown-menu\\\" role=\\\"menu\\\">\\n                <li>\");\n      stack1 = (helper = helpers[\'link-to\'] || (depth0 && depth0[\'link-to\']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:[\"STRING\"],data:data},helper ? helper.call(depth0, \"index\", options) : helperMissing.call(depth0, \"link-to\", \"index\", options));\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"</li>\\n                <li><a href=\\\"https://github.com/softlayer/sl-ember-store/blob/master/README.md\\\"><i class=\\\"fa fa-wrench\\\"></i> Get Started</a></li>\\n                <li><a href=\\\"https://github.com/softlayer/sl-ember-store/blob/master/CONTRIBUTING.md\\\"><i class=\\\"fa fa-cog\\\"></i> Contribution Guide</a></li>\\n                <li><a href=\\\"https://github.com/softlayer/sl-ember-store/stargazers\\\"><i class=\\\"fa fa-star\\\"></i> Star Our Repo</a></li>\\n                <li><a href=\\\"https://github.com/softlayer/sl-ember-store/fork\\\"><i class=\\\"fa fa-code-fork\\\"></i> Fork Our Repo</a></li>\\n                </ul>\\n            </div>\\n        </div>\\n    </div>\\n\\n    \");\n      stack1 = helpers._triageMustache.call(depth0, \"outlet\", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:[\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"\\n\\n    <br><br>\\n    <div class=\\\"row\\\">\\n        <div class=\\\"col-md-12 text-center\\\">\\n            <p>npm install sl-ember-store</p>\\n            <p><a href=\\\"https://github.com/softlayer/sl-ember-store/blob/master/LICENSE.md\\\">MIT Licensed</a></p>\\n        </div>\\n    </div>\\n</div>\");\n      return buffer;\n      \n    });\n  });//# sourceURL=dummy/templates/application.js");
-
-;eval("define(\"dummy/templates/demos\", \n  [\"ember\",\"exports\"],\n  function(__dependency1__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    __exports__[\"default\"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {\n    this.compilerInfo = [4,\'>= 1.0.0\'];\n    helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};\n      var buffer = \'\', stack1, helper, options, self=this, helperMissing=helpers.helperMissing;\n\n    function program1(depth0,data) {\n      \n      \n      data.buffer.push(\"Demo Application\");\n      }\n\n    function program3(depth0,data) {\n      \n      \n      data.buffer.push(\"Single model example\");\n      }\n\n    function program5(depth0,data) {\n      \n      \n      data.buffer.push(\"Array of models example\");\n      }\n\n      data.buffer.push(\"<div class=\\\"row\\\">\\n    <div class=\\\"col-md-12 text-center\\\">\\n        <h1>\");\n      stack1 = (helper = helpers[\'link-to\'] || (depth0 && depth0[\'link-to\']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:[\"STRING\"],data:data},helper ? helper.call(depth0, \"demos\", options) : helperMissing.call(depth0, \"link-to\", \"demos\", options));\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"</h1>\\n        <p class=\\\"lead\\\">View the source code of the dummy application for syntax employed in this demo</p>\\n    </div>\\n</div>\\n\\n<div class=\\\"row\\\">\\n    <div class=\\\"col-md-12 text-center\\\">\\n        \");\n      stack1 = (helper = helpers[\'link-to\'] || (depth0 && depth0[\'link-to\']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0,depth0],types:[\"STRING\",\"INTEGER\"],data:data},helper ? helper.call(depth0, \"demos.singleModel\", 1, options) : helperMissing.call(depth0, \"link-to\", \"demos.singleModel\", 1, options));\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"\\n        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\\n        \");\n      stack1 = (helper = helpers[\'link-to\'] || (depth0 && depth0[\'link-to\']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(5, program5, data),contexts:[depth0],types:[\"STRING\"],data:data},helper ? helper.call(depth0, \"demos.arrayOfModels\", options) : helperMissing.call(depth0, \"link-to\", \"demos.arrayOfModels\", options));\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"\\n    </div>\\n</div>\\n\\n\");\n      stack1 = helpers._triageMustache.call(depth0, \"outlet\", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:[\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      return buffer;\n      \n    });\n  });//# sourceURL=dummy/templates/demos.js");
-
-;eval("define(\"dummy/templates/demos/array-of-models\", \n  [\"ember\",\"exports\"],\n  function(__dependency1__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    __exports__[\"default\"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {\n    this.compilerInfo = [4,\'>= 1.0.0\'];\n    helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};\n      var buffer = \'\', stack1, self=this, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;\n\n    function program1(depth0,data) {\n      \n      var buffer = \'\', stack1, helper, options;\n      data.buffer.push(\"\\n            <h4>Foo Model</h4>\\n\\n            <ul>\\n            <li>\");\n      stack1 = (helper = helpers[\'link-to\'] || (depth0 && depth0[\'link-to\']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0,depth0],types:[\"STRING\",\"ID\"],data:data},helper ? helper.call(depth0, \"demos.singleModel\", \"model.id\", options) : helperMissing.call(depth0, \"link-to\", \"demos.singleModel\", \"model.id\", options));\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"</li>\\n            <li>Text: \");\n      stack1 = helpers._triageMustache.call(depth0, \"model.text\", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:[\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"</li>\\n            \");\n      stack1 = helpers[\'if\'].call(depth0, \"model.bar.id\", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0],types:[\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"\\n        \");\n      return buffer;\n      }\n    function program2(depth0,data) {\n      \n      var buffer = \'\', stack1;\n      data.buffer.push(\"ID: \");\n      stack1 = helpers._triageMustache.call(depth0, \"model.id\", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:[\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      return buffer;\n      }\n\n    function program4(depth0,data) {\n      \n      var buffer = \'\', stack1;\n      data.buffer.push(\"\\n                <ul>\\n                <h4>Bar Model</h4>\\n                <li>ID: \");\n      stack1 = helpers._triageMustache.call(depth0, \"model.bar.id\", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:[\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"</li>\\n                <li>Text: \");\n      stack1 = helpers._triageMustache.call(depth0, \"model.bar.text\", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:[\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"</li>\\n                </ul>\\n            </ul>\\n            \");\n      return buffer;\n      }\n\n    function program6(depth0,data) {\n      \n      var buffer = \'\', stack1, helper, options;\n      data.buffer.push(\"\\n                    <h4>Foo Model</h4>\\n\\n                    <ul>\\n                    <li>\");\n      stack1 = (helper = helpers[\'link-to\'] || (depth0 && depth0[\'link-to\']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0,depth0],types:[\"STRING\",\"ID\"],data:data},helper ? helper.call(depth0, \"demos.singleModel\", \"model.id\", options) : helperMissing.call(depth0, \"link-to\", \"demos.singleModel\", \"model.id\", options));\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"</li>\\n                    <li>Text: \");\n      stack1 = helpers._triageMustache.call(depth0, \"model.text\", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:[\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"</li>\\n                    \");\n      stack1 = helpers[\'if\'].call(depth0, \"model.bar.id\", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(7, program7, data),contexts:[depth0],types:[\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"\\n                \");\n      return buffer;\n      }\n    function program7(depth0,data) {\n      \n      var buffer = \'\', stack1;\n      data.buffer.push(\"\\n                        <ul>\\n                        <h4>Bar Model</h4>\\n                        <li>ID: \");\n      stack1 = helpers._triageMustache.call(depth0, \"model.bar.id\", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:[\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"</li>\\n                        <li>Text: \");\n      stack1 = helpers._triageMustache.call(depth0, \"model.bar.text\", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:[\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"</li>\\n                        </ul>\\n                    </ul>\\n                    \");\n      return buffer;\n      }\n\n      data.buffer.push(\"<div class=\\\"row\\\">\\n    <div class=\\\"col-md-12\\\">\\n\\n        <h2>Array of Models</h2>\\n\\n        <p>These records can be loaded in our route\'s model hook with the following code:</p>\\n\\n        <code>this.store.find(\'foo\');</code>\\n\\n        <br><br>\\n        <p>The `foo` model has its adapter set to the ajax adapter*.  The \\\"/foo\\\" resource contains foo records with embedded \\\"bar\\\" records.  These records are automatically created as an instance of the \\\"Bar\\\" model when the data is returned from the adapter.</p>\\n\\n        <br>\\n        \");\n      stack1 = helpers.each.call(depth0, \"model\", \"in\", \"controller\", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0,depth0,depth0],types:[\"ID\",\"ID\",\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"\\n\\n\\n        <br>\\n        <p>The original JSON for this resource:</p>\\n\\n        <pre>\\n{\\n    id: 1,\\n    text: \'This is foo record with id: 1\',\\n    bar: {\\n        id: 1,\\n        text: \'This is a bar record with id: 1\'\\n    }\\n},\\n{\\n    id: 2,\\n    text: \'This is foo record #2\',\\n    bar: {\\n        id: 2,\\n        text: \'This is a bar record with id: 2\'\\n    }\\n\\n},\\n{\\n    id: 3,\\n    text: \'This is foo record #3\',\\n    bar: {\\n        id: 3,\\n        text: \'This is a bar record with id: 3\'\\n    }\\n\\n}\\n        </pre>\\n        <p>* We are actually using <a href=\\\"https://github.com/rwjblue/ember-cli-pretender\\\">Pretender</a> to mockup our data. This library is great for static gh-pages!</p>\\n\\n        <h3>Cacheing and Options</h3>\\n\\n        <p>Our store implements a simple cacheing layer.  The cacheing layer recoginzes requests for multiple records and will check to see if one has already been made.  If so then it returns the records in its cache.  However, you may wish to override this default behavior and fetch the records again through the adapter.  This can be accomplished by passing a flag through the <code>store.find</code> method\'s <code>options</code> parameter.</p>\\n\\n        <p>When fetching many records there are two flags you can pass along in the <code>options</code> object to control how your records are cached:\\n            <dl>\\n                <dt>options.reload</dt>\\n                <dd>Clear the cache for this record type and load new records from the adapter</dd>\\n\\n                <dt>options.add</dt>\\n                <dd>Request new records from the adapter and add them to the cache</dd>\\n            </dl>\\n\\n        <p>Additionally there is a third key on the options object:</p>\\n            <dl>\\n                <dt>options.data</dt>\\n                <dd>An object of key/value pairs that will be passed to the adapter\\n            </dl>\\n       In the case of the ajax adapter these key/value pairs will be transformed into query parameters.</p>\\n\\n        <p>Earlier I said that these records can be loaded with <code>this.store.find(\'foo\')</code>.  While that is true, the code we actually used was <code>this.store.find( \'foo\', { data: { start: 0, length: 3} } )</code>.  This only loaded a subset of the records available.  The following two buttons will demonstrate the functionality of the <code>reload</code> and <code>add</code> flags:</p>\\n        <div class=\\\"row\\\">\\n            <div class=\\\"col-md-12\\\">\\n                <ul class=\\\"list-group\\\">\\n                <li class=\\\"list-group-item\\\"><button class=\\\"btn btn-primary\\\" \");\n      data.buffer.push(escapeExpression(helpers.action.call(depth0, \"addSomeRecords\", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:[\"STRING\"],data:data})));\n      data.buffer.push(\">Add Some Records</button> will run <code>this.store.find( \'foo\', { add: true, data: { start: 3, length: 6 } } ) </code></li>\\n                <li class=\\\"list-group-item\\\"><button class=\\\"btn btn-primary\\\" \");\n      data.buffer.push(escapeExpression(helpers.action.call(depth0, \"addAllRecords\", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:[\"STRING\"],data:data})));\n      data.buffer.push(\">Add All Records</button> will run <code>this.store.find( \'foo\', { add: true } ) //server responds with all records</code></li>\\n                <li class=\\\"list-group-item\\\"><button class=\\\"btn btn-primary\\\" \");\n      data.buffer.push(escapeExpression(helpers.action.call(depth0, \"reloadFirstRecords\", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:[\"STRING\"],data:data})));\n      data.buffer.push(\">Reload First Records</button> will run to <code>this.store.find( \'foo\', { reload: true, data: { start: 0, length: 3} } )</code></li>\\n                </ul>\\n            </div>\\n        </div>\\n        <div class=\\\"row\\\">\\n            <div class=\\\"col-md-4\\\">\\n                <ul class=\\\"list-group\\\">\\n                    <li class=\\\"list-group-item\\\">Total records on server: <span class=\\\"badge\\\">\");\n      stack1 = helpers._triageMustache.call(depth0, \"model2meta.total\", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:[\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"</span></li>\\n                    <li class=\\\"list-group-item\\\">Total records in cache: <span class=\\\"badge\\\">\");\n      stack1 = helpers._triageMustache.call(depth0, \"model2CachedTotalCount\", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:[\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"</span></li>\\n                    <li class=\\\"list-group-item\\\">Total records in controller: <span class=\\\"badge\\\">\");\n      stack1 = helpers._triageMustache.call(depth0, \"model2.length\", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:[\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"</span></li>\\n                </ul>\\n            </div>\\n        </div>\\n        <div class=\\\"row\\\">\\n            <div class=\\\"col-md-12\\\">\\n\\n                \");\n      stack1 = helpers.each.call(depth0, \"model\", \"in\", \"controller.model2\", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(6, program6, data),contexts:[depth0,depth0,depth0],types:[\"ID\",\"ID\",\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"\\n            </div>\\n        </div>\\n        <p>If you specify <code>options.data</code> key value pairs without specifying <code>add</code> or <code>reload</code> then we assume <code>add</code> by default.</p>\\n    </div>\\n</div>\");\n      return buffer;\n      \n    });\n  });//# sourceURL=dummy/templates/demos/array-of-models.js");
-
-;eval("define(\"dummy/templates/demos/single-model\", \n  [\"ember\",\"exports\"],\n  function(__dependency1__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    __exports__[\"default\"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {\n    this.compilerInfo = [4,\'>= 1.0.0\'];\n    helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};\n      var buffer = \'\', stack1;\n\n\n      data.buffer.push(\"<div class=\\\"row\\\">\\n    <div class=\\\"col-md-12\\\">\\n\\n        <h2>Single Model</h2>\\n\\n        <p>This record is loaded in our route\'s model hook with the following code:</p>\\n\\n        <code>this.store.find( \'foo\', params.model_id );</code>\\n\\n        <br><br>\\n        <p>The model is loaded by the store via the ajax adapter.  The \\\"/foo?id=1\\\" resource contains an embedded \\\"bar\\\" record, and this record is automatically created as an instance of the \\\"Bar\\\" model.</p>\\n\\n        <br>\\n        <h4>Foo Model</h4>\\n\\n        <ul>\\n        <li>ID: \");\n      stack1 = helpers._triageMustache.call(depth0, \"model.id\", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:[\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"</li>\\n        <li>Text: \");\n      stack1 = helpers._triageMustache.call(depth0, \"model.text\", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:[\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"</li>\\n            <ul>\\n                <h4>Bar Model</h4>\\n                <li>ID: \");\n      stack1 = helpers._triageMustache.call(depth0, \"model.bar.id\", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:[\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"</li>\\n                <li>Text: \");\n      stack1 = helpers._triageMustache.call(depth0, \"model.bar.text\", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:[\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"</li>\\n            </ul>\\n        </ul>\\n\\n        <br>\\n        <p>The original JSON for this resource:</p>\\n\\n        <pre>\\n{\\n    id: \");\n      stack1 = helpers._triageMustache.call(depth0, \"model.id\", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:[\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\",\\n    text: \'\");\n      stack1 = helpers._triageMustache.call(depth0, \"model.text\", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:[\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"\',\\n    bar: {\\n        id: \");\n      stack1 = helpers._triageMustache.call(depth0, \"model.bar.id\", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:[\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\",\\n        text: \'\");\n      stack1 = helpers._triageMustache.call(depth0, \"model.bar.text\", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:[\"ID\"],data:data});\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"\'\\n    }\\n}\\n</pre>\\n\\n    </div>\\n</div>\");\n      return buffer;\n      \n    });\n  });//# sourceURL=dummy/templates/demos/single-model.js");
-
-;eval("define(\"dummy/templates/index\", \n  [\"ember\",\"exports\"],\n  function(__dependency1__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    __exports__[\"default\"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {\n    this.compilerInfo = [4,\'>= 1.0.0\'];\n    helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};\n      var buffer = \'\', stack1, helper, options, self=this, helperMissing=helpers.helperMissing;\n\n    function program1(depth0,data) {\n      \n      \n      data.buffer.push(\"<i class=\\\"fa fa-cubes fa-5x\\\"></i>\");\n      }\n\n    function program3(depth0,data) {\n      \n      \n      data.buffer.push(\"<b>Demo</b>\");\n      }\n\n      data.buffer.push(\"<div class=\\\"row\\\">\\n    <div class=\\\"col-md-12 text-center\\\">\\n        <h1>sl-ember-store</h1>\\n        <p class=\\\"lead\\\">An Ember CLI Addon to provide a model layer for an Ember application.</p>\\n    </div>\\n</div>\\n\\n<div class=\\\"row\\\">\\n    <div class=\\\"col-md-4 text-center\\\">\\n        <h3>\");\n      stack1 = (helper = helpers[\'link-to\'] || (depth0 && depth0[\'link-to\']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:[\"STRING\"],data:data},helper ? helper.call(depth0, \"demos\", options) : helperMissing.call(depth0, \"link-to\", \"demos\", options));\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"</h3>\\n        <p>\");\n      stack1 = (helper = helpers[\'link-to\'] || (depth0 && depth0[\'link-to\']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0],types:[\"STRING\"],data:data},helper ? helper.call(depth0, \"demos\", options) : helperMissing.call(depth0, \"link-to\", \"demos\", options));\n      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }\n      data.buffer.push(\"</p>\\n    </div>\\n    <div class=\\\"col-md-4 text-center\\\">\\n        <h3><a href=\\\"https://github.com/softlayer/sl-ember-store/blob/master/README.md\\\"><i class=\\\"fa fa-book fa-5x\\\"></i></a></h3>\\n        <p><a href=\\\"https://github.com/softlayer/sl-ember-store/blob/master/README.md\\\"><b>Documentation</b></a></p>\\n    </div>\\n    <div class=\\\"col-md-4 text-center\\\">\\n        <h3><a href=\\\"https://github.com/softlayer/sl-ember-store\\\"><i class=\\\"fa fa-github fa-5x\\\"></i></a></h3>\\n        <p><a href=\\\"https://github.com/softlayer/sl-ember-store\\\"><b>Available on GitHub</b></a></p>\\n    </div>\\n</div>\");\n      return buffer;\n      \n    });\n  });//# sourceURL=dummy/templates/index.js");
-
-;eval("define(\"dummy/tests/acceptance/array-of-models-test\", \n  [\"ember\",\"dummy/tests/helpers/start-app\",\"dummy/models/foo\",\"ember-qunit\"],\n  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    var startApp = __dependency2__[\"default\"];\n    var Foo = __dependency3__[\"default\"];\n    var test = __dependency4__.test;\n    var moduleFor = __dependency4__.moduleFor;\n\n    var App;\n\n    module(\'Acceptance: ArrayOfModels\', {\n      setup: function() {\n        App = startApp();\n      },\n      teardown: function() {\n        Ember.run(App, \'destroy\');\n      }\n    });\n\n    test(\'visiting /arrayOfModels\', function() {\n      visit(\'/demos/arrayOfModels\');\n\n      andThen(function() {\n        var arrayModelController = App.__container__.lookup(\'controller:demos/arrayOfModels\');\n        equal(currentPath(), \'demos.arrayOfModels\');\n        ok( arrayModelController.get(\'model.0\') instanceof Foo, \'Controllers model is instance of Foo\' );\n\n      });\n    });\n  });//# sourceURL=dummy/tests/acceptance/array-of-models-test.js");
-
-;eval("define(\"dummy/tests/helpers/start-app\", \n  [\"ember\",\"dummy/app\",\"dummy/router\",\"dummy/config/environment\",\"exports\"],\n  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    var Application = __dependency2__[\"default\"];\n    var Router = __dependency3__[\"default\"];\n    var config = __dependency4__[\"default\"];\n\n    __exports__[\"default\"] = function startApp(attrs) {\n      var App;\n\n      var attributes = Ember.merge({}, config.APP);\n      attributes = Ember.merge(attributes, attrs); // use defaults, but you can override;\n\n      Ember.run(function() {\n        App = Application.create(attributes);\n        App.setupForTesting();\n        App.injectTestHelpers();\n      });\n\n      return App;\n    }\n  });//# sourceURL=dummy/tests/helpers/start-app.js");
-
-;eval("define(\"dummy/tests/acceptance/single-model-test\", \n  [\"ember\",\"dummy/tests/helpers/start-app\",\"dummy/models/foo\",\"ember-qunit\"],\n  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    var startApp = __dependency2__[\"default\"];\n    var Foo = __dependency3__[\"default\"];\n    var test = __dependency4__.test;\n    var moduleFor = __dependency4__.moduleFor;\n\n    var App;\n\n    module( \'Acceptance: SingleModel\', {\n      setup: function() {\n        App = startApp();\n      },\n      teardown: function() {\n        Ember.run(App, \'destroy\');\n      }\n    });\n\n    test(\'visiting /singleModel\', function() {\n      visit(\'/demos/singleModel/1\');\n\n      andThen(function() {\n        var singleModelController = App.__container__.lookup(\'controller:demos/singleModel\');\n        equal(currentPath(), \'demos.singleModel\');\n        ok( singleModelController.get(\'model\') instanceof Foo, \'Controllers model is instance of Foo\' );\n      });\n    });\n  });//# sourceURL=dummy/tests/acceptance/single-model-test.js");
-
-;eval("define(\"dummy/tests/app.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - .\');\n    test(\'app.js should pass jshint\', function() { \n      ok(true, \'app.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/app.jshint.js");
-
-;eval("define(\"dummy/tests/dummy/tests/acceptance/array-of-models-test.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - dummy/tests/acceptance\');\n    test(\'dummy/tests/acceptance/array-of-models-test.js should pass jshint\', function() { \n      ok(true, \'dummy/tests/acceptance/array-of-models-test.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/dummy/tests/acceptance/array-of-models-test.jshint.js");
-
-;eval("define(\"dummy/tests/dummy/tests/acceptance/single-model-test.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - dummy/tests/acceptance\');\n    test(\'dummy/tests/acceptance/single-model-test.js should pass jshint\', function() { \n      ok(true, \'dummy/tests/acceptance/single-model-test.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/dummy/tests/acceptance/single-model-test.jshint.js");
-
-;eval("define(\"dummy/tests/dummy/tests/helpers/module-for-sl-ember-model.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - dummy/tests/helpers\');\n    test(\'dummy/tests/helpers/module-for-sl-ember-model.js should pass jshint\', function() { \n      ok(true, \'dummy/tests/helpers/module-for-sl-ember-model.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/dummy/tests/helpers/module-for-sl-ember-model.jshint.js");
-
-;eval("define(\"dummy/tests/dummy/tests/helpers/resolver.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - dummy/tests/helpers\');\n    test(\'dummy/tests/helpers/resolver.js should pass jshint\', function() { \n      ok(true, \'dummy/tests/helpers/resolver.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/dummy/tests/helpers/resolver.jshint.js");
-
-;eval("define(\"dummy/tests/dummy/tests/helpers/start-app.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - dummy/tests/helpers\');\n    test(\'dummy/tests/helpers/start-app.js should pass jshint\', function() { \n      ok(true, \'dummy/tests/helpers/start-app.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/dummy/tests/helpers/start-app.jshint.js");
-
-;eval("define(\"dummy/tests/dummy/tests/test-helper.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - dummy/tests\');\n    test(\'dummy/tests/test-helper.js should pass jshint\', function() { \n      ok(true, \'dummy/tests/test-helper.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/dummy/tests/test-helper.jshint.js");
-
-;eval("define(\"dummy/tests/dummy/tests/unit/adapters-test.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - dummy/tests/unit\');\n    test(\'dummy/tests/unit/adapters-test.js should pass jshint\', function() { \n      ok(true, \'dummy/tests/unit/adapters-test.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/dummy/tests/unit/adapters-test.jshint.js");
-
-;eval("define(\"dummy/tests/dummy/tests/unit/adapters/ajax-test.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - dummy/tests/unit/adapters\');\n    test(\'dummy/tests/unit/adapters/ajax-test.js should pass jshint\', function() { \n      ok(true, \'dummy/tests/unit/adapters/ajax-test.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/dummy/tests/unit/adapters/ajax-test.jshint.js");
-
-;eval("define(\"dummy/tests/dummy/tests/unit/adapters/localstorage-test.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - dummy/tests/unit/adapters\');\n    test(\'dummy/tests/unit/adapters/localstorage-test.js should pass jshint\', function() { \n      ok(true, \'dummy/tests/unit/adapters/localstorage-test.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/dummy/tests/unit/adapters/localstorage-test.jshint.js");
-
-;eval("define(\"dummy/tests/dummy/tests/unit/cache-test.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - dummy/tests/unit\');\n    test(\'dummy/tests/unit/cache-test.js should pass jshint\', function() { \n      ok(true, \'dummy/tests/unit/cache-test.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/dummy/tests/unit/cache-test.jshint.js");
-
-;eval("define(\"dummy/tests/dummy/tests/unit/initializers/sl-ember-model-test.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - dummy/tests/unit/initializers\');\n    test(\'dummy/tests/unit/initializers/sl-ember-model-test.js should pass jshint\', function() { \n      ok(true, \'dummy/tests/unit/initializers/sl-ember-model-test.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/dummy/tests/unit/initializers/sl-ember-model-test.jshint.js");
-
-;eval("define(\"dummy/tests/dummy/tests/unit/model-test.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - dummy/tests/unit\');\n    test(\'dummy/tests/unit/model-test.js should pass jshint\', function() { \n      ok(true, \'dummy/tests/unit/model-test.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/dummy/tests/unit/model-test.jshint.js");
-
-;eval("define(\"dummy/tests/dummy/tests/unit/store-test.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - dummy/tests/unit\');\n    test(\'dummy/tests/unit/store-test.js should pass jshint\', function() { \n      ok(true, \'dummy/tests/unit/store-test.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/dummy/tests/unit/store-test.jshint.js");
-
-;eval("define(\"dummy/tests/helpers/module-for-sl-ember-model\", \n  [\"ember-qunit\",\"ember\",\"sl-ember-store/store\",\"exports\"],\n  function(__dependency1__, __dependency2__, __dependency3__, __exports__) {\n    \"use strict\";\n    var moduleFor = __dependency1__.moduleFor;\n    var Ember = __dependency2__[\"default\"];\n    var Store = __dependency3__[\"default\"];\n\n\n    __exports__[\"default\"] = function moduleForSlEmberModel(name, description, callbacks) {\n\n        moduleFor(\'model:\' + name, description, callbacks, function(container, context, defaultSubject) {\n\n            container.register(\'store:main\', Store );\n\n            context.__setup_properties__.store = function(){\n                return container.lookup(\'store:main\');\n            };\n\n            if (context.__setup_properties__.subject === defaultSubject) {\n                context.__setup_properties__.subject = function(options) {\n                    return Ember.run(function() {\n                        return container.lookup(\'store:main\').createRecord(name, options);\n                    });\n                };\n            }\n        });\n    }\n  });//# sourceURL=dummy/tests/helpers/module-for-sl-ember-model.js");
-
-;eval("define(\"dummy/tests/helpers/resolver\", \n  [\"ember/resolver\",\"dummy/config/environment\",\"exports\"],\n  function(__dependency1__, __dependency2__, __exports__) {\n    \"use strict\";\n    var Resolver = __dependency1__[\"default\"];\n    var config = __dependency2__[\"default\"];\n\n    var resolver = Resolver.create();\n\n    resolver.namespace = {\n      modulePrefix: config.modulePrefix,\n      podModulePrefix: config.podModulePrefix\n    };\n\n    __exports__[\"default\"] = resolver;\n  });//# sourceURL=dummy/tests/helpers/resolver.js");
-
-;eval("define(\"dummy/tests/initializers/pretender.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - initializers\');\n    test(\'initializers/pretender.js should pass jshint\', function() { \n      ok(true, \'initializers/pretender.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/initializers/pretender.jshint.js");
-
-;eval("define(\"dummy/tests/models/bar.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - models\');\n    test(\'models/bar.js should pass jshint\', function() { \n      ok(true, \'models/bar.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/models/bar.jshint.js");
-
-;eval("define(\"dummy/tests/models/car.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - models\');\n    test(\'models/car.js should pass jshint\', function() { \n      ok(true, \'models/car.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/models/car.jshint.js");
-
-;eval("define(\"dummy/tests/models/foo.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - models\');\n    test(\'models/foo.js should pass jshint\', function() { \n      ok(true, \'models/foo.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/models/foo.jshint.js");
-
-;eval("define(\"dummy/tests/router.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - .\');\n    test(\'router.js should pass jshint\', function() { \n      ok(true, \'router.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/router.jshint.js");
-
-;eval("define(\"dummy/tests/routes/demos/array-of-models.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - routes/demos\');\n    test(\'routes/demos/array-of-models.js should pass jshint\', function() { \n      ok(true, \'routes/demos/array-of-models.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/routes/demos/array-of-models.jshint.js");
-
-;eval("define(\"dummy/tests/routes/demos/single-model.jshint\", \n  [],\n  function() {\n    \"use strict\";\n    module(\'JSHint - routes/demos\');\n    test(\'routes/demos/single-model.js should pass jshint\', function() { \n      ok(true, \'routes/demos/single-model.js should pass jshint.\'); \n    });\n  });//# sourceURL=dummy/tests/routes/demos/single-model.jshint.js");
-
-;eval("define(\"dummy/tests/test-helper\", \n  [\"dummy/tests/helpers/resolver\",\"ember-qunit\"],\n  function(__dependency1__, __dependency2__) {\n    \"use strict\";\n    var resolver = __dependency1__[\"default\"];\n    var setResolver = __dependency2__.setResolver;\n\n    setResolver(resolver);\n\n    document.write(\'<div id=\"ember-testing-container\"><div id=\"ember-testing\"></div></div>\');\n\n    QUnit.config.urlConfig.push({ id: \'nocontainer\', label: \'Hide container\'});\n    var containerVisibility = QUnit.urlParams.nocontainer ? \'hidden\' : \'visible\';\n    document.getElementById(\'ember-testing-container\').style.visibility = containerVisibility;\n  });//# sourceURL=dummy/tests/test-helper.js");
-
-;eval("define(\"dummy/tests/unit/adapters-test\", \n  [\"ember\",\"ember-qunit\",\"sl-ember-store/adapter\"],\n  function(__dependency1__, __dependency2__, __dependency3__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    var test = __dependency2__.test;\n    var moduleFor = __dependency2__.moduleFor;\n    var Adapter = __dependency3__[\"default\"];\n\n    var adapter,\n        store = {\n            runPostQueryHooks: sinon.spy(),\n            runPreQueryHooks: sinon.spy()\n        };\n\n    module( \'Unit - sl-ember-store/adapter\', {\n        setup: function() {\n            adapter = Adapter.create({\n                container:{\n                    lookup: function( type ){\n                        if( type === \'store:main\' )\n                            return store;\n                        else\n                            Ember.Assert( \'Container could not find \"\'+type+\'\"\', false);\n                    }\n                }\n            });\n        },\n        teardown: function() {\n            store.runPostQueryHooks.reset();\n            store.runPreQueryHooks.reset();\n        }\n    });\n    test( \'runPreQueryHooks should run the prequeryhook once\', function() {\n        adapter.runPreQueryHooks();\n        ok( store.runPreQueryHooks.calledOnce );\n    });\n\n    test( \'runPreQueryHooks should not have run postqueryhook\', function() {\n        adapter.runPreQueryHooks();\n        equal( store.runPostQueryHooks.callCount,0 );\n    });\n\n    test( \'runPostQueryHooks should run the postqueryhook once\', function() {\n         adapter.runPostQueryHooks();\n         ok( store.runPostQueryHooks.calledOnce );\n    });\n    test( \'runPostQueryHooks should not have run the prequeryhook\', function() {\n         adapter.runPostQueryHooks();\n         equal( store.runPreQueryHooks.callCount,0 );\n    });\n  });//# sourceURL=dummy/tests/unit/adapters-test.js");
-
-;eval("define(\"dummy/tests/unit/adapters/ajax-test\", \n  [\"ember\",\"ember-qunit\",\"sl-ember-store/model\",\"sl-ember-store/adapter\",\"sl-ember-store/store\",\"sl-ember-store/adapters/ajax\",\"ic-ajax\"],\n  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    var test = __dependency2__.test;\n    var moduleFor = __dependency2__.moduleFor;\n    var Model = __dependency3__[\"default\"];\n    var Adapter = __dependency4__[\"default\"];\n    var Store = __dependency5__[\"default\"];\n    var Ajaxadapter = __dependency6__[\"default\"];\n    var icAjax = __dependency7__;\n\n    var ajaxadapter,\n        Foo = Model.extend(),\n        Bar = Model.extend(),\n        defineFixture = icAjax.defineFixture,\n        response,\n        requestSpy;\n\n    module( \'Unit - sl-ember-store/adapter/ajax\', {\n        setup: function() {\n            var container = {\n                    registry: [],\n                    cache: {},\n                    normalize: function( key ){\n                        return key;\n                    },\n                    lookup: function( key ){\n                        if( this.cache[key] ) return this.cache[key];\n\n                        var obj = this.registry.findBy( \'key\', key ).factory.create({container:this});\n                        this.cache[key] = obj;\n                        return obj;\n                    },\n                    lookupFactory: function( key ){\n                        var item = this.registry.findBy( \'key\', key );\n                        return item ? item.factory : undefined;\n                    }\n                };\n\n            ajaxadapter = Ajaxadapter.create({\n                container: container,\n                store: Store.create({ container:container })\n            });\n            //register mock data\n            ajaxadapter.container.cache[\'store:main\']={\n                runPostQueryHooks: sinon.spy(),\n                runPreQueryHooks: sinon.spy()\n            };\n\n            ajaxadapter.container.registry.push( { key: \'model:foo\', factory: Foo } );\n            ajaxadapter.container.registry.push( { key: \'model:bar\', factory: Bar } );\n\n            defineFixture( \'/foo\', {\n                response: { id: 1, test: \'foo\', \'bar\': { id: 1, quiz: \'bar\' } },\n                jqXHR: {},\n                textStatus: \'success\'\n            });\n            defineFixture( \'/fooFail\', {\n                errorThrown: \'this is an error msg\',\n                jqXHR: {},\n                textStatus: \'error\'\n            });\n            defineFixture( \'/bar\', {\n                response:  [ { id: 1, quiz: \'bar\' }, { id: 2, quiz: \'bar2\' } ],\n                jqXHR: {},\n                textStatus: \'success\'\n            });\n            Foo.reopenClass( {\n                url: \'/foo\',\n                endpoints: {\n                    fail: {\n                        url: \'/fooFail\'\n                    }\n                }\n            });\n\n            Bar.reopenClass( { url: \'/bar\'});\n\n            //spies\n            requestSpy = sinon.spy( icAjax, \'request\' );\n        },\n        teardown: function() {\n            icAjax.request.restore();\n        }\n    });\n\n    function ajaxTestSuite(){\n        ok( requestSpy.calledOnce, \'request called once\' );\n        ok( response.then, \'response is a promise\' );\n        ok( Ember.PromiseProxyMixin.detect( response ), \'response is a promise proxy\' );\n    }\n\n    asyncTest( \'__find single model with id\', function(){\n\n        expect(6);\n        response = ajaxadapter.find( \'foo\', 1 );\n\n        equal( requestSpy.args[0][0].url, \'/foo\', \'should call icAjax.request with the correct arguments\');\n\n        equal( requestSpy.args[0][0].data.id, 1, \'should call icAjax.request with the correct arguments\');\n\n        ajaxTestSuite();\n\n        response.then( function(){\n            ok( response.get(\'content\') instanceof Foo, \'response is instance of Foo\' );\n            start();\n        });\n    });\n\n    asyncTest( \'__find single model with no id\', function(){\n        var options =  {data: {main: true }};\n\n        response = ajaxadapter.find( \'foo\', null, options, true );\n\n        equal( requestSpy.args[0][0].url, \'/foo\', \'should call icAjax.request with the correct arguments\');\n\n        ok( requestSpy.args[0][0].data.main, \'should call icAjax.request with the correct arguments\');\n\n        ajaxTestSuite();\n\n        response.then( function(){\n            ok( response.get(\'content\') instanceof Foo, \'response is instance of Foo\' );\n            start();\n        });\n\n    });\n\n    asyncTest( \'__find array of model\', function(){\n        var options =  {data: {main: true }};\n        //request\n        response = ajaxadapter.find( \'bar\', null, options, false );\n\n        ajaxTestSuite();\n\n        ok( response instanceof Ember.ArrayProxy, \'should return an instance of Ember.ArrayProxy\' );\n        response.then( function(){\n            ok( response.content[0] instanceof Bar, \'should return an array of Bar models\' );\n            ok( response.content[1] instanceof Bar, \'should return an array of Bar models\' );\n            start();\n        });\n    });\n\n\n    asyncTest( \'find should throw error if request fails\', function(){\n        var options = { endpoint: \'fail\' },\n            promise = ajaxadapter.find( \'foo\', null, options, false );\n\n        promise.then( function( result ){\n            ok( false, \'find did not throw an error!\' );\n            start();\n        },\n        function( result ){\n            equal( result.textStatus, \'error\', \'find did throw error\' );\n            start();\n        });\n    });\n\n    test( \'save\', function(){\n        var foo = Foo.create({ test: \'foo\', \'bar\': { id: 1, quiz: \'bar\' } });\n        response = ajaxadapter.save( \'/foo\', foo );\n        ok( requestSpy.calledOnce, \'should call icAjax request once\' );\n        equal( requestSpy.args[0][0].url, \'/foo\', \'should call icAjax with correct url\');\n        equal( requestSpy.args[0][0].type, \'POST\', \'should call icAjax with correct method\');\n        equal( typeof requestSpy.args[0][0].data, \'string\', \'icAjax should return a string\');\n    });\n\n    test( \'save, should call $.ajax with the correct arguments\', function(){\n        var foo = Foo.create({ test: \'foo\', \'bar\': { id: 1, quiz: \'bar\' } });\n        response = ajaxadapter.save( \'/foo\', foo );\n        ok( requestSpy.calledOnce, \'request called once\' );\n        equal( requestSpy.args[0][0].url, \'/foo\' );\n        equal( requestSpy.args[0][0].type, \'POST\' );\n        equal( typeof requestSpy.args[0][0].data, \'string\' );\n        ok( response.then, \'response is a promise\' );\n    });\n\n    test( \'delete, should call icAjax.request once\', function(){\n        var foo = Foo.create({ id: 1, test: \'foo\', \'bar\': { id: 1, quiz: \'bar\' } });\n        response = ajaxadapter.deleteRecord( \'/foo\', 1 );\n\n        ok( requestSpy.calledOnce );\n        equal( requestSpy.args[0][0].url, \'/foo\', \'should call icAjax with correct url\');\n        equal( requestSpy.args[0][0].type, \'DELETE\', \'should call icAjax with correct url\');\n        equal( typeof requestSpy.args[0][0].data, \'string\', \'icAjax should return a string\');\n        ok( response.then, \'response is a proxy\' );\n    });\n  });//# sourceURL=dummy/tests/unit/adapters/ajax-test.js");
-
-;eval("define(\"dummy/tests/unit/adapters/localstorage-test\", \n  [\"ember\",\"ember-qunit\",\"sl-ember-store/model\",\"sl-ember-store/adapter\",\"sl-ember-store/store\",\"sl-ember-store/adapters/localstorage\"],\n  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    var test = __dependency2__.test;\n    var moduleFor = __dependency2__.moduleFor;\n    var Model = __dependency3__[\"default\"];\n    var Adapter = __dependency4__[\"default\"];\n    var Store = __dependency5__[\"default\"];\n    var LocalStorageAdapter = __dependency6__[\"default\"];\n\n    var localstorageadapter,\n        localStorageBackup,\n        localStorage,\n        container,\n        getLocalStorageSpy,\n        requestSpy,\n        saveSpy,\n        response,\n        Foo = Model.extend(),\n        Bar = Model.extend();\n\n    module( \'Unit - sl-ember-store/adapter/localstorage\', {\n        setup: function() {\n           localStorage = {\n                _ns: \'testLSObject\',\n                setItem: function( item, content ){\n                    this[item] = content;\n                },\n                getItem: function( item ){\n                    return this[item];\n                }\n            };\n            container = {\n                registry: [],\n                cache: {},\n                normalize: function( key ){\n                    return key;\n                },\n                lookup: function( key ){\n                    if( this.cache[key] ) return this.cache[key];\n\n                    var obj = this.registry.findBy( \'key\', key ).factory.create({container:this});\n                    this.cache[key] = obj;\n                    return obj;\n                },\n                lookupFactory: function( key ){\n                    var item = this.registry.findBy( \'key\', key );\n                    return item ? item.factory : undefined;\n                }\n            };\n            localstorageadapter = LocalStorageAdapter.create({\n                container: container,\n                store: Store.create({ container:container })\n            });\n\n            //register mock data\n            localstorageadapter.container.cache[\'store:main\']={\n                runPostQueryHooks: sinon.spy(),\n                runPreQueryHooks: sinon.spy()\n            };\n\n            Foo.reopenClass( { url: \'/foo\', adapter: \'localstorage\' } );\n            Bar.reopenClass( { url: \'/bar\', adapter: \'localstorage\' } );\n\n            localstorageadapter.container.registry.push( { key: \'model:foo\', factory: Foo } );\n            localstorageadapter.container.registry.push( { key: \'model:bar\', factory: Bar } );\n\n            getLocalStorageSpy = sinon.stub( localstorageadapter, \'_getLocalStorage\', function(){\n                return localStorage;\n            });\n\n            localstorageadapter.save( \'/foo\',  {id: 1, test: \'foo\', \'bar\': { id: 1, quiz: \'bar\' } } );\n            localstorageadapter.save( \'/bar\', { id: 1, quiz: \'bar\' } );\n            localstorageadapter.save( \'/bar\', { id: 2, quiz: \'bar2\' } );\n\n        //spies\n            requestSpy = sinon.spy( localStorage, \'getItem\' );\n            saveSpy = sinon.spy( localStorage, \'setItem\' );\n\n        },\n        teardown: function() {\n            localStorage.getItem.restore();\n            localStorage.setItem.restore();\n            getLocalStorageSpy.restore();\n        }\n    });\n\n    asyncTest( \'__find single model with id\', function(){\n        response = localstorageadapter.find( \'foo\', 1, { label: \'1\' } );\n        equal(requestSpy.args[0][0], \'sl-ember-store\', \'calls request with correct args\' );\n        ok( response.then, \'response is a promise\' );\n        ok( Ember.PromiseProxyMixin.detect( response ), \'response is a promise\' );\n        response.then(function( result ){\n            ok( response.get( \'content\' ) instanceof Foo, \'response content is instace of Foo\' );\n            start();\n        });\n    });\n\n    asyncTest( \'__find single model with no id\', function(){\n        var options =  {data: {main: true }};\n\n        response = localstorageadapter.find( \'foo\', null, options, true );\n\n        equal(requestSpy.args[0][0], \'sl-ember-store\', \'calls request with correct args\' );\n\n        ok( response.then, \'response is a promise\' );\n\n        ok( Ember.PromiseProxyMixin.detect( response ), \'response is a promise\' );\n\n        response.then(function(){\n            ok( response.get( \'content\' ) instanceof Foo, \'response content is instace of Foo\' );\n            start();\n        });\n\n    });\n\n    asyncTest( \'__find array of models\', function(){\n        var options =  {data: {main: true }};\n\n        response = localstorageadapter.find( \'bar\', null, options, false );\n\n        ok( Ember.PromiseProxyMixin.detect( response ), \'response is a promise\' );\n\n        response.then(function(){\n            ok( response.get( \'content.0\' ) instanceof Bar, \'response content is instace of Bar\' );\n            ok( response.get( \'content.1\' ) instanceof Bar, \'response content is instace of Bar\' );\n            start();\n        });\n    });\n\n    asyncTest( \'save\', function(){\n        var fooContent = { id: 2, test: \'foo\', \'bar\': { id: 1, quiz: \'bar2\' } },\n            foo = Foo.create( fooContent );\n\n        response = localstorageadapter.save( \'/foo\', foo );\n        response.then( function(){\n            var fooRecords = JSON.parse(localStorage.getItem(\'sl-ember-store\')).foo,\n                fooRecord = fooRecords.findBy( \'id\', 2 );\n\n            ok( response.then, \'response is a promise\' );\n\n            equal( fooRecord.id, 2, \'should have added the record to the mock ls object\' );\n            start();\n        });\n    });\n\n    asyncTest( \'delete\', function(){\n        var fooContent = { id: 2, test: \'foo\', \'bar\': { id: 1, quiz: \'bar2\' } },\n            foo = Foo.create( fooContent ),\n            r = localstorageadapter.save( \'/foo\', foo );\n\n            r.then( function(){\n\n                var response = localstorageadapter.deleteRecord( \'/foo\', 2 );\n\n                response.then( function(){\n                    ok( response.then, \'response is a promise\' );\n\n                    var fooRecords = [ JSON.parse(localStorage.getItem(\'sl-ember-store\')).foo ],\n                        fooRecord = fooRecords.findBy( \'id\', 2 );\n\n                    equal( fooRecord, undefined, \'should have deleted the record to the mock ls object\' );\n                    start();\n                });\n            });\n    });\n\n    asyncTest( \'quota test\', function(){\n        var fooContent = { id: 1, test: [] },\n            foo,\n            r;\n\n        for( var i = 0; i < 10000000; i++){\n            fooContent.test[i] = \'01000001000000000100010\';\n        }\n\n        //make sure we actually test the browser\'s localstorage\n        getLocalStorageSpy.restore();\n\n        foo = Foo.create( fooContent );\n\n        r = localstorageadapter.save( \'/foo\', foo );\n\n        r.then(\n            function( result ){\n                ok( false, \'Promise did not get rejected!\');\n                start();\n            },\n            function( result ){\n                equal( result.textStatus, \'error\', \'Promise gets rejected for exceeding quota\' );\n                start();\n            });\n    });\n  });//# sourceURL=dummy/tests/unit/adapters/localstorage-test.js");
-
-;eval("define(\"dummy/tests/unit/cache-test\", \n  [\"ember\",\"ember-qunit\",\"sl-ember-store/cache\"],\n  function(__dependency1__, __dependency2__, __dependency3__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    var test = __dependency2__.test;\n    var moduleFor = __dependency2__.moduleFor;\n    var Cache = __dependency3__[\"default\"];\n\n    var cache,\n        fetchByIdSpy,\n        fetchOneSpy,\n        _getManyPromiseSpy,\n        _getRecordSpy;\n\n    module( \'Unit - sl-ember-store/cache\', {\n        setup: function(){\n            cache = Cache.create();\n            fetchByIdSpy = sinon.spy( cache, \'fetchById\' );\n            fetchOneSpy = sinon.spy( cache, \'fetchOne\' );\n            _getManyPromiseSpy = sinon.spy( cache, \'_getManyPromise\' );\n            _getRecordSpy = sinon.spy( cache, \'_getRecords\' );\n        },\n        teardown: function(){\n            fetchByIdSpy.restore();\n            fetchOneSpy.restore();\n            _getManyPromiseSpy.restore();\n            _getRecordSpy.restore();\n        }\n    });\n\n    test( \'isCached, id\', function(){\n        cache.isCached( \'test\', 1 );\n        ok( fetchByIdSpy.calledOnce, \'fetch by id called once\' );\n        equal( fetchByIdSpy.args[0][1], 1, \'fetch by the right id\' );\n    });\n    test( \'isCached, one\', function(){\n        cache.isCached( \'test\', null, true );\n        ok( fetchOneSpy.calledOnce, \'fetch one called once\' );\n        equal( fetchOneSpy.args[0][0], \'test\', \'fetch one called with correct type\' );\n    });\n    test( \'isCached, all\', function(){\n        cache.isCached( \'test\' );\n        ok( _getManyPromiseSpy.calledOnce, \'get all called once\');\n        equal( _getManyPromiseSpy.args[0][0], \'test\', \'get all called with correct type\' );\n        ok( _getRecordSpy.calledOnce, \'get all called once\');\n        equal( _getRecordSpy.args[0][0], \'test\', \'get all called with correct type\' );\n    });\n\n    test( \'clearCache\', function(){\n        sinon.spy( cache, \'_initializeRecords\' );\n        sinon.spy( cache, \'_initializePromises\' );\n        cache.clearCache( \'test\' );\n        ok( cache._initializeRecords.calledOnce, \'initialize records called once\');\n        ok( cache._initializeRecords.calledWith( \'test\' ), \'initialize records called with correct arg\' );\n        ok( cache._initializePromises.calledOnce, \'initialize promises called once\');\n        ok( cache._initializePromises.calledWith( \'test\' ), \'initialize records called with correct arg\' );\n    });\n\n    test( \'removeRecord\', function(){\n        cache.removeRecord( \'test\', Ember.Object.create() );\n        ok( cache._getRecords.calledOnce, \'_getRecords called once\' );\n        ok( cache._getRecords.calledWith( \'test\' ), \'_getRecords called with correct arg\');\n    });\n\n    test( \'removeRecords\', function(){\n        sinon.spy( cache, \'removeRecord\' );\n        cache.removeRecords( \'test\', [ Ember.Object.create() ] );\n        ok( cache.removeRecord.calledOnce, \'removeRecord called once\' );\n        ok( cache.removeRecord.calledWith( \'test\' ), \'removeRecord called with correct arg\' );\n    });\n\n    test( \'addToCache, single promise\', function(){\n        var result =  new Ember.RSVP.Promise(function( resolve ){ resolve( Ember.Object.create() ); });\n        sinon.spy( cache, \'addPromise\');\n        cache.addToCache( \'test\', 1, false, result );\n        ok( cache.addPromise.calledOnce, \'addPromise called once\' );\n        ok( cache.addPromise.calledWith( \'test\' ), \'addPromise called with correct args\' );\n    });\n\n    test( \'addToCache, all promise\', function(){\n        var result =  new Ember.RSVP.Promise(function( resolve ){ resolve( [ Ember.Object.create() ] ); });\n        sinon.spy( cache, \'addManyPromise\');\n        cache.addToCache( \'test\', false, false, result );\n        ok( cache.addManyPromise.calledOnce, \'addManyPromise called once\' );\n        ok( cache.addManyPromise.calledWith( \'test\' ), \'addManyPromise called with correct args\' );\n    });\n\n    test( \'addToCache, record\', function(){\n        sinon.spy( cache, \'addRecord\');\n        cache.addToCache( \'test\', 1, false, Ember.Object.create() );\n        ok( cache.addRecord.calledOnce, \'addRecord called once\' );\n        ok( cache.addRecord.calledWith( \'test\' ), \'addRecord called with correct args\' );\n    });\n\n    asyncTest( \'addPromise, resolve\', function(){\n        var testRecord =  Ember.Object.create({ id: 1, test: \'test\' }),\n            testPromise = new Ember.RSVP.Promise( function( resolve ){\n               setTimeout( resolve( testRecord ), 1000);\n            }),\n            rPromise;\n\n        sinon.spy( cache, \'_getPromises\' );\n\n        rPromise = cache.addPromise( \'test\', 1, testPromise );\n        ok( cache._getPromises.calledOnce, \'_getPromises called once\' );\n        equal( cache.get( \'_promises.test.ids.1\' ), testPromise, \'promise got added to promise cache\' );\n\n        //test that promise gets removed from promise hash on resolution\n        rPromise.finally( function(){\n            equal( cache.get( \'_promises.test.ids.1\' ), undefined, \'promise was removed from cache\' );\n            ok( cache._getRecords.calledOnce, \'_getRecords called once\' );\n            equal( cache.get( \'_records.test.ids.1\' ), testRecord, \'record was added to record cache\' );\n            start();\n        });\n\n    });\n    asyncTest( \'addPromise, reject\', function(){\n        var testRecord =  Ember.Object.create({ id: 1, test: \'test\' }),\n            testPromise = new Ember.RSVP.Promise( function( resolve, reject ){\n               setTimeout( reject( testRecord ), 1000);\n            }),\n            rPromise;\n\n        sinon.spy( cache, \'_getPromises\' );\n\n        rPromise = cache.addPromise( \'test\', 1, testPromise );\n        ok( cache._getPromises.calledOnce, \'_getPromises called once\' );\n        equal( cache.get( \'_promises.test.ids.1\' ), testPromise, \'promise got added to promise cache\' );\n\n        //test that promise gets removed from promise hash on resolution\n        rPromise.finally( function(){\n            equal( cache.get( \'_promises.test.ids.1\' ), undefined, \'promise was removed from cache\' );\n            ok( !cache._getRecords.called, \'_getRecords not called\' );\n            equal( cache.get( \'_records.test.ids.1\' ), undefined, \'record was not added to record cache\' );\n            start();\n        });\n\n    });\n\n\n    asyncTest( \'addManyPromise, resolve\', function(){\n        var testRecord =  Ember.Object.create({ id: 1, test: \'test\' }),\n            testPromise = new Ember.RSVP.Promise( function( resolve ){\n               setTimeout( resolve( [ testRecord ]  ), 100);\n            }),\n            rPromise;\n\n        sinon.spy( cache, \'_getPromises\' );\n        sinon.spy( cache, \'addRecords\' );\n\n        rPromise = cache.addManyPromise( \'test\', testPromise );\n        ok( cache._getPromises.called >= 1, \'_getPromises called at least once\' );\n        equal( cache.get( \'_promises.test.many.firstObject\' ), testPromise, \'promise was added to promise cache\' );\n        rPromise.then( function(){\n            equal( cache.get( \'_promises.test.many.length\' ), 0, \'promise was removed from promise cache\' );\n            ok( cache.addRecords.calledOnce, \'addrecords called once\' );\n            equal( cache.get( \'_records.test.ids.1\'), testRecord, \'record was added to record cache\' );\n            start();\n        });\n    });\n\n    asyncTest( \'addManyPromise, reject\', function(){\n        var testRecord =  Ember.Object.create({ id: 1, test: \'test\' }),\n            testPromise = new Ember.RSVP.Promise( function( resolve, reject ){\n               setTimeout( reject( [ testRecord ]  ), 100);\n            }),\n            rPromise;\n\n        sinon.spy( cache, \'_getPromises\' );\n        sinon.spy( cache, \'addRecords\' );\n\n        rPromise = cache.addManyPromise( \'test\', testPromise );\n        ok( cache._getPromises.called >= 1, \'_getPromises called at least once\' );\n        equal( cache.get( \'_promises.test.many.firstObject\' ), testPromise, \'promise was added to promise cache\' );\n        rPromise.finally( function(){\n            equal( cache.get( \'_promises.test.many.length\' ), 0, \'promise was removed from promise cache\' );\n            ok( !cache.addRecords.calledOnce, \'addrecords not called once\' );\n            equal( cache.get( \'_records.test.ids.1\'), undefined, \'record was added to record cache\' );\n            start();\n        });\n    });\n\n    test( \'addRecord\', function(){\n        var testRecord =  Ember.Object.create({ id: 1, test: \'test\' });\n        var testRecord2 =  Ember.Object.create({ id: 1, test: \'test2\' });\n\n        sinon.spy( cache, \'removeRecord\' );\n\n        cache.addRecord( \'test\', testRecord );\n\n        equal( cache.get( \'_records.test.ids.1\' ), testRecord, \'testRecord added to record cache\' );\n\n        ok( ! cache.removeRecord.called, \'removeRecord was not called on initial add\');\n\n        cache.addRecord( \'test\', testRecord2 );\n\n        ok( cache.removeRecord.called, \'removeRecord was called on 2nd add\');\n\n        equal( cache.get( \'_records.test.ids.1\' ), testRecord2, \'testRecord2 replaced old record in cache\' );\n    });\n\n    test( \'addRecords\', function(){\n        var testRecord =  Ember.Object.create({ id: 1, test: \'test\' });\n        var testRecord2 =  Ember.Object.create({ id: 2, test: \'test2\' });\n\n        sinon.spy( cache, \'addRecord\' );\n\n        cache.addRecords( \'test\', [ testRecord, testRecord2 ] );\n\n        equal( cache.addRecord.callCount, 2, \'addRecord called for each record\' );\n\n    });\n\n    test( \'fetch, id\', function(){\n        cache.fetch( \'test\', 1 );\n        ok( fetchByIdSpy.calledOnce, \'fetch by id called once\' );\n        equal( fetchByIdSpy.args[0][1], 1, \'fetch by the right id\' );\n    });\n    test( \'fetch, one\', function(){\n        cache.fetch( \'test\', null, true );\n        ok( fetchOneSpy.calledOnce, \'fetch one called once\' );\n        equal( fetchOneSpy.args[0][0], \'test\', \'fetch one called with correct type\' );\n    });\n    test( \'fetch, all\', function(){\n        cache.fetch( \'test\' );\n        ok( _getManyPromiseSpy.calledOnce, \'get all called once\');\n        equal( _getManyPromiseSpy.args[0][0], \'test\', \'get all called with correct type\' );\n        ok( _getRecordSpy.calledOnce, \'get all called once\');\n        equal( _getRecordSpy.args[0][0], \'test\', \'get all called with correct type\' );\n    });\n\n\n    asyncTest( \'fetchOne - promise\', function(){\n        var testRecord = Ember.Object.create({ id: 1});\n\n        cache.addPromise( \'test\', 1, Ember.RSVP.Promise.resolve( testRecord ) )\n        .then( function(){\n\n            sinon.spy( cache, \'_getPromises\' );\n\n            var response = cache.fetchOne( \'test\' );\n\n            ok( cache._getPromises.calledOnce, \'getPromise called once\' );\n\n            response.then( function(){\n                equal( response.get(\'content\'), testRecord, \'fetchOne returned correct record\' );\n\n                start();\n            });\n        });\n\n    });\n\n    asyncTest( \'fetchOne - record\', function(){\n        var testRecord = Ember.Object.create({ id: 1});\n\n        cache.addRecord( \'test\', testRecord );\n\n        var response = cache.fetchOne( \'test\' );\n\n        ok( cache._getRecords.called, \'getRecords called once\' );\n\n        response.then( function(){\n            equal( response.get(\'content\'), testRecord, \'fetchOne returned the correct record\' );\n            start();\n        });\n    });\n\n\n    asyncTest( \'fetchById - promise\', function(){\n        var testRecord = Ember.Object.create({ id: 1});\n\n        cache.addPromise( \'test\', 1, Ember.RSVP.Promise.resolve( testRecord ) )\n        .then( function(){\n\n            sinon.spy( cache, \'_getPromiseById\' );\n\n            var response = cache.fetchById( \'test\', 1 );\n\n            ok( cache._getPromiseById.calledOnce, \'getPromiseById called once\' );\n\n            response.then( function(){\n                equal( response.get(\'content\'), testRecord, \'fetchById returned correct record\' );\n\n                start();\n            });\n        });\n\n    });\n\n    asyncTest( \'fetchById - record\', function(){\n        var testRecord = Ember.Object.create({ id: 1});\n\n        cache.addRecord( \'test\', testRecord );\n\n        sinon.spy( cache, \'_getRecordById\' );\n\n        var response = cache.fetchById( \'test\', 1 );\n\n        ok( cache._getRecordById.calledOnce, \'getRecordById called once\' );\n\n        response.then( function(){\n            equal( response.get(\'content\'), testRecord, \'fetchById returned correct record\' );\n\n            start();\n        });\n\n    });\n\n    test( \'fetchMany - promise\', function(){\n\n        var testRecord = Ember.Object.create({ id: 1});\n        var testPromise =  Ember.RSVP.Promise.resolve( [ testRecord] );\n\n        cache.addManyPromise( \'test\', testPromise);\n        var response = cache.fetchMany( \'test\' );\n        ok( cache._getManyPromise.calledOnce, \'calls _getManyPromise once\' );\n        ok( response, testPromise, \'returns the test promise\' );\n    });\n\n    asyncTest( \'fetchMany - record\', function(){\n\n        var testRecord = Ember.Object.create({ id: 1});\n        cache.addRecords( \'test\', [ testRecord ] );\n        var response = cache.fetchMany( \'test\' );\n        ok( cache._getRecords.called, \'calls _getManyRecordsCached once\' );\n        response.then( function(){\n            equal( response.get( \'content.0\' ), testRecord, \'returns the test record in an array\' );\n            start();\n        });\n\n    });\n\n    test( \'_setupCache\', function(){\n        cache._setupCache();\n        equal( Object.keys( cache._records ).length, 0, \'records object is empty\' );\n        equal( Object.keys( cache._promises ).length, 0, \'promises object is empty\' );\n    });\n\n    test( \'_initializeRecords\', function(){\n        cache._initializeRecords( \'test\' );\n        equal( cache._records.test.records.length, 0, \'sets up `test` records array\' );\n        ok( cache._records.test.ids instanceof Ember.Object, \'sets up `test` records object\' );\n    });\n\n    test( \'_getRecords, none\', function(){\n        var response = cache._getRecords( \'test\' );\n        equal( response.records.length, 0, \'returns 0 records\');\n    });\n\n    test( \'_getRecords, some\', function(){\n        cache.addRecord( \'test\', Ember.Object.create({id:1}));\n        var response = cache._getRecords( \'test\' );\n        equal( response.records[0].id, 1, \'returns an array with the test record\' );\n    });\n\n    test( \'_getRecordById, not found\', function(){\n        var response = cache._getRecordById( \'test\', 12 );\n        equal( response, undefined, \'record should not be found\');\n    });\n\n    test( \'_getRecordById, found\', function(){\n        var testRecord = Ember.Object.create({id:1});\n        cache.addRecord( \'test\', testRecord);\n        var response = cache._getRecordById( \'test\', 1 );\n        equal( response, testRecord, \'returns the correct record\' );\n    });\n\n    test( \'_getRecords, empty\', function(){\n        var response = cache._getRecords( \'test\' ).records;\n        equal( response.length, 0,  \'returns an empty array\' );\n    });\n\n    test( \'_getRecords, some\', function(){\n        var testRecord = Ember.Object.create({id:1});\n        cache.addRecord( \'test\', testRecord);\n        var response = cache._getRecords( \'test\' ).records;\n        equal( response[0], testRecord, \'returns the test record in an array\' );\n    });\n\n    test( \'_initializePromises\', function(){\n        cache._initializePromises( \'test\' );\n        equal( cache._promises.test.many.firstObject, null, \'test all promise is null \');\n        equal( Object.keys(cache._promises.test.ids).length, 0, \'test promise object is empty\' );\n    });\n\n    test( \'_getPromises, empty\', function(){\n        sinon.spy( cache, \'_initializePromises\' );\n        var response = cache._getPromises(\'test\');\n        ok( cache._initializePromises.calledOnce, \'calls initializePromises\' );\n\n    });\n\n    test( \'_getPromises, some\', function(){\n        var testPromise = Ember.RSVP.Promise.resolve( Ember.Object.create({id:1}) );\n        cache.addPromise( \'test\', 1, testPromise );\n        var response = cache._getPromises( \'test\' );\n        equal( response.ids[1], testPromise, \'has testpromise set\' );\n    });\n\n    test( \'_getPromiseById, none\', function(){\n        var response = cache._getPromiseById( \'test\', 1 );\n        equal( response, undefined, \'no promise should be found\' );\n    });\n    test( \'_getPromiseById, some\', function(){\n        var testPromise = Ember.RSVP.Promise.resolve( Ember.Object.create({id:1}));\n        cache.addPromise( \'test\', 1, testPromise );\n        var response = cache._getPromiseById( \'test\', 1 );\n        equal( response, testPromise, \'promise should be found\' );\n    });\n\n    test( \'_getManyPromise, none\', function(){\n        var response = cache._getManyPromise( \'test\' );\n        equal( response, undefined, \'response should be undefined\' );\n    });\n    asyncTest( \'_getManyPromise, some\', function(){\n        var testRecord = Ember.Object.create({id:1}),\n            testPromise = Ember.RSVP.Promise.resolve( [ testRecord ] );\n\n        cache.addManyPromise( \'test\', testPromise );\n\n        var response = cache._getManyPromise( \'test\' );\n\n        response.then( function( records ){\n            equal( testRecord, records[0], \'should return promise\' );\n            start();\n        });\n    });\n\n    asyncTest( \'_getManyPromise, more\', function(){\n        var testRecord = Ember.Object.create({id:1}),\n            testRecord2 = Ember.Object.create({id:2}),\n            testPromise = Ember.RSVP.Promise.resolve( [ testRecord ] ),\n            testPromise2 = Ember.RSVP.Promise.resolve( [ testRecord2 ] );\n\n        cache.addManyPromise( \'test\', testPromise );\n        cache.addManyPromise( \'test\', testPromise2 );\n\n        var response = cache._getManyPromise( \'test\' );\n\n        response.then( function( records ){\n            equal( testRecord, records[0], \'first record should be testRecord\' );\n            equal( testRecord2, records[1], \'first record should be testRecord\' );\n            start();\n        });\n    });\n  });//# sourceURL=dummy/tests/unit/cache-test.js");
-
-;eval("define(\"dummy/tests/unit/initializers/sl-ember-model-test\", \n  [\"ember\",\"ember-qunit\",\"dummy/tests/helpers/start-app\",\"sl-ember-store/store\",\"sl-ember-store/adapters/ajax\",\"sl-ember-store/adapters/localstorage\"],\n  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    var test = __dependency2__.test;\n    var moduleForComponent = __dependency2__.moduleForComponent;\n    var startApp = __dependency3__[\"default\"];\n    var Store = __dependency4__[\"default\"];\n    var AjaxAdapter = __dependency5__[\"default\"];\n    var LocalstorageAdapter = __dependency6__[\"default\"];\n\n    var App,\n        container;\n\n    module( \'Unit - initializer: sl-ember-store\', {\n        setup: function() {\n            App = startApp();\n            container = App.__container__;\n        },\n\n        teardown: function() {\n            Ember.run( App, App.destroy );\n        }\n    });\n\n    test( \'LocalStorage adapter gets namespace set\', function(){\n        var lsAdapter = container.lookupFactory( \'adapter:localstorage\' );\n        equal( lsAdapter.namespace, container.lookup( \'application:main\' ).get( \'modulePrefix\' ) );\n    });\n\n    test( \'store:main gets registered\', function(){\n        var store = container.lookupFactory( \'store:main\' );\n        ok( Store.detect( store ) );\n    });\n\n    test( \'adapter:ajax gets registered\', function(){\n        var ajaxAdapter = container.lookupFactory( \'adapter:ajax\' );\n        ok( AjaxAdapter.detect( ajaxAdapter ) );\n    });\n\n    test( \'adapter:localstorage gets registered\', function(){\n        var lsAdapter = container.lookupFactory( \'adapter:localstorage\' );\n        ok( LocalstorageAdapter.detect( lsAdapter ) );\n    });\n\n    test( \'store gets injected into controllers, routes, adapters\', function(){\n        var appRoute = container.lookup( \'route:demos/single-model\' ),\n            appController,\n            ajaxAdapter = container.lookup( \'adapter:ajax\' ),\n            store = container.lookup( \'store:main\' );\n\n        expect( 3 );\n\n        equal( appRoute.get( \'store\' ), store );\n        equal( ajaxAdapter.get( \'store\' ), store );\n\n        visit( \'/\' ).then(function() {\n            appController = container.lookup( \'controller:application\' );\n            equal( appController.get( \'store\' ), store );\n        });\n    });\n  });//# sourceURL=dummy/tests/unit/initializers/sl-ember-model-test.js");
-
-;eval("define(\"dummy/tests/unit/model-test\", \n  [\"ember\",\"ember-qunit\",\"dummy/models/foo\",\"dummy/models/bar\",\"sl-ember-store/model\"],\n  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    var test = __dependency2__.test;\n    var moduleFor = __dependency2__.moduleFor;\n    var Foo = __dependency3__[\"default\"];\n    var Bar = __dependency4__[\"default\"];\n    var Model = __dependency5__[\"default\"];\n\n    var foo,\n        bar,\n        adapter,\n        container,\n        fooResponse   = { id: 1, test: \'true\' },\n        ajaxMock      = function() {\n            return new Ember.RSVP.Promise( function(resolve) { resolve( fooResponse ); });\n        },\n        serRespons1   = { test: true },\n        serResponse2  = { test: false },\n        serializer1   = function( response, store ){ return response; },\n        serializer2   = function( response, store ){ return response; },\n        testResponse1 = { test:true },\n        testResponse2 = { test: false },\n        TestModel     = Model.extend({});\n        TestModel.reopenClass({\n            serializer: function( response, store ){\n                return testResponse1;\n            },\n            endpoints: {\n                test: {\n                    get: {\n                        serializer: function( response, store ){\n                            return testResponse2;\n                        }\n                    }\n                }\n            }\n        });\n\n    module( \'Unit - sl-ember-store/model\', {\n        setup: function() {\n\n            Foo.reopenClass({\n                url       :\'/foo\',\n                endpoints : {\n                    doo: {\n                        url: \'/doo\'\n                    },\n                    goo: {\n                        serializer: serializer1,\n                        post: {\n                            url: \'/goo\',\n                            serializer: serializer2\n                        }\n                    }\n                }\n            });\n\n            Bar.reopenClass({\n                url       : \'/bar\',\n                endpoints : {\n                    default: {\n                            post: \'/barUpdate\',\n                            delete: \'/barDelete\',\n                            serializer: serializer1\n                    },\n                    car: {\n                        post: {\n                            url: \'/carUpdate\',\n                            serializer: serializer2,\n                        },\n                        delete: \'/carDelete\'\n                    }\n                }\n            });\n\n            adapter = {\n                save         : ajaxMock,\n                deleteRecord : ajaxMock,\n            };\n\n            sinon.spy( adapter, \'save\' );\n            sinon.spy( adapter, \'deleteRecord\' );\n\n            container = {\n                registry: [],\n                cache: {},\n                normalize: function( key ) {\n                    return key;\n                },\n                lookup: function( key ) {\n                    if ( this.cache[key] ) return this.cache[key];\n\n                    var obj = this.registry.findBy( \'key\', key ).factory.create({container:this});\n                    this.cache[key] = obj;\n                    return obj;\n                },\n                lookupFactory: function( key ){\n                    var item = this.registry.findBy( \'key\', key );\n                    return item ? item.factory : undefined;\n                }\n            };\n\n            container.cache[\'adapter:ajax\'] = adapter;\n\n            foo = Foo.create({\n                content: {\n                    test: \'foo\',\n                    \'bar\': { id: 1, quiz: \'bar\' },\n                },\n                container: container\n            });\n\n\n            bar = Bar.create({\n                content: {\n                    test: \'bar\',\n                    \'car\': { id: 1, quiz: \'car\' },\n                },\n                container: container\n            });\n        },\n        teardown: function() {\n            adapter.save.reset();\n            adapter.deleteRecord.reset();\n            foo = Foo.create({\n                content: {\n                    test: \'foo\',\n                    \'bar\': { id: 1, quiz: \'bar\' },\n                },\n                container: container\n            });\n            bar = Bar.create({\n                content: {\n                    test: \'bar\',\n                    \'car\': { id: 1, quiz: \'car\' },\n                },\n                container: container\n            });\n        }\n    });\n\n    test( \'getUrlForEndpointAction:should return /bar for ( null, `get` )\', function() {\n        equal( Bar.getUrlForEndpointAction( null, \'get\' ), \'/bar\' );\n    });\n\n    test( \'getUrlForEndpointAction:should return /barUpdate for ( null, `post` )\', function() {\n        equal( Bar.getUrlForEndpointAction( null, \'post\' ), \'/barUpdate\' );\n    });\n\n    test( \'getUrlForEndpointAction:should return /barDelete for ( null, `delete` )\', function() {\n        equal( Bar.getUrlForEndpointAction( null, \'delete\' ), \'/barDelete\' );\n    });\n\n    test( \'getUrlForEndpointAction:should return /bar for ( `default`, `get` )\', function() {\n        equal( Bar.getUrlForEndpointAction( \'default\', \'get\' ), \'/bar\' );\n    });\n\n    test( \'getUrlForEndpointAction:should return /barUpdate for ( `default`, `post` )\', function() {\n        equal( Bar.getUrlForEndpointAction( \'default\', \'post\' ), \'/barUpdate\' );\n    });\n\n    test( \'getUrlForEndpointAction:should return /barDelete for ( `default`, `delete` )\', function() {\n        equal( Bar.getUrlForEndpointAction( \'default\', \'delete\' ), \'/barDelete\' );\n    });\n\n    test( \'getUrlForEndpointAction:should return /bar for ( `car`, `get` )\', function() {\n        equal( Bar.getUrlForEndpointAction( \'car\', \'get\' ), \'/bar\' );\n    });\n\n    test( \'getUrlForEndpointAction:should return /carUpdate for ( `car`, `post` )\', function() {\n        equal( Bar.getUrlForEndpointAction( \'car\', \'post\' ), \'/carUpdate\' );\n    });\n\n    test( \'getUrlForEndpointAction:should return /carDelete for ( `car`, `delete` )\', function() {\n        equal( Bar.getUrlForEndpointAction( \'car\', \'delete\' ), \'/carDelete\' );\n    });\n\n    test( \'callSerializerForEndpointAction:should return testResponse1 for TestModel - ( `null`, `get` ) \', function() {\n        var testResponse = TestModel.callSerializerForEndpointAction( null, \'get\', {} );\n        equal( testResponse, testResponse1 );\n    });\n\n    test( \'callSerializerForEndpointAction:should return testResponse1 for TestModel - ( `test`, `get` ) \', function() {\n        var testResponse = TestModel.callSerializerForEndpointAction( \'test\', \'get\', {} );\n        equal( testResponse, testResponse2 );\n    });\n\n    test( \'save-default:should call adapter.save with correct arguments\', function() {\n        expect(2);\n        foo.save().then( function() {\n            equal( adapter.save.args[0][0], \'/foo\' );\n            equal( adapter.save.args[0][1].test, \'foo\' );\n        });\n    });\n\n    test( \'save-default:should update its content with fooResponse\', function() {\n        expect(1);\n        foo.save().then(function() {\n            deepEqual( foo.get(\'content\'), fooResponse );\n        });\n    });\n\n    test( \'save-endpoint:should call adapter.save with correct arguments\', function() {\n        expect(2);\n        bar.save().then( function() {\n            equal( adapter.save.args[0][0], \'/barUpdate\' );\n            equal( adapter.save.args[0][1].test, \'bar\' );\n        });\n    });\n    test( \'save-endpoint:should update its content with fooResponse\', function() {\n        expect(1);\n        bar.save().then( function() {\n            deepEqual( bar.get(\'content\'), fooResponse );\n        });\n    });\n\n    test( \'save-endpoint:car: should call adapter.save with correct arguments\', function() {\n        expect(2);\n        bar = Bar.create({\n            content: {\n                test: \'bar\',\n                \'car\': { id: 1, quiz: \'car\' },\n            },\n            container: container\n        });\n        bar.save({endpoint:\'car\'}).then( function() {\n            equal( adapter.save.args[0][0], \'/carUpdate\' );\n            equal( adapter.save.args[0][1].test, \'bar\' );\n        });\n    });\n\n    test( \'save-endpoint:car: should update its content with fooResponse\', function() {\n        bar = Bar.create({\n            content: {\n                test: \'bar\',\n                \'car\': { id: 1, quiz: \'car\' },\n            },\n            container: container\n        });\n        bar.save({endpoint:\'car\'}).then( function() {\n            deepEqual( bar.get(\'content\'), fooResponse );\n        });\n    });\n\n    test( \'delete: should call adapter.deleteRecord with correct arguments\', function() {\n        expect(1);\n        foo.deleteRecord().then( function() {\n            ok( adapter.deleteRecord.calledWith( \'/foo\' ) );\n        });\n    });\n\n    test( \'delete: should destroy foo\', function() {\n        expect(1);\n        foo.deleteRecord().then( function() {\n            ok( foo.isDestroyed );\n        });\n\n    });\n\n    test( \'delete-endpoint: should call adapter.delete with correct arguments\', function() {\n        expect(1);\n        bar.deleteRecord().then( function() {\n            ok( adapter.deleteRecord.calledWith( \'/barDelete\' ) );\n        });\n    });\n\n    test( \'delete-endpoint: should destroy bar\', function() {\n        expect(1);\n        bar.deleteRecord().then( function() {\n            ok( bar.isDestroyed );\n        });\n    });\n\n    test( \'delete-endpoint:car: should call adapter.delete with correct arguments\', function() {\n        expect(1);\n        bar.deleteRecord({endpoint:\'car\'}).then( function() {\n            ok( adapter.deleteRecord.calledWith( \'/carDelete\' ) );\n        });\n    });\n\n    test( \'delete-endpoint:car: should destroy bar\', function() {\n        expect(1);\n        bar.deleteRecord({endpoint:\'car\'}).then( function() {\n            ok( bar.isDestroyed );\n        });\n    });\n  });//# sourceURL=dummy/tests/unit/model-test.js");
-
-;eval("define(\"dummy/tests/unit/store-test\", \n  [\"ember\",\"ember-qunit\",\"sl-ember-store/store\",\"sl-ember-store/model\"],\n  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__) {\n    \"use strict\";\n    var Ember = __dependency1__[\"default\"];\n    var test = __dependency2__.test;\n    var moduleFor = __dependency2__.moduleFor;\n    var Store = __dependency3__[\"default\"];\n    var Model = __dependency4__[\"default\"];\n\n    var Foo,\n        Bar,\n        store,\n        AjaxAdapter,\n        ajaxAdapter,\n        LocalstorageAdapter,\n        queryHook;\n\n    module( \'Unit - sl-ember-store/store\', {\n\n        setup: function() {\n            Foo = Model.extend();\n            Bar = Model.extend();\n            Bar.reopenClass({ adapter: \'localstorage\' });\n\n            AjaxAdapter = Ember.Object.extend({\n                type: \'ajax\',\n                __find: function(){},\n                find: function(){\n                    return Ember.RSVP.resolve( [ Ember.Object.create() ] );\n                }\n            });\n\n            LocalstorageAdapter = Ember.Object.extend({ type: \'localstorage\' });\n\n            store = Store.create({\n                container: {\n                    registry: [],\n                    cache: {},\n                    normalize: function( key ){\n                        return key;\n                    },\n                    lookup: function( key ){\n                        if( this.cache[key] ) return this.cache[key];\n\n                        var obj = this.registry.findBy( \'key\', key ).factory.create({container:this});\n                        this.cache[key] = obj;\n                        return obj;\n                    },\n                    lookupFactory: function( key ){\n                        return this.registry.findBy( \'key\', key ).factory;\n                    }\n                }\n            });\n            store.container.registry.push( { key: \'adapter:ajax\', factory: AjaxAdapter } );\n            store.container.registry.push( { key: \'adapter:localstorage\', factory: LocalstorageAdapter } );\n\n            store.container.registry.push( { key: \'model:foo\', factory: Foo } );\n            store.container.registry.push( { key: \'model:bar\', factory: Bar } );\n\n            ajaxAdapter = store.container.lookup(\'adapter:ajax\');\n\n\n            //sinon spies\n            sinon.spy( store, \'__find\' );\n            sinon.spy( store, \'modelFor\' );\n            sinon.spy( store, \'adapterFor\' );\n            sinon.spy( ajaxAdapter, \'find\' );\n            sinon.spy( Foo, \'create\' );\n            queryHook = sinon.spy();\n        },\n        teardown: function() {\n            store.__find.restore();\n            store.modelFor.restore();\n            store.adapterFor.restore();\n            ajaxAdapter.find.restore();\n            Foo.create.restore();\n            queryHook.reset();\n        }\n    });\n\n    test( \'modelFor: should return the model \"Foo\" for type \"foo\" \', function() {\n        ok( store.modelFor( \'foo\' ) === Foo );\n    });\n\n    test( \'modelFor: should return the model \"Bar\" for type \"bar\" \', function() {\n        ok( store.modelFor( \'bar\' ) === Bar );\n    });\n\n    test( \'adapterFor: should return the adapter ajax for model type foo\', function() {\n        ok( store.adapterFor( \'foo\' ) instanceof AjaxAdapter );\n    });\n\n    test( \'adapterFor: should return the adapter localstorage for model type bar\', function() {\n        ok( store.adapterFor( \'bar\' ) instanceof LocalstorageAdapter );\n    });\n\n    test( \'findOne: should call __find with correct args\', function() {\n        var options = { \"otherId\":1 },\n            args;\n\n        store.findOne( \'foo\', options );\n\n        ok( store.__find.calledWith( \'foo\', null, options, true ) );\n    });\n\n    test( \'find should call __find with numeric id\', function() {\n        var options = { \"otherId\": 1 };\n        store.find( \'foo\', 1, options );\n        ok( store.__find.calledWith( \'foo\', 1, options, false ) );\n    });\n\n    test( \'find should call __find with object for first param\', function() {\n        var options = { \"otherId\": 1 };\n        store.find( \'foo\', options );\n        ok( store.__find.calledWith( \'foo\', null, options, false ) );\n    });\n\n    test( \'find should call __find with only the type\', function() {\n        store.find( \'foo\' );\n        ok( store.__find.calledWith( \'foo\', null, null, false ) );\n    });\n\n    test( \'__find should have called modelFor\', function() {\n        store.__find( \'foo\', 1, {}, false );\n        ok( store.modelFor.calledWith( \'foo\' ) );\n    });\n\n    test( \'__find should have called adapterFor\', function() {\n        store.__find( \'foo\', 1, {}, false );\n        ok( store.adapterFor.calledWith( \'foo\' ) );\n    });\n\n    test( \'__find should have called AjaxAdapter.find\', function() {\n        store.__find( \'foo\', 1, {}, false );\n        ok( ajaxAdapter.find.calledWith( \'foo\', 1, {}, false ) );\n    });\n\n    test( \'createRecord should have called modelFor\', function() {\n        store.createRecord( \'foo\' );\n        ok( store.modelFor.calledWith( \'foo\' ) );\n    });\n\n    test( \'createRecord should have called Foo.create once\', function() {\n        store.createRecord( \'foo\' );\n        ok( Foo.create.calledOnce );\n    });\n\n    test( \'createRecord should have called Foo.create with an object container\', function() {\n        store.createRecord( \'foo\' );\n        ok( Foo.create.calledWith( { container: store.container } ) );\n    });\n\n    test( \'registerPreQueryHook should add an entry to preQueryHooks\', function() {\n        store.registerPreQueryHook( queryHook );\n        ok( store.get( \'preQueryHooks\' ).length === 1 );\n    });\n\n    test( \'runPreQueryHooks should run query hook once\', function() {\n        store.registerPostQueryHook( queryHook );\n        store.runPostQueryHooks();\n        ok( queryHook.calledOnce );\n    });\n  });//# sourceURL=dummy/tests/unit/store-test.js");
-
+define("dummy/Ember CLI QUnit/tests/ember-cli-qunit/adapter.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-qunit');
+    test('ember-cli-qunit/adapter.js should pass jshint', function() { 
+      ok(true, 'ember-cli-qunit/adapter.js should pass jshint.'); 
+    });
+  });
+define("dummy/Ember CLI QUnit/tests/ember-cli-qunit/adapters/ajax.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-qunit/adapters');
+    test('ember-cli-qunit/adapters/ajax.js should pass jshint', function() { 
+      ok(true, 'ember-cli-qunit/adapters/ajax.js should pass jshint.'); 
+    });
+  });
+define("dummy/Ember CLI QUnit/tests/ember-cli-qunit/adapters/localstorage.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-qunit/adapters');
+    test('ember-cli-qunit/adapters/localstorage.js should pass jshint', function() { 
+      ok(true, 'ember-cli-qunit/adapters/localstorage.js should pass jshint.'); 
+    });
+  });
+define("dummy/Ember CLI QUnit/tests/ember-cli-qunit/cache.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-qunit');
+    test('ember-cli-qunit/cache.js should pass jshint', function() { 
+      ok(true, 'ember-cli-qunit/cache.js should pass jshint.'); 
+    });
+  });
+define("dummy/Ember CLI QUnit/tests/ember-cli-qunit/debug-adapter.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-qunit');
+    test('ember-cli-qunit/debug-adapter.js should pass jshint', function() { 
+      ok(true, 'ember-cli-qunit/debug-adapter.js should pass jshint.'); 
+    });
+  });
+define("dummy/Ember CLI QUnit/tests/ember-cli-qunit/initializers/sl-ember-store.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-qunit/initializers');
+    test('ember-cli-qunit/initializers/sl-ember-store.js should pass jshint', function() { 
+      ok(true, 'ember-cli-qunit/initializers/sl-ember-store.js should pass jshint.'); 
+    });
+  });
+define("dummy/Ember CLI QUnit/tests/ember-cli-qunit/model.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-qunit');
+    test('ember-cli-qunit/model.js should pass jshint', function() { 
+      ok(true, 'ember-cli-qunit/model.js should pass jshint.'); 
+    });
+  });
+define("dummy/Ember CLI QUnit/tests/ember-cli-qunit/store.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-qunit');
+    test('ember-cli-qunit/store.js should pass jshint', function() { 
+      ok(true, 'ember-cli-qunit/store.js should pass jshint.'); 
+    });
+  });
+define("dummy/app", 
+  ["ember","ember/resolver","ember/load-initializers","dummy/config/environment","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    var Resolver = __dependency2__["default"];
+    var loadInitializers = __dependency3__["default"];
+    var config = __dependency4__["default"];
+
+    Ember.MODEL_FACTORY_INJECTIONS = true;
+
+    var App = Ember.Application.extend({
+      modulePrefix: config.modulePrefix,
+      podModulePrefix: config.podModulePrefix,
+      Resolver: Resolver
+    });
+
+    loadInitializers(App, config.modulePrefix);
+
+    __exports__["default"] = App;
+  });
+define("dummy/ember-cli-es5-shim/tests/ember-cli-es5-shim/adapter.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-es5-shim');
+    test('ember-cli-es5-shim/adapter.js should pass jshint', function() { 
+      ok(true, 'ember-cli-es5-shim/adapter.js should pass jshint.'); 
+    });
+  });
+define("dummy/ember-cli-es5-shim/tests/ember-cli-es5-shim/adapters/ajax.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-es5-shim/adapters');
+    test('ember-cli-es5-shim/adapters/ajax.js should pass jshint', function() { 
+      ok(true, 'ember-cli-es5-shim/adapters/ajax.js should pass jshint.'); 
+    });
+  });
+define("dummy/ember-cli-es5-shim/tests/ember-cli-es5-shim/adapters/localstorage.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-es5-shim/adapters');
+    test('ember-cli-es5-shim/adapters/localstorage.js should pass jshint', function() { 
+      ok(true, 'ember-cli-es5-shim/adapters/localstorage.js should pass jshint.'); 
+    });
+  });
+define("dummy/ember-cli-es5-shim/tests/ember-cli-es5-shim/cache.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-es5-shim');
+    test('ember-cli-es5-shim/cache.js should pass jshint', function() { 
+      ok(true, 'ember-cli-es5-shim/cache.js should pass jshint.'); 
+    });
+  });
+define("dummy/ember-cli-es5-shim/tests/ember-cli-es5-shim/debug-adapter.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-es5-shim');
+    test('ember-cli-es5-shim/debug-adapter.js should pass jshint', function() { 
+      ok(true, 'ember-cli-es5-shim/debug-adapter.js should pass jshint.'); 
+    });
+  });
+define("dummy/ember-cli-es5-shim/tests/ember-cli-es5-shim/initializers/sl-ember-store.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-es5-shim/initializers');
+    test('ember-cli-es5-shim/initializers/sl-ember-store.js should pass jshint', function() { 
+      ok(true, 'ember-cli-es5-shim/initializers/sl-ember-store.js should pass jshint.'); 
+    });
+  });
+define("dummy/ember-cli-es5-shim/tests/ember-cli-es5-shim/model.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-es5-shim');
+    test('ember-cli-es5-shim/model.js should pass jshint', function() { 
+      ok(true, 'ember-cli-es5-shim/model.js should pass jshint.'); 
+    });
+  });
+define("dummy/ember-cli-es5-shim/tests/ember-cli-es5-shim/store.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-es5-shim');
+    test('ember-cli-es5-shim/store.js should pass jshint', function() { 
+      ok(true, 'ember-cli-es5-shim/store.js should pass jshint.'); 
+    });
+  });
+define("dummy/ember-cli-pretender/tests/ember-cli-pretender/adapter.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-pretender');
+    test('ember-cli-pretender/adapter.js should pass jshint', function() { 
+      ok(true, 'ember-cli-pretender/adapter.js should pass jshint.'); 
+    });
+  });
+define("dummy/ember-cli-pretender/tests/ember-cli-pretender/adapters/ajax.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-pretender/adapters');
+    test('ember-cli-pretender/adapters/ajax.js should pass jshint', function() { 
+      ok(true, 'ember-cli-pretender/adapters/ajax.js should pass jshint.'); 
+    });
+  });
+define("dummy/ember-cli-pretender/tests/ember-cli-pretender/adapters/localstorage.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-pretender/adapters');
+    test('ember-cli-pretender/adapters/localstorage.js should pass jshint', function() { 
+      ok(true, 'ember-cli-pretender/adapters/localstorage.js should pass jshint.'); 
+    });
+  });
+define("dummy/ember-cli-pretender/tests/ember-cli-pretender/cache.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-pretender');
+    test('ember-cli-pretender/cache.js should pass jshint', function() { 
+      ok(true, 'ember-cli-pretender/cache.js should pass jshint.'); 
+    });
+  });
+define("dummy/ember-cli-pretender/tests/ember-cli-pretender/debug-adapter.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-pretender');
+    test('ember-cli-pretender/debug-adapter.js should pass jshint', function() { 
+      ok(true, 'ember-cli-pretender/debug-adapter.js should pass jshint.'); 
+    });
+  });
+define("dummy/ember-cli-pretender/tests/ember-cli-pretender/initializers/sl-ember-store.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-pretender/initializers');
+    test('ember-cli-pretender/initializers/sl-ember-store.js should pass jshint', function() { 
+      ok(true, 'ember-cli-pretender/initializers/sl-ember-store.js should pass jshint.'); 
+    });
+  });
+define("dummy/ember-cli-pretender/tests/ember-cli-pretender/model.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-pretender');
+    test('ember-cli-pretender/model.js should pass jshint', function() { 
+      ok(true, 'ember-cli-pretender/model.js should pass jshint.'); 
+    });
+  });
+define("dummy/ember-cli-pretender/tests/ember-cli-pretender/store.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-cli-pretender');
+    test('ember-cli-pretender/store.js should pass jshint', function() { 
+      ok(true, 'ember-cli-pretender/store.js should pass jshint.'); 
+    });
+  });
+define("dummy/ember-export-application-global/tests/ember-export-application-global/adapter.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-export-application-global');
+    test('ember-export-application-global/adapter.js should pass jshint', function() { 
+      ok(true, 'ember-export-application-global/adapter.js should pass jshint.'); 
+    });
+  });
+define("dummy/ember-export-application-global/tests/ember-export-application-global/adapters/ajax.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-export-application-global/adapters');
+    test('ember-export-application-global/adapters/ajax.js should pass jshint', function() { 
+      ok(true, 'ember-export-application-global/adapters/ajax.js should pass jshint.'); 
+    });
+  });
+define("dummy/ember-export-application-global/tests/ember-export-application-global/adapters/localstorage.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-export-application-global/adapters');
+    test('ember-export-application-global/adapters/localstorage.js should pass jshint', function() { 
+      ok(true, 'ember-export-application-global/adapters/localstorage.js should pass jshint.'); 
+    });
+  });
+define("dummy/ember-export-application-global/tests/ember-export-application-global/cache.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-export-application-global');
+    test('ember-export-application-global/cache.js should pass jshint', function() { 
+      ok(true, 'ember-export-application-global/cache.js should pass jshint.'); 
+    });
+  });
+define("dummy/ember-export-application-global/tests/ember-export-application-global/debug-adapter.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-export-application-global');
+    test('ember-export-application-global/debug-adapter.js should pass jshint', function() { 
+      ok(true, 'ember-export-application-global/debug-adapter.js should pass jshint.'); 
+    });
+  });
+define("dummy/ember-export-application-global/tests/ember-export-application-global/initializers/sl-ember-store.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-export-application-global/initializers');
+    test('ember-export-application-global/initializers/sl-ember-store.js should pass jshint', function() { 
+      ok(true, 'ember-export-application-global/initializers/sl-ember-store.js should pass jshint.'); 
+    });
+  });
+define("dummy/ember-export-application-global/tests/ember-export-application-global/model.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-export-application-global');
+    test('ember-export-application-global/model.js should pass jshint', function() { 
+      ok(true, 'ember-export-application-global/model.js should pass jshint.'); 
+    });
+  });
+define("dummy/ember-export-application-global/tests/ember-export-application-global/store.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - ember-export-application-global');
+    test('ember-export-application-global/store.js should pass jshint', function() { 
+      ok(true, 'ember-export-application-global/store.js should pass jshint.'); 
+    });
+  });
+define("dummy/initializers/export-application-global", 
+  ["ember","dummy/config/environment","exports"],
+  function(__dependency1__, __dependency2__, __exports__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    var config = __dependency2__["default"];
+
+    function initialize(container, application) {
+      var classifiedName = Ember.String.classify(config.modulePrefix);
+
+      if (config.exportApplicationGlobal) {
+        window[classifiedName] = application;
+      }
+    };
+    __exports__.initialize = initialize;
+    __exports__["default"] = {
+      name: 'export-application-global',
+
+      initialize: initialize
+    };
+  });
+define("dummy/initializers/pretender", 
+  ["pretender","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var Pretender = __dependency1__["default"];
+
+    var fooRecords = [
+        {
+            id: 1,
+            text: 'This is foo record with id: 1',
+            bar: {
+                id: 1,
+                text: 'This is a bar record with id: 1'
+            }
+        },
+        {
+            id: 2,
+            text: 'This is foo record #2',
+            bar: {
+                id: 2,
+                text: 'This is a bar record with id: 2'
+            }
+
+        },
+        {
+            id: 3,
+            text: 'This is foo record #3',
+            bar: {
+                id: 3,
+                text: 'This is a bar record with id: 3'
+            }
+
+        },
+        {
+            id: 4,
+            text: 'This is foo record with id: 4',
+            bar: {
+                id: 4,
+                text: 'This is a bar record with id: 4'
+            }
+        },
+        {
+            id: 5,
+            text: 'This is foo record #5',
+            bar: {
+                id: 5,
+                text: 'This is a bar record with id: 5'
+            }
+
+        },
+        {
+            id: 6,
+            text: 'This is foo record #6',
+            bar: {
+                id: 6,
+                text: 'This is a bar record with id: 6'
+            }
+
+        }
+    ];
+
+    function initialize(/* container, application */) {
+        new Pretender(function(){
+            this.get( '/foo', function(request){
+                var id = request.queryParams.id && ( parseInt( request.queryParams.id ) - 1 ),
+                    start = request.queryParams.start || 0,
+                    length = request.queryParams.length || fooRecords.length,
+                    results = fooRecords.slice( start, length );
+
+                if( request.queryParams.id ){
+                    return [
+                        200,
+                        { "Content-Type":"application/json" },
+                        JSON.stringify( { foo: fooRecords[ id ] } )
+                    ];
+                }
+
+                return [
+                    200,
+                    { "Content-Type":"application/json" },
+                    JSON.stringify( { foo: results, meta: { total: fooRecords.length } })
+                ];
+            });
+            this.post( '/foo', function(request){
+                var record = JSON.parse( request.requestBody );
+                fooRecords[ record.id ]= record;
+                return [
+                    200,
+                    { "Content-Type":"application/json" },
+                    JSON.stringify( record )
+                ];
+            });
+        });
+    }
+
+    __exports__.initialize = initialize;__exports__["default"] = {
+      name: 'pretender',
+      after: 'sl-ember-store',
+      initialize: initialize
+    };
+  });
+define("dummy/initializers/sl-ember-store", 
+  ["sl-ember-store/initializers/sl-ember-store","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var initializer = __dependency1__["default"];
+
+    __exports__["default"] = {
+
+        name: 'sl-ember-store',
+
+        initialize: initializer
+    };
+  });
+define("dummy/live-reload-middleware/tests/live-reload-middleware/adapter.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - live-reload-middleware');
+    test('live-reload-middleware/adapter.js should pass jshint', function() { 
+      ok(true, 'live-reload-middleware/adapter.js should pass jshint.'); 
+    });
+  });
+define("dummy/live-reload-middleware/tests/live-reload-middleware/adapters/ajax.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - live-reload-middleware/adapters');
+    test('live-reload-middleware/adapters/ajax.js should pass jshint', function() { 
+      ok(true, 'live-reload-middleware/adapters/ajax.js should pass jshint.'); 
+    });
+  });
+define("dummy/live-reload-middleware/tests/live-reload-middleware/adapters/localstorage.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - live-reload-middleware/adapters');
+    test('live-reload-middleware/adapters/localstorage.js should pass jshint', function() { 
+      ok(true, 'live-reload-middleware/adapters/localstorage.js should pass jshint.'); 
+    });
+  });
+define("dummy/live-reload-middleware/tests/live-reload-middleware/cache.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - live-reload-middleware');
+    test('live-reload-middleware/cache.js should pass jshint', function() { 
+      ok(true, 'live-reload-middleware/cache.js should pass jshint.'); 
+    });
+  });
+define("dummy/live-reload-middleware/tests/live-reload-middleware/debug-adapter.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - live-reload-middleware');
+    test('live-reload-middleware/debug-adapter.js should pass jshint', function() { 
+      ok(true, 'live-reload-middleware/debug-adapter.js should pass jshint.'); 
+    });
+  });
+define("dummy/live-reload-middleware/tests/live-reload-middleware/initializers/sl-ember-store.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - live-reload-middleware/initializers');
+    test('live-reload-middleware/initializers/sl-ember-store.js should pass jshint', function() { 
+      ok(true, 'live-reload-middleware/initializers/sl-ember-store.js should pass jshint.'); 
+    });
+  });
+define("dummy/live-reload-middleware/tests/live-reload-middleware/model.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - live-reload-middleware');
+    test('live-reload-middleware/model.js should pass jshint', function() { 
+      ok(true, 'live-reload-middleware/model.js should pass jshint.'); 
+    });
+  });
+define("dummy/live-reload-middleware/tests/live-reload-middleware/store.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - live-reload-middleware');
+    test('live-reload-middleware/store.js should pass jshint', function() { 
+      ok(true, 'live-reload-middleware/store.js should pass jshint.'); 
+    });
+  });
+define("dummy/models/bar", 
+  ["sl-ember-store/model","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var Model = __dependency1__["default"];
+
+    var Bar = Model.extend({
+    });
+
+
+    __exports__["default"] = Bar;
+  });
+define("dummy/models/car", 
+  ["sl-ember-store/model","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var Model = __dependency1__["default"];
+
+    var Car = Model.extend({
+    });
+
+    Car.reopenClass({
+        url: '/api/car',
+        serializer: function( result ){
+            return result.car;
+        }
+    });
+
+    __exports__["default"] = Car;
+  });
+define("dummy/models/foo", 
+  ["sl-ember-store/model","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var Model = __dependency1__["default"];
+
+    var Foo = Model.extend({
+    });
+
+    Foo.reopenClass({
+        url: '/foo',
+        serializer: function( data, store ){
+        	if( data.meta ){
+        		store.metaForType( 'foo', data.meta );
+        	}
+
+        	return data.foo;
+        }
+    });
+
+    __exports__["default"] = Foo;
+  });
+define("dummy/router", 
+  ["ember","dummy/config/environment","exports"],
+  function(__dependency1__, __dependency2__, __exports__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    var config = __dependency2__["default"];
+
+    var Router = Ember.Router.extend({
+      location: config.locationType
+    });
+
+    Router.map(function() {
+        this.route( 'index', { path: '/' });
+
+        this.resource( 'demos', function() {
+            this.route( 'singleModel', { path: '/singleModel/:model_id' } );
+            this.route( 'arrayOfModels', { path: '/arrayOfModels' } );
+        });
+    });
+
+    __exports__["default"] = Router;
+  });
+define("dummy/routes/demos/array-of-models", 
+  ["ember","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    __exports__["default"] = Ember.Route.extend({
+        actions: {
+            addSomeRecords: function(){
+                this.loadRecords( { add: true, data: { start: 3, length: 6 } } );            
+            },
+            loadSomeRecords: function(){
+                this.loadRecords( { data: { start: 3, length: 6 } } );            
+            },
+            addAllRecords: function(){
+                this.loadRecords( { add: true } );            
+            },
+            reloadFirstRecords: function(){
+                this.loadRecords( { reload: true, data: { start: 0, length: 3 } } );            
+            },
+        },
+
+        loadRecords: function( options ){
+            var controller = this.controller,
+                records = this.store.find( 'foo', options );            
+
+            controller.set( 'model2', records );
+
+            records.then( function(){
+                controller.set( 'model2meta', this.store.metadataFor( 'foo' ) );
+                this.store.find( 'foo' ).then( function( records ){
+                    controller.set( 'model2CachedTotalCount', records.length );    
+                });
+            }.bind( this ));      
+        },
+
+        model: function( ){
+            var initialRequest = this.store.find( 'foo', null, { data: { start: 0, length: 3 } } );
+
+            return initialRequest;
+        },
+
+        setupController: function( controller, model ){
+            controller.set( 'model', model );
+            controller.set( 'model2', model );
+            controller.set( 'model2CachedTotalCount', model.length );
+            controller.set( 'model2meta', this.store.metadataFor( 'foo' ) );
+        }
+    });
+  });
+define("dummy/routes/demos/single-model", 
+  ["ember","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    __exports__["default"] = Ember.Route.extend({
+        model: function( params ){
+            return this.store.find( 'foo', params.model_id );
+        }
+    });
+  });
+define("dummy/sl-ember-modelize/tests/sl-ember-modelize/adapter.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - sl-ember-modelize');
+    test('sl-ember-modelize/adapter.js should pass jshint', function() { 
+      ok(true, 'sl-ember-modelize/adapter.js should pass jshint.'); 
+    });
+  });
+define("dummy/sl-ember-modelize/tests/sl-ember-modelize/adapters/ajax.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - sl-ember-modelize/adapters');
+    test('sl-ember-modelize/adapters/ajax.js should pass jshint', function() { 
+      ok(true, 'sl-ember-modelize/adapters/ajax.js should pass jshint.'); 
+    });
+  });
+define("dummy/sl-ember-modelize/tests/sl-ember-modelize/adapters/localstorage.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - sl-ember-modelize/adapters');
+    test('sl-ember-modelize/adapters/localstorage.js should pass jshint', function() { 
+      ok(true, 'sl-ember-modelize/adapters/localstorage.js should pass jshint.'); 
+    });
+  });
+define("dummy/sl-ember-modelize/tests/sl-ember-modelize/cache.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - sl-ember-modelize');
+    test('sl-ember-modelize/cache.js should pass jshint', function() { 
+      ok(true, 'sl-ember-modelize/cache.js should pass jshint.'); 
+    });
+  });
+define("dummy/sl-ember-modelize/tests/sl-ember-modelize/debug-adapter.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - sl-ember-modelize');
+    test('sl-ember-modelize/debug-adapter.js should pass jshint', function() { 
+      ok(true, 'sl-ember-modelize/debug-adapter.js should pass jshint.'); 
+    });
+  });
+define("dummy/sl-ember-modelize/tests/sl-ember-modelize/initializers/sl-ember-store.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - sl-ember-modelize/initializers');
+    test('sl-ember-modelize/initializers/sl-ember-store.js should pass jshint', function() { 
+      ok(true, 'sl-ember-modelize/initializers/sl-ember-store.js should pass jshint.'); 
+    });
+  });
+define("dummy/sl-ember-modelize/tests/sl-ember-modelize/model.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - sl-ember-modelize');
+    test('sl-ember-modelize/model.js should pass jshint', function() { 
+      ok(true, 'sl-ember-modelize/model.js should pass jshint.'); 
+    });
+  });
+define("dummy/sl-ember-modelize/tests/sl-ember-modelize/store.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - sl-ember-modelize');
+    test('sl-ember-modelize/store.js should pass jshint', function() { 
+      ok(true, 'sl-ember-modelize/store.js should pass jshint.'); 
+    });
+  });
+define("dummy/sl-ember-store/tests/sl-ember-store/adapter.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - sl-ember-store');
+    test('sl-ember-store/adapter.js should pass jshint', function() { 
+      ok(true, 'sl-ember-store/adapter.js should pass jshint.'); 
+    });
+  });
+define("dummy/sl-ember-store/tests/sl-ember-store/adapters/ajax.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - sl-ember-store/adapters');
+    test('sl-ember-store/adapters/ajax.js should pass jshint', function() { 
+      ok(true, 'sl-ember-store/adapters/ajax.js should pass jshint.'); 
+    });
+  });
+define("dummy/sl-ember-store/tests/sl-ember-store/adapters/localstorage.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - sl-ember-store/adapters');
+    test('sl-ember-store/adapters/localstorage.js should pass jshint', function() { 
+      ok(true, 'sl-ember-store/adapters/localstorage.js should pass jshint.'); 
+    });
+  });
+define("dummy/sl-ember-store/tests/sl-ember-store/cache.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - sl-ember-store');
+    test('sl-ember-store/cache.js should pass jshint', function() { 
+      ok(true, 'sl-ember-store/cache.js should pass jshint.'); 
+    });
+  });
+define("dummy/sl-ember-store/tests/sl-ember-store/debug-adapter.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - sl-ember-store');
+    test('sl-ember-store/debug-adapter.js should pass jshint', function() { 
+      ok(true, 'sl-ember-store/debug-adapter.js should pass jshint.'); 
+    });
+  });
+define("dummy/sl-ember-store/tests/sl-ember-store/initializers/sl-ember-store.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - sl-ember-store/initializers');
+    test('sl-ember-store/initializers/sl-ember-store.js should pass jshint', function() { 
+      ok(true, 'sl-ember-store/initializers/sl-ember-store.js should pass jshint.'); 
+    });
+  });
+define("dummy/sl-ember-store/tests/sl-ember-store/model.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - sl-ember-store');
+    test('sl-ember-store/model.js should pass jshint', function() { 
+      ok(true, 'sl-ember-store/model.js should pass jshint.'); 
+    });
+  });
+define("dummy/sl-ember-store/tests/sl-ember-store/store.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - sl-ember-store');
+    test('sl-ember-store/store.js should pass jshint', function() { 
+      ok(true, 'sl-ember-store/store.js should pass jshint.'); 
+    });
+  });
+define("dummy/templates/application", 
+  ["ember","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    __exports__["default"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+    this.compilerInfo = [4,'>= 1.0.0'];
+    helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+      var buffer = '', stack1, helper, options, self=this, helperMissing=helpers.helperMissing;
+
+    function program1(depth0,data) {
+      
+      
+      data.buffer.push("<i class=\"fa fa-home\"></i> Home");
+      }
+
+      data.buffer.push("<br>\n<div class=\"container\">\n\n    <div class=\"row\">\n        <div class=\"col-md-12\">\n            <div class=\"btn-group pull-right\">\n                <button type=\"button\" class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\" aria-expanded=\"false\">\n                    <i class=\"fa fa-reorder\"></i> <span class=\"caret\"></span>\n                </button>\n\n                <ul class=\"dropdown-menu\" role=\"menu\">\n                <li>");
+      stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "index", options) : helperMissing.call(depth0, "link-to", "index", options));
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("</li>\n                <li><a href=\"https://github.com/softlayer/sl-ember-store/blob/master/README.md\"><i class=\"fa fa-wrench\"></i> Get Started</a></li>\n                <li><a href=\"https://github.com/softlayer/sl-ember-store/blob/master/CONTRIBUTING.md\"><i class=\"fa fa-cog\"></i> Contribution Guide</a></li>\n                <li><a href=\"https://github.com/softlayer/sl-ember-store/stargazers\"><i class=\"fa fa-star\"></i> Star Our Repo</a></li>\n                <li><a href=\"https://github.com/softlayer/sl-ember-store/fork\"><i class=\"fa fa-code-fork\"></i> Fork Our Repo</a></li>\n                </ul>\n            </div>\n        </div>\n    </div>\n\n    ");
+      stack1 = helpers._triageMustache.call(depth0, "outlet", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("\n\n    <br><br>\n    <div class=\"row\">\n        <div class=\"col-md-12 text-center\">\n            <p>npm install sl-ember-store</p>\n            <p><a href=\"https://github.com/softlayer/sl-ember-store/blob/master/LICENSE.md\">MIT Licensed</a></p>\n        </div>\n    </div>\n</div>");
+      return buffer;
+      
+    });
+  });
+define("dummy/templates/demos", 
+  ["ember","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    __exports__["default"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+    this.compilerInfo = [4,'>= 1.0.0'];
+    helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+      var buffer = '', stack1, helper, options, self=this, helperMissing=helpers.helperMissing;
+
+    function program1(depth0,data) {
+      
+      
+      data.buffer.push("Demo Application");
+      }
+
+    function program3(depth0,data) {
+      
+      
+      data.buffer.push("Single model example");
+      }
+
+    function program5(depth0,data) {
+      
+      
+      data.buffer.push("Array of models example");
+      }
+
+      data.buffer.push("<div class=\"row\">\n    <div class=\"col-md-12 text-center\">\n        <h1>");
+      stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "demos", options) : helperMissing.call(depth0, "link-to", "demos", options));
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("</h1>\n        <p class=\"lead\">View the source code of the dummy application for syntax employed in this demo</p>\n    </div>\n</div>\n\n<div class=\"row\">\n    <div class=\"col-md-12 text-center\">\n        ");
+      stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0,depth0],types:["STRING","INTEGER"],data:data},helper ? helper.call(depth0, "demos.singleModel", 1, options) : helperMissing.call(depth0, "link-to", "demos.singleModel", 1, options));
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("\n        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\n        ");
+      stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(5, program5, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "demos.arrayOfModels", options) : helperMissing.call(depth0, "link-to", "demos.arrayOfModels", options));
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("\n    </div>\n</div>\n\n");
+      stack1 = helpers._triageMustache.call(depth0, "outlet", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      return buffer;
+      
+    });
+  });
+define("dummy/templates/demos/array-of-models", 
+  ["ember","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    __exports__["default"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+    this.compilerInfo = [4,'>= 1.0.0'];
+    helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+      var buffer = '', stack1, self=this, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
+
+    function program1(depth0,data) {
+      
+      var buffer = '', stack1, helper, options;
+      data.buffer.push("\n            <h4>Foo Model</h4>\n\n            <ul>\n            <li>");
+      stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0,depth0],types:["STRING","ID"],data:data},helper ? helper.call(depth0, "demos.singleModel", "model.id", options) : helperMissing.call(depth0, "link-to", "demos.singleModel", "model.id", options));
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("</li>\n            <li>Text: ");
+      stack1 = helpers._triageMustache.call(depth0, "model.text", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("</li>\n            ");
+      stack1 = helpers['if'].call(depth0, "model.bar.id", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(4, program4, data),contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("\n        ");
+      return buffer;
+      }
+    function program2(depth0,data) {
+      
+      var buffer = '', stack1;
+      data.buffer.push("ID: ");
+      stack1 = helpers._triageMustache.call(depth0, "model.id", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      return buffer;
+      }
+
+    function program4(depth0,data) {
+      
+      var buffer = '', stack1;
+      data.buffer.push("\n                <ul>\n                <h4>Bar Model</h4>\n                <li>ID: ");
+      stack1 = helpers._triageMustache.call(depth0, "model.bar.id", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("</li>\n                <li>Text: ");
+      stack1 = helpers._triageMustache.call(depth0, "model.bar.text", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("</li>\n                </ul>\n            </ul>\n            ");
+      return buffer;
+      }
+
+    function program6(depth0,data) {
+      
+      var buffer = '', stack1, helper, options;
+      data.buffer.push("\n                    <h4>Foo Model</h4>\n\n                    <ul>\n                    <li>");
+      stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(2, program2, data),contexts:[depth0,depth0],types:["STRING","ID"],data:data},helper ? helper.call(depth0, "demos.singleModel", "model.id", options) : helperMissing.call(depth0, "link-to", "demos.singleModel", "model.id", options));
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("</li>\n                    <li>Text: ");
+      stack1 = helpers._triageMustache.call(depth0, "model.text", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("</li>\n                    ");
+      stack1 = helpers['if'].call(depth0, "model.bar.id", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(7, program7, data),contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("\n                ");
+      return buffer;
+      }
+    function program7(depth0,data) {
+      
+      var buffer = '', stack1;
+      data.buffer.push("\n                        <ul>\n                        <h4>Bar Model</h4>\n                        <li>ID: ");
+      stack1 = helpers._triageMustache.call(depth0, "model.bar.id", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("</li>\n                        <li>Text: ");
+      stack1 = helpers._triageMustache.call(depth0, "model.bar.text", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("</li>\n                        </ul>\n                    </ul>\n                    ");
+      return buffer;
+      }
+
+      data.buffer.push("<div class=\"row\">\n    <div class=\"col-md-12\">\n\n        <h2>Array of Models</h2>\n\n        <p>These records can be loaded in our route's model hook with the following code:</p>\n\n        <code>this.store.find('foo');</code>\n\n        <br><br>\n        <p>The `foo` model has its adapter set to the ajax adapter*.  The \"/foo\" resource contains foo records with embedded \"bar\" records.  These records are automatically created as an instance of the \"Bar\" model when the data is returned from the adapter.</p>\n\n        <br>\n        ");
+      stack1 = helpers.each.call(depth0, "model", "in", "controller", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("\n\n\n        <br>\n        <p>The original JSON for this resource:</p>\n\n        <pre>\n{\n    id: 1,\n    text: 'This is foo record with id: 1',\n    bar: {\n        id: 1,\n        text: 'This is a bar record with id: 1'\n    }\n},\n{\n    id: 2,\n    text: 'This is foo record #2',\n    bar: {\n        id: 2,\n        text: 'This is a bar record with id: 2'\n    }\n\n},\n{\n    id: 3,\n    text: 'This is foo record #3',\n    bar: {\n        id: 3,\n        text: 'This is a bar record with id: 3'\n    }\n\n}\n        </pre>\n        <p>* We are actually using <a href=\"https://github.com/rwjblue/ember-cli-pretender\">Pretender</a> to mockup our data. This library is great for static gh-pages!</p>\n\n        <h3>Cacheing and Options</h3>\n\n        <p>Our store implements a simple cacheing layer.  The cacheing layer recoginzes requests for multiple records and will check to see if one has already been made.  If so then it returns the records in its cache.  However, you may wish to override this default behavior and fetch the records again through the adapter.  This can be accomplished by passing a flag through the <code>store.find</code> method's <code>options</code> parameter.</p>\n\n        <p>When fetching many records there are two flags you can pass along in the <code>options</code> object to control how your records are cached:\n            <dl>\n                <dt>options.reload</dt>\n                <dd>Clear the cache for this record type and load new records from the adapter</dd>\n\n                <dt>options.add</dt>\n                <dd>Request new records from the adapter and add them to the cache</dd>\n            </dl>\n\n        <p>Additionally there is a third key on the options object:</p>\n            <dl>\n                <dt>options.data</dt>\n                <dd>An object of key/value pairs that will be passed to the adapter\n            </dl>\n       In the case of the ajax adapter these key/value pairs will be transformed into query parameters.</p>\n\n        <p>Earlier I said that these records can be loaded with <code>this.store.find('foo')</code>.  While that is true, the code we actually used was <code>this.store.find( 'foo', { data: { start: 0, length: 3} } )</code>.  This only loaded a subset of the records available.  The following two buttons will demonstrate the functionality of the <code>reload</code> and <code>add</code> flags:</p>\n        <div class=\"row\">\n            <div class=\"col-md-12\">\n                <ul class=\"list-group\">\n                <li class=\"list-group-item\"><button class=\"btn btn-primary\" ");
+      data.buffer.push(escapeExpression(helpers.action.call(depth0, "addSomeRecords", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data})));
+      data.buffer.push(">Add Some Records</button> will run <code>this.store.find( 'foo', { add: true, data: { start: 3, length: 6 } } ) </code></li>\n                <li class=\"list-group-item\"><button class=\"btn btn-primary\" ");
+      data.buffer.push(escapeExpression(helpers.action.call(depth0, "addAllRecords", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data})));
+      data.buffer.push(">Add All Records</button> will run <code>this.store.find( 'foo', { add: true } ) //server responds with all records</code></li>\n                <li class=\"list-group-item\"><button class=\"btn btn-primary\" ");
+      data.buffer.push(escapeExpression(helpers.action.call(depth0, "reloadFirstRecords", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["STRING"],data:data})));
+      data.buffer.push(">Reload First Records</button> will run to <code>this.store.find( 'foo', { reload: true, data: { start: 0, length: 3} } )</code></li>\n                </ul>\n            </div>\n        </div>\n        <div class=\"row\">\n            <div class=\"col-md-4\">\n                <ul class=\"list-group\">\n                    <li class=\"list-group-item\">Total records on server: <span class=\"badge\">");
+      stack1 = helpers._triageMustache.call(depth0, "model2meta.total", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("</span></li>\n                    <li class=\"list-group-item\">Total records in cache: <span class=\"badge\">");
+      stack1 = helpers._triageMustache.call(depth0, "model2CachedTotalCount", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("</span></li>\n                    <li class=\"list-group-item\">Total records in controller: <span class=\"badge\">");
+      stack1 = helpers._triageMustache.call(depth0, "model2.length", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("</span></li>\n                </ul>\n            </div>\n        </div>\n        <div class=\"row\">\n            <div class=\"col-md-12\">\n\n                ");
+      stack1 = helpers.each.call(depth0, "model", "in", "controller.model2", {hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(6, program6, data),contexts:[depth0,depth0,depth0],types:["ID","ID","ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("\n            </div>\n        </div>\n        <p>If you specify <code>options.data</code> key value pairs without specifying <code>add</code> or <code>reload</code> then we assume <code>add</code> by default.</p>\n    </div>\n</div>");
+      return buffer;
+      
+    });
+  });
+define("dummy/templates/demos/single-model", 
+  ["ember","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    __exports__["default"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+    this.compilerInfo = [4,'>= 1.0.0'];
+    helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+      var buffer = '', stack1;
+
+
+      data.buffer.push("<div class=\"row\">\n    <div class=\"col-md-12\">\n\n        <h2>Single Model</h2>\n\n        <p>This record is loaded in our route's model hook with the following code:</p>\n\n        <code>this.store.find( 'foo', params.model_id );</code>\n\n        <br><br>\n        <p>The model is loaded by the store via the ajax adapter.  The \"/foo?id=1\" resource contains an embedded \"bar\" record, and this record is automatically created as an instance of the \"Bar\" model.</p>\n\n        <br>\n        <h4>Foo Model</h4>\n\n        <ul>\n        <li>ID: ");
+      stack1 = helpers._triageMustache.call(depth0, "model.id", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("</li>\n        <li>Text: ");
+      stack1 = helpers._triageMustache.call(depth0, "model.text", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("</li>\n            <ul>\n                <h4>Bar Model</h4>\n                <li>ID: ");
+      stack1 = helpers._triageMustache.call(depth0, "model.bar.id", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("</li>\n                <li>Text: ");
+      stack1 = helpers._triageMustache.call(depth0, "model.bar.text", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("</li>\n            </ul>\n        </ul>\n\n        <br>\n        <p>The original JSON for this resource:</p>\n\n        <pre>\n{\n    id: ");
+      stack1 = helpers._triageMustache.call(depth0, "model.id", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push(",\n    text: '");
+      stack1 = helpers._triageMustache.call(depth0, "model.text", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("',\n    bar: {\n        id: ");
+      stack1 = helpers._triageMustache.call(depth0, "model.bar.id", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push(",\n        text: '");
+      stack1 = helpers._triageMustache.call(depth0, "model.bar.text", {hash:{},hashTypes:{},hashContexts:{},contexts:[depth0],types:["ID"],data:data});
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("'\n    }\n}\n</pre>\n\n    </div>\n</div>");
+      return buffer;
+      
+    });
+  });
+define("dummy/templates/index", 
+  ["ember","exports"],
+  function(__dependency1__, __exports__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    __exports__["default"] = Ember.Handlebars.template(function anonymous(Handlebars,depth0,helpers,partials,data) {
+    this.compilerInfo = [4,'>= 1.0.0'];
+    helpers = this.merge(helpers, Ember.Handlebars.helpers); data = data || {};
+      var buffer = '', stack1, helper, options, self=this, helperMissing=helpers.helperMissing;
+
+    function program1(depth0,data) {
+      
+      
+      data.buffer.push("<i class=\"fa fa-cubes fa-5x\"></i>");
+      }
+
+    function program3(depth0,data) {
+      
+      
+      data.buffer.push("<b>Demo</b>");
+      }
+
+      data.buffer.push("<div class=\"row\">\n    <div class=\"col-md-12 text-center\">\n        <h1>sl-ember-store</h1>\n        <p class=\"lead\">An Ember CLI Addon to provide a model layer for an Ember application.</p>\n    </div>\n</div>\n\n<div class=\"row\">\n    <div class=\"col-md-4 text-center\">\n        <h3>");
+      stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(1, program1, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "demos", options) : helperMissing.call(depth0, "link-to", "demos", options));
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("</h3>\n        <p>");
+      stack1 = (helper = helpers['link-to'] || (depth0 && depth0['link-to']),options={hash:{},hashTypes:{},hashContexts:{},inverse:self.noop,fn:self.program(3, program3, data),contexts:[depth0],types:["STRING"],data:data},helper ? helper.call(depth0, "demos", options) : helperMissing.call(depth0, "link-to", "demos", options));
+      if(stack1 || stack1 === 0) { data.buffer.push(stack1); }
+      data.buffer.push("</p>\n    </div>\n    <div class=\"col-md-4 text-center\">\n        <h3><a href=\"https://github.com/softlayer/sl-ember-store/blob/master/README.md\"><i class=\"fa fa-book fa-5x\"></i></a></h3>\n        <p><a href=\"https://github.com/softlayer/sl-ember-store/blob/master/README.md\"><b>Documentation</b></a></p>\n    </div>\n    <div class=\"col-md-4 text-center\">\n        <h3><a href=\"https://github.com/softlayer/sl-ember-store\"><i class=\"fa fa-github fa-5x\"></i></a></h3>\n        <p><a href=\"https://github.com/softlayer/sl-ember-store\"><b>Available on GitHub</b></a></p>\n    </div>\n</div>");
+      return buffer;
+      
+    });
+  });
+define("dummy/tests/acceptance/array-of-models-test", 
+  ["ember","dummy/tests/helpers/start-app","dummy/models/foo","ember-qunit"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    var startApp = __dependency2__["default"];
+    var Foo = __dependency3__["default"];
+    var test = __dependency4__.test;
+    var moduleFor = __dependency4__.moduleFor;
+
+    var App;
+
+    module('Acceptance: ArrayOfModels', {
+      setup: function() {
+        App = startApp();
+      },
+      teardown: function() {
+        Ember.run(App, 'destroy');
+      }
+    });
+
+    test('visiting /arrayOfModels', function() {
+      visit('/demos/arrayOfModels');
+
+      andThen(function() {
+        var arrayModelController = App.__container__.lookup('controller:demos/arrayOfModels');
+        equal(currentPath(), 'demos.arrayOfModels');
+        ok( arrayModelController.get('model.0') instanceof Foo, 'Controllers model is instance of Foo' );
+
+      });
+    });
+  });
+define("dummy/tests/acceptance/single-model-test", 
+  ["ember","dummy/tests/helpers/start-app","dummy/models/foo","ember-qunit"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    var startApp = __dependency2__["default"];
+    var Foo = __dependency3__["default"];
+    var test = __dependency4__.test;
+    var moduleFor = __dependency4__.moduleFor;
+
+    var App;
+
+    module( 'Acceptance: SingleModel', {
+      setup: function() {
+        App = startApp();
+      },
+      teardown: function() {
+        Ember.run(App, 'destroy');
+      }
+    });
+
+    test('visiting /singleModel', function() {
+      visit('/demos/singleModel/1');
+
+      andThen(function() {
+        var singleModelController = App.__container__.lookup('controller:demos/singleModel');
+        equal(currentPath(), 'demos.singleModel');
+        ok( singleModelController.get('model') instanceof Foo, 'Controllers model is instance of Foo' );
+      });
+    });
+  });
+define("dummy/tests/app.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - .');
+    test('app.js should pass jshint', function() { 
+      ok(true, 'app.js should pass jshint.'); 
+    });
+  });
+define("dummy/tests/dummy/tests/acceptance/array-of-models-test.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - dummy/tests/acceptance');
+    test('dummy/tests/acceptance/array-of-models-test.js should pass jshint', function() { 
+      ok(true, 'dummy/tests/acceptance/array-of-models-test.js should pass jshint.'); 
+    });
+  });
+define("dummy/tests/dummy/tests/acceptance/single-model-test.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - dummy/tests/acceptance');
+    test('dummy/tests/acceptance/single-model-test.js should pass jshint', function() { 
+      ok(true, 'dummy/tests/acceptance/single-model-test.js should pass jshint.'); 
+    });
+  });
+define("dummy/tests/dummy/tests/helpers/module-for-sl-ember-model.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - dummy/tests/helpers');
+    test('dummy/tests/helpers/module-for-sl-ember-model.js should pass jshint', function() { 
+      ok(true, 'dummy/tests/helpers/module-for-sl-ember-model.js should pass jshint.'); 
+    });
+  });
+define("dummy/tests/dummy/tests/helpers/resolver.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - dummy/tests/helpers');
+    test('dummy/tests/helpers/resolver.js should pass jshint', function() { 
+      ok(true, 'dummy/tests/helpers/resolver.js should pass jshint.'); 
+    });
+  });
+define("dummy/tests/dummy/tests/helpers/start-app.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - dummy/tests/helpers');
+    test('dummy/tests/helpers/start-app.js should pass jshint', function() { 
+      ok(true, 'dummy/tests/helpers/start-app.js should pass jshint.'); 
+    });
+  });
+define("dummy/tests/dummy/tests/test-helper.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - dummy/tests');
+    test('dummy/tests/test-helper.js should pass jshint', function() { 
+      ok(true, 'dummy/tests/test-helper.js should pass jshint.'); 
+    });
+  });
+define("dummy/tests/dummy/tests/unit/adapters-test.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - dummy/tests/unit');
+    test('dummy/tests/unit/adapters-test.js should pass jshint', function() { 
+      ok(true, 'dummy/tests/unit/adapters-test.js should pass jshint.'); 
+    });
+  });
+define("dummy/tests/dummy/tests/unit/adapters/ajax-test.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - dummy/tests/unit/adapters');
+    test('dummy/tests/unit/adapters/ajax-test.js should pass jshint', function() { 
+      ok(true, 'dummy/tests/unit/adapters/ajax-test.js should pass jshint.'); 
+    });
+  });
+define("dummy/tests/dummy/tests/unit/adapters/localstorage-test.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - dummy/tests/unit/adapters');
+    test('dummy/tests/unit/adapters/localstorage-test.js should pass jshint', function() { 
+      ok(true, 'dummy/tests/unit/adapters/localstorage-test.js should pass jshint.'); 
+    });
+  });
+define("dummy/tests/dummy/tests/unit/cache-test.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - dummy/tests/unit');
+    test('dummy/tests/unit/cache-test.js should pass jshint', function() { 
+      ok(true, 'dummy/tests/unit/cache-test.js should pass jshint.'); 
+    });
+  });
+define("dummy/tests/dummy/tests/unit/initializers/sl-ember-model-test.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - dummy/tests/unit/initializers');
+    test('dummy/tests/unit/initializers/sl-ember-model-test.js should pass jshint', function() { 
+      ok(true, 'dummy/tests/unit/initializers/sl-ember-model-test.js should pass jshint.'); 
+    });
+  });
+define("dummy/tests/dummy/tests/unit/model-test.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - dummy/tests/unit');
+    test('dummy/tests/unit/model-test.js should pass jshint', function() { 
+      ok(true, 'dummy/tests/unit/model-test.js should pass jshint.'); 
+    });
+  });
+define("dummy/tests/dummy/tests/unit/store-test.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - dummy/tests/unit');
+    test('dummy/tests/unit/store-test.js should pass jshint', function() { 
+      ok(true, 'dummy/tests/unit/store-test.js should pass jshint.'); 
+    });
+  });
+define("dummy/tests/helpers/module-for-sl-ember-model", 
+  ["ember-qunit","ember","sl-ember-store/store","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
+    "use strict";
+    var moduleFor = __dependency1__.moduleFor;
+    var Ember = __dependency2__["default"];
+    var Store = __dependency3__["default"];
+
+
+    __exports__["default"] = function moduleForSlEmberModel(name, description, callbacks) {
+
+        moduleFor('model:' + name, description, callbacks, function(container, context, defaultSubject) {
+
+            container.register('store:main', Store );
+
+            context.__setup_properties__.store = function(){
+                return container.lookup('store:main');
+            };
+
+            if (context.__setup_properties__.subject === defaultSubject) {
+                context.__setup_properties__.subject = function(options) {
+                    return Ember.run(function() {
+                        return container.lookup('store:main').createRecord(name, options);
+                    });
+                };
+            }
+        });
+    }
+  });
+define("dummy/tests/helpers/resolver", 
+  ["ember/resolver","dummy/config/environment","exports"],
+  function(__dependency1__, __dependency2__, __exports__) {
+    "use strict";
+    var Resolver = __dependency1__["default"];
+    var config = __dependency2__["default"];
+
+    var resolver = Resolver.create();
+
+    resolver.namespace = {
+      modulePrefix: config.modulePrefix,
+      podModulePrefix: config.podModulePrefix
+    };
+
+    __exports__["default"] = resolver;
+  });
+define("dummy/tests/helpers/start-app", 
+  ["ember","dummy/app","dummy/router","dummy/config/environment","exports"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    var Application = __dependency2__["default"];
+    var Router = __dependency3__["default"];
+    var config = __dependency4__["default"];
+
+    __exports__["default"] = function startApp(attrs) {
+      var application;
+
+      var attributes = Ember.merge({}, config.APP);
+      attributes = Ember.merge(attributes, attrs); // use defaults, but you can override;
+
+      Ember.run(function() {
+        application = Application.create(attributes);
+        application.setupForTesting();
+        application.injectTestHelpers();
+      });
+
+      return application;
+    }
+  });
+define("dummy/tests/initializers/pretender.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - initializers');
+    test('initializers/pretender.js should pass jshint', function() { 
+      ok(true, 'initializers/pretender.js should pass jshint.'); 
+    });
+  });
+define("dummy/tests/models/bar.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - models');
+    test('models/bar.js should pass jshint', function() { 
+      ok(true, 'models/bar.js should pass jshint.'); 
+    });
+  });
+define("dummy/tests/models/car.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - models');
+    test('models/car.js should pass jshint', function() { 
+      ok(true, 'models/car.js should pass jshint.'); 
+    });
+  });
+define("dummy/tests/models/foo.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - models');
+    test('models/foo.js should pass jshint', function() { 
+      ok(true, 'models/foo.js should pass jshint.'); 
+    });
+  });
+define("dummy/tests/router.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - .');
+    test('router.js should pass jshint', function() { 
+      ok(true, 'router.js should pass jshint.'); 
+    });
+  });
+define("dummy/tests/routes/demos/array-of-models.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - routes/demos');
+    test('routes/demos/array-of-models.js should pass jshint', function() { 
+      ok(true, 'routes/demos/array-of-models.js should pass jshint.'); 
+    });
+  });
+define("dummy/tests/routes/demos/single-model.jshint", 
+  [],
+  function() {
+    "use strict";
+    module('JSHint - routes/demos');
+    test('routes/demos/single-model.js should pass jshint', function() { 
+      ok(true, 'routes/demos/single-model.js should pass jshint.'); 
+    });
+  });
+define("dummy/tests/test-helper", 
+  ["dummy/tests/helpers/resolver","ember-qunit"],
+  function(__dependency1__, __dependency2__) {
+    "use strict";
+    var resolver = __dependency1__["default"];
+    var setResolver = __dependency2__.setResolver;
+
+    setResolver(resolver);
+
+    document.write('<div id="ember-testing-container"><div id="ember-testing"></div></div>');
+
+    QUnit.config.urlConfig.push({ id: 'nocontainer', label: 'Hide container'});
+    var containerVisibility = QUnit.urlParams.nocontainer ? 'hidden' : 'visible';
+    document.getElementById('ember-testing-container').style.visibility = containerVisibility;
+  });
+define("dummy/tests/unit/adapters-test", 
+  ["ember","ember-qunit","sl-ember-store/adapter"],
+  function(__dependency1__, __dependency2__, __dependency3__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    var test = __dependency2__.test;
+    var moduleFor = __dependency2__.moduleFor;
+    var Adapter = __dependency3__["default"];
+
+    var adapter,
+        store = {
+            runPostQueryHooks: sinon.spy(),
+            runPreQueryHooks: sinon.spy()
+        };
+
+    module( 'Unit - sl-ember-store/adapter', {
+        setup: function() {
+            adapter = Adapter.create({
+                container:{
+                    lookup: function( type ){
+                        if( type === 'store:main' )
+                            return store;
+                        else
+                            Ember.Assert( 'Container could not find "'+type+'"', false);
+                    }
+                }
+            });
+        },
+        teardown: function() {
+            store.runPostQueryHooks.reset();
+            store.runPreQueryHooks.reset();
+        }
+    });
+    test( 'runPreQueryHooks should run the prequeryhook once', function() {
+        adapter.runPreQueryHooks();
+        ok( store.runPreQueryHooks.calledOnce );
+    });
+
+    test( 'runPreQueryHooks should not have run postqueryhook', function() {
+        adapter.runPreQueryHooks();
+        equal( store.runPostQueryHooks.callCount,0 );
+    });
+
+    test( 'runPostQueryHooks should run the postqueryhook once', function() {
+         adapter.runPostQueryHooks();
+         ok( store.runPostQueryHooks.calledOnce );
+    });
+    test( 'runPostQueryHooks should not have run the prequeryhook', function() {
+         adapter.runPostQueryHooks();
+         equal( store.runPreQueryHooks.callCount,0 );
+    });
+  });
+define("dummy/tests/unit/adapters/ajax-test", 
+  ["ember","ember-qunit","sl-ember-store/model","sl-ember-store/adapter","sl-ember-store/store","sl-ember-store/adapters/ajax","ic-ajax"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__, __dependency7__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    var test = __dependency2__.test;
+    var moduleFor = __dependency2__.moduleFor;
+    var Model = __dependency3__["default"];
+    var Adapter = __dependency4__["default"];
+    var Store = __dependency5__["default"];
+    var Ajaxadapter = __dependency6__["default"];
+    var icAjax = __dependency7__;
+
+    var ajaxadapter,
+        Foo = Model.extend(),
+        Bar = Model.extend(),
+        defineFixture = icAjax.defineFixture,
+        response,
+        requestSpy;
+
+    module( 'Unit - sl-ember-store/adapter/ajax', {
+        setup: function() {
+            var container = {
+                    registry: [],
+                    cache: {},
+                    normalize: function( key ){
+                        return key;
+                    },
+                    lookup: function( key ){
+                        if( this.cache[key] ) return this.cache[key];
+
+                        var obj = this.registry.findBy( 'key', key ).factory.create({container:this});
+                        this.cache[key] = obj;
+                        return obj;
+                    },
+                    lookupFactory: function( key ){
+                        var item = this.registry.findBy( 'key', key );
+                        return item ? item.factory : undefined;
+                    }
+                };
+
+            ajaxadapter = Ajaxadapter.create({
+                container: container,
+                store: Store.create({ container:container })
+            });
+            //register mock data
+            ajaxadapter.container.cache['store:main']={
+                runPostQueryHooks: sinon.spy(),
+                runPreQueryHooks: sinon.spy()
+            };
+
+            ajaxadapter.container.registry.push( { key: 'model:foo', factory: Foo } );
+            ajaxadapter.container.registry.push( { key: 'model:bar', factory: Bar } );
+
+            defineFixture( '/foo', {
+                response: { id: 1, test: 'foo', 'bar': { id: 1, quiz: 'bar' } },
+                jqXHR: {},
+                textStatus: 'success'
+            });
+            defineFixture( '/fooFail', {
+                errorThrown: 'this is an error msg',
+                jqXHR: {},
+                textStatus: 'error'
+            });
+            defineFixture( '/bar', {
+                response:  [ { id: 1, quiz: 'bar' }, { id: 2, quiz: 'bar2' } ],
+                jqXHR: {},
+                textStatus: 'success'
+            });
+            Foo.reopenClass( {
+                url: '/foo',
+                endpoints: {
+                    fail: {
+                        url: '/fooFail'
+                    }
+                }
+            });
+
+            Bar.reopenClass( { url: '/bar'});
+
+            //spies
+            requestSpy = sinon.spy( icAjax, 'request' );
+        },
+        teardown: function() {
+            icAjax.request.restore();
+        }
+    });
+
+    function ajaxTestSuite(){
+        ok( requestSpy.calledOnce, 'request called once' );
+        ok( response.then, 'response is a promise' );
+        ok( Ember.PromiseProxyMixin.detect( response ), 'response is a promise proxy' );
+    }
+
+    asyncTest( '__find single model with id', function(){
+
+        expect(6);
+        response = ajaxadapter.find( 'foo', 1 );
+
+        equal( requestSpy.args[0][0].url, '/foo', 'should call icAjax.request with the correct arguments');
+
+        equal( requestSpy.args[0][0].data.id, 1, 'should call icAjax.request with the correct arguments');
+
+        ajaxTestSuite();
+
+        response.then( function(){
+            ok( response.get('content') instanceof Foo, 'response is instance of Foo' );
+            start();
+        });
+    });
+
+    asyncTest( '__find single model with no id', function(){
+        var options =  {data: {main: true }};
+
+        response = ajaxadapter.find( 'foo', null, options, true );
+
+        equal( requestSpy.args[0][0].url, '/foo', 'should call icAjax.request with the correct arguments');
+
+        ok( requestSpy.args[0][0].data.main, 'should call icAjax.request with the correct arguments');
+
+        ajaxTestSuite();
+
+        response.then( function(){
+            ok( response.get('content') instanceof Foo, 'response is instance of Foo' );
+            start();
+        });
+
+    });
+
+    asyncTest( '__find array of model', function(){
+        var options =  {data: {main: true }};
+        //request
+        response = ajaxadapter.find( 'bar', null, options, false );
+
+        ajaxTestSuite();
+
+        ok( response instanceof Ember.ArrayProxy, 'should return an instance of Ember.ArrayProxy' );
+        response.then( function(){
+            ok( response.content[0] instanceof Bar, 'should return an array of Bar models' );
+            ok( response.content[1] instanceof Bar, 'should return an array of Bar models' );
+            start();
+        });
+    });
+
+
+    asyncTest( 'find should throw error if request fails', function(){
+        var options = { endpoint: 'fail' },
+            promise = ajaxadapter.find( 'foo', null, options, false );
+
+        promise.then( function( result ){
+            ok( false, 'find did not throw an error!' );
+            start();
+        },
+        function( result ){
+            equal( result.textStatus, 'error', 'find did throw error' );
+            start();
+        });
+    });
+
+    test( 'save', function(){
+        var foo = Foo.create({ test: 'foo', 'bar': { id: 1, quiz: 'bar' } });
+        response = ajaxadapter.save( '/foo', foo );
+        ok( requestSpy.calledOnce, 'should call icAjax request once' );
+        equal( requestSpy.args[0][0].url, '/foo', 'should call icAjax with correct url');
+        equal( requestSpy.args[0][0].type, 'POST', 'should call icAjax with correct method');
+        equal( typeof requestSpy.args[0][0].data, 'string', 'icAjax should return a string');
+    });
+
+    test( 'save, should call $.ajax with the correct arguments', function(){
+        var foo = Foo.create({ test: 'foo', 'bar': { id: 1, quiz: 'bar' } });
+        response = ajaxadapter.save( '/foo', foo );
+        ok( requestSpy.calledOnce, 'request called once' );
+        equal( requestSpy.args[0][0].url, '/foo' );
+        equal( requestSpy.args[0][0].type, 'POST' );
+        equal( typeof requestSpy.args[0][0].data, 'string' );
+        ok( response.then, 'response is a promise' );
+    });
+
+    test( 'delete, should call icAjax.request once', function(){
+        var foo = Foo.create({ id: 1, test: 'foo', 'bar': { id: 1, quiz: 'bar' } });
+        response = ajaxadapter.deleteRecord( '/foo', 1 );
+
+        ok( requestSpy.calledOnce );
+        equal( requestSpy.args[0][0].url, '/foo', 'should call icAjax with correct url');
+        equal( requestSpy.args[0][0].type, 'DELETE', 'should call icAjax with correct url');
+        equal( typeof requestSpy.args[0][0].data, 'string', 'icAjax should return a string');
+        ok( response.then, 'response is a proxy' );
+    });
+  });
+define("dummy/tests/unit/adapters/localstorage-test", 
+  ["ember","ember-qunit","sl-ember-store/model","sl-ember-store/adapter","sl-ember-store/store","sl-ember-store/adapters/localstorage"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    var test = __dependency2__.test;
+    var moduleFor = __dependency2__.moduleFor;
+    var Model = __dependency3__["default"];
+    var Adapter = __dependency4__["default"];
+    var Store = __dependency5__["default"];
+    var LocalStorageAdapter = __dependency6__["default"];
+
+    var localstorageadapter,
+        localStorageBackup,
+        localStorage,
+        container,
+        getLocalStorageSpy,
+        requestSpy,
+        saveSpy,
+        response,
+        Foo = Model.extend(),
+        Bar = Model.extend();
+
+    module( 'Unit - sl-ember-store/adapter/localstorage', {
+        setup: function() {
+           localStorage = {
+                _ns: 'testLSObject',
+                setItem: function( item, content ){
+                    this[item] = content;
+                },
+                getItem: function( item ){
+                    return this[item];
+                }
+            };
+            container = {
+                registry: [],
+                cache: {},
+                normalize: function( key ){
+                    return key;
+                },
+                lookup: function( key ){
+                    if( this.cache[key] ) return this.cache[key];
+
+                    var obj = this.registry.findBy( 'key', key ).factory.create({container:this});
+                    this.cache[key] = obj;
+                    return obj;
+                },
+                lookupFactory: function( key ){
+                    var item = this.registry.findBy( 'key', key );
+                    return item ? item.factory : undefined;
+                }
+            };
+            localstorageadapter = LocalStorageAdapter.create({
+                container: container,
+                store: Store.create({ container:container })
+            });
+
+            //register mock data
+            localstorageadapter.container.cache['store:main']={
+                runPostQueryHooks: sinon.spy(),
+                runPreQueryHooks: sinon.spy()
+            };
+
+            Foo.reopenClass( { url: '/foo', adapter: 'localstorage' } );
+            Bar.reopenClass( { url: '/bar', adapter: 'localstorage' } );
+
+            localstorageadapter.container.registry.push( { key: 'model:foo', factory: Foo } );
+            localstorageadapter.container.registry.push( { key: 'model:bar', factory: Bar } );
+
+            getLocalStorageSpy = sinon.stub( localstorageadapter, '_getLocalStorage', function(){
+                return localStorage;
+            });
+
+            localstorageadapter.save( '/foo',  {id: 1, test: 'foo', 'bar': { id: 1, quiz: 'bar' } } );
+            localstorageadapter.save( '/bar', { id: 1, quiz: 'bar' } );
+            localstorageadapter.save( '/bar', { id: 2, quiz: 'bar2' } );
+
+        //spies
+            requestSpy = sinon.spy( localStorage, 'getItem' );
+            saveSpy = sinon.spy( localStorage, 'setItem' );
+
+        },
+        teardown: function() {
+            localStorage.getItem.restore();
+            localStorage.setItem.restore();
+            getLocalStorageSpy.restore();
+        }
+    });
+
+    asyncTest( '__find single model with id', function(){
+        response = localstorageadapter.find( 'foo', 1, { label: '1' } );
+        equal(requestSpy.args[0][0], 'sl-ember-store', 'calls request with correct args' );
+        ok( response.then, 'response is a promise' );
+        ok( Ember.PromiseProxyMixin.detect( response ), 'response is a promise' );
+        response.then(function( result ){
+            ok( response.get( 'content' ) instanceof Foo, 'response content is instace of Foo' );
+            start();
+        });
+    });
+
+    asyncTest( '__find single model with no id', function(){
+        var options =  {data: {main: true }};
+
+        response = localstorageadapter.find( 'foo', null, options, true );
+
+        equal(requestSpy.args[0][0], 'sl-ember-store', 'calls request with correct args' );
+
+        ok( response.then, 'response is a promise' );
+
+        ok( Ember.PromiseProxyMixin.detect( response ), 'response is a promise' );
+
+        response.then(function(){
+            ok( response.get( 'content' ) instanceof Foo, 'response content is instace of Foo' );
+            start();
+        });
+
+    });
+
+    asyncTest( '__find array of models', function(){
+        var options =  {data: {main: true }};
+
+        response = localstorageadapter.find( 'bar', null, options, false );
+
+        ok( Ember.PromiseProxyMixin.detect( response ), 'response is a promise' );
+
+        response.then(function(){
+            ok( response.get( 'content.0' ) instanceof Bar, 'response content is instace of Bar' );
+            ok( response.get( 'content.1' ) instanceof Bar, 'response content is instace of Bar' );
+            start();
+        });
+    });
+
+    asyncTest( 'save', function(){
+        var fooContent = { id: 2, test: 'foo', 'bar': { id: 1, quiz: 'bar2' } },
+            foo = Foo.create( fooContent );
+
+        response = localstorageadapter.save( '/foo', foo );
+        response.then( function(){
+            var fooRecords = JSON.parse(localStorage.getItem('sl-ember-store')).foo,
+                fooRecord = fooRecords.findBy( 'id', 2 );
+
+            ok( response.then, 'response is a promise' );
+
+            equal( fooRecord.id, 2, 'should have added the record to the mock ls object' );
+            start();
+        });
+    });
+
+    asyncTest( 'delete', function(){
+        var fooContent = { id: 2, test: 'foo', 'bar': { id: 1, quiz: 'bar2' } },
+            foo = Foo.create( fooContent ),
+            r = localstorageadapter.save( '/foo', foo );
+
+            r.then( function(){
+
+                var response = localstorageadapter.deleteRecord( '/foo', 2 );
+
+                response.then( function(){
+                    ok( response.then, 'response is a promise' );
+
+                    var fooRecords = [ JSON.parse(localStorage.getItem('sl-ember-store')).foo ],
+                        fooRecord = fooRecords.findBy( 'id', 2 );
+
+                    equal( fooRecord, undefined, 'should have deleted the record to the mock ls object' );
+                    start();
+                });
+            });
+    });
+
+    asyncTest( 'quota test', function(){
+        var fooContent = { id: 1, test: [] },
+            foo,
+            r;
+
+        for( var i = 0; i < 10000000; i++){
+            fooContent.test[i] = '01000001000000000100010';
+        }
+
+        //make sure we actually test the browser's localstorage
+        getLocalStorageSpy.restore();
+
+        foo = Foo.create( fooContent );
+
+        r = localstorageadapter.save( '/foo', foo );
+
+        r.then(
+            function( result ){
+                ok( false, 'Promise did not get rejected!');
+                start();
+            },
+            function( result ){
+                equal( result.textStatus, 'error', 'Promise gets rejected for exceeding quota' );
+                start();
+            });
+    });
+  });
+define("dummy/tests/unit/cache-test", 
+  ["ember","ember-qunit","sl-ember-store/cache"],
+  function(__dependency1__, __dependency2__, __dependency3__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    var test = __dependency2__.test;
+    var moduleFor = __dependency2__.moduleFor;
+    var Cache = __dependency3__["default"];
+
+    var cache,
+        fetchByIdSpy,
+        fetchOneSpy,
+        _getManyPromiseSpy,
+        _getRecordSpy;
+
+    module( 'Unit - sl-ember-store/cache', {
+        setup: function(){
+            cache = Cache.create();
+            fetchByIdSpy = sinon.spy( cache, 'fetchById' );
+            fetchOneSpy = sinon.spy( cache, 'fetchOne' );
+            _getManyPromiseSpy = sinon.spy( cache, '_getManyPromise' );
+            _getRecordSpy = sinon.spy( cache, '_getRecords' );
+        },
+        teardown: function(){
+            fetchByIdSpy.restore();
+            fetchOneSpy.restore();
+            _getManyPromiseSpy.restore();
+            _getRecordSpy.restore();
+        }
+    });
+
+    test( 'isCached, id', function(){
+        cache.isCached( 'test', 1 );
+        ok( fetchByIdSpy.calledOnce, 'fetch by id called once' );
+        equal( fetchByIdSpy.args[0][1], 1, 'fetch by the right id' );
+    });
+    test( 'isCached, one', function(){
+        cache.isCached( 'test', null, true );
+        ok( fetchOneSpy.calledOnce, 'fetch one called once' );
+        equal( fetchOneSpy.args[0][0], 'test', 'fetch one called with correct type' );
+    });
+    test( 'isCached, all', function(){
+        cache.isCached( 'test' );
+        ok( _getManyPromiseSpy.calledOnce, 'get all called once');
+        equal( _getManyPromiseSpy.args[0][0], 'test', 'get all called with correct type' );
+        ok( _getRecordSpy.calledOnce, 'get all called once');
+        equal( _getRecordSpy.args[0][0], 'test', 'get all called with correct type' );
+    });
+
+    test( 'clearCache', function(){
+        sinon.spy( cache, '_initializeRecords' );
+        sinon.spy( cache, '_initializePromises' );
+        cache.clearCache( 'test' );
+        ok( cache._initializeRecords.calledOnce, 'initialize records called once');
+        ok( cache._initializeRecords.calledWith( 'test' ), 'initialize records called with correct arg' );
+        ok( cache._initializePromises.calledOnce, 'initialize promises called once');
+        ok( cache._initializePromises.calledWith( 'test' ), 'initialize records called with correct arg' );
+    });
+
+    test( 'removeRecord', function(){
+        cache.removeRecord( 'test', Ember.Object.create() );
+        ok( cache._getRecords.calledOnce, '_getRecords called once' );
+        ok( cache._getRecords.calledWith( 'test' ), '_getRecords called with correct arg');
+    });
+
+    test( 'removeRecords', function(){
+        sinon.spy( cache, 'removeRecord' );
+        cache.removeRecords( 'test', [ Ember.Object.create() ] );
+        ok( cache.removeRecord.calledOnce, 'removeRecord called once' );
+        ok( cache.removeRecord.calledWith( 'test' ), 'removeRecord called with correct arg' );
+    });
+
+    test( 'addToCache, single promise', function(){
+        var result =  new Ember.RSVP.Promise(function( resolve ){ resolve( Ember.Object.create() ); });
+        sinon.spy( cache, 'addPromise');
+        cache.addToCache( 'test', 1, false, result );
+        ok( cache.addPromise.calledOnce, 'addPromise called once' );
+        ok( cache.addPromise.calledWith( 'test' ), 'addPromise called with correct args' );
+    });
+
+    test( 'addToCache, all promise', function(){
+        var result =  new Ember.RSVP.Promise(function( resolve ){ resolve( [ Ember.Object.create() ] ); });
+        sinon.spy( cache, 'addManyPromise');
+        cache.addToCache( 'test', false, false, result );
+        ok( cache.addManyPromise.calledOnce, 'addManyPromise called once' );
+        ok( cache.addManyPromise.calledWith( 'test' ), 'addManyPromise called with correct args' );
+    });
+
+    test( 'addToCache, record', function(){
+        sinon.spy( cache, 'addRecord');
+        cache.addToCache( 'test', 1, false, Ember.Object.create() );
+        ok( cache.addRecord.calledOnce, 'addRecord called once' );
+        ok( cache.addRecord.calledWith( 'test' ), 'addRecord called with correct args' );
+    });
+
+    asyncTest( 'addPromise, resolve', function(){
+        var testRecord =  Ember.Object.create({ id: 1, test: 'test' }),
+            testPromise = new Ember.RSVP.Promise( function( resolve ){
+               setTimeout( resolve( testRecord ), 1000);
+            }),
+            rPromise;
+
+        sinon.spy( cache, '_getPromises' );
+
+        rPromise = cache.addPromise( 'test', 1, testPromise );
+        ok( cache._getPromises.calledOnce, '_getPromises called once' );
+        equal( cache.get( '_promises.test.ids.1' ), testPromise, 'promise got added to promise cache' );
+
+        //test that promise gets removed from promise hash on resolution
+        rPromise.finally( function(){
+            equal( cache.get( '_promises.test.ids.1' ), undefined, 'promise was removed from cache' );
+            ok( cache._getRecords.calledOnce, '_getRecords called once' );
+            equal( cache.get( '_records.test.ids.1' ), testRecord, 'record was added to record cache' );
+            start();
+        });
+
+    });
+    asyncTest( 'addPromise, reject', function(){
+        var testRecord =  Ember.Object.create({ id: 1, test: 'test' }),
+            testPromise = new Ember.RSVP.Promise( function( resolve, reject ){
+               setTimeout( reject( testRecord ), 1000);
+            }),
+            rPromise;
+
+        sinon.spy( cache, '_getPromises' );
+
+        rPromise = cache.addPromise( 'test', 1, testPromise );
+        ok( cache._getPromises.calledOnce, '_getPromises called once' );
+        equal( cache.get( '_promises.test.ids.1' ), testPromise, 'promise got added to promise cache' );
+
+        //test that promise gets removed from promise hash on resolution
+        rPromise.finally( function(){
+            equal( cache.get( '_promises.test.ids.1' ), undefined, 'promise was removed from cache' );
+            ok( !cache._getRecords.called, '_getRecords not called' );
+            equal( cache.get( '_records.test.ids.1' ), undefined, 'record was not added to record cache' );
+            start();
+        });
+
+    });
+
+
+    asyncTest( 'addManyPromise, resolve', function(){
+        var testRecord =  Ember.Object.create({ id: 1, test: 'test' }),
+            testPromise = new Ember.RSVP.Promise( function( resolve ){
+               setTimeout( resolve( [ testRecord ]  ), 100);
+            }),
+            rPromise;
+
+        sinon.spy( cache, '_getPromises' );
+        sinon.spy( cache, 'addRecords' );
+
+        rPromise = cache.addManyPromise( 'test', testPromise );
+        ok( cache._getPromises.called >= 1, '_getPromises called at least once' );
+        equal( cache.get( '_promises.test.many.firstObject' ), testPromise, 'promise was added to promise cache' );
+        rPromise.then( function(){
+            equal( cache.get( '_promises.test.many.length' ), 0, 'promise was removed from promise cache' );
+            ok( cache.addRecords.calledOnce, 'addrecords called once' );
+            equal( cache.get( '_records.test.ids.1'), testRecord, 'record was added to record cache' );
+            start();
+        });
+    });
+
+    asyncTest( 'addManyPromise, reject', function(){
+        var testRecord =  Ember.Object.create({ id: 1, test: 'test' }),
+            testPromise = new Ember.RSVP.Promise( function( resolve, reject ){
+               setTimeout( reject( [ testRecord ]  ), 100);
+            }),
+            rPromise;
+
+        sinon.spy( cache, '_getPromises' );
+        sinon.spy( cache, 'addRecords' );
+
+        rPromise = cache.addManyPromise( 'test', testPromise );
+        ok( cache._getPromises.called >= 1, '_getPromises called at least once' );
+        equal( cache.get( '_promises.test.many.firstObject' ), testPromise, 'promise was added to promise cache' );
+        rPromise.finally( function(){
+            equal( cache.get( '_promises.test.many.length' ), 0, 'promise was removed from promise cache' );
+            ok( !cache.addRecords.calledOnce, 'addrecords not called once' );
+            equal( cache.get( '_records.test.ids.1'), undefined, 'record was added to record cache' );
+            start();
+        });
+    });
+
+    test( 'addRecord', function(){
+        var testRecord =  Ember.Object.create({ id: 1, test: 'test' });
+        var testRecord2 =  Ember.Object.create({ id: 1, test: 'test2' });
+
+        sinon.spy( cache, 'removeRecord' );
+
+        cache.addRecord( 'test', testRecord );
+
+        equal( cache.get( '_records.test.ids.1' ), testRecord, 'testRecord added to record cache' );
+
+        ok( ! cache.removeRecord.called, 'removeRecord was not called on initial add');
+
+        cache.addRecord( 'test', testRecord2 );
+
+        ok( cache.removeRecord.called, 'removeRecord was called on 2nd add');
+
+        equal( cache.get( '_records.test.ids.1' ), testRecord2, 'testRecord2 replaced old record in cache' );
+    });
+
+    test( 'addRecords', function(){
+        var testRecord =  Ember.Object.create({ id: 1, test: 'test' });
+        var testRecord2 =  Ember.Object.create({ id: 2, test: 'test2' });
+
+        sinon.spy( cache, 'addRecord' );
+
+        cache.addRecords( 'test', [ testRecord, testRecord2 ] );
+
+        equal( cache.addRecord.callCount, 2, 'addRecord called for each record' );
+
+    });
+
+    test( 'fetch, id', function(){
+        cache.fetch( 'test', 1 );
+        ok( fetchByIdSpy.calledOnce, 'fetch by id called once' );
+        equal( fetchByIdSpy.args[0][1], 1, 'fetch by the right id' );
+    });
+    test( 'fetch, one', function(){
+        cache.fetch( 'test', null, true );
+        ok( fetchOneSpy.calledOnce, 'fetch one called once' );
+        equal( fetchOneSpy.args[0][0], 'test', 'fetch one called with correct type' );
+    });
+    test( 'fetch, all', function(){
+        cache.fetch( 'test' );
+        ok( _getManyPromiseSpy.calledOnce, 'get all called once');
+        equal( _getManyPromiseSpy.args[0][0], 'test', 'get all called with correct type' );
+        ok( _getRecordSpy.calledOnce, 'get all called once');
+        equal( _getRecordSpy.args[0][0], 'test', 'get all called with correct type' );
+    });
+
+
+    asyncTest( 'fetchOne - promise', function(){
+        var testRecord = Ember.Object.create({ id: 1});
+
+        cache.addPromise( 'test', 1, Ember.RSVP.Promise.resolve( testRecord ) )
+        .then( function(){
+
+            sinon.spy( cache, '_getPromises' );
+
+            var response = cache.fetchOne( 'test' );
+
+            ok( cache._getPromises.calledOnce, 'getPromise called once' );
+
+            response.then( function(){
+                equal( response.get('content'), testRecord, 'fetchOne returned correct record' );
+
+                start();
+            });
+        });
+
+    });
+
+    asyncTest( 'fetchOne - record', function(){
+        var testRecord = Ember.Object.create({ id: 1});
+
+        cache.addRecord( 'test', testRecord );
+
+        var response = cache.fetchOne( 'test' );
+
+        ok( cache._getRecords.called, 'getRecords called once' );
+
+        response.then( function(){
+            equal( response.get('content'), testRecord, 'fetchOne returned the correct record' );
+            start();
+        });
+    });
+
+
+    asyncTest( 'fetchById - promise', function(){
+        var testRecord = Ember.Object.create({ id: 1});
+
+        cache.addPromise( 'test', 1, Ember.RSVP.Promise.resolve( testRecord ) )
+        .then( function(){
+
+            sinon.spy( cache, '_getPromiseById' );
+
+            var response = cache.fetchById( 'test', 1 );
+
+            ok( cache._getPromiseById.calledOnce, 'getPromiseById called once' );
+
+            response.then( function(){
+                equal( response.get('content'), testRecord, 'fetchById returned correct record' );
+
+                start();
+            });
+        });
+
+    });
+
+    asyncTest( 'fetchById - record', function(){
+        var testRecord = Ember.Object.create({ id: 1});
+
+        cache.addRecord( 'test', testRecord );
+
+        sinon.spy( cache, '_getRecordById' );
+
+        var response = cache.fetchById( 'test', 1 );
+
+        ok( cache._getRecordById.calledOnce, 'getRecordById called once' );
+
+        response.then( function(){
+            equal( response.get('content'), testRecord, 'fetchById returned correct record' );
+
+            start();
+        });
+
+    });
+
+    test( 'fetchMany - promise', function(){
+
+        var testRecord = Ember.Object.create({ id: 1});
+        var testPromise =  Ember.RSVP.Promise.resolve( [ testRecord] );
+
+        cache.addManyPromise( 'test', testPromise);
+        var response = cache.fetchMany( 'test' );
+        ok( cache._getManyPromise.calledOnce, 'calls _getManyPromise once' );
+        ok( response, testPromise, 'returns the test promise' );
+    });
+
+    asyncTest( 'fetchMany - record', function(){
+
+        var testRecord = Ember.Object.create({ id: 1});
+        cache.addRecords( 'test', [ testRecord ] );
+        var response = cache.fetchMany( 'test' );
+        ok( cache._getRecords.called, 'calls _getManyRecordsCached once' );
+        response.then( function(){
+            equal( response.get( 'content.0' ), testRecord, 'returns the test record in an array' );
+            start();
+        });
+
+    });
+
+    test( '_setupCache', function(){
+        cache._setupCache();
+        equal( Object.keys( cache._records ).length, 0, 'records object is empty' );
+        equal( Object.keys( cache._promises ).length, 0, 'promises object is empty' );
+    });
+
+    test( '_initializeRecords', function(){
+        cache._initializeRecords( 'test' );
+        equal( cache._records.test.records.length, 0, 'sets up `test` records array' );
+        ok( cache._records.test.ids instanceof Ember.Object, 'sets up `test` records object' );
+    });
+
+    test( '_getRecords, none', function(){
+        var response = cache._getRecords( 'test' );
+        equal( response.records.length, 0, 'returns 0 records');
+    });
+
+    test( '_getRecords, some', function(){
+        cache.addRecord( 'test', Ember.Object.create({id:1}));
+        var response = cache._getRecords( 'test' );
+        equal( response.records[0].id, 1, 'returns an array with the test record' );
+    });
+
+    test( '_getRecordById, not found', function(){
+        var response = cache._getRecordById( 'test', 12 );
+        equal( response, undefined, 'record should not be found');
+    });
+
+    test( '_getRecordById, found', function(){
+        var testRecord = Ember.Object.create({id:1});
+        cache.addRecord( 'test', testRecord);
+        var response = cache._getRecordById( 'test', 1 );
+        equal( response, testRecord, 'returns the correct record' );
+    });
+
+    test( '_getRecords, empty', function(){
+        var response = cache._getRecords( 'test' ).records;
+        equal( response.length, 0,  'returns an empty array' );
+    });
+
+    test( '_getRecords, some', function(){
+        var testRecord = Ember.Object.create({id:1});
+        cache.addRecord( 'test', testRecord);
+        var response = cache._getRecords( 'test' ).records;
+        equal( response[0], testRecord, 'returns the test record in an array' );
+    });
+
+    test( '_initializePromises', function(){
+        cache._initializePromises( 'test' );
+        equal( cache._promises.test.many.firstObject, null, 'test all promise is null ');
+        equal( Object.keys(cache._promises.test.ids).length, 0, 'test promise object is empty' );
+    });
+
+    test( '_getPromises, empty', function(){
+        sinon.spy( cache, '_initializePromises' );
+        var response = cache._getPromises('test');
+        ok( cache._initializePromises.calledOnce, 'calls initializePromises' );
+
+    });
+
+    test( '_getPromises, some', function(){
+        var testPromise = Ember.RSVP.Promise.resolve( Ember.Object.create({id:1}) );
+        cache.addPromise( 'test', 1, testPromise );
+        var response = cache._getPromises( 'test' );
+        equal( response.ids[1], testPromise, 'has testpromise set' );
+    });
+
+    test( '_getPromiseById, none', function(){
+        var response = cache._getPromiseById( 'test', 1 );
+        equal( response, undefined, 'no promise should be found' );
+    });
+    test( '_getPromiseById, some', function(){
+        var testPromise = Ember.RSVP.Promise.resolve( Ember.Object.create({id:1}));
+        cache.addPromise( 'test', 1, testPromise );
+        var response = cache._getPromiseById( 'test', 1 );
+        equal( response, testPromise, 'promise should be found' );
+    });
+
+    test( '_getManyPromise, none', function(){
+        var response = cache._getManyPromise( 'test' );
+        equal( response, undefined, 'response should be undefined' );
+    });
+    asyncTest( '_getManyPromise, some', function(){
+        var testRecord = Ember.Object.create({id:1}),
+            testPromise = Ember.RSVP.Promise.resolve( [ testRecord ] );
+
+        cache.addManyPromise( 'test', testPromise );
+
+        var response = cache._getManyPromise( 'test' );
+
+        response.then( function( records ){
+            equal( testRecord, records[0], 'should return promise' );
+            start();
+        });
+    });
+
+    asyncTest( '_getManyPromise, more', function(){
+        var testRecord = Ember.Object.create({id:1}),
+            testRecord2 = Ember.Object.create({id:2}),
+            testPromise = Ember.RSVP.Promise.resolve( [ testRecord ] ),
+            testPromise2 = Ember.RSVP.Promise.resolve( [ testRecord2 ] );
+
+        cache.addManyPromise( 'test', testPromise );
+        cache.addManyPromise( 'test', testPromise2 );
+
+        var response = cache._getManyPromise( 'test' );
+
+        response.then( function( records ){
+            equal( testRecord, records[0], 'first record should be testRecord' );
+            equal( testRecord2, records[1], 'first record should be testRecord' );
+            start();
+        });
+    });
+  });
+define("dummy/tests/unit/initializers/sl-ember-model-test", 
+  ["ember","ember-qunit","dummy/tests/helpers/start-app","sl-ember-store/store","sl-ember-store/adapters/ajax","sl-ember-store/adapters/localstorage"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__, __dependency6__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    var test = __dependency2__.test;
+    var moduleForComponent = __dependency2__.moduleForComponent;
+    var startApp = __dependency3__["default"];
+    var Store = __dependency4__["default"];
+    var AjaxAdapter = __dependency5__["default"];
+    var LocalstorageAdapter = __dependency6__["default"];
+
+    var App,
+        container;
+
+    module( 'Unit - initializer: sl-ember-store', {
+        setup: function() {
+            App = startApp();
+            container = App.__container__;
+        },
+
+        teardown: function() {
+            Ember.run( App, App.destroy );
+        }
+    });
+
+    test( 'LocalStorage adapter gets namespace set', function(){
+        var lsAdapter = container.lookupFactory( 'adapter:localstorage' );
+        equal( lsAdapter.namespace, container.lookup( 'application:main' ).get( 'modulePrefix' ) );
+    });
+
+    test( 'store:main gets registered', function(){
+        var store = container.lookupFactory( 'store:main' );
+        ok( Store.detect( store ) );
+    });
+
+    test( 'adapter:ajax gets registered', function(){
+        var ajaxAdapter = container.lookupFactory( 'adapter:ajax' );
+        ok( AjaxAdapter.detect( ajaxAdapter ) );
+    });
+
+    test( 'adapter:localstorage gets registered', function(){
+        var lsAdapter = container.lookupFactory( 'adapter:localstorage' );
+        ok( LocalstorageAdapter.detect( lsAdapter ) );
+    });
+
+    test( 'store gets injected into controllers, routes, adapters', function(){
+        var appRoute = container.lookup( 'route:demos/single-model' ),
+            appController,
+            ajaxAdapter = container.lookup( 'adapter:ajax' ),
+            store = container.lookup( 'store:main' );
+
+        expect( 3 );
+
+        equal( appRoute.get( 'store' ), store );
+        equal( ajaxAdapter.get( 'store' ), store );
+
+        visit( '/' ).then(function() {
+            appController = container.lookup( 'controller:application' );
+            equal( appController.get( 'store' ), store );
+        });
+    });
+  });
+define("dummy/tests/unit/model-test", 
+  ["ember","ember-qunit","dummy/models/foo","dummy/models/bar","sl-ember-store/model"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __dependency5__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    var test = __dependency2__.test;
+    var moduleFor = __dependency2__.moduleFor;
+    var Foo = __dependency3__["default"];
+    var Bar = __dependency4__["default"];
+    var Model = __dependency5__["default"];
+
+    var foo,
+        bar,
+        adapter,
+        container,
+        fooResponse   = { id: 1, test: 'true' },
+        ajaxMock      = function() {
+            return new Ember.RSVP.Promise( function(resolve) { resolve( fooResponse ); });
+        },
+        serRespons1   = { test: true },
+        serResponse2  = { test: false },
+        serializer1   = function( response, store ){ return response; },
+        serializer2   = function( response, store ){ return response; },
+        testResponse1 = { test:true },
+        testResponse2 = { test: false },
+        TestModel     = Model.extend({});
+        TestModel.reopenClass({
+            serializer: function( response, store ){
+                return testResponse1;
+            },
+            endpoints: {
+                test: {
+                    get: {
+                        serializer: function( response, store ){
+                            return testResponse2;
+                        }
+                    }
+                }
+            }
+        });
+
+    module( 'Unit - sl-ember-store/model', {
+        setup: function() {
+
+            Foo.reopenClass({
+                url       :'/foo',
+                endpoints : {
+                    doo: {
+                        url: '/doo'
+                    },
+                    goo: {
+                        serializer: serializer1,
+                        post: {
+                            url: '/goo',
+                            serializer: serializer2
+                        }
+                    }
+                }
+            });
+
+            Bar.reopenClass({
+                url       : '/bar',
+                endpoints : {
+                    default: {
+                            post: '/barUpdate',
+                            delete: '/barDelete',
+                            serializer: serializer1
+                    },
+                    car: {
+                        post: {
+                            url: '/carUpdate',
+                            serializer: serializer2,
+                        },
+                        delete: '/carDelete'
+                    }
+                }
+            });
+
+            adapter = {
+                save         : ajaxMock,
+                deleteRecord : ajaxMock,
+            };
+
+            sinon.spy( adapter, 'save' );
+            sinon.spy( adapter, 'deleteRecord' );
+
+            container = {
+                registry: [],
+                cache: {},
+                normalize: function( key ) {
+                    return key;
+                },
+                lookup: function( key ) {
+                    if ( this.cache[key] ) return this.cache[key];
+
+                    var obj = this.registry.findBy( 'key', key ).factory.create({container:this});
+                    this.cache[key] = obj;
+                    return obj;
+                },
+                lookupFactory: function( key ){
+                    var item = this.registry.findBy( 'key', key );
+                    return item ? item.factory : undefined;
+                }
+            };
+
+            container.cache['adapter:ajax'] = adapter;
+
+            foo = Foo.create({
+                content: {
+                    test: 'foo',
+                    'bar': { id: 1, quiz: 'bar' },
+                },
+                container: container
+            });
+
+
+            bar = Bar.create({
+                content: {
+                    test: 'bar',
+                    'car': { id: 1, quiz: 'car' },
+                },
+                container: container
+            });
+        },
+        teardown: function() {
+            adapter.save.reset();
+            adapter.deleteRecord.reset();
+            foo = Foo.create({
+                content: {
+                    test: 'foo',
+                    'bar': { id: 1, quiz: 'bar' },
+                },
+                container: container
+            });
+            bar = Bar.create({
+                content: {
+                    test: 'bar',
+                    'car': { id: 1, quiz: 'car' },
+                },
+                container: container
+            });
+        }
+    });
+
+    test( 'getUrlForEndpointAction:should return /bar for ( null, `get` )', function() {
+        equal( Bar.getUrlForEndpointAction( null, 'get' ), '/bar' );
+    });
+
+    test( 'getUrlForEndpointAction:should return /barUpdate for ( null, `post` )', function() {
+        equal( Bar.getUrlForEndpointAction( null, 'post' ), '/barUpdate' );
+    });
+
+    test( 'getUrlForEndpointAction:should return /barDelete for ( null, `delete` )', function() {
+        equal( Bar.getUrlForEndpointAction( null, 'delete' ), '/barDelete' );
+    });
+
+    test( 'getUrlForEndpointAction:should return /bar for ( `default`, `get` )', function() {
+        equal( Bar.getUrlForEndpointAction( 'default', 'get' ), '/bar' );
+    });
+
+    test( 'getUrlForEndpointAction:should return /barUpdate for ( `default`, `post` )', function() {
+        equal( Bar.getUrlForEndpointAction( 'default', 'post' ), '/barUpdate' );
+    });
+
+    test( 'getUrlForEndpointAction:should return /barDelete for ( `default`, `delete` )', function() {
+        equal( Bar.getUrlForEndpointAction( 'default', 'delete' ), '/barDelete' );
+    });
+
+    test( 'getUrlForEndpointAction:should return /bar for ( `car`, `get` )', function() {
+        equal( Bar.getUrlForEndpointAction( 'car', 'get' ), '/bar' );
+    });
+
+    test( 'getUrlForEndpointAction:should return /carUpdate for ( `car`, `post` )', function() {
+        equal( Bar.getUrlForEndpointAction( 'car', 'post' ), '/carUpdate' );
+    });
+
+    test( 'getUrlForEndpointAction:should return /carDelete for ( `car`, `delete` )', function() {
+        equal( Bar.getUrlForEndpointAction( 'car', 'delete' ), '/carDelete' );
+    });
+
+    test( 'callSerializerForEndpointAction:should return testResponse1 for TestModel - ( `null`, `get` ) ', function() {
+        var testResponse = TestModel.callSerializerForEndpointAction( null, 'get', {} );
+        equal( testResponse, testResponse1 );
+    });
+
+    test( 'callSerializerForEndpointAction:should return testResponse1 for TestModel - ( `test`, `get` ) ', function() {
+        var testResponse = TestModel.callSerializerForEndpointAction( 'test', 'get', {} );
+        equal( testResponse, testResponse2 );
+    });
+
+    test( 'save-default:should call adapter.save with correct arguments', function() {
+        expect(2);
+        foo.save().then( function() {
+            equal( adapter.save.args[0][0], '/foo' );
+            equal( adapter.save.args[0][1].test, 'foo' );
+        });
+    });
+
+    test( 'save-default:should update its content with fooResponse', function() {
+        expect(1);
+        foo.save().then(function() {
+            deepEqual( foo.get('content'), fooResponse );
+        });
+    });
+
+    test( 'save-endpoint:should call adapter.save with correct arguments', function() {
+        expect(2);
+        bar.save().then( function() {
+            equal( adapter.save.args[0][0], '/barUpdate' );
+            equal( adapter.save.args[0][1].test, 'bar' );
+        });
+    });
+    test( 'save-endpoint:should update its content with fooResponse', function() {
+        expect(1);
+        bar.save().then( function() {
+            deepEqual( bar.get('content'), fooResponse );
+        });
+    });
+
+    test( 'save-endpoint:car: should call adapter.save with correct arguments', function() {
+        expect(2);
+        bar = Bar.create({
+            content: {
+                test: 'bar',
+                'car': { id: 1, quiz: 'car' },
+            },
+            container: container
+        });
+        bar.save({endpoint:'car'}).then( function() {
+            equal( adapter.save.args[0][0], '/carUpdate' );
+            equal( adapter.save.args[0][1].test, 'bar' );
+        });
+    });
+
+    test( 'save-endpoint:car: should update its content with fooResponse', function() {
+        bar = Bar.create({
+            content: {
+                test: 'bar',
+                'car': { id: 1, quiz: 'car' },
+            },
+            container: container
+        });
+        bar.save({endpoint:'car'}).then( function() {
+            deepEqual( bar.get('content'), fooResponse );
+        });
+    });
+
+    test( 'delete: should call adapter.deleteRecord with correct arguments', function() {
+        expect(1);
+        foo.deleteRecord().then( function() {
+            ok( adapter.deleteRecord.calledWith( '/foo' ) );
+        });
+    });
+
+    test( 'delete: should destroy foo', function() {
+        expect(1);
+        foo.deleteRecord().then( function() {
+            ok( foo.isDestroyed );
+        });
+
+    });
+
+    test( 'delete-endpoint: should call adapter.delete with correct arguments', function() {
+        expect(1);
+        bar.deleteRecord().then( function() {
+            ok( adapter.deleteRecord.calledWith( '/barDelete' ) );
+        });
+    });
+
+    test( 'delete-endpoint: should destroy bar', function() {
+        expect(1);
+        bar.deleteRecord().then( function() {
+            ok( bar.isDestroyed );
+        });
+    });
+
+    test( 'delete-endpoint:car: should call adapter.delete with correct arguments', function() {
+        expect(1);
+        bar.deleteRecord({endpoint:'car'}).then( function() {
+            ok( adapter.deleteRecord.calledWith( '/carDelete' ) );
+        });
+    });
+
+    test( 'delete-endpoint:car: should destroy bar', function() {
+        expect(1);
+        bar.deleteRecord({endpoint:'car'}).then( function() {
+            ok( bar.isDestroyed );
+        });
+    });
+  });
+define("dummy/tests/unit/store-test", 
+  ["ember","ember-qunit","sl-ember-store/store","sl-ember-store/model"],
+  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__) {
+    "use strict";
+    var Ember = __dependency1__["default"];
+    var test = __dependency2__.test;
+    var moduleFor = __dependency2__.moduleFor;
+    var Store = __dependency3__["default"];
+    var Model = __dependency4__["default"];
+
+    var Foo,
+        Bar,
+        store,
+        AjaxAdapter,
+        ajaxAdapter,
+        LocalstorageAdapter,
+        queryHook;
+
+    module( 'Unit - sl-ember-store/store', {
+
+        setup: function() {
+            Foo = Model.extend();
+            Bar = Model.extend();
+            Bar.reopenClass({ adapter: 'localstorage' });
+
+            AjaxAdapter = Ember.Object.extend({
+                type: 'ajax',
+                __find: function(){},
+                find: function(){
+                    return Ember.RSVP.resolve( [ Ember.Object.create() ] );
+                }
+            });
+
+            LocalstorageAdapter = Ember.Object.extend({ type: 'localstorage' });
+
+            store = Store.create({
+                container: {
+                    registry: [],
+                    cache: {},
+                    normalize: function( key ){
+                        return key;
+                    },
+                    lookup: function( key ){
+                        if( this.cache[key] ) return this.cache[key];
+
+                        var obj = this.registry.findBy( 'key', key ).factory.create({container:this});
+                        this.cache[key] = obj;
+                        return obj;
+                    },
+                    lookupFactory: function( key ){
+                        return this.registry.findBy( 'key', key ).factory;
+                    }
+                }
+            });
+            store.container.registry.push( { key: 'adapter:ajax', factory: AjaxAdapter } );
+            store.container.registry.push( { key: 'adapter:localstorage', factory: LocalstorageAdapter } );
+
+            store.container.registry.push( { key: 'model:foo', factory: Foo } );
+            store.container.registry.push( { key: 'model:bar', factory: Bar } );
+
+            ajaxAdapter = store.container.lookup('adapter:ajax');
+
+
+            //sinon spies
+            sinon.spy( store, '__find' );
+            sinon.spy( store, 'modelFor' );
+            sinon.spy( store, 'adapterFor' );
+            sinon.spy( ajaxAdapter, 'find' );
+            sinon.spy( Foo, 'create' );
+            queryHook = sinon.spy();
+        },
+        teardown: function() {
+            store.__find.restore();
+            store.modelFor.restore();
+            store.adapterFor.restore();
+            ajaxAdapter.find.restore();
+            Foo.create.restore();
+            queryHook.reset();
+        }
+    });
+
+    test( 'modelFor: should return the model "Foo" for type "foo" ', function() {
+        ok( store.modelFor( 'foo' ) === Foo );
+    });
+
+    test( 'modelFor: should return the model "Bar" for type "bar" ', function() {
+        ok( store.modelFor( 'bar' ) === Bar );
+    });
+
+    test( 'adapterFor: should return the adapter ajax for model type foo', function() {
+        ok( store.adapterFor( 'foo' ) instanceof AjaxAdapter );
+    });
+
+    test( 'adapterFor: should return the adapter localstorage for model type bar', function() {
+        ok( store.adapterFor( 'bar' ) instanceof LocalstorageAdapter );
+    });
+
+    test( 'findOne: should call __find with correct args', function() {
+        var options = { "otherId":1 },
+            args;
+
+        store.findOne( 'foo', options );
+
+        ok( store.__find.calledWith( 'foo', null, options, true ) );
+    });
+
+    test( 'find should call __find with numeric id', function() {
+        var options = { "otherId": 1 };
+        store.find( 'foo', 1, options );
+        ok( store.__find.calledWith( 'foo', 1, options, false ) );
+    });
+
+    test( 'find should call __find with object for first param', function() {
+        var options = { "otherId": 1 };
+        store.find( 'foo', options );
+        ok( store.__find.calledWith( 'foo', null, options, false ) );
+    });
+
+    test( 'find should call __find with only the type', function() {
+        store.find( 'foo' );
+        ok( store.__find.calledWith( 'foo', null, null, false ) );
+    });
+
+    test( '__find should have called modelFor', function() {
+        store.__find( 'foo', 1, {}, false );
+        ok( store.modelFor.calledWith( 'foo' ) );
+    });
+
+    test( '__find should have called adapterFor', function() {
+        store.__find( 'foo', 1, {}, false );
+        ok( store.adapterFor.calledWith( 'foo' ) );
+    });
+
+    test( '__find should have called AjaxAdapter.find', function() {
+        store.__find( 'foo', 1, {}, false );
+        ok( ajaxAdapter.find.calledWith( 'foo', 1, {}, false ) );
+    });
+
+    test( 'createRecord should have called modelFor', function() {
+        store.createRecord( 'foo' );
+        ok( store.modelFor.calledWith( 'foo' ) );
+    });
+
+    test( 'createRecord should have called Foo.create once', function() {
+        store.createRecord( 'foo' );
+        ok( Foo.create.calledOnce );
+    });
+
+    test( 'createRecord should have called Foo.create with an object container', function() {
+        store.createRecord( 'foo' );
+        ok( Foo.create.calledWith( { container: store.container } ) );
+    });
+
+    test( 'registerPreQueryHook should add an entry to preQueryHooks', function() {
+        store.registerPreQueryHook( queryHook );
+        ok( store.get( 'preQueryHooks' ).length === 1 );
+    });
+
+    test( 'runPreQueryHooks should run query hook once', function() {
+        store.registerPostQueryHook( queryHook );
+        store.runPostQueryHooks();
+        ok( queryHook.calledOnce );
+    });
+  });
 /* jshint ignore:start */
 
 define('dummy/config/environment', ['ember'], function(Ember) {
@@ -213,16 +2794,13 @@ catch(err) {
 
 /* jshint ignore:end */
 
-
-
 });
 
 if (runningTests) {
   require("dummy/tests/test-helper");
 } else {
-  require("dummy/app")["default"].create({"LOG_ACTIVE_GENERATION":true,"LOG_VIEW_LOOKUPS":true});
+  require("dummy/app")["default"].create({});
 }
 
-
-
 /* jshint ignore:end */
+//# sourceMappingURL=dummy.map
