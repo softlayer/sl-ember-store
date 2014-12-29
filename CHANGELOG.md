@@ -1,5 +1,11 @@
 # sl-ember-store Changelog
 
+### 0.6.0
+
+Incorrectly released v0.5.0 as v1.5.0, so re-releasing as v0.6.0.  The v1.5.0 release will have to be skipped once arrived at.
+
+[View complete changeset](https://github.com/softlayer/sl-ember-store/compare/v0.5.0...v0.6.0)
+
 ### 0.5.0
 
 * [#93](https://github.com/softlayer/sl-ember-store/pull/93) [BREAKING ENHANCEMENT] Update version of sl-ember-modelize dependency
