@@ -36,7 +36,8 @@
     "express": "^4.8.5",
     "glob": "^4.0.5",
     "morgan": "^1.5.0",
-    "ember-cli-es5-shim": "~0.1.0"
+    "ember-cli-es5-shim": "~0.1.0",
+    "broccoli-string-replace": "0.0.2"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"
