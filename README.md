@@ -7,6 +7,10 @@ License: [MIT](LICENSE.md)
 
 ---
 
+[![Build Status](https://travis-ci.org/softlayer/sl-ember-store.svg?branch=develop)](https://travis-ci.org/softlayer/sl-ember-store)
+
+---
+
 ### Is currently in BETA
 
 ---
