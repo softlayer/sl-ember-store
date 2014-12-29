@@ -1,5 +1,13 @@
 # sl-ember-store Changelog
 
+### 0.5.0
+
+* [#93](https://github.com/softlayer/sl-ember-store/pull/93) [BREAKING ENHANCEMENT] Update version of sl-ember-modelize dependency
+* [#94](https://github.com/softlayer/sl-ember-store/pull/94) [BREAKING ENHANCEMENT] Upgrade to Ember CLI 0.1.5
+* [#89](https://github.com/softlayer/sl-ember-store/pull/89) [INTERNAL] Installed ember-cli-es5-shim to faciliate running of tests via TravisCI
+
+[View complete changeset](https://github.com/softlayer/sl-ember-store/compare/v0.4.0...v0.5.0)
+
 ### 0.4.0
 
 * [#77](https://github.com/softlayer/sl-ember-store/pull/77) [BUGFIX] Ember Inspector now correctly recognizes this addon's models
