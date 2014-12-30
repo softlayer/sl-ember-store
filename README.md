@@ -5,7 +5,7 @@ License: [MIT](LICENSE.md)
 
 ---
 
-[![Build Status](https://travis-ci.org/softlayer/sl-ember-store.svg?branch=develop)](https://travis-ci.org/softlayer/sl-ember-store)
+[![Build Status](https://travis-ci.org/softlayer/sl-ember-store.svg?branch=develop)](https://travis-ci.org/softlayer/sl-ember-store) [![Code Climate](https://codeclimate.com/github/softlayer/sl-ember-store/badges/gpa.svg)](https://codeclimate.com/github/softlayer/sl-ember-store)
 
 ---
 
