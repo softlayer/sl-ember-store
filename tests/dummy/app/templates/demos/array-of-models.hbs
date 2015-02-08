@@ -61,9 +61,9 @@
         </pre>
         <p>* We are actually using <a href="https://github.com/rwjblue/ember-cli-pretender">Pretender</a> to mockup our data. This library is great for static gh-pages!</p>
 
-        <h3>Cacheing and Options</h3>
+        <h3>Caching and Options</h3>
 
-        <p>Our store implements a simple cacheing layer.  The cacheing layer recoginzes requests for multiple records and will check to see if one has already been made.  If so then it returns the records in its cache.  However, you may wish to override this default behavior and fetch the records again through the adapter.  This can be accomplished by passing a flag through the <code>store.find</code> method's <code>options</code> parameter.</p>
+        <p>Our store implements a simple caching layer.  The caching layer recoginzes requests for multiple records and will check to see if one has already been made.  If so then it returns the records in its cache.  However, you may wish to override this default behavior and fetch the records again through the adapter.  This can be accomplished by passing a flag through the <code>store.find</code> method's <code>options</code> parameter.</p>
 
         <p>When fetching many records there are two flags you can pass along in the <code>options</code> object to control how your records are cached:
             <dl>
@@ -107,7 +107,7 @@
                     <h4>Foo Model</h4>
 
                     <ul>
-                    <li>{{#link-to 'demos.singleModel' model.id }}ID: {{model.id}}{{/link-to}}</li>
+                    <li>{{#link-to 'demos.singleModel' model.id}}ID: {{model.id}}{{/link-to}}</li>
                     <li>Text: {{model.text}}</li>
                     {{#if model.bar.id}}
                         <ul>
