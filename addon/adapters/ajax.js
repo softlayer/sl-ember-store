@@ -66,11 +66,6 @@ export default Adapter.extend({
                 response = this.modelize( response );
 
                 if ( results instanceof Ember.ArrayProxy ) {
-                    // Reject if the response if empty
-                    if( !response.length ) {
-                        throw { message: 'No objects found' };
-                    }
-
                     tmpResult = [];
                     Ember.makeArray( response ).forEach( function ( child ) {
                         tmpResult.pushObject( store.createRecord( type, child ) );
