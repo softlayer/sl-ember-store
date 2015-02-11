@@ -3,10 +3,10 @@ import { test, moduleFor } from 'ember-qunit';
 import Model from 'sl-ember-store/model';
 import Adapter from 'sl-ember-store/adapter';
 import Store from 'sl-ember-store/store';
-import Ajaxadapter from 'sl-ember-store/adapters/ajax';
+import AjaxAdapter from 'sl-ember-store/adapters/ajax';
 module icAjax from 'ic-ajax';
 
-var ajaxadapter,
+var ajaxAdapter,
     Foo = Model.extend(),
     Bar = Model.extend(),
     defineFixture = icAjax.defineFixture,
@@ -34,25 +34,25 @@ module( 'Unit - sl-ember-store/adapter/ajax', {
                 }
             };
 
-        ajaxadapter = Ajaxadapter.create({
+        ajaxAdapter = AjaxAdapter.create({
             container: container,
             store: Store.create({ container:container })
         });
         //register mock data
-        ajaxadapter.container.cache['store:main']={
+        ajaxAdapter.container.cache['store:main']={
             runPostQueryHooks: sinon.spy(),
             runPreQueryHooks: sinon.spy()
         };
 
-        ajaxadapter.container.registry.push( { key: 'model:foo', factory: Foo } );
-        ajaxadapter.container.registry.push( { key: 'model:bar', factory: Bar } );
+        ajaxAdapter.container.registry.push( { key: 'model:foo', factory: Foo } );
+        ajaxAdapter.container.registry.push( { key: 'model:bar', factory: Bar } );
 
         defineFixture( '/foo', {
             response: { id: 1, test: 'foo', 'bar': { id: 1, quiz: 'bar' } },
             jqXHR: {},
             textStatus: 'success'
         });
-        defineFixture( '/fooFail', {
+        defineFixture( '/foo-fail', {
             errorThrown: 'this is an error msg',
             jqXHR: {},
             textStatus: 'error'
@@ -62,11 +62,19 @@ module( 'Unit - sl-ember-store/adapter/ajax', {
             jqXHR: {},
             textStatus: 'success'
         });
+        defineFixture( '/no-results', {
+            response:  [],
+            jqXHR: {},
+            textStatus: 'success'
+        });
         Foo.reopenClass( {
             url: '/foo',
             endpoints: {
                 fail: {
-                    url: '/fooFail'
+                    url: '/foo-fail'
+                },
+                noResults: {
+                    url: '/no-results'
                 }
             }
         });
@@ -90,7 +98,7 @@ function ajaxTestSuite(){
 asyncTest( '__find single model with id', function(){
 
     expect(6);
-    response = ajaxadapter.find( 'foo', 1 );
+    response = ajaxAdapter.find( 'foo', 1 );
 
     equal( requestSpy.args[0][0].url, '/foo', 'should call icAjax.request with the correct arguments');
 
@@ -107,7 +115,7 @@ asyncTest( '__find single model with id', function(){
 asyncTest( '__find single model with no id', function(){
     var options =  {data: {main: true }};
 
-    response = ajaxadapter.find( 'foo', null, options, true );
+    response = ajaxAdapter.find( 'foo', null, options, true );
 
     equal( requestSpy.args[0][0].url, '/foo', 'should call icAjax.request with the correct arguments');
 
@@ -125,7 +133,7 @@ asyncTest( '__find single model with no id', function(){
 asyncTest( '__find array of model', function(){
     var options =  {data: {main: true }};
     //request
-    response = ajaxadapter.find( 'bar', null, options, false );
+    response = ajaxAdapter.find( 'bar', null, options, false );
 
     ajaxTestSuite();
 
@@ -140,7 +148,7 @@ asyncTest( '__find array of model', function(){
 
 asyncTest( 'find should throw error if request fails', function(){
     var options = { endpoint: 'fail' },
-        promise = ajaxadapter.find( 'foo', null, options, false );
+        promise = ajaxAdapter.find( 'foo', null, options, false );
 
     promise.then( function( result ){
         ok( false, 'find did not throw an error!' );
@@ -152,9 +160,23 @@ asyncTest( 'find should throw error if request fails', function(){
     });
 });
 
+asyncTest( 'find should not throw error if response is empty', function(){
+    var options = { endpoint: 'noResults' },
+        promise = ajaxAdapter.find( 'foo', null, options, false );
+
+    promise.then( function( result ){
+        ok( true, 'find did not throw an error.' );
+        start();
+    },
+    function( result ){
+        ok( false, 'find threw an error!' );
+        start();
+    });
+});
+
 test( 'save', function(){
     var foo = Foo.create({ test: 'foo', 'bar': { id: 1, quiz: 'bar' } });
-    response = ajaxadapter.save( '/foo', foo );
+    response = ajaxAdapter.save( '/foo', foo );
     ok( requestSpy.calledOnce, 'should call icAjax request once' );
     equal( requestSpy.args[0][0].url, '/foo', 'should call icAjax with correct url');
     equal( requestSpy.args[0][0].type, 'POST', 'should call icAjax with correct method');
@@ -163,7 +185,7 @@ test( 'save', function(){
 
 test( 'save, should call $.ajax with the correct arguments', function(){
     var foo = Foo.create({ test: 'foo', 'bar': { id: 1, quiz: 'bar' } });
-    response = ajaxadapter.save( '/foo', foo );
+    response = ajaxAdapter.save( '/foo', foo );
     ok( requestSpy.calledOnce, 'request called once' );
     equal( requestSpy.args[0][0].url, '/foo' );
     equal( requestSpy.args[0][0].type, 'POST' );
@@ -173,7 +195,7 @@ test( 'save, should call $.ajax with the correct arguments', function(){
 
 test( 'delete, should call icAjax.request once', function(){
     var foo = Foo.create({ id: 1, test: 'foo', 'bar': { id: 1, quiz: 'bar' } });
-    response = ajaxadapter.deleteRecord( '/foo', 1 );
+    response = ajaxAdapter.deleteRecord( '/foo', 1 );
 
     ok( requestSpy.calledOnce );
     equal( requestSpy.args[0][0].url, '/foo', 'should call icAjax with correct url');
