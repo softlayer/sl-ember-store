@@ -22,6 +22,8 @@ This library **does not** support relationships or manage data state such as how
 
 What this library **DOES** do is allow you to work with models that do not have to be pre-defined.  Having a dependency on [sl-ember-modelize](https://github.com/softlayer/sl-ember-modelize), this libary is able to dynamically set data returned from an endpoint onto the correct model objects without having any knowledge of the data it will be receiving.
 
+This library is also compatible with [Ember Inspector](https://github.com/emberjs/ember-inspector)
+
 ---
 
 # Demo
