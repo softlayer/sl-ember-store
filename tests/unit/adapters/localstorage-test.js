@@ -17,7 +17,7 @@ var localstorageadapter,
     Bar = Model.extend();
 
 module( 'Unit - sl-ember-store/adapter/localstorage', {
-    setup: function() {
+    beforeEach: function() {
        localStorage = {
             _ns: 'testLSObject',
             setItem: function( item, content ){
@@ -75,57 +75,57 @@ module( 'Unit - sl-ember-store/adapter/localstorage', {
         saveSpy = sinon.spy( localStorage, 'setItem' );
 
     },
-    teardown: function() {
+    afterEach: function() {
         localStorage.getItem.restore();
         localStorage.setItem.restore();
         getLocalStorageSpy.restore();
     }
 });
 
-asyncTest( '__find single model with id', function(){
+asyncTest( '__find single model with id', function( assert ){
     response = localstorageadapter.find( 'foo', 1, { label: '1' } );
-    equal(requestSpy.args[0][0], 'sl-ember-store', 'calls request with correct args' );
-    ok( response.then, 'response is a promise' );
-    ok( Ember.PromiseProxyMixin.detect( response ), 'response is a promise' );
+    assert.equal(requestSpy.args[0][0], 'sl-ember-store', 'calls request with correct args' );
+    assert.ok( response.then, 'response is a promise' );
+    assert.ok( Ember.PromiseProxyMixin.detect( response ), 'response is a promise' );
     response.then(function( result ){
-        ok( response.get( 'content' ) instanceof Foo, 'response content is instace of Foo' );
+        assert.ok( response.get( 'content' ) instanceof Foo, 'response content is instace of Foo' );
         start();
     });
 });
 
-asyncTest( '__find single model with no id', function(){
+asyncTest( '__find single model with no id', function( assert ){
     var options =  {data: {main: true }};
 
     response = localstorageadapter.find( 'foo', null, options, true );
 
-    equal(requestSpy.args[0][0], 'sl-ember-store', 'calls request with correct args' );
+    assert.equal(requestSpy.args[0][0], 'sl-ember-store', 'calls request with correct args' );
 
-    ok( response.then, 'response is a promise' );
+    assert.ok( response.then, 'response is a promise' );
 
-    ok( Ember.PromiseProxyMixin.detect( response ), 'response is a promise' );
+    assert.ok( Ember.PromiseProxyMixin.detect( response ), 'response is a promise' );
 
     response.then(function(){
-        ok( response.get( 'content' ) instanceof Foo, 'response content is instace of Foo' );
+        assert.ok( response.get( 'content' ) instanceof Foo, 'response content is instace of Foo' );
         start();
     });
 
 });
 
-asyncTest( '__find array of models', function(){
+asyncTest( '__find array of models', function( assert ){
     var options =  {data: {main: true }};
 
     response = localstorageadapter.find( 'bar', null, options, false );
 
-    ok( Ember.PromiseProxyMixin.detect( response ), 'response is a promise' );
+    assert.ok( Ember.PromiseProxyMixin.detect( response ), 'response is a promise' );
 
     response.then(function(){
-        ok( response.get( 'content.0' ) instanceof Bar, 'response content is instace of Bar' );
-        ok( response.get( 'content.1' ) instanceof Bar, 'response content is instace of Bar' );
+        assert.ok( response.get( 'content.0' ) instanceof Bar, 'response content is instace of Bar' );
+        assert.ok( response.get( 'content.1' ) instanceof Bar, 'response content is instace of Bar' );
         start();
     });
 });
 
-asyncTest( 'save', function(){
+asyncTest( 'save', function( assert ){
     var fooContent = { id: 2, test: 'foo', 'bar': { id: 1, quiz: 'bar2' } },
         foo = Foo.create( fooContent );
 
@@ -134,14 +134,14 @@ asyncTest( 'save', function(){
         var fooRecords = JSON.parse(localStorage.getItem('sl-ember-store')).foo,
             fooRecord = fooRecords.findBy( 'id', 2 );
 
-        ok( response.then, 'response is a promise' );
+        assert.ok( response.then, 'response is a promise' );
 
-        equal( fooRecord.id, 2, 'should have added the record to the mock ls object' );
+        assert.equal( fooRecord.id, 2, 'should have added the record to the mock ls object' );
         start();
     });
 });
 
-asyncTest( 'delete', function(){
+asyncTest( 'delete', function( assert ){
     var fooContent = { id: 2, test: 'foo', 'bar': { id: 1, quiz: 'bar2' } },
         foo = Foo.create( fooContent ),
         r = localstorageadapter.save( '/foo', foo );
@@ -151,18 +151,18 @@ asyncTest( 'delete', function(){
             var response = localstorageadapter.deleteRecord( '/foo', 2 );
 
             response.then( function(){
-                ok( response.then, 'response is a promise' );
+                assert.ok( response.then, 'response is a promise' );
 
                 var fooRecords = [ JSON.parse(localStorage.getItem('sl-ember-store')).foo ],
                     fooRecord = fooRecords.findBy( 'id', 2 );
 
-                equal( fooRecord, undefined, 'should have deleted the record to the mock ls object' );
+                assert.equal( fooRecord, undefined, 'should have deleted the record to the mock ls object' );
                 start();
             });
         });
 });
 
-asyncTest( 'quota test', function(){
+asyncTest( 'quota test', function( assert ){
     var fooContent = { id: 1, test: [] },
         foo,
         r;
@@ -180,11 +180,11 @@ asyncTest( 'quota test', function(){
 
     r.then(
         function( result ){
-            ok( false, 'Promise did not get rejected!');
+            assert.ok( false, 'Promise did not get rejected!');
             start();
         },
         function( result ){
-            equal( result.textStatus, 'error', 'Promise gets rejected for exceeding quota' );
+            assert.equal( result.textStatus, 'error', 'Promise gets rejected for exceeding quota' );
             start();
         });
 });

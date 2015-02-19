@@ -4,7 +4,8 @@ import Model from 'sl-ember-store/model';
 import Adapter from 'sl-ember-store/adapter';
 import Store from 'sl-ember-store/store';
 import AjaxAdapter from 'sl-ember-store/adapters/ajax';
-module icAjax from 'ic-ajax';
+
+var icAjax = require( 'ic-ajax' );
 
 var ajaxAdapter,
     Foo = Model.extend(),
@@ -14,7 +15,7 @@ var ajaxAdapter,
     requestSpy;
 
 module( 'Unit - sl-ember-store/adapter/ajax', {
-    setup: function() {
+    beforeEach: function() {
         var container = {
                 registry: [],
                 cache: {},
@@ -84,122 +85,122 @@ module( 'Unit - sl-ember-store/adapter/ajax', {
         //spies
         requestSpy = sinon.spy( icAjax, 'request' );
     },
-    teardown: function() {
+    afterEach: function() {
         icAjax.request.restore();
     }
 });
 
-function ajaxTestSuite(){
-    ok( requestSpy.calledOnce, 'request called once' );
-    ok( response.then, 'response is a promise' );
-    ok( Ember.PromiseProxyMixin.detect( response ), 'response is a promise proxy' );
+function ajaxTestSuite( assert ){
+    assert.ok( requestSpy.calledOnce, 'request called once' );
+    assert.ok( response.then, 'response is a promise' );
+    assert.ok( Ember.PromiseProxyMixin.detect( response ), 'response is a promise proxy' );
 }
 
-asyncTest( '__find single model with id', function(){
+asyncTest( '__find single model with id', function( assert ){
 
-    expect(6);
+    assert.expect(6);
     response = ajaxAdapter.find( 'foo', 1 );
 
-    equal( requestSpy.args[0][0].url, '/foo', 'should call icAjax.request with the correct arguments');
+    assert.equal( requestSpy.args[0][0].url, '/foo', 'should call icAjax.request with the correct arguments');
 
-    equal( requestSpy.args[0][0].data.id, 1, 'should call icAjax.request with the correct arguments');
+    assert.equal( requestSpy.args[0][0].data.id, 1, 'should call icAjax.request with the correct arguments');
 
-    ajaxTestSuite();
+    ajaxTestSuite( assert );
 
     response.then( function(){
-        ok( response.get('content') instanceof Foo, 'response is instance of Foo' );
+        assert.ok( response.get('content') instanceof Foo, 'response is instance of Foo' );
         start();
     });
 });
 
-asyncTest( '__find single model with no id', function(){
+asyncTest( '__find single model with no id', function( assert ){
     var options =  {data: {main: true }};
 
     response = ajaxAdapter.find( 'foo', null, options, true );
 
-    equal( requestSpy.args[0][0].url, '/foo', 'should call icAjax.request with the correct arguments');
+    assert.equal( requestSpy.args[0][0].url, '/foo', 'should call icAjax.request with the correct arguments');
 
-    ok( requestSpy.args[0][0].data.main, 'should call icAjax.request with the correct arguments');
+    assert.ok( requestSpy.args[0][0].data.main, 'should call icAjax.request with the correct arguments');
 
-    ajaxTestSuite();
+    ajaxTestSuite( assert );
 
     response.then( function(){
-        ok( response.get('content') instanceof Foo, 'response is instance of Foo' );
+        assert.ok( response.get('content') instanceof Foo, 'response is instance of Foo' );
         start();
     });
 
 });
 
-asyncTest( '__find array of model', function(){
+asyncTest( '__find array of model', function( assert ){
     var options =  {data: {main: true }};
     //request
     response = ajaxAdapter.find( 'bar', null, options, false );
 
-    ajaxTestSuite();
+    ajaxTestSuite( assert );
 
-    ok( response instanceof Ember.ArrayProxy, 'should return an instance of Ember.ArrayProxy' );
+    assert.ok( response instanceof Ember.ArrayProxy, 'should return an instance of Ember.ArrayProxy' );
     response.then( function(){
-        ok( response.content[0] instanceof Bar, 'should return an array of Bar models' );
-        ok( response.content[1] instanceof Bar, 'should return an array of Bar models' );
+        assert.ok( response.content[0] instanceof Bar, 'should return an array of Bar models' );
+        assert.ok( response.content[1] instanceof Bar, 'should return an array of Bar models' );
         start();
     });
 });
 
 
-asyncTest( 'find should throw error if request fails', function(){
+asyncTest( 'find should throw error if request fails', function( assert ){
     var options = { endpoint: 'fail' },
         promise = ajaxAdapter.find( 'foo', null, options, false );
 
     promise.then( function( result ){
-        ok( false, 'find did not throw an error!' );
+        assert.ok( false, 'find did not throw an error!' );
         start();
     },
     function( result ){
-        equal( result.textStatus, 'error', 'find did throw error' );
+        assert.equal( result.textStatus, 'error', 'find did throw error' );
         start();
     });
 });
 
-asyncTest( 'find should not throw error if response is empty', function(){
+asyncTest( 'find should not throw error if response is empty', function( assert ){
     var options = { endpoint: 'noResults' },
         promise = ajaxAdapter.find( 'foo', null, options, false );
 
     promise.then( function( result ){
-        ok( true, 'find did not throw an error.' );
+        assert.ok( true, 'find did not throw an error.' );
         start();
     },
     function( result ){
-        ok( false, 'find threw an error!' );
+        assert.ok( false, 'find threw an error!' );
         start();
     });
 });
 
-test( 'save', function(){
+test( 'save', function( assert ){
     var foo = Foo.create({ test: 'foo', 'bar': { id: 1, quiz: 'bar' } });
     response = ajaxAdapter.save( '/foo', foo );
-    ok( requestSpy.calledOnce, 'should call icAjax request once' );
-    equal( requestSpy.args[0][0].url, '/foo', 'should call icAjax with correct url');
-    equal( requestSpy.args[0][0].type, 'POST', 'should call icAjax with correct method');
-    equal( typeof requestSpy.args[0][0].data, 'string', 'icAjax should return a string');
+    assert.ok( requestSpy.calledOnce, 'should call icAjax request once' );
+    assert.equal( requestSpy.args[0][0].url, '/foo', 'should call icAjax with correct url');
+    assert.equal( requestSpy.args[0][0].type, 'POST', 'should call icAjax with correct method');
+    assert.equal( typeof requestSpy.args[0][0].data, 'string', 'icAjax should return a string');
 });
 
-test( 'save, should call $.ajax with the correct arguments', function(){
+test( 'save, should call $.ajax with the correct arguments', function( assert ){
     var foo = Foo.create({ test: 'foo', 'bar': { id: 1, quiz: 'bar' } });
     response = ajaxAdapter.save( '/foo', foo );
-    ok( requestSpy.calledOnce, 'request called once' );
-    equal( requestSpy.args[0][0].url, '/foo' );
-    equal( requestSpy.args[0][0].type, 'POST' );
-    equal( typeof requestSpy.args[0][0].data, 'string' );
-    ok( response.then, 'response is a promise' );
+    assert.ok( requestSpy.calledOnce, 'request called once' );
+    assert.equal( requestSpy.args[0][0].url, '/foo' );
+    assert.equal( requestSpy.args[0][0].type, 'POST' );
+    assert.equal( typeof requestSpy.args[0][0].data, 'string' );
+    assert.ok( response.then, 'response is a promise' );
 });
 
-test( 'delete, should call icAjax.request once', function(){
+test( 'delete, should call icAjax.request once', function( assert ){
     var foo = Foo.create({ id: 1, test: 'foo', 'bar': { id: 1, quiz: 'bar' } });
     response = ajaxAdapter.deleteRecord( '/foo', 1 );
 
-    ok( requestSpy.calledOnce );
-    equal( requestSpy.args[0][0].url, '/foo', 'should call icAjax with correct url');
-    equal( requestSpy.args[0][0].type, 'DELETE', 'should call icAjax with correct url');
-    equal( typeof requestSpy.args[0][0].data, 'string', 'icAjax should return a string');
-    ok( response.then, 'response is a proxy' );
+    assert.ok( requestSpy.calledOnce );
+    assert.equal( requestSpy.args[0][0].url, '/foo', 'should call icAjax with correct url');
+    assert.equal( requestSpy.args[0][0].type, 'DELETE', 'should call icAjax with correct url');
+    assert.equal( typeof requestSpy.args[0][0].data, 'string', 'icAjax should return a string');
+    assert.ok( response.then, 'response is a proxy' );
 });

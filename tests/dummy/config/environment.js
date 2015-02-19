@@ -37,6 +37,9 @@ module.exports = function(environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = false;
 
     ENV.APP.rootElement = '#ember-testing';
+
+    // Per https://github.com/emberjs/data/pull/1952, this resolves instanceOf checks
+    ENV.APP.MODEL_FACTORY_INJECTIONS = false;
   }
 
   if (environment === 'production') {
