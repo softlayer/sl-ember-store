@@ -203,15 +203,17 @@ export default Ember.Object.extend({
      * @returns  {Ember.Object} ObjectProxy or PromiseProxyMixin
      */
     addPromise: function( type, id, promise ) {
+        var _self = this;
+
         this._getPromises( type ).set( 'ids.' + id, promise );
 
         promise.then( function( record ) {
-            this.addRecord( type, record );
-            delete this._getPromises( type ).get( 'ids' )[ id ];
-        }.bind( this ) )
+            _self.addRecord( type, record );
+            delete _self._getPromises( type ).get( 'ids' )[ id ];
+        })
         .catch( function() {
-            delete this._getPromises( type ).get( 'ids' )[ id ];
-        }.bind( this ) );
+            delete _self._getPromises( type ).get( 'ids' )[ id ];
+        });
 
         return promise;
     },
@@ -225,15 +227,17 @@ export default Ember.Object.extend({
      * @returns  {Ember.Array} ArrayProxy or PromiseProxyMixin
      */
     addManyPromise: function( type, promise ) {
+        var _self = this;
+
         this._getPromises( type ).get( 'many' ).addObject( promise );
 
         promise.then( function( records ) {
-            this.addManyRecords( type, records );
-            this._getPromises( type ).get( 'many' ).removeObject( promise );
-        }.bind(this))
+            _self.addManyRecords( type, records );
+            _self._getPromises( type ).get( 'many' ).removeObject( promise );
+        })
         .catch( function() {
-            this._getPromises( type ).get( 'many' ).removeObject( promise );
-        }.bind(this));
+            _self._getPromises( type ).get( 'many' ).removeObject( promise );
+        });
 
         return promise;
     },
@@ -268,9 +272,11 @@ export default Ember.Object.extend({
      * @returns  {void}
      */
     addRecords: function( type, records ) {
+        var _self = this;
+
         records.forEach( function( record ) {
-            this.addRecord( type, record );
-        }.bind( this ) );
+            _self.addRecord( type, record );
+        });
     },
 
     /**
@@ -314,9 +320,11 @@ export default Ember.Object.extend({
      * @returns  {void}
      */
     removeRecords: function( type, records ) {
+        var _self = this;
+
         records.map( function( record ) {
-            this.removeRecord( type, record );
-        }.bind( this ) );
+            _self.removeRecord( type, record );
+        });
     },
 
     /**

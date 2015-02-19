@@ -12,8 +12,7 @@
     "ember-qunit": "0.2.8",
     "ember-qunit-notifications": "0.0.7",
     "qunit": "~1.17.1",
-    "pretender": "0.1.0",
-    "es5-shim": "^4.0.5"
+    "pretender": "0.1.0"
   },
   "devDependencies": {
     "sinonjs": "~1.10.2",
