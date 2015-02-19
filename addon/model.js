@@ -26,10 +26,10 @@ var Model =  Ember.ObjectProxy.extend({
         Ember.assert( 'Endpoint must be configured on ' + this.toString() + ' before calling save.', endpoint );
 
         return this.container.lookup( 'adapter:' + this.constructor.adapter ).save( endpoint, data )
-            .then( function( response ) {
+            .then( Ember.run.bind( this, function( response ) {
                 this.set( 'content', response );
                 return this;
-            }.bind( this ), null, 'sl-ember-store.model:save' );
+            }), null, 'sl-ember-store.model:save' );
     },
 
     /**
@@ -49,9 +49,9 @@ var Model =  Ember.ObjectProxy.extend({
         Ember.assert( 'Enpoint must be configured on ' + this.toString() + ' before calling deleteRecord.', endpoint );
 
         return this.container.lookup( 'adapter:'+this.constructor.adapter ).deleteRecord( endpoint, this.get( 'id' ) )
-            .then( function() {
+            .then( Ember.run.bind( this, function() {
                 Ember.run( this, 'destroy' );
-            }.bind( this ), null, 'sl-ember-store.model:deleteRecord' );
+            }), null, 'sl-ember-store.model:deleteRecord' );
     }
 });
 
