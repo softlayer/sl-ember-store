@@ -9,49 +9,49 @@ var App,
     container;
 
 module( 'Unit - initializer: sl-ember-store', {
-    setup: function() {
+    beforeEach: function() {
         App = startApp();
         container = App.__container__;
     },
 
-    teardown: function() {
+    afterEach: function() {
         Ember.run( App, App.destroy );
     }
 });
 
-test( 'LocalStorage adapter gets namespace set', function(){
+test( 'LocalStorage adapter gets namespace set', function( assert ){
     var lsAdapter = container.lookupFactory( 'adapter:localstorage' );
-    equal( lsAdapter.namespace, container.lookup( 'application:main' ).get( 'modulePrefix' ) );
+    assert.equal( lsAdapter.namespace, container.lookup( 'application:main' ).get( 'modulePrefix' ) );
 });
 
-test( 'store:main gets registered', function(){
+test( 'store:main gets registered', function( assert ){
     var store = container.lookupFactory( 'store:main' );
-    ok( Store.detect( store ) );
+    assert.ok( Store.detect( store ) );
 });
 
-test( 'adapter:ajax gets registered', function(){
+test( 'adapter:ajax gets registered', function( assert ){
     var ajaxAdapter = container.lookupFactory( 'adapter:ajax' );
-    ok( AjaxAdapter.detect( ajaxAdapter ) );
+    assert.ok( AjaxAdapter.detect( ajaxAdapter ) );
 });
 
-test( 'adapter:localstorage gets registered', function(){
+test( 'adapter:localstorage gets registered', function( assert ){
     var lsAdapter = container.lookupFactory( 'adapter:localstorage' );
-    ok( LocalstorageAdapter.detect( lsAdapter ) );
+    assert.ok( LocalstorageAdapter.detect( lsAdapter ) );
 });
 
-test( 'store gets injected into controllers, routes, adapters', function(){
+test( 'store gets injected into controllers, routes, adapters', function( assert ){
     var appRoute = container.lookup( 'route:demos/single-model' ),
         appController,
         ajaxAdapter = container.lookup( 'adapter:ajax' ),
         store = container.lookup( 'store:main' );
 
-    expect( 3 );
+    assert.expect( 3 );
 
-    equal( appRoute.get( 'store' ), store );
-    equal( ajaxAdapter.get( 'store' ), store );
+    assert.equal( appRoute.get( 'store' ), store );
+    assert.equal( ajaxAdapter.get( 'store' ), store );
 
     visit( '/' ).then(function() {
         appController = container.lookup( 'controller:application' );
-        equal( appController.get( 'store' ), store );
+        assert.equal( appController.get( 'store' ), store );
     });
 });

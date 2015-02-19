@@ -35,7 +35,7 @@ var foo,
     });
 
 module( 'Unit - sl-ember-store/model', {
-    setup: function() {
+    beforeEach: function() {
 
         Foo.reopenClass({
             url       :'/foo',
@@ -117,7 +117,7 @@ module( 'Unit - sl-ember-store/model', {
             container: container
         });
     },
-    teardown: function() {
+    afterEach: function() {
         adapter.save.reset();
         adapter.deleteRecord.reset();
         foo = Foo.create({
@@ -137,83 +137,83 @@ module( 'Unit - sl-ember-store/model', {
     }
 });
 
-test( 'getUrlForEndpointAction:should return /bar for ( null, `get` )', function() {
-    equal( Bar.getUrlForEndpointAction( null, 'get' ), '/bar' );
+test( 'getUrlForEndpointAction:should return /bar for ( null, `get` )', function( assert ) {
+    assert.equal( Bar.getUrlForEndpointAction( null, 'get' ), '/bar' );
 });
 
-test( 'getUrlForEndpointAction:should return /barUpdate for ( null, `post` )', function() {
-    equal( Bar.getUrlForEndpointAction( null, 'post' ), '/barUpdate' );
+test( 'getUrlForEndpointAction:should return /barUpdate for ( null, `post` )', function( assert ) {
+    assert.equal( Bar.getUrlForEndpointAction( null, 'post' ), '/barUpdate' );
 });
 
-test( 'getUrlForEndpointAction:should return /barDelete for ( null, `delete` )', function() {
-    equal( Bar.getUrlForEndpointAction( null, 'delete' ), '/barDelete' );
+test( 'getUrlForEndpointAction:should return /barDelete for ( null, `delete` )', function( assert ) {
+    assert.equal( Bar.getUrlForEndpointAction( null, 'delete' ), '/barDelete' );
 });
 
-test( 'getUrlForEndpointAction:should return /bar for ( `default`, `get` )', function() {
-    equal( Bar.getUrlForEndpointAction( 'default', 'get' ), '/bar' );
+test( 'getUrlForEndpointAction:should return /bar for ( `default`, `get` )', function( assert ) {
+    assert.equal( Bar.getUrlForEndpointAction( 'default', 'get' ), '/bar' );
 });
 
-test( 'getUrlForEndpointAction:should return /barUpdate for ( `default`, `post` )', function() {
-    equal( Bar.getUrlForEndpointAction( 'default', 'post' ), '/barUpdate' );
+test( 'getUrlForEndpointAction:should return /barUpdate for ( `default`, `post` )', function( assert ) {
+    assert.equal( Bar.getUrlForEndpointAction( 'default', 'post' ), '/barUpdate' );
 });
 
-test( 'getUrlForEndpointAction:should return /barDelete for ( `default`, `delete` )', function() {
-    equal( Bar.getUrlForEndpointAction( 'default', 'delete' ), '/barDelete' );
+test( 'getUrlForEndpointAction:should return /barDelete for ( `default`, `delete` )', function( assert ) {
+    assert.equal( Bar.getUrlForEndpointAction( 'default', 'delete' ), '/barDelete' );
 });
 
-test( 'getUrlForEndpointAction:should return /bar for ( `car`, `get` )', function() {
-    equal( Bar.getUrlForEndpointAction( 'car', 'get' ), '/bar' );
+test( 'getUrlForEndpointAction:should return /bar for ( `car`, `get` )', function( assert ) {
+    assert.equal( Bar.getUrlForEndpointAction( 'car', 'get' ), '/bar' );
 });
 
-test( 'getUrlForEndpointAction:should return /carUpdate for ( `car`, `post` )', function() {
-    equal( Bar.getUrlForEndpointAction( 'car', 'post' ), '/carUpdate' );
+test( 'getUrlForEndpointAction:should return /carUpdate for ( `car`, `post` )', function( assert ) {
+    assert.equal( Bar.getUrlForEndpointAction( 'car', 'post' ), '/carUpdate' );
 });
 
-test( 'getUrlForEndpointAction:should return /carDelete for ( `car`, `delete` )', function() {
-    equal( Bar.getUrlForEndpointAction( 'car', 'delete' ), '/carDelete' );
+test( 'getUrlForEndpointAction:should return /carDelete for ( `car`, `delete` )', function( assert ) {
+    assert.equal( Bar.getUrlForEndpointAction( 'car', 'delete' ), '/carDelete' );
 });
 
-test( 'callSerializerForEndpointAction:should return testResponse1 for TestModel - ( `null`, `get` ) ', function() {
+test( 'callSerializerForEndpointAction:should return testResponse1 for TestModel - ( `null`, `get` ) ', function( assert ) {
     var testResponse = TestModel.callSerializerForEndpointAction( null, 'get', {} );
-    equal( testResponse, testResponse1 );
+    assert.equal( testResponse, testResponse1 );
 });
 
-test( 'callSerializerForEndpointAction:should return testResponse1 for TestModel - ( `test`, `get` ) ', function() {
+test( 'callSerializerForEndpointAction:should return testResponse1 for TestModel - ( `test`, `get` ) ', function( assert ) {
     var testResponse = TestModel.callSerializerForEndpointAction( 'test', 'get', {} );
-    equal( testResponse, testResponse2 );
+    assert.equal( testResponse, testResponse2 );
 });
 
-test( 'save-default:should call adapter.save with correct arguments', function() {
-    expect(2);
+test( 'save-default:should call adapter.save with correct arguments', function( assert ) {
+    assert.expect(2);
     foo.save().then( function() {
-        equal( adapter.save.args[0][0], '/foo' );
-        equal( adapter.save.args[0][1].test, 'foo' );
+        assert.equal( adapter.save.args[0][0], '/foo' );
+        assert.equal( adapter.save.args[0][1].test, 'foo' );
     });
 });
 
-test( 'save-default:should update its content with fooResponse', function() {
-    expect(1);
+test( 'save-default:should update its content with fooResponse', function( assert ) {
+    assert.expect(1);
     foo.save().then(function() {
-        deepEqual( foo.get('content'), fooResponse );
+        assert.deepEqual( foo.get('content'), fooResponse );
     });
 });
 
-test( 'save-endpoint:should call adapter.save with correct arguments', function() {
-    expect(2);
+test( 'save-endpoint:should call adapter.save with correct arguments', function( assert ) {
+    assert.expect(2);
     bar.save().then( function() {
-        equal( adapter.save.args[0][0], '/barUpdate' );
-        equal( adapter.save.args[0][1].test, 'bar' );
+        assert.equal( adapter.save.args[0][0], '/barUpdate' );
+        assert.equal( adapter.save.args[0][1].test, 'bar' );
     });
 });
-test( 'save-endpoint:should update its content with fooResponse', function() {
-    expect(1);
+test( 'save-endpoint:should update its content with fooResponse', function( assert ) {
+    assert.expect(1);
     bar.save().then( function() {
-        deepEqual( bar.get('content'), fooResponse );
+        assert.deepEqual( bar.get('content'), fooResponse );
     });
 });
 
-test( 'save-endpoint:car: should call adapter.save with correct arguments', function() {
-    expect(2);
+test( 'save-endpoint:car: should call adapter.save with correct arguments', function( assert ) {
+    assert.expect(2);
     bar = Bar.create({
         content: {
             test: 'bar',
@@ -222,12 +222,12 @@ test( 'save-endpoint:car: should call adapter.save with correct arguments', func
         container: container
     });
     bar.save({endpoint:'car'}).then( function() {
-        equal( adapter.save.args[0][0], '/carUpdate' );
-        equal( adapter.save.args[0][1].test, 'bar' );
+        assert.equal( adapter.save.args[0][0], '/carUpdate' );
+        assert.equal( adapter.save.args[0][1].test, 'bar' );
     });
 });
 
-test( 'save-endpoint:car: should update its content with fooResponse', function() {
+test( 'save-endpoint:car: should update its content with fooResponse', function( assert ) {
     bar = Bar.create({
         content: {
             test: 'bar',
@@ -236,49 +236,49 @@ test( 'save-endpoint:car: should update its content with fooResponse', function(
         container: container
     });
     bar.save({endpoint:'car'}).then( function() {
-        deepEqual( bar.get('content'), fooResponse );
+        assert.deepEqual( bar.get('content'), fooResponse );
     });
 });
 
-test( 'delete: should call adapter.deleteRecord with correct arguments', function() {
-    expect(1);
+test( 'delete: should call adapter.deleteRecord with correct arguments', function( assert ) {
+    assert.expect(1);
     foo.deleteRecord().then( function() {
-        ok( adapter.deleteRecord.calledWith( '/foo' ) );
+        assert.ok( adapter.deleteRecord.calledWith( '/foo' ) );
     });
 });
 
-test( 'delete: should destroy foo', function() {
-    expect(1);
+test( 'delete: should destroy foo', function( assert ) {
+    assert.expect(1);
     foo.deleteRecord().then( function() {
-        ok( foo.isDestroyed );
+        assert.ok( foo.isDestroyed );
     });
 
 });
 
-test( 'delete-endpoint: should call adapter.delete with correct arguments', function() {
-    expect(1);
+test( 'delete-endpoint: should call adapter.delete with correct arguments', function( assert ) {
+    assert.expect(1);
     bar.deleteRecord().then( function() {
-        ok( adapter.deleteRecord.calledWith( '/barDelete' ) );
+        assert.ok( adapter.deleteRecord.calledWith( '/barDelete' ) );
     });
 });
 
-test( 'delete-endpoint: should destroy bar', function() {
-    expect(1);
+test( 'delete-endpoint: should destroy bar', function( assert ) {
+    assert.expect(1);
     bar.deleteRecord().then( function() {
-        ok( bar.isDestroyed );
+        assert.ok( bar.isDestroyed );
     });
 });
 
-test( 'delete-endpoint:car: should call adapter.delete with correct arguments', function() {
-    expect(1);
+test( 'delete-endpoint:car: should call adapter.delete with correct arguments', function( assert ) {
+    assert.expect(1);
     bar.deleteRecord({endpoint:'car'}).then( function() {
-        ok( adapter.deleteRecord.calledWith( '/carDelete' ) );
+        assert.ok( adapter.deleteRecord.calledWith( '/carDelete' ) );
     });
 });
 
-test( 'delete-endpoint:car: should destroy bar', function() {
-    expect(1);
+test( 'delete-endpoint:car: should destroy bar', function( assert ) {
+    assert.expect(1);
     bar.deleteRecord({endpoint:'car'}).then( function() {
-        ok( bar.isDestroyed );
+        assert.ok( bar.isDestroyed );
     });
 });

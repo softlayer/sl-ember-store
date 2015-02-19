@@ -1,6 +1,7 @@
 import Ember from 'ember';
 import Adapter from '../adapter';
-module icAjax from 'ic-ajax';
+
+var icAjax = require( 'ic-ajax' );
 
 /**
  * @module adapters

@@ -6,20 +6,20 @@ import { test, moduleFor } from 'ember-qunit';
 var App;
 
 module( 'Acceptance: SingleModel', {
-  setup: function() {
+  beforeEach: function() {
     App = startApp();
   },
-  teardown: function() {
+  afterEach: function() {
     Ember.run(App, 'destroy');
   }
 });
 
-test('visiting /singleModel', function() {
+test('visiting /singleModel', function( assert ) {
   visit('/demos/singleModel/1');
 
   andThen(function() {
     var singleModelController = App.__container__.lookup('controller:demos/singleModel');
-    equal(currentPath(), 'demos.singleModel');
-    ok( singleModelController.get('model') instanceof Foo, 'Controllers model is instance of Foo' );
+    assert.equal(currentPath(), 'demos.singleModel');
+    assert.ok( singleModelController.get('model') instanceof Foo, 'Controllers model is instance of Foo' );
   });
 });

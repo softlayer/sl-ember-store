@@ -9,7 +9,7 @@ var adapter,
     };
 
 module( 'Unit - sl-ember-store/adapter', {
-    setup: function() {
+    beforeEach: function() {
         adapter = Adapter.create({
             container:{
                 lookup: function( type ){
@@ -21,26 +21,26 @@ module( 'Unit - sl-ember-store/adapter', {
             }
         });
     },
-    teardown: function() {
+    afterEach: function() {
         store.runPostQueryHooks.reset();
         store.runPreQueryHooks.reset();
     }
 });
-test( 'runPreQueryHooks should run the prequeryhook once', function() {
+test( 'runPreQueryHooks should run the prequeryhook once', function( assert ) {
     adapter.runPreQueryHooks();
-    ok( store.runPreQueryHooks.calledOnce );
+    assert.ok( store.runPreQueryHooks.calledOnce );
 });
 
-test( 'runPreQueryHooks should not have run postqueryhook', function() {
+test( 'runPreQueryHooks should not have run postqueryhook', function( assert ) {
     adapter.runPreQueryHooks();
-    equal( store.runPostQueryHooks.callCount,0 );
+    assert.equal( store.runPostQueryHooks.callCount,0 );
 });
 
-test( 'runPostQueryHooks should run the postqueryhook once', function() {
+test( 'runPostQueryHooks should run the postqueryhook once', function( assert ) {
      adapter.runPostQueryHooks();
-     ok( store.runPostQueryHooks.calledOnce );
+     assert.ok( store.runPostQueryHooks.calledOnce );
 });
-test( 'runPostQueryHooks should not have run the prequeryhook', function() {
+test( 'runPostQueryHooks should not have run the prequeryhook', function( assert ) {
      adapter.runPostQueryHooks();
-     equal( store.runPreQueryHooks.callCount,0 );
+     assert.equal( store.runPreQueryHooks.callCount,0 );
 });

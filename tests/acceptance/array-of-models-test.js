@@ -6,21 +6,21 @@ import { test, moduleFor } from 'ember-qunit';
 var App;
 
 module('Acceptance: ArrayOfModels', {
-  setup: function() {
+  beforeEach: function() {
     App = startApp();
   },
-  teardown: function() {
+  afterEach: function() {
     Ember.run(App, 'destroy');
   }
 });
 
-test('visiting /arrayOfModels', function() {
+test('visiting /arrayOfModels', function( assert ) {
   visit('/demos/arrayOfModels');
 
   andThen(function() {
     var arrayModelController = App.__container__.lookup('controller:demos/arrayOfModels');
-    equal(currentPath(), 'demos.arrayOfModels');
-    ok( arrayModelController.get('model.0') instanceof Foo, 'Controllers model is instance of Foo' );
+    assert.equal(currentPath(), 'demos.arrayOfModels');
+    assert.ok( arrayModelController.get('model.0') instanceof Foo, 'Controllers model is instance of Foo' );
 
   });
 });
