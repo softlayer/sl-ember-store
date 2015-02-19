@@ -23,7 +23,7 @@ export default Adapter.extend({
     find: function( type, id, options, findOne ) {
         var store = this.get( 'store' ),
             model = store.modelFor( type ),
-            _this = this,
+            _self = this,
             url,
             results,
             promise,
@@ -65,7 +65,7 @@ export default Adapter.extend({
                 response = model.callSerializerForEndpointAction( options.endpoint, 'get', response, store );
 
                 // Run the modelize mixin to map keys to models
-                response = _this.modelize( response );
+                response = _self.modelize( response );
 
                 if ( results instanceof Ember.ArrayProxy ) {
                     tmpResult = [];
@@ -76,7 +76,7 @@ export default Adapter.extend({
                     tmpResult = store.createRecord( type, response );
                 }
 
-                _this.runPostQueryHooks( tmpResult );
+                _self.runPostQueryHooks( tmpResult );
 
                 return tmpResult;
             }, null, 'sl-ember--model.ajaxAdapter:find - then' );
@@ -103,7 +103,7 @@ export default Adapter.extend({
             data    : JSON.stringify({ id: id }),
             context : this
         },
-        _this = this;
+        _self = this;
 
         Ember.assert( 'A url is required to delete a model', url );
 
@@ -111,7 +111,7 @@ export default Adapter.extend({
 
         return icAjax.request( queryObj )
             .then( function ajaxAdapterDeleteFinally( response ) {
-                _this.runPostQueryHooks( response );
+                _self.runPostQueryHooks( response );
             } , 'sl-ember-store.ajaxAdapter:deleteRecord' );
     },
 
@@ -132,7 +132,7 @@ export default Adapter.extend({
                 data    : JSON.stringify( content ),
                 context : this
             },
-            _this = this;
+            _self = this;
 
         Ember.assert( 'A url property is required to save a model', url );
 
@@ -140,9 +140,9 @@ export default Adapter.extend({
 
         promise = icAjax.request( queryObj )
             .then( function ajaxAdapterSaveResponse( response ) {
-                var modelized = _this.modelize( response );
+                var modelized = _self.modelize( response );
                 // run the modelize mixin to map keys to models
-                _this.runPostQueryHooks( modelized );
+                _self.runPostQueryHooks( modelized );
                 return modelized;
             }, null, 'sl-ember-store:save - then' )
 

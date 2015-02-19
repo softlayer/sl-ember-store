@@ -21,7 +21,7 @@ var LocalStorageAdapter = Adapter.extend({
     find: function ( type, id, options, findOne ) {
         var store = this.get( 'store' ),
             model = store.modelFor( type ),
-            _this = this,
+            _self = this,
             url,
             results,
             promise,
@@ -57,9 +57,9 @@ var LocalStorageAdapter = Adapter.extend({
                 response,
                 finalResult;
 
-            db = _this._getDb();
+            db = _self._getDb();
 
-            records = _this._getRecords( db, url );
+            records = _self._getRecords( db, url );
 
             if ( options.data && options.data.id ) {
                 response = records.findBy( 'id', options.data.id );
@@ -80,7 +80,7 @@ var LocalStorageAdapter = Adapter.extend({
 
             response = model.callSerializerForEndpointAction( options.endpoint, 'get', response, store );
 
-            response = _this.modelize( response );
+            response = _self.modelize( response );
 
             if ( results instanceof Ember.ArrayProxy ) {
                 finalResult = [];
@@ -96,7 +96,7 @@ var LocalStorageAdapter = Adapter.extend({
         }, 'sl-ember-store.localstorageAdapter:find - Promise' )
 
         .then( function lsAdapterFindThen( response ) {
-            _this.runPostQueryHooks( response );
+            _self.runPostQueryHooks( response );
             return response;
         }, 'sl-ember-store.localstorageAdapter:find - then' );
 
@@ -117,7 +117,7 @@ var LocalStorageAdapter = Adapter.extend({
      * @returns  {Ember.RSVP} Promise
      */
     deleteRecord: function( url, id ) {
-        var _this = this,
+        var _self = this,
             promise;
 
         Ember.assert( 'A url is required to delete a model', url );
@@ -128,11 +128,11 @@ var LocalStorageAdapter = Adapter.extend({
                 recordIndex,
                 exception = {};
 
-            db = _this._getDb();
+            db = _self._getDb();
 
-            records = _this._getRecords( db, url );
+            records = _self._getRecords( db, url );
 
-            recordIndex = _this._getRecordIndexById( records, id );
+            recordIndex = _self._getRecordIndexById( records, id );
 
             if ( recordIndex >= 0 ) {
                 records.splice( recordIndex, 1 );
@@ -141,7 +141,7 @@ var LocalStorageAdapter = Adapter.extend({
                 reject( { textStatus: 'error', errorThrown: 'Not Found' } );
             }
 
-            if ( !_this._dbWrite( db, exception ) ) {
+            if ( !_self._dbWrite( db, exception ) ) {
                 reject( { textStatus: 'error', errorThrown: exception.msg } );
             }
 
@@ -150,7 +150,7 @@ var LocalStorageAdapter = Adapter.extend({
         })
 
         .then( function lsAdapterDeleteFinally( response ) {
-            _this.runPostQueryHooks( response );
+            _self.runPostQueryHooks( response );
             return response;
         }, 'sl-ember-store.localstorageAdapter:deleteRecord - always' );
 
@@ -166,7 +166,7 @@ var LocalStorageAdapter = Adapter.extend({
      * @returns  {Ember.RSVP} Promise
      */
     save: function( url, content ) {
-        var _this = this,
+        var _self = this,
             promise;
 
         Ember.assert( 'A url is required to save a model', url );
@@ -177,11 +177,11 @@ var LocalStorageAdapter = Adapter.extend({
                 recordIndex,
                 exception = {};
 
-            db = _this._getDb();
+            db = _self._getDb();
 
-            records = _this._getRecords( db, url );
+            records = _self._getRecords( db, url );
 
-            recordIndex = _this._getRecordIndexById( records, content.id );
+            recordIndex = _self._getRecordIndexById( records, content.id );
 
             if ( recordIndex >= 0 ) {
                 records.splice( recordIndex, 1 );
@@ -189,7 +189,7 @@ var LocalStorageAdapter = Adapter.extend({
 
             records.push( content );
 
-            if( ! _this._dbWrite( db, exception ) ) {
+            if( ! _self._dbWrite( db, exception ) ) {
                 reject( { textStatus: 'error', errorThrown: exception.msg } );
             }
 
@@ -197,7 +197,7 @@ var LocalStorageAdapter = Adapter.extend({
 
         })
         .then( function lsAdapterSaveFinally( response ) {
-            _this.runPostQueryHooks( response );
+            _self.runPostQueryHooks( response );
             return response;
         } , 'sl-ember-store.localstorageAdapter:saveRecord - always' );
 
