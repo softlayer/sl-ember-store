@@ -3,6 +3,8 @@
 window.EmberENV = {"FEATURES":{}};
 var runningTests = false;
 
+
+
 /* jshint ignore:end */
 
 ;var define, requireModule, require, requirejs;
@@ -64063,633 +64065,653 @@ if (typeof module !== 'undefined' && module.exports) {
 }
 })();
 
-;(function(__exports__) {
-  "use strict";
-  var specials = [
-    '/', '.', '*', '+', '?', '|',
-    '(', ')', '[', ']', '{', '}', '\\'
-  ];
+;(function() {
+    "use strict";
+    function $$route$recognizer$dsl$$Target(path, matcher, delegate) {
+      this.path = path;
+      this.matcher = matcher;
+      this.delegate = delegate;
+    }
 
-  var escapeRegex = new RegExp('(\\' + specials.join('|\\') + ')', 'g');
+    $$route$recognizer$dsl$$Target.prototype = {
+      to: function(target, callback) {
+        var delegate = this.delegate;
 
-  function isArray(test) {
-    return Object.prototype.toString.call(test) === "[object Array]";
-  }
+        if (delegate && delegate.willAddRoute) {
+          target = delegate.willAddRoute(this.matcher.target, target);
+        }
 
-  // A Segment represents a segment in the original route description.
-  // Each Segment type provides an `eachChar` and `regex` method.
-  //
-  // The `eachChar` method invokes the callback with one or more character
-  // specifications. A character specification consumes one or more input
-  // characters.
-  //
-  // The `regex` method returns a regex fragment for the segment. If the
-  // segment is a dynamic of star segment, the regex fragment also includes
-  // a capture.
-  //
-  // A character specification contains:
-  //
-  // * `validChars`: a String with a list of all valid characters, or
-  // * `invalidChars`: a String with a list of all invalid characters
-  // * `repeat`: true if the character specification can repeat
+        this.matcher.add(this.path, target);
 
-  function StaticSegment(string) { this.string = string; }
-  StaticSegment.prototype = {
-    eachChar: function(callback) {
-      var string = this.string, ch;
-
-      for (var i=0, l=string.length; i<l; i++) {
-        ch = string.charAt(i);
-        callback({ validChars: ch });
+        if (callback) {
+          if (callback.length === 0) { throw new Error("You must have an argument in the function passed to `to`"); }
+          this.matcher.addChild(this.path, target, callback, this.delegate);
+        }
+        return this;
       }
-    },
+    };
 
-    regex: function() {
-      return this.string.replace(escapeRegex, '\\$1');
-    },
-
-    generate: function() {
-      return this.string;
+    function $$route$recognizer$dsl$$Matcher(target) {
+      this.routes = {};
+      this.children = {};
+      this.target = target;
     }
-  };
 
-  function DynamicSegment(name) { this.name = name; }
-  DynamicSegment.prototype = {
-    eachChar: function(callback) {
-      callback({ invalidChars: "/", repeat: true });
-    },
+    $$route$recognizer$dsl$$Matcher.prototype = {
+      add: function(path, handler) {
+        this.routes[path] = handler;
+      },
 
-    regex: function() {
-      return "([^/]+)";
-    },
+      addChild: function(path, target, callback, delegate) {
+        var matcher = new $$route$recognizer$dsl$$Matcher(target);
+        this.children[path] = matcher;
 
-    generate: function(params) {
-      return params[this.name];
+        var match = $$route$recognizer$dsl$$generateMatch(path, matcher, delegate);
+
+        if (delegate && delegate.contextEntered) {
+          delegate.contextEntered(target, match);
+        }
+
+        callback(match);
+      }
+    };
+
+    function $$route$recognizer$dsl$$generateMatch(startingPath, matcher, delegate) {
+      return function(path, nestedCallback) {
+        var fullPath = startingPath + path;
+
+        if (nestedCallback) {
+          nestedCallback($$route$recognizer$dsl$$generateMatch(fullPath, matcher, delegate));
+        } else {
+          return new $$route$recognizer$dsl$$Target(startingPath + path, matcher, delegate);
+        }
+      };
     }
-  };
 
-  function StarSegment(name) { this.name = name; }
-  StarSegment.prototype = {
-    eachChar: function(callback) {
-      callback({ invalidChars: "", repeat: true });
-    },
+    function $$route$recognizer$dsl$$addRoute(routeArray, path, handler) {
+      var len = 0;
+      for (var i=0, l=routeArray.length; i<l; i++) {
+        len += routeArray[i].path.length;
+      }
 
-    regex: function() {
-      return "(.+)";
-    },
-
-    generate: function(params) {
-      return params[this.name];
+      path = path.substr(len);
+      var route = { path: path, handler: handler };
+      routeArray.push(route);
     }
-  };
 
-  function EpsilonSegment() {}
-  EpsilonSegment.prototype = {
-    eachChar: function() {},
-    regex: function() { return ""; },
-    generate: function() { return ""; }
-  };
+    function $$route$recognizer$dsl$$eachRoute(baseRoute, matcher, callback, binding) {
+      var routes = matcher.routes;
 
-  function parse(route, names, types) {
-    // normalize route as not starting with a "/". Recognition will
-    // also normalize.
-    if (route.charAt(0) === "/") { route = route.substr(1); }
+      for (var path in routes) {
+        if (routes.hasOwnProperty(path)) {
+          var routeArray = baseRoute.slice();
+          $$route$recognizer$dsl$$addRoute(routeArray, path, routes[path]);
 
-    var segments = route.split("/"), results = [];
-
-    for (var i=0, l=segments.length; i<l; i++) {
-      var segment = segments[i], match;
-
-      if (match = segment.match(/^:([^\/]+)$/)) {
-        results.push(new DynamicSegment(match[1]));
-        names.push(match[1]);
-        types.dynamics++;
-      } else if (match = segment.match(/^\*([^\/]+)$/)) {
-        results.push(new StarSegment(match[1]));
-        names.push(match[1]);
-        types.stars++;
-      } else if(segment === "") {
-        results.push(new EpsilonSegment());
-      } else {
-        results.push(new StaticSegment(segment));
-        types.statics++;
+          if (matcher.children[path]) {
+            $$route$recognizer$dsl$$eachRoute(routeArray, matcher.children[path], callback, binding);
+          } else {
+            callback.call(binding, routeArray);
+          }
+        }
       }
     }
 
-    return results;
-  }
+    var $$route$recognizer$dsl$$default = function(callback, addRouteCallback) {
+      var matcher = new $$route$recognizer$dsl$$Matcher();
 
-  // A State has a character specification and (`charSpec`) and a list of possible
-  // subsequent states (`nextStates`).
-  //
-  // If a State is an accepting state, it will also have several additional
-  // properties:
-  //
-  // * `regex`: A regular expression that is used to extract parameters from paths
-  //   that reached this accepting state.
-  // * `handlers`: Information on how to convert the list of captures into calls
-  //   to registered handlers with the specified parameters
-  // * `types`: How many static, dynamic or star segments in this route. Used to
-  //   decide which route to use if multiple registered routes match a path.
-  //
-  // Currently, State is implemented naively by looping over `nextStates` and
-  // comparing a character specification against a character. A more efficient
-  // implementation would use a hash of keys pointing at one or more next states.
+      callback($$route$recognizer$dsl$$generateMatch("", matcher, this.delegate));
 
-  function State(charSpec) {
-    this.charSpec = charSpec;
-    this.nextStates = [];
-  }
+      $$route$recognizer$dsl$$eachRoute([], matcher, function(route) {
+        if (addRouteCallback) { addRouteCallback(this, route); }
+        else { this.add(route); }
+      }, this);
+    };
 
-  State.prototype = {
-    get: function(charSpec) {
-      var nextStates = this.nextStates;
+    var $$route$recognizer$$specials = [
+      '/', '.', '*', '+', '?', '|',
+      '(', ')', '[', ']', '{', '}', '\\'
+    ];
 
-      for (var i=0, l=nextStates.length; i<l; i++) {
-        var child = nextStates[i];
+    var $$route$recognizer$$escapeRegex = new RegExp('(\\' + $$route$recognizer$$specials.join('|\\') + ')', 'g');
 
-        var isEqual = child.charSpec.validChars === charSpec.validChars;
-        isEqual = isEqual && child.charSpec.invalidChars === charSpec.invalidChars;
+    function $$route$recognizer$$isArray(test) {
+      return Object.prototype.toString.call(test) === "[object Array]";
+    }
 
-        if (isEqual) { return child; }
+    // A Segment represents a segment in the original route description.
+    // Each Segment type provides an `eachChar` and `regex` method.
+    //
+    // The `eachChar` method invokes the callback with one or more character
+    // specifications. A character specification consumes one or more input
+    // characters.
+    //
+    // The `regex` method returns a regex fragment for the segment. If the
+    // segment is a dynamic of star segment, the regex fragment also includes
+    // a capture.
+    //
+    // A character specification contains:
+    //
+    // * `validChars`: a String with a list of all valid characters, or
+    // * `invalidChars`: a String with a list of all invalid characters
+    // * `repeat`: true if the character specification can repeat
+
+    function $$route$recognizer$$StaticSegment(string) { this.string = string; }
+    $$route$recognizer$$StaticSegment.prototype = {
+      eachChar: function(callback) {
+        var string = this.string, ch;
+
+        for (var i=0, l=string.length; i<l; i++) {
+          ch = string.charAt(i);
+          callback({ validChars: ch });
+        }
+      },
+
+      regex: function() {
+        return this.string.replace($$route$recognizer$$escapeRegex, '\\$1');
+      },
+
+      generate: function() {
+        return this.string;
       }
-    },
+    };
 
-    put: function(charSpec) {
-      var state;
+    function $$route$recognizer$$DynamicSegment(name) { this.name = name; }
+    $$route$recognizer$$DynamicSegment.prototype = {
+      eachChar: function(callback) {
+        callback({ invalidChars: "/", repeat: true });
+      },
 
-      // If the character specification already exists in a child of the current
-      // state, just return that state.
-      if (state = this.get(charSpec)) { return state; }
+      regex: function() {
+        return "([^/]+)";
+      },
 
-      // Make a new state for the character spec
-      state = new State(charSpec);
-
-      // Insert the new state as a child of the current state
-      this.nextStates.push(state);
-
-      // If this character specification repeats, insert the new state as a child
-      // of itself. Note that this will not trigger an infinite loop because each
-      // transition during recognition consumes a character.
-      if (charSpec.repeat) {
-        state.nextStates.push(state);
+      generate: function(params) {
+        return params[this.name];
       }
+    };
 
-      // Return the new state
-      return state;
-    },
+    function $$route$recognizer$$StarSegment(name) { this.name = name; }
+    $$route$recognizer$$StarSegment.prototype = {
+      eachChar: function(callback) {
+        callback({ invalidChars: "", repeat: true });
+      },
 
-    // Find a list of child states matching the next character
-    match: function(ch) {
-      // DEBUG "Processing `" + ch + "`:"
-      var nextStates = this.nextStates,
-          child, charSpec, chars;
+      regex: function() {
+        return "(.+)";
+      },
 
-      // DEBUG "  " + debugState(this)
-      var returned = [];
+      generate: function(params) {
+        return params[this.name];
+      }
+    };
 
-      for (var i=0, l=nextStates.length; i<l; i++) {
-        child = nextStates[i];
+    function $$route$recognizer$$EpsilonSegment() {}
+    $$route$recognizer$$EpsilonSegment.prototype = {
+      eachChar: function() {},
+      regex: function() { return ""; },
+      generate: function() { return ""; }
+    };
 
-        charSpec = child.charSpec;
+    function $$route$recognizer$$parse(route, names, types) {
+      // normalize route as not starting with a "/". Recognition will
+      // also normalize.
+      if (route.charAt(0) === "/") { route = route.substr(1); }
 
-        if (typeof (chars = charSpec.validChars) !== 'undefined') {
-          if (chars.indexOf(ch) !== -1) { returned.push(child); }
-        } else if (typeof (chars = charSpec.invalidChars) !== 'undefined') {
-          if (chars.indexOf(ch) === -1) { returned.push(child); }
+      var segments = route.split("/"), results = [];
+
+      for (var i=0, l=segments.length; i<l; i++) {
+        var segment = segments[i], match;
+
+        if (match = segment.match(/^:([^\/]+)$/)) {
+          results.push(new $$route$recognizer$$DynamicSegment(match[1]));
+          names.push(match[1]);
+          types.dynamics++;
+        } else if (match = segment.match(/^\*([^\/]+)$/)) {
+          results.push(new $$route$recognizer$$StarSegment(match[1]));
+          names.push(match[1]);
+          types.stars++;
+        } else if(segment === "") {
+          results.push(new $$route$recognizer$$EpsilonSegment());
+        } else {
+          results.push(new $$route$recognizer$$StaticSegment(segment));
+          types.statics++;
         }
       }
 
-      return returned;
+      return results;
     }
+
+    // A State has a character specification and (`charSpec`) and a list of possible
+    // subsequent states (`nextStates`).
+    //
+    // If a State is an accepting state, it will also have several additional
+    // properties:
+    //
+    // * `regex`: A regular expression that is used to extract parameters from paths
+    //   that reached this accepting state.
+    // * `handlers`: Information on how to convert the list of captures into calls
+    //   to registered handlers with the specified parameters
+    // * `types`: How many static, dynamic or star segments in this route. Used to
+    //   decide which route to use if multiple registered routes match a path.
+    //
+    // Currently, State is implemented naively by looping over `nextStates` and
+    // comparing a character specification against a character. A more efficient
+    // implementation would use a hash of keys pointing at one or more next states.
+
+    function $$route$recognizer$$State(charSpec) {
+      this.charSpec = charSpec;
+      this.nextStates = [];
+    }
+
+    $$route$recognizer$$State.prototype = {
+      get: function(charSpec) {
+        var nextStates = this.nextStates;
+
+        for (var i=0, l=nextStates.length; i<l; i++) {
+          var child = nextStates[i];
+
+          var isEqual = child.charSpec.validChars === charSpec.validChars;
+          isEqual = isEqual && child.charSpec.invalidChars === charSpec.invalidChars;
+
+          if (isEqual) { return child; }
+        }
+      },
+
+      put: function(charSpec) {
+        var state;
+
+        // If the character specification already exists in a child of the current
+        // state, just return that state.
+        if (state = this.get(charSpec)) { return state; }
+
+        // Make a new state for the character spec
+        state = new $$route$recognizer$$State(charSpec);
+
+        // Insert the new state as a child of the current state
+        this.nextStates.push(state);
+
+        // If this character specification repeats, insert the new state as a child
+        // of itself. Note that this will not trigger an infinite loop because each
+        // transition during recognition consumes a character.
+        if (charSpec.repeat) {
+          state.nextStates.push(state);
+        }
+
+        // Return the new state
+        return state;
+      },
+
+      // Find a list of child states matching the next character
+      match: function(ch) {
+        // DEBUG "Processing `" + ch + "`:"
+        var nextStates = this.nextStates,
+            child, charSpec, chars;
+
+        // DEBUG "  " + debugState(this)
+        var returned = [];
+
+        for (var i=0, l=nextStates.length; i<l; i++) {
+          child = nextStates[i];
+
+          charSpec = child.charSpec;
+
+          if (typeof (chars = charSpec.validChars) !== 'undefined') {
+            if (chars.indexOf(ch) !== -1) { returned.push(child); }
+          } else if (typeof (chars = charSpec.invalidChars) !== 'undefined') {
+            if (chars.indexOf(ch) === -1) { returned.push(child); }
+          }
+        }
+
+        return returned;
+      }
+
+      /** IF DEBUG
+      , debug: function() {
+        var charSpec = this.charSpec,
+            debug = "[",
+            chars = charSpec.validChars || charSpec.invalidChars;
+
+        if (charSpec.invalidChars) { debug += "^"; }
+        debug += chars;
+        debug += "]";
+
+        if (charSpec.repeat) { debug += "+"; }
+
+        return debug;
+      }
+      END IF **/
+    };
 
     /** IF DEBUG
-    , debug: function() {
-      var charSpec = this.charSpec,
-          debug = "[",
-          chars = charSpec.validChars || charSpec.invalidChars;
+    function debug(log) {
+      console.log(log);
+    }
 
-      if (charSpec.invalidChars) { debug += "^"; }
-      debug += chars;
-      debug += "]";
-
-      if (charSpec.repeat) { debug += "+"; }
-
-      return debug;
+    function debugState(state) {
+      return state.nextStates.map(function(n) {
+        if (n.nextStates.length === 0) { return "( " + n.debug() + " [accepting] )"; }
+        return "( " + n.debug() + " <then> " + n.nextStates.map(function(s) { return s.debug() }).join(" or ") + " )";
+      }).join(", ")
     }
     END IF **/
-  };
 
-  /** IF DEBUG
-  function debug(log) {
-    console.log(log);
-  }
+    // This is a somewhat naive strategy, but should work in a lot of cases
+    // A better strategy would properly resolve /posts/:id/new and /posts/edit/:id.
+    //
+    // This strategy generally prefers more static and less dynamic matching.
+    // Specifically, it
+    //
+    //  * prefers fewer stars to more, then
+    //  * prefers using stars for less of the match to more, then
+    //  * prefers fewer dynamic segments to more, then
+    //  * prefers more static segments to more
+    function $$route$recognizer$$sortSolutions(states) {
+      return states.sort(function(a, b) {
+        if (a.types.stars !== b.types.stars) { return a.types.stars - b.types.stars; }
 
-  function debugState(state) {
-    return state.nextStates.map(function(n) {
-      if (n.nextStates.length === 0) { return "( " + n.debug() + " [accepting] )"; }
-      return "( " + n.debug() + " <then> " + n.nextStates.map(function(s) { return s.debug() }).join(" or ") + " )";
-    }).join(", ")
-  }
-  END IF **/
-
-  // This is a somewhat naive strategy, but should work in a lot of cases
-  // A better strategy would properly resolve /posts/:id/new and /posts/edit/:id.
-  //
-  // This strategy generally prefers more static and less dynamic matching.
-  // Specifically, it
-  //
-  //  * prefers fewer stars to more, then
-  //  * prefers using stars for less of the match to more, then
-  //  * prefers fewer dynamic segments to more, then
-  //  * prefers more static segments to more
-  function sortSolutions(states) {
-    return states.sort(function(a, b) {
-      if (a.types.stars !== b.types.stars) { return a.types.stars - b.types.stars; }
-
-      if (a.types.stars) {
-        if (a.types.statics !== b.types.statics) { return b.types.statics - a.types.statics; }
-        if (a.types.dynamics !== b.types.dynamics) { return b.types.dynamics - a.types.dynamics; }
-      }
-
-      if (a.types.dynamics !== b.types.dynamics) { return a.types.dynamics - b.types.dynamics; }
-      if (a.types.statics !== b.types.statics) { return b.types.statics - a.types.statics; }
-
-      return 0;
-    });
-  }
-
-  function recognizeChar(states, ch) {
-    var nextStates = [];
-
-    for (var i=0, l=states.length; i<l; i++) {
-      var state = states[i];
-
-      nextStates = nextStates.concat(state.match(ch));
-    }
-
-    return nextStates;
-  }
-
-  var oCreate = Object.create || function(proto) {
-    function F() {}
-    F.prototype = proto;
-    return new F();
-  };
-
-  function RecognizeResults(queryParams) {
-    this.queryParams = queryParams || {};
-  }
-  RecognizeResults.prototype = oCreate({
-    splice: Array.prototype.splice,
-    slice:  Array.prototype.slice,
-    push:   Array.prototype.push,
-    length: 0,
-    queryParams: null
-  });
-
-  function findHandler(state, path, queryParams) {
-    var handlers = state.handlers, regex = state.regex;
-    var captures = path.match(regex), currentCapture = 1;
-    var result = new RecognizeResults(queryParams);
-
-    for (var i=0, l=handlers.length; i<l; i++) {
-      var handler = handlers[i], names = handler.names, params = {};
-
-      for (var j=0, m=names.length; j<m; j++) {
-        params[names[j]] = captures[currentCapture++];
-      }
-
-      result.push({ handler: handler.handler, params: params, isDynamic: !!names.length });
-    }
-
-    return result;
-  }
-
-  function addSegment(currentState, segment) {
-    segment.eachChar(function(ch) {
-      var state;
-
-      currentState = currentState.put(ch);
-    });
-
-    return currentState;
-  }
-
-  // The main interface
-
-  var RouteRecognizer = function() {
-    this.rootState = new State();
-    this.names = {};
-  };
-
-
-  RouteRecognizer.prototype = {
-    add: function(routes, options) {
-      var currentState = this.rootState, regex = "^",
-          types = { statics: 0, dynamics: 0, stars: 0 },
-          handlers = [], allSegments = [], name;
-
-      var isEmpty = true;
-
-      for (var i=0, l=routes.length; i<l; i++) {
-        var route = routes[i], names = [];
-
-        var segments = parse(route.path, names, types);
-
-        allSegments = allSegments.concat(segments);
-
-        for (var j=0, m=segments.length; j<m; j++) {
-          var segment = segments[j];
-
-          if (segment instanceof EpsilonSegment) { continue; }
-
-          isEmpty = false;
-
-          // Add a "/" for the new segment
-          currentState = currentState.put({ validChars: "/" });
-          regex += "/";
-
-          // Add a representation of the segment to the NFA and regex
-          currentState = addSegment(currentState, segment);
-          regex += segment.regex();
+        if (a.types.stars) {
+          if (a.types.statics !== b.types.statics) { return b.types.statics - a.types.statics; }
+          if (a.types.dynamics !== b.types.dynamics) { return b.types.dynamics - a.types.dynamics; }
         }
 
-        var handler = { handler: route.handler, names: names };
-        handlers.push(handler);
+        if (a.types.dynamics !== b.types.dynamics) { return a.types.dynamics - b.types.dynamics; }
+        if (a.types.statics !== b.types.statics) { return b.types.statics - a.types.statics; }
+
+        return 0;
+      });
+    }
+
+    function $$route$recognizer$$recognizeChar(states, ch) {
+      var nextStates = [];
+
+      for (var i=0, l=states.length; i<l; i++) {
+        var state = states[i];
+
+        nextStates = nextStates.concat(state.match(ch));
       }
 
-      if (isEmpty) {
-        currentState = currentState.put({ validChars: "/" });
-        regex += "/";
-      }
+      return nextStates;
+    }
 
-      currentState.handlers = handlers;
-      currentState.regex = new RegExp(regex + "$");
-      currentState.types = types;
+    var $$route$recognizer$$oCreate = Object.create || function(proto) {
+      function F() {}
+      F.prototype = proto;
+      return new F();
+    };
 
-      if (name = options && options.as) {
-        this.names[name] = {
-          segments: allSegments,
-          handlers: handlers
-        };
-      }
-    },
+    function $$route$recognizer$$RecognizeResults(queryParams) {
+      this.queryParams = queryParams || {};
+    }
+    $$route$recognizer$$RecognizeResults.prototype = $$route$recognizer$$oCreate({
+      splice: Array.prototype.splice,
+      slice:  Array.prototype.slice,
+      push:   Array.prototype.push,
+      length: 0,
+      queryParams: null
+    });
 
-    handlersFor: function(name) {
-      var route = this.names[name], result = [];
-      if (!route) { throw new Error("There is no route named " + name); }
+    function $$route$recognizer$$findHandler(state, path, queryParams) {
+      var handlers = state.handlers, regex = state.regex;
+      var captures = path.match(regex), currentCapture = 1;
+      var result = new $$route$recognizer$$RecognizeResults(queryParams);
 
-      for (var i=0, l=route.handlers.length; i<l; i++) {
-        result.push(route.handlers[i]);
+      for (var i=0, l=handlers.length; i<l; i++) {
+        var handler = handlers[i], names = handler.names, params = {};
+
+        for (var j=0, m=names.length; j<m; j++) {
+          params[names[j]] = captures[currentCapture++];
+        }
+
+        result.push({ handler: handler.handler, params: params, isDynamic: !!names.length });
       }
 
       return result;
-    },
+    }
 
-    hasRoute: function(name) {
-      return !!this.names[name];
-    },
+    function $$route$recognizer$$addSegment(currentState, segment) {
+      segment.eachChar(function(ch) {
+        var state;
 
-    generate: function(name, params) {
-      var route = this.names[name], output = "";
-      if (!route) { throw new Error("There is no route named " + name); }
+        currentState = currentState.put(ch);
+      });
 
-      var segments = route.segments;
+      return currentState;
+    }
 
-      for (var i=0, l=segments.length; i<l; i++) {
-        var segment = segments[i];
+    function $$route$recognizer$$decodeQueryParamPart(part) {
+      // http://www.w3.org/TR/html401/interact/forms.html#h-17.13.4.1
+      part = part.replace(/\+/gm, '%20');
+      return decodeURIComponent(part);
+    }
 
-        if (segment instanceof EpsilonSegment) { continue; }
+    // The main interface
 
-        output += "/";
-        output += segment.generate(params);
-      }
+    var $$route$recognizer$$RouteRecognizer = function() {
+      this.rootState = new $$route$recognizer$$State();
+      this.names = {};
+    };
 
-      if (output.charAt(0) !== '/') { output = '/' + output; }
 
-      if (params && params.queryParams) {
-        output += this.generateQueryString(params.queryParams, route.handlers);
-      }
+    $$route$recognizer$$RouteRecognizer.prototype = {
+      add: function(routes, options) {
+        var currentState = this.rootState, regex = "^",
+            types = { statics: 0, dynamics: 0, stars: 0 },
+            handlers = [], allSegments = [], name;
 
-      return output;
-    },
+        var isEmpty = true;
 
-    generateQueryString: function(params, handlers) {
-      var pairs = [];
-      var keys = [];
-      for(var key in params) {
-        if (params.hasOwnProperty(key)) {
-          keys.push(key);
-        }
-      }
-      keys.sort();
-      for (var i = 0, len = keys.length; i < len; i++) {
-        key = keys[i];
-        var value = params[key];
-        if (value == null) {
-          continue;
-        }
-        var pair = key;
-        if (isArray(value)) {
-          for (var j = 0, l = value.length; j < l; j++) {
-            var arrayPair = key + '[]' + '=' + encodeURIComponent(value[j]);
-            pairs.push(arrayPair);
+        for (var i=0, l=routes.length; i<l; i++) {
+          var route = routes[i], names = [];
+
+          var segments = $$route$recognizer$$parse(route.path, names, types);
+
+          allSegments = allSegments.concat(segments);
+
+          for (var j=0, m=segments.length; j<m; j++) {
+            var segment = segments[j];
+
+            if (segment instanceof $$route$recognizer$$EpsilonSegment) { continue; }
+
+            isEmpty = false;
+
+            // Add a "/" for the new segment
+            currentState = currentState.put({ validChars: "/" });
+            regex += "/";
+
+            // Add a representation of the segment to the NFA and regex
+            currentState = $$route$recognizer$$addSegment(currentState, segment);
+            regex += segment.regex();
           }
-        } else {
-          pair += "=" + encodeURIComponent(value);
-          pairs.push(pair);
+
+          var handler = { handler: route.handler, names: names };
+          handlers.push(handler);
         }
-      }
 
-      if (pairs.length === 0) { return ''; }
+        if (isEmpty) {
+          currentState = currentState.put({ validChars: "/" });
+          regex += "/";
+        }
 
-      return "?" + pairs.join("&");
-    },
+        currentState.handlers = handlers;
+        currentState.regex = new RegExp(regex + "$");
+        currentState.types = types;
 
-    parseQueryString: function(queryString) {
-      var pairs = queryString.split("&"), queryParams = {};
-      for(var i=0; i < pairs.length; i++) {
-        var pair      = pairs[i].split('='),
-            key       = decodeURIComponent(pair[0]),
-            keyLength = key.length,
-            isArray = false,
-            value;
-        if (pair.length === 1) {
-          value = 'true';
-        } else {
-          //Handle arrays
-          if (keyLength > 2 && key.slice(keyLength -2) === '[]') {
-            isArray = true;
-            key = key.slice(0, keyLength - 2);
-            if(!queryParams[key]) {
-              queryParams[key] = [];
+        if (name = options && options.as) {
+          this.names[name] = {
+            segments: allSegments,
+            handlers: handlers
+          };
+        }
+      },
+
+      handlersFor: function(name) {
+        var route = this.names[name], result = [];
+        if (!route) { throw new Error("There is no route named " + name); }
+
+        for (var i=0, l=route.handlers.length; i<l; i++) {
+          result.push(route.handlers[i]);
+        }
+
+        return result;
+      },
+
+      hasRoute: function(name) {
+        return !!this.names[name];
+      },
+
+      generate: function(name, params) {
+        var route = this.names[name], output = "";
+        if (!route) { throw new Error("There is no route named " + name); }
+
+        var segments = route.segments;
+
+        for (var i=0, l=segments.length; i<l; i++) {
+          var segment = segments[i];
+
+          if (segment instanceof $$route$recognizer$$EpsilonSegment) { continue; }
+
+          output += "/";
+          output += segment.generate(params);
+        }
+
+        if (output.charAt(0) !== '/') { output = '/' + output; }
+
+        if (params && params.queryParams) {
+          output += this.generateQueryString(params.queryParams, route.handlers);
+        }
+
+        return output;
+      },
+
+      generateQueryString: function(params, handlers) {
+        var pairs = [];
+        var keys = [];
+        for(var key in params) {
+          if (params.hasOwnProperty(key)) {
+            keys.push(key);
+          }
+        }
+        keys.sort();
+        for (var i = 0, len = keys.length; i < len; i++) {
+          key = keys[i];
+          var value = params[key];
+          if (value == null) {
+            continue;
+          }
+          var pair = encodeURIComponent(key);
+          if ($$route$recognizer$$isArray(value)) {
+            for (var j = 0, l = value.length; j < l; j++) {
+              var arrayPair = key + '[]' + '=' + encodeURIComponent(value[j]);
+              pairs.push(arrayPair);
             }
+          } else {
+            pair += "=" + encodeURIComponent(value);
+            pairs.push(pair);
           }
-          value = pair[1] ? decodeURIComponent(pair[1]) : '';
         }
-        if (isArray) {
-          queryParams[key].push(value);
-        } else {
-          queryParams[key] = decodeURIComponent(value);
+
+        if (pairs.length === 0) { return ''; }
+
+        return "?" + pairs.join("&");
+      },
+
+      parseQueryString: function(queryString) {
+        var pairs = queryString.split("&"), queryParams = {};
+        for(var i=0; i < pairs.length; i++) {
+          var pair      = pairs[i].split('='),
+              key       = $$route$recognizer$$decodeQueryParamPart(pair[0]),
+              keyLength = key.length,
+              isArray = false,
+              value;
+          if (pair.length === 1) {
+            value = 'true';
+          } else {
+            //Handle arrays
+            if (keyLength > 2 && key.slice(keyLength -2) === '[]') {
+              isArray = true;
+              key = key.slice(0, keyLength - 2);
+              if(!queryParams[key]) {
+                queryParams[key] = [];
+              }
+            }
+            value = pair[1] ? $$route$recognizer$$decodeQueryParamPart(pair[1]) : '';
+          }
+          if (isArray) {
+            queryParams[key].push(value);
+          } else {
+            queryParams[key] = value;
+          }
         }
-      }
-      return queryParams;
-    },
+        return queryParams;
+      },
 
-    recognize: function(path) {
-      var states = [ this.rootState ],
-          pathLen, i, l, queryStart, queryParams = {},
-          isSlashDropped = false;
+      recognize: function(path) {
+        var states = [ this.rootState ],
+            pathLen, i, l, queryStart, queryParams = {},
+            isSlashDropped = false;
 
-      path = decodeURI(path);
-
-      queryStart = path.indexOf('?');
-      if (queryStart !== -1) {
-        var queryString = path.substr(queryStart + 1, path.length);
-        path = path.substr(0, queryStart);
-        queryParams = this.parseQueryString(queryString);
-      }
-
-      // DEBUG GROUP path
-
-      if (path.charAt(0) !== "/") { path = "/" + path; }
-
-      pathLen = path.length;
-      if (pathLen > 1 && path.charAt(pathLen - 1) === "/") {
-        path = path.substr(0, pathLen - 1);
-        isSlashDropped = true;
-      }
-
-      for (i=0, l=path.length; i<l; i++) {
-        states = recognizeChar(states, path.charAt(i));
-        if (!states.length) { break; }
-      }
-
-      // END DEBUG GROUP
-
-      var solutions = [];
-      for (i=0, l=states.length; i<l; i++) {
-        if (states[i].handlers) { solutions.push(states[i]); }
-      }
-
-      states = sortSolutions(solutions);
-
-      var state = solutions[0];
-
-      if (state && state.handlers) {
-        // if a trailing slash was dropped and a star segment is the last segment
-        // specified, put the trailing slash back
-        if (isSlashDropped && state.regex.source.slice(-5) === "(.+)$") {
-          path = path + "/";
+        queryStart = path.indexOf('?');
+        if (queryStart !== -1) {
+          var queryString = path.substr(queryStart + 1, path.length);
+          path = path.substr(0, queryStart);
+          queryParams = this.parseQueryString(queryString);
         }
-        return findHandler(state, path, queryParams);
-      }
-    }
-  };
 
-  __exports__.RouteRecognizer = RouteRecognizer;
+        path = decodeURI(path);
 
-  function Target(path, matcher, delegate) {
-    this.path = path;
-    this.matcher = matcher;
-    this.delegate = delegate;
-  }
+        // DEBUG GROUP path
 
-  Target.prototype = {
-    to: function(target, callback) {
-      var delegate = this.delegate;
+        if (path.charAt(0) !== "/") { path = "/" + path; }
 
-      if (delegate && delegate.willAddRoute) {
-        target = delegate.willAddRoute(this.matcher.target, target);
-      }
+        pathLen = path.length;
+        if (pathLen > 1 && path.charAt(pathLen - 1) === "/") {
+          path = path.substr(0, pathLen - 1);
+          isSlashDropped = true;
+        }
 
-      this.matcher.add(this.path, target);
+        for (i=0, l=path.length; i<l; i++) {
+          states = $$route$recognizer$$recognizeChar(states, path.charAt(i));
+          if (!states.length) { break; }
+        }
 
-      if (callback) {
-        if (callback.length === 0) { throw new Error("You must have an argument in the function passed to `to`"); }
-        this.matcher.addChild(this.path, target, callback, this.delegate);
-      }
-      return this;
-    }
-  };
+        // END DEBUG GROUP
 
-  function Matcher(target) {
-    this.routes = {};
-    this.children = {};
-    this.target = target;
-  }
+        var solutions = [];
+        for (i=0, l=states.length; i<l; i++) {
+          if (states[i].handlers) { solutions.push(states[i]); }
+        }
 
-  Matcher.prototype = {
-    add: function(path, handler) {
-      this.routes[path] = handler;
-    },
+        states = $$route$recognizer$$sortSolutions(solutions);
 
-    addChild: function(path, target, callback, delegate) {
-      var matcher = new Matcher(target);
-      this.children[path] = matcher;
+        var state = solutions[0];
 
-      var match = generateMatch(path, matcher, delegate);
-
-      if (delegate && delegate.contextEntered) {
-        delegate.contextEntered(target, match);
-      }
-
-      callback(match);
-    }
-  };
-
-  function generateMatch(startingPath, matcher, delegate) {
-    return function(path, nestedCallback) {
-      var fullPath = startingPath + path;
-
-      if (nestedCallback) {
-        nestedCallback(generateMatch(fullPath, matcher, delegate));
-      } else {
-        return new Target(startingPath + path, matcher, delegate);
+        if (state && state.handlers) {
+          // if a trailing slash was dropped and a star segment is the last segment
+          // specified, put the trailing slash back
+          if (isSlashDropped && state.regex.source.slice(-5) === "(.+)$") {
+            path = path + "/";
+          }
+          return $$route$recognizer$$findHandler(state, path, queryParams);
+        }
       }
     };
-  }
 
-  function addRoute(routeArray, path, handler) {
-    var len = 0;
-    for (var i=0, l=routeArray.length; i<l; i++) {
-      len += routeArray[i].path.length;
+    $$route$recognizer$$RouteRecognizer.prototype.map = $$route$recognizer$dsl$$default;
+
+    $$route$recognizer$$RouteRecognizer.VERSION = '0.1.5';
+
+    var $$route$recognizer$$default = $$route$recognizer$$RouteRecognizer;
+
+    /* global define:true module:true window: true */
+    if (typeof define === 'function' && define['amd']) {
+      define(function() { return $$route$recognizer$$default; });
+    } else if (typeof module !== 'undefined' && module['exports']) {
+      module['exports'] = $$route$recognizer$$default;
+    } else if (typeof this !== 'undefined') {
+      this['RouteRecognizer'] = $$route$recognizer$$default;
     }
+}).call(this);
 
-    path = path.substr(len);
-    var route = { path: path, handler: handler };
-    routeArray.push(route);
-  }
-
-  function eachRoute(baseRoute, matcher, callback, binding) {
-    var routes = matcher.routes;
-
-    for (var path in routes) {
-      if (routes.hasOwnProperty(path)) {
-        var routeArray = baseRoute.slice();
-        addRoute(routeArray, path, routes[path]);
-
-        if (matcher.children[path]) {
-          eachRoute(routeArray, matcher.children[path], callback, binding);
-        } else {
-          callback.call(binding, routeArray);
-        }
-      }
-    }
-  }
-
-  RouteRecognizer.prototype.map = function(callback, addRouteCallback) {
-    var matcher = new Matcher();
-
-    callback(generateMatch("", matcher, this.delegate));
-
-    eachRoute([], matcher, function(route) {
-      if (addRouteCallback) { addRouteCallback(this, route); }
-      else { this.add(route); }
-    }, this);
-  };
-})(window);
 
 ;var isNode = typeof process !== 'undefined' && process.toString() === '[object process]';
 var RouteRecognizer = isNode ? require('route-recognizer') : window.RouteRecognizer;
@@ -64827,1441 +64849,18 @@ define('pretender', [], function() {
   };
 });
 
-;/*!
- * https://github.com/es-shims/es5-shim
- * @license es5-shim Copyright 2009-2014 by contributors, MIT License
- * see https://github.com/es-shims/es5-shim/blob/master/LICENSE
- */
+;define("sl-ember-modelize", ["sl-ember-modelize/index","exports"], function(__index__, __exports__) {
+  "use strict";
+  Object.keys(__index__).forEach(function(key){
+    __exports__[key] = __index__[key];
+  });
+});
 
-// vim: ts=4 sts=4 sw=4 expandtab
+define('sl-ember-modelize/mixins/modelize', ['exports', 'ember'], function (exports, Ember) {
 
-
-// UMD (Universal Module Definition)
-// see https://github.com/umdjs/umd/blob/master/returnExports.js
-// Add semicolon to prevent IIFE from being passed as argument to concatenated code.
-;(function (root, factory) {
     'use strict';
-    /*global define, exports, module */
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(factory);
-    } else if (typeof exports === 'object') {
-        // Node. Does not work with strict CommonJS, but
-        // only CommonJS-like enviroments that support module.exports,
-        // like Node.
-        module.exports = factory();
-    } else {
-        // Browser globals (root is window)
-        root.returnExports = factory();
-    }
-}(this, function () {
 
-/**
- * Brings an environment as close to ECMAScript 5 compliance
- * as is possible with the facilities of erstwhile engines.
- *
- * Annotated ES5: http://es5.github.com/ (specific links below)
- * ES5 Spec: http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf
- * Required reading: http://javascriptweblog.wordpress.com/2011/12/05/extending-javascript-natives/
- */
-
-// Shortcut to an often accessed properties, in order to avoid multiple
-// dereference that costs universally.
-var ArrayPrototype = Array.prototype;
-var ObjectPrototype = Object.prototype;
-var FunctionPrototype = Function.prototype;
-var StringPrototype = String.prototype;
-var NumberPrototype = Number.prototype;
-var array_slice = ArrayPrototype.slice;
-var array_splice = ArrayPrototype.splice;
-var array_push = ArrayPrototype.push;
-var array_unshift = ArrayPrototype.unshift;
-var call = FunctionPrototype.call;
-
-// Having a toString local variable name breaks in Opera so use to_string.
-var to_string = ObjectPrototype.toString;
-
-var isFunction = function (val) {
-    return to_string.call(val) === '[object Function]';
-};
-var isRegex = function (val) {
-    return to_string.call(val) === '[object RegExp]';
-};
-var isArray = function isArray(obj) {
-    return to_string.call(obj) === '[object Array]';
-};
-var isString = function isString(obj) {
-    return to_string.call(obj) === '[object String]';
-};
-var isArguments = function isArguments(value) {
-    var str = to_string.call(value);
-    var isArgs = str === '[object Arguments]';
-    if (!isArgs) {
-        isArgs = !isArray(value) &&
-          value !== null &&
-          typeof value === 'object' &&
-          typeof value.length === 'number' &&
-          value.length >= 0 &&
-          isFunction(value.callee);
-    }
-    return isArgs;
-};
-
-var supportsDescriptors = Object.defineProperty && (function () {
-    try {
-        Object.defineProperty({}, 'x', {});
-        return true;
-    } catch (e) { /* this is ES3 */
-        return false;
-    }
-}());
-
-// Define configurable, writable and non-enumerable props
-// if they don't exist.
-var defineProperty;
-if (supportsDescriptors) {
-    defineProperty = function (object, name, method, forceAssign) {
-        if (!forceAssign && (name in object)) { return; }
-        Object.defineProperty(object, name, {
-            configurable: true,
-            enumerable: false,
-            writable: true,
-            value: method
-        });
-    };
-} else {
-    defineProperty = function (object, name, method, forceAssign) {
-        if (!forceAssign && (name in object)) { return; }
-        object[name] = method;
-    };
-}
-var defineProperties = function (object, map, forceAssign) {
-    for (var name in map) {
-        if (ObjectPrototype.hasOwnProperty.call(map, name)) {
-          defineProperty(object, name, map[name], forceAssign);
-        }
-    }
-};
-
-//
-// Util
-// ======
-//
-
-// ES5 9.4
-// http://es5.github.com/#x9.4
-// http://jsperf.com/to-integer
-
-function toInteger(num) {
-    var n = +num;
-    if (n !== n) { // isNaN
-        n = 0;
-    } else if (n !== 0 && n !== (1 / 0) && n !== -(1 / 0)) {
-        n = (n > 0 || -1) * Math.floor(Math.abs(n));
-    }
-    return n;
-}
-
-function isPrimitive(input) {
-    var type = typeof input;
-    return input === null ||
-        type === 'undefined' ||
-        type === 'boolean' ||
-        type === 'number' ||
-        type === 'string';
-}
-
-function toPrimitive(input) {
-    var val, valueOf, toStr;
-    if (isPrimitive(input)) {
-        return input;
-    }
-    valueOf = input.valueOf;
-    if (isFunction(valueOf)) {
-        val = valueOf.call(input);
-        if (isPrimitive(val)) {
-            return val;
-        }
-    }
-    toStr = input.toString;
-    if (isFunction(toStr)) {
-        val = toStr.call(input);
-        if (isPrimitive(val)) {
-            return val;
-        }
-    }
-    throw new TypeError();
-}
-
-var ES = {
-    // ES5 9.9
-    // http://es5.github.com/#x9.9
-    ToObject: function (o) {
-        /*jshint eqnull: true */
-        if (o == null) { // this matches both null and undefined
-            throw new TypeError("can't convert " + o + ' to object');
-        }
-        return Object(o);
-    },
-    ToUint32: function ToUint32(x) {
-        return x >>> 0;
-    }
-};
-
-//
-// Function
-// ========
-//
-
-// ES-5 15.3.4.5
-// http://es5.github.com/#x15.3.4.5
-
-var Empty = function Empty() {};
-
-defineProperties(FunctionPrototype, {
-    bind: function bind(that) { // .length is 1
-        // 1. Let Target be the this value.
-        var target = this;
-        // 2. If IsCallable(Target) is false, throw a TypeError exception.
-        if (!isFunction(target)) {
-            throw new TypeError('Function.prototype.bind called on incompatible ' + target);
-        }
-        // 3. Let A be a new (possibly empty) internal list of all of the
-        //   argument values provided after thisArg (arg1, arg2 etc), in order.
-        // XXX slicedArgs will stand in for "A" if used
-        var args = array_slice.call(arguments, 1); // for normal call
-        // 4. Let F be a new native ECMAScript object.
-        // 11. Set the [[Prototype]] internal property of F to the standard
-        //   built-in Function prototype object as specified in 15.3.3.1.
-        // 12. Set the [[Call]] internal property of F as described in
-        //   15.3.4.5.1.
-        // 13. Set the [[Construct]] internal property of F as described in
-        //   15.3.4.5.2.
-        // 14. Set the [[HasInstance]] internal property of F as described in
-        //   15.3.4.5.3.
-        var bound;
-        var binder = function () {
-
-            if (this instanceof bound) {
-                // 15.3.4.5.2 [[Construct]]
-                // When the [[Construct]] internal method of a function object,
-                // F that was created using the bind function is called with a
-                // list of arguments ExtraArgs, the following steps are taken:
-                // 1. Let target be the value of F's [[TargetFunction]]
-                //   internal property.
-                // 2. If target has no [[Construct]] internal method, a
-                //   TypeError exception is thrown.
-                // 3. Let boundArgs be the value of F's [[BoundArgs]] internal
-                //   property.
-                // 4. Let args be a new list containing the same values as the
-                //   list boundArgs in the same order followed by the same
-                //   values as the list ExtraArgs in the same order.
-                // 5. Return the result of calling the [[Construct]] internal
-                //   method of target providing args as the arguments.
-
-                var result = target.apply(
-                    this,
-                    args.concat(array_slice.call(arguments))
-                );
-                if (Object(result) === result) {
-                    return result;
-                }
-                return this;
-
-            } else {
-                // 15.3.4.5.1 [[Call]]
-                // When the [[Call]] internal method of a function object, F,
-                // which was created using the bind function is called with a
-                // this value and a list of arguments ExtraArgs, the following
-                // steps are taken:
-                // 1. Let boundArgs be the value of F's [[BoundArgs]] internal
-                //   property.
-                // 2. Let boundThis be the value of F's [[BoundThis]] internal
-                //   property.
-                // 3. Let target be the value of F's [[TargetFunction]] internal
-                //   property.
-                // 4. Let args be a new list containing the same values as the
-                //   list boundArgs in the same order followed by the same
-                //   values as the list ExtraArgs in the same order.
-                // 5. Return the result of calling the [[Call]] internal method
-                //   of target providing boundThis as the this value and
-                //   providing args as the arguments.
-
-                // equiv: target.call(this, ...boundArgs, ...args)
-                return target.apply(
-                    that,
-                    args.concat(array_slice.call(arguments))
-                );
-
-            }
-
-        };
-
-        // 15. If the [[Class]] internal property of Target is "Function", then
-        //     a. Let L be the length property of Target minus the length of A.
-        //     b. Set the length own property of F to either 0 or L, whichever is
-        //       larger.
-        // 16. Else set the length own property of F to 0.
-
-        var boundLength = Math.max(0, target.length - args.length);
-
-        // 17. Set the attributes of the length own property of F to the values
-        //   specified in 15.3.5.1.
-        var boundArgs = [];
-        for (var i = 0; i < boundLength; i++) {
-            boundArgs.push('$' + i);
-        }
-
-        // XXX Build a dynamic function with desired amount of arguments is the only
-        // way to set the length property of a function.
-        // In environments where Content Security Policies enabled (Chrome extensions,
-        // for ex.) all use of eval or Function costructor throws an exception.
-        // However in all of these environments Function.prototype.bind exists
-        // and so this code will never be executed.
-        bound = Function('binder', 'return function (' + boundArgs.join(',') + '){ return binder.apply(this, arguments); }')(binder);
-
-        if (target.prototype) {
-            Empty.prototype = target.prototype;
-            bound.prototype = new Empty();
-            // Clean up dangling references.
-            Empty.prototype = null;
-        }
-
-        // TODO
-        // 18. Set the [[Extensible]] internal property of F to true.
-
-        // TODO
-        // 19. Let thrower be the [[ThrowTypeError]] function Object (13.2.3).
-        // 20. Call the [[DefineOwnProperty]] internal method of F with
-        //   arguments "caller", PropertyDescriptor {[[Get]]: thrower, [[Set]]:
-        //   thrower, [[Enumerable]]: false, [[Configurable]]: false}, and
-        //   false.
-        // 21. Call the [[DefineOwnProperty]] internal method of F with
-        //   arguments "arguments", PropertyDescriptor {[[Get]]: thrower,
-        //   [[Set]]: thrower, [[Enumerable]]: false, [[Configurable]]: false},
-        //   and false.
-
-        // TODO
-        // NOTE Function objects created using Function.prototype.bind do not
-        // have a prototype property or the [[Code]], [[FormalParameters]], and
-        // [[Scope]] internal properties.
-        // XXX can't delete prototype in pure-js.
-
-        // 22. Return F.
-        return bound;
-    }
-});
-
-// _Please note: Shortcuts are defined after `Function.prototype.bind` as we
-// us it in defining shortcuts.
-var owns = call.bind(ObjectPrototype.hasOwnProperty);
-
-//
-// Array
-// =====
-//
-
-// ES5 15.4.4.12
-// http://es5.github.com/#x15.4.4.12
-var spliceNoopReturnsEmptyArray = (function () {
-    var a = [1, 2];
-    var result = a.splice();
-    return a.length === 2 && isArray(result) && result.length === 0;
-}());
-defineProperties(ArrayPrototype, {
-    // Safari 5.0 bug where .splice() returns undefined
-    splice: function splice(start, deleteCount) {
-        if (arguments.length === 0) {
-            return [];
-        } else {
-            return array_splice.apply(this, arguments);
-        }
-    }
-}, spliceNoopReturnsEmptyArray);
-
-var spliceWorksWithEmptyObject = (function () {
-    var obj = {};
-    ArrayPrototype.splice.call(obj, 0, 0, 1);
-    return obj.length === 1;
-}());
-defineProperties(ArrayPrototype, {
-    splice: function splice(start, deleteCount) {
-        if (arguments.length === 0) { return []; }
-        var args = arguments;
-        this.length = Math.max(toInteger(this.length), 0);
-        if (arguments.length > 0 && typeof deleteCount !== 'number') {
-            args = array_slice.call(arguments);
-            if (args.length < 2) {
-                args.push(this.length - start);
-            } else {
-                args[1] = toInteger(deleteCount);
-            }
-        }
-        return array_splice.apply(this, args);
-    }
-}, !spliceWorksWithEmptyObject);
-
-// ES5 15.4.4.12
-// http://es5.github.com/#x15.4.4.13
-// Return len+argCount.
-// [bugfix, ielt8]
-// IE < 8 bug: [].unshift(0) === undefined but should be "1"
-var hasUnshiftReturnValueBug = [].unshift(0) !== 1;
-defineProperties(ArrayPrototype, {
-    unshift: function () {
-        array_unshift.apply(this, arguments);
-        return this.length;
-    }
-}, hasUnshiftReturnValueBug);
-
-// ES5 15.4.3.2
-// http://es5.github.com/#x15.4.3.2
-// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/isArray
-defineProperties(Array, { isArray: isArray });
-
-// The IsCallable() check in the Array functions
-// has been replaced with a strict check on the
-// internal class of the object to trap cases where
-// the provided function was actually a regular
-// expression literal, which in V8 and
-// JavaScriptCore is a typeof "function".  Only in
-// V8 are regular expression literals permitted as
-// reduce parameters, so it is desirable in the
-// general case for the shim to match the more
-// strict and common behavior of rejecting regular
-// expressions.
-
-// ES5 15.4.4.18
-// http://es5.github.com/#x15.4.4.18
-// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/array/forEach
-
-// Check failure of by-index access of string characters (IE < 9)
-// and failure of `0 in boxedString` (Rhino)
-var boxedString = Object('a');
-var splitString = boxedString[0] !== 'a' || !(0 in boxedString);
-
-var properlyBoxesContext = function properlyBoxed(method) {
-    // Check node 0.6.21 bug where third parameter is not boxed
-    var properlyBoxesNonStrict = true;
-    var properlyBoxesStrict = true;
-    if (method) {
-        method.call('foo', function (_, __, context) {
-            if (typeof context !== 'object') { properlyBoxesNonStrict = false; }
-        });
-
-        method.call([1], function () {
-            'use strict';
-            properlyBoxesStrict = typeof this === 'string';
-        }, 'x');
-    }
-    return !!method && properlyBoxesNonStrict && properlyBoxesStrict;
-};
-
-defineProperties(ArrayPrototype, {
-    forEach: function forEach(fun /*, thisp*/) {
-        var object = ES.ToObject(this),
-            self = splitString && isString(this) ? this.split('') : object,
-            thisp = arguments[1],
-            i = -1,
-            length = self.length >>> 0;
-
-        // If no callback function or if callback is not a callable function
-        if (!isFunction(fun)) {
-            throw new TypeError(); // TODO message
-        }
-
-        while (++i < length) {
-            if (i in self) {
-                // Invoke the callback function with call, passing arguments:
-                // context, property value, property key, thisArg object
-                // context
-                fun.call(thisp, self[i], i, object);
-            }
-        }
-    }
-}, !properlyBoxesContext(ArrayPrototype.forEach));
-
-// ES5 15.4.4.19
-// http://es5.github.com/#x15.4.4.19
-// https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/map
-defineProperties(ArrayPrototype, {
-    map: function map(fun /*, thisp*/) {
-        var object = ES.ToObject(this),
-            self = splitString && isString(this) ? this.split('') : object,
-            length = self.length >>> 0,
-            result = Array(length),
-            thisp = arguments[1];
-
-        // If no callback function or if callback is not a callable function
-        if (!isFunction(fun)) {
-            throw new TypeError(fun + ' is not a function');
-        }
-
-        for (var i = 0; i < length; i++) {
-            if (i in self) {
-                result[i] = fun.call(thisp, self[i], i, object);
-            }
-        }
-        return result;
-    }
-}, !properlyBoxesContext(ArrayPrototype.map));
-
-// ES5 15.4.4.20
-// http://es5.github.com/#x15.4.4.20
-// https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/filter
-defineProperties(ArrayPrototype, {
-    filter: function filter(fun /*, thisp */) {
-        var object = ES.ToObject(this),
-            self = splitString && isString(this) ? this.split('') : object,
-            length = self.length >>> 0,
-            result = [],
-            value,
-            thisp = arguments[1];
-
-        // If no callback function or if callback is not a callable function
-        if (!isFunction(fun)) {
-            throw new TypeError(fun + ' is not a function');
-        }
-
-        for (var i = 0; i < length; i++) {
-            if (i in self) {
-                value = self[i];
-                if (fun.call(thisp, value, i, object)) {
-                    result.push(value);
-                }
-            }
-        }
-        return result;
-    }
-}, !properlyBoxesContext(ArrayPrototype.filter));
-
-// ES5 15.4.4.16
-// http://es5.github.com/#x15.4.4.16
-// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/every
-defineProperties(ArrayPrototype, {
-    every: function every(fun /*, thisp */) {
-        var object = ES.ToObject(this),
-            self = splitString && isString(this) ? this.split('') : object,
-            length = self.length >>> 0,
-            thisp = arguments[1];
-
-        // If no callback function or if callback is not a callable function
-        if (!isFunction(fun)) {
-            throw new TypeError(fun + ' is not a function');
-        }
-
-        for (var i = 0; i < length; i++) {
-            if (i in self && !fun.call(thisp, self[i], i, object)) {
-                return false;
-            }
-        }
-        return true;
-    }
-}, !properlyBoxesContext(ArrayPrototype.every));
-
-// ES5 15.4.4.17
-// http://es5.github.com/#x15.4.4.17
-// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/some
-defineProperties(ArrayPrototype, {
-    some: function some(fun /*, thisp */) {
-        var object = ES.ToObject(this),
-            self = splitString && isString(this) ? this.split('') : object,
-            length = self.length >>> 0,
-            thisp = arguments[1];
-
-        // If no callback function or if callback is not a callable function
-        if (!isFunction(fun)) {
-            throw new TypeError(fun + ' is not a function');
-        }
-
-        for (var i = 0; i < length; i++) {
-            if (i in self && fun.call(thisp, self[i], i, object)) {
-                return true;
-            }
-        }
-        return false;
-    }
-}, !properlyBoxesContext(ArrayPrototype.some));
-
-// ES5 15.4.4.21
-// http://es5.github.com/#x15.4.4.21
-// https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduce
-var reduceCoercesToObject = false;
-if (ArrayPrototype.reduce) {
-    reduceCoercesToObject = typeof ArrayPrototype.reduce.call('es5', function (_, __, ___, list) { return list; }) === 'object';
-}
-defineProperties(ArrayPrototype, {
-    reduce: function reduce(fun /*, initial*/) {
-        var object = ES.ToObject(this),
-            self = splitString && isString(this) ? this.split('') : object,
-            length = self.length >>> 0;
-
-        // If no callback function or if callback is not a callable function
-        if (!isFunction(fun)) {
-            throw new TypeError(fun + ' is not a function');
-        }
-
-        // no value to return if no initial value and an empty array
-        if (!length && arguments.length === 1) {
-            throw new TypeError('reduce of empty array with no initial value');
-        }
-
-        var i = 0;
-        var result;
-        if (arguments.length >= 2) {
-            result = arguments[1];
-        } else {
-            do {
-                if (i in self) {
-                    result = self[i++];
-                    break;
-                }
-
-                // if array contains no values, no initial value to return
-                if (++i >= length) {
-                    throw new TypeError('reduce of empty array with no initial value');
-                }
-            } while (true);
-        }
-
-        for (; i < length; i++) {
-            if (i in self) {
-                result = fun.call(void 0, result, self[i], i, object);
-            }
-        }
-
-        return result;
-    }
-}, !reduceCoercesToObject);
-
-// ES5 15.4.4.22
-// http://es5.github.com/#x15.4.4.22
-// https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Objects/Array/reduceRight
-var reduceRightCoercesToObject = false;
-if (ArrayPrototype.reduceRight) {
-    reduceRightCoercesToObject = typeof ArrayPrototype.reduceRight.call('es5', function (_, __, ___, list) { return list; }) === 'object';
-}
-defineProperties(ArrayPrototype, {
-    reduceRight: function reduceRight(fun /*, initial*/) {
-        var object = ES.ToObject(this),
-            self = splitString && isString(this) ? this.split('') : object,
-            length = self.length >>> 0;
-
-        // If no callback function or if callback is not a callable function
-        if (!isFunction(fun)) {
-            throw new TypeError(fun + ' is not a function');
-        }
-
-        // no value to return if no initial value, empty array
-        if (!length && arguments.length === 1) {
-            throw new TypeError('reduceRight of empty array with no initial value');
-        }
-
-        var result, i = length - 1;
-        if (arguments.length >= 2) {
-            result = arguments[1];
-        } else {
-            do {
-                if (i in self) {
-                    result = self[i--];
-                    break;
-                }
-
-                // if array contains no values, no initial value to return
-                if (--i < 0) {
-                    throw new TypeError('reduceRight of empty array with no initial value');
-                }
-            } while (true);
-        }
-
-        if (i < 0) {
-            return result;
-        }
-
-        do {
-            if (i in self) {
-                result = fun.call(void 0, result, self[i], i, object);
-            }
-        } while (i--);
-
-        return result;
-    }
-}, !reduceRightCoercesToObject);
-
-// ES5 15.4.4.14
-// http://es5.github.com/#x15.4.4.14
-// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/indexOf
-var hasFirefox2IndexOfBug = Array.prototype.indexOf && [0, 1].indexOf(1, 2) !== -1;
-defineProperties(ArrayPrototype, {
-    indexOf: function indexOf(sought /*, fromIndex */) {
-        var self = splitString && isString(this) ? this.split('') : ES.ToObject(this),
-            length = self.length >>> 0;
-
-        if (!length) {
-            return -1;
-        }
-
-        var i = 0;
-        if (arguments.length > 1) {
-            i = toInteger(arguments[1]);
-        }
-
-        // handle negative indices
-        i = i >= 0 ? i : Math.max(0, length + i);
-        for (; i < length; i++) {
-            if (i in self && self[i] === sought) {
-                return i;
-            }
-        }
-        return -1;
-    }
-}, hasFirefox2IndexOfBug);
-
-// ES5 15.4.4.15
-// http://es5.github.com/#x15.4.4.15
-// https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/lastIndexOf
-var hasFirefox2LastIndexOfBug = Array.prototype.lastIndexOf && [0, 1].lastIndexOf(0, -3) !== -1;
-defineProperties(ArrayPrototype, {
-    lastIndexOf: function lastIndexOf(sought /*, fromIndex */) {
-        var self = splitString && isString(this) ? this.split('') : ES.ToObject(this),
-            length = self.length >>> 0;
-
-        if (!length) {
-            return -1;
-        }
-        var i = length - 1;
-        if (arguments.length > 1) {
-            i = Math.min(i, toInteger(arguments[1]));
-        }
-        // handle negative indices
-        i = i >= 0 ? i : length - Math.abs(i);
-        for (; i >= 0; i--) {
-            if (i in self && sought === self[i]) {
-                return i;
-            }
-        }
-        return -1;
-    }
-}, hasFirefox2LastIndexOfBug);
-
-//
-// Object
-// ======
-//
-
-// ES5 15.2.3.14
-// http://es5.github.com/#x15.2.3.14
-
-// http://whattheheadsaid.com/2010/10/a-safer-object-keys-compatibility-implementation
-var hasDontEnumBug = !({'toString': null}).propertyIsEnumerable('toString'),
-    hasProtoEnumBug = function () {}.propertyIsEnumerable('prototype'),
-    dontEnums = [
-        'toString',
-        'toLocaleString',
-        'valueOf',
-        'hasOwnProperty',
-        'isPrototypeOf',
-        'propertyIsEnumerable',
-        'constructor'
-    ],
-    dontEnumsLength = dontEnums.length;
-
-defineProperties(Object, {
-    keys: function keys(object) {
-        var isFn = isFunction(object),
-            isArgs = isArguments(object),
-            isObject = object !== null && typeof object === 'object',
-            isStr = isObject && isString(object);
-
-        if (!isObject && !isFn && !isArgs) {
-            throw new TypeError('Object.keys called on a non-object');
-        }
-
-        var theKeys = [];
-        var skipProto = hasProtoEnumBug && isFn;
-        if (isStr || isArgs) {
-            for (var i = 0; i < object.length; ++i) {
-                theKeys.push(String(i));
-            }
-        } else {
-            for (var name in object) {
-                if (!(skipProto && name === 'prototype') && owns(object, name)) {
-                    theKeys.push(String(name));
-                }
-            }
-        }
-
-        if (hasDontEnumBug) {
-            var ctor = object.constructor,
-                skipConstructor = ctor && ctor.prototype === object;
-            for (var j = 0; j < dontEnumsLength; j++) {
-                var dontEnum = dontEnums[j];
-                if (!(skipConstructor && dontEnum === 'constructor') && owns(object, dontEnum)) {
-                    theKeys.push(dontEnum);
-                }
-            }
-        }
-        return theKeys;
-    }
-});
-
-var keysWorksWithArguments = Object.keys && (function () {
-    // Safari 5.0 bug
-    return Object.keys(arguments).length === 2;
-}(1, 2));
-var originalKeys = Object.keys;
-defineProperties(Object, {
-    keys: function keys(object) {
-        if (isArguments(object)) {
-            return originalKeys(ArrayPrototype.slice.call(object));
-        } else {
-            return originalKeys(object);
-        }
-    }
-}, !keysWorksWithArguments);
-
-//
-// Date
-// ====
-//
-
-// ES5 15.9.5.43
-// http://es5.github.com/#x15.9.5.43
-// This function returns a String value represent the instance in time
-// represented by this Date object. The format of the String is the Date Time
-// string format defined in 15.9.1.15. All fields are present in the String.
-// The time zone is always UTC, denoted by the suffix Z. If the time value of
-// this object is not a finite Number a RangeError exception is thrown.
-var negativeDate = -62198755200000;
-var negativeYearString = '-000001';
-var hasNegativeDateBug = Date.prototype.toISOString && new Date(negativeDate).toISOString().indexOf(negativeYearString) === -1;
-
-defineProperties(Date.prototype, {
-    toISOString: function toISOString() {
-        var result, length, value, year, month;
-        if (!isFinite(this)) {
-            throw new RangeError('Date.prototype.toISOString called on non-finite value.');
-        }
-
-        year = this.getUTCFullYear();
-
-        month = this.getUTCMonth();
-        // see https://github.com/es-shims/es5-shim/issues/111
-        year += Math.floor(month / 12);
-        month = (month % 12 + 12) % 12;
-
-        // the date time string format is specified in 15.9.1.15.
-        result = [month + 1, this.getUTCDate(), this.getUTCHours(), this.getUTCMinutes(), this.getUTCSeconds()];
-        year = (
-            (year < 0 ? '-' : (year > 9999 ? '+' : '')) +
-            ('00000' + Math.abs(year)).slice(0 <= year && year <= 9999 ? -4 : -6)
-        );
-
-        length = result.length;
-        while (length--) {
-            value = result[length];
-            // pad months, days, hours, minutes, and seconds to have two
-            // digits.
-            if (value < 10) {
-                result[length] = '0' + value;
-            }
-        }
-        // pad milliseconds to have three digits.
-        return (
-            year + '-' + result.slice(0, 2).join('-') +
-            'T' + result.slice(2).join(':') + '.' +
-            ('000' + this.getUTCMilliseconds()).slice(-3) + 'Z'
-        );
-    }
-}, hasNegativeDateBug);
-
-
-// ES5 15.9.5.44
-// http://es5.github.com/#x15.9.5.44
-// This function provides a String representation of a Date object for use by
-// JSON.stringify (15.12.3).
-var dateToJSONIsSupported = false;
-try {
-    dateToJSONIsSupported = (
-        Date.prototype.toJSON &&
-        new Date(NaN).toJSON() === null &&
-        new Date(negativeDate).toJSON().indexOf(negativeYearString) !== -1 &&
-        Date.prototype.toJSON.call({ // generic
-            toISOString: function () {
-                return true;
-            }
-        })
-    );
-} catch (e) {
-}
-if (!dateToJSONIsSupported) {
-    Date.prototype.toJSON = function toJSON(key) {
-        // When the toJSON method is called with argument key, the following
-        // steps are taken:
-
-        // 1.  Let O be the result of calling ToObject, giving it the this
-        // value as its argument.
-        // 2. Let tv be toPrimitive(O, hint Number).
-        var o = Object(this),
-            tv = toPrimitive(o),
-            toISO;
-        // 3. If tv is a Number and is not finite, return null.
-        if (typeof tv === 'number' && !isFinite(tv)) {
-            return null;
-        }
-        // 4. Let toISO be the result of calling the [[Get]] internal method of
-        // O with argument "toISOString".
-        toISO = o.toISOString;
-        // 5. If IsCallable(toISO) is false, throw a TypeError exception.
-        if (typeof toISO !== 'function') {
-            throw new TypeError('toISOString property is not callable');
-        }
-        // 6. Return the result of calling the [[Call]] internal method of
-        //  toISO with O as the this value and an empty argument list.
-        return toISO.call(o);
-
-        // NOTE 1 The argument is ignored.
-
-        // NOTE 2 The toJSON function is intentionally generic; it does not
-        // require that its this value be a Date object. Therefore, it can be
-        // transferred to other kinds of objects for use as a method. However,
-        // it does require that any such object have a toISOString method. An
-        // object is free to use the argument key to filter its
-        // stringification.
-    };
-}
-
-// ES5 15.9.4.2
-// http://es5.github.com/#x15.9.4.2
-// based on work shared by Daniel Friesen (dantman)
-// http://gist.github.com/303249
-var supportsExtendedYears = Date.parse('+033658-09-27T01:46:40.000Z') === 1e15;
-var acceptsInvalidDates = !isNaN(Date.parse('2012-04-04T24:00:00.500Z')) || !isNaN(Date.parse('2012-11-31T23:59:59.000Z'));
-var doesNotParseY2KNewYear = isNaN(Date.parse('2000-01-01T00:00:00.000Z'));
-if (!Date.parse || doesNotParseY2KNewYear || acceptsInvalidDates || !supportsExtendedYears) {
-    // XXX global assignment won't work in embeddings that use
-    // an alternate object for the context.
-    /*global Date: true */
-    Date = (function (NativeDate) {
-
-        // Date.length === 7
-        function Date(Y, M, D, h, m, s, ms) {
-            var length = arguments.length;
-            if (this instanceof NativeDate) {
-                var date = length === 1 && String(Y) === Y ? // isString(Y)
-                    // We explicitly pass it through parse:
-                    new NativeDate(Date.parse(Y)) :
-                    // We have to manually make calls depending on argument
-                    // length here
-                    length >= 7 ? new NativeDate(Y, M, D, h, m, s, ms) :
-                    length >= 6 ? new NativeDate(Y, M, D, h, m, s) :
-                    length >= 5 ? new NativeDate(Y, M, D, h, m) :
-                    length >= 4 ? new NativeDate(Y, M, D, h) :
-                    length >= 3 ? new NativeDate(Y, M, D) :
-                    length >= 2 ? new NativeDate(Y, M) :
-                    length >= 1 ? new NativeDate(Y) :
-                                  new NativeDate();
-                // Prevent mixups with unfixed Date object
-                date.constructor = Date;
-                return date;
-            }
-            return NativeDate.apply(this, arguments);
-        }
-
-        // 15.9.1.15 Date Time String Format.
-        var isoDateExpression = new RegExp('^' +
-            '(\\d{4}|[+-]\\d{6})' + // four-digit year capture or sign +
-                                      // 6-digit extended year
-            '(?:-(\\d{2})' + // optional month capture
-            '(?:-(\\d{2})' + // optional day capture
-            '(?:' + // capture hours:minutes:seconds.milliseconds
-                'T(\\d{2})' + // hours capture
-                ':(\\d{2})' + // minutes capture
-                '(?:' + // optional :seconds.milliseconds
-                    ':(\\d{2})' + // seconds capture
-                    '(?:(\\.\\d{1,}))?' + // milliseconds capture
-                ')?' +
-            '(' + // capture UTC offset component
-                'Z|' + // UTC capture
-                '(?:' + // offset specifier +/-hours:minutes
-                    '([-+])' + // sign capture
-                    '(\\d{2})' + // hours offset capture
-                    ':(\\d{2})' + // minutes offset capture
-                ')' +
-            ')?)?)?)?' +
-        '$');
-
-        var months = [
-            0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365
-        ];
-
-        function dayFromMonth(year, month) {
-            var t = month > 1 ? 1 : 0;
-            return (
-                months[month] +
-                Math.floor((year - 1969 + t) / 4) -
-                Math.floor((year - 1901 + t) / 100) +
-                Math.floor((year - 1601 + t) / 400) +
-                365 * (year - 1970)
-            );
-        }
-
-        function toUTC(t) {
-            return Number(new NativeDate(1970, 0, 1, 0, 0, 0, t));
-        }
-
-        // Copy any custom methods a 3rd party library may have added
-        for (var key in NativeDate) {
-            Date[key] = NativeDate[key];
-        }
-
-        // Copy "native" methods explicitly; they may be non-enumerable
-        Date.now = NativeDate.now;
-        Date.UTC = NativeDate.UTC;
-        Date.prototype = NativeDate.prototype;
-        Date.prototype.constructor = Date;
-
-        // Upgrade Date.parse to handle simplified ISO 8601 strings
-        Date.parse = function parse(string) {
-            var match = isoDateExpression.exec(string);
-            if (match) {
-                // parse months, days, hours, minutes, seconds, and milliseconds
-                // provide default values if necessary
-                // parse the UTC offset component
-                var year = Number(match[1]),
-                    month = Number(match[2] || 1) - 1,
-                    day = Number(match[3] || 1) - 1,
-                    hour = Number(match[4] || 0),
-                    minute = Number(match[5] || 0),
-                    second = Number(match[6] || 0),
-                    millisecond = Math.floor(Number(match[7] || 0) * 1000),
-                    // When time zone is missed, local offset should be used
-                    // (ES 5.1 bug)
-                    // see https://bugs.ecmascript.org/show_bug.cgi?id=112
-                    isLocalTime = Boolean(match[4] && !match[8]),
-                    signOffset = match[9] === '-' ? 1 : -1,
-                    hourOffset = Number(match[10] || 0),
-                    minuteOffset = Number(match[11] || 0),
-                    result;
-                if (
-                    hour < (
-                        minute > 0 || second > 0 || millisecond > 0 ?
-                        24 : 25
-                    ) &&
-                    minute < 60 && second < 60 && millisecond < 1000 &&
-                    month > -1 && month < 12 && hourOffset < 24 &&
-                    minuteOffset < 60 && // detect invalid offsets
-                    day > -1 &&
-                    day < (
-                        dayFromMonth(year, month + 1) -
-                        dayFromMonth(year, month)
-                    )
-                ) {
-                    result = (
-                        (dayFromMonth(year, month) + day) * 24 +
-                        hour +
-                        hourOffset * signOffset
-                    ) * 60;
-                    result = (
-                        (result + minute + minuteOffset * signOffset) * 60 +
-                        second
-                    ) * 1000 + millisecond;
-                    if (isLocalTime) {
-                        result = toUTC(result);
-                    }
-                    if (-8.64e15 <= result && result <= 8.64e15) {
-                        return result;
-                    }
-                }
-                return NaN;
-            }
-            return NativeDate.parse.apply(this, arguments);
-        };
-
-        return Date;
-    }(Date));
-    /*global Date: false */
-}
-
-// ES5 15.9.4.4
-// http://es5.github.com/#x15.9.4.4
-if (!Date.now) {
-    Date.now = function now() {
-        return new Date().getTime();
-    };
-}
-
-
-//
-// Number
-// ======
-//
-
-// ES5.1 15.7.4.5
-// http://es5.github.com/#x15.7.4.5
-var hasToFixedBugs = NumberPrototype.toFixed && (
-  (0.00008).toFixed(3) !== '0.000' ||
-  (0.9).toFixed(0) !== '1' ||
-  (1.255).toFixed(2) !== '1.25' ||
-  (1000000000000000128).toFixed(0) !== '1000000000000000128'
-);
-
-var toFixedHelpers = {
-  base: 1e7,
-  size: 6,
-  data: [0, 0, 0, 0, 0, 0],
-  multiply: function multiply(n, c) {
-      var i = -1;
-      while (++i < toFixedHelpers.size) {
-          c += n * toFixedHelpers.data[i];
-          toFixedHelpers.data[i] = c % toFixedHelpers.base;
-          c = Math.floor(c / toFixedHelpers.base);
-      }
-  },
-  divide: function divide(n) {
-      var i = toFixedHelpers.size, c = 0;
-      while (--i >= 0) {
-          c += toFixedHelpers.data[i];
-          toFixedHelpers.data[i] = Math.floor(c / n);
-          c = (c % n) * toFixedHelpers.base;
-      }
-  },
-  numToString: function numToString() {
-      var i = toFixedHelpers.size;
-      var s = '';
-      while (--i >= 0) {
-          if (s !== '' || i === 0 || toFixedHelpers.data[i] !== 0) {
-              var t = String(toFixedHelpers.data[i]);
-              if (s === '') {
-                  s = t;
-              } else {
-                  s += '0000000'.slice(0, 7 - t.length) + t;
-              }
-          }
-      }
-      return s;
-  },
-  pow: function pow(x, n, acc) {
-      return (n === 0 ? acc : (n % 2 === 1 ? pow(x, n - 1, acc * x) : pow(x * x, n / 2, acc)));
-  },
-  log: function log(x) {
-      var n = 0;
-      while (x >= 4096) {
-          n += 12;
-          x /= 4096;
-      }
-      while (x >= 2) {
-          n += 1;
-          x /= 2;
-      }
-      return n;
-  }
-};
-
-defineProperties(NumberPrototype, {
-    toFixed: function toFixed(fractionDigits) {
-        var f, x, s, m, e, z, j, k;
-
-        // Test for NaN and round fractionDigits down
-        f = Number(fractionDigits);
-        f = f !== f ? 0 : Math.floor(f);
-
-        if (f < 0 || f > 20) {
-            throw new RangeError('Number.toFixed called with invalid number of decimals');
-        }
-
-        x = Number(this);
-
-        // Test for NaN
-        if (x !== x) {
-            return 'NaN';
-        }
-
-        // If it is too big or small, return the string value of the number
-        if (x <= -1e21 || x >= 1e21) {
-            return String(x);
-        }
-
-        s = '';
-
-        if (x < 0) {
-            s = '-';
-            x = -x;
-        }
-
-        m = '0';
-
-        if (x > 1e-21) {
-            // 1e-21 < x < 1e21
-            // -70 < log2(x) < 70
-            e = toFixedHelpers.log(x * toFixedHelpers.pow(2, 69, 1)) - 69;
-            z = (e < 0 ? x * toFixedHelpers.pow(2, -e, 1) : x / toFixedHelpers.pow(2, e, 1));
-            z *= 0x10000000000000; // Math.pow(2, 52);
-            e = 52 - e;
-
-            // -18 < e < 122
-            // x = z / 2 ^ e
-            if (e > 0) {
-                toFixedHelpers.multiply(0, z);
-                j = f;
-
-                while (j >= 7) {
-                    toFixedHelpers.multiply(1e7, 0);
-                    j -= 7;
-                }
-
-                toFixedHelpers.multiply(toFixedHelpers.pow(10, j, 1), 0);
-                j = e - 1;
-
-                while (j >= 23) {
-                    toFixedHelpers.divide(1 << 23);
-                    j -= 23;
-                }
-
-                toFixedHelpers.divide(1 << j);
-                toFixedHelpers.multiply(1, 1);
-                toFixedHelpers.divide(2);
-                m = toFixedHelpers.numToString();
-            } else {
-                toFixedHelpers.multiply(0, z);
-                toFixedHelpers.multiply(1 << (-e), 0);
-                m = toFixedHelpers.numToString() + '0.00000000000000000000'.slice(2, 2 + f);
-            }
-        }
-
-        if (f > 0) {
-            k = m.length;
-
-            if (k <= f) {
-                m = s + '0.0000000000000000000'.slice(0, f - k + 2) + m;
-            } else {
-                m = s + m.slice(0, k - f) + '.' + m.slice(k - f);
-            }
-        } else {
-            m = s + m;
-        }
-
-        return m;
-    }
-}, hasToFixedBugs);
-
-
-//
-// String
-// ======
-//
-
-// ES5 15.5.4.14
-// http://es5.github.com/#x15.5.4.14
-
-// [bugfix, IE lt 9, firefox 4, Konqueror, Opera, obscure browsers]
-// Many browsers do not split properly with regular expressions or they
-// do not perform the split correctly under obscure conditions.
-// See http://blog.stevenlevithan.com/archives/cross-browser-split
-// I've tested in many browsers and this seems to cover the deviant ones:
-//    'ab'.split(/(?:ab)*/) should be ["", ""], not [""]
-//    '.'.split(/(.?)(.?)/) should be ["", ".", "", ""], not ["", ""]
-//    'tesst'.split(/(s)*/) should be ["t", undefined, "e", "s", "t"], not
-//       [undefined, "t", undefined, "e", ...]
-//    ''.split(/.?/) should be [], not [""]
-//    '.'.split(/()()/) should be ["."], not ["", "", "."]
-
-var string_split = StringPrototype.split;
-if (
-    'ab'.split(/(?:ab)*/).length !== 2 ||
-    '.'.split(/(.?)(.?)/).length !== 4 ||
-    'tesst'.split(/(s)*/)[1] === 't' ||
-    'test'.split(/(?:)/, -1).length !== 4 ||
-    ''.split(/.?/).length ||
-    '.'.split(/()()/).length > 1
-) {
-    (function () {
-        var compliantExecNpcg = typeof (/()??/).exec('')[1] === 'undefined'; // NPCG: nonparticipating capturing group
-
-        StringPrototype.split = function (separator, limit) {
-            var string = this;
-            if (typeof separator === 'undefined' && limit === 0) {
-                return [];
-            }
-
-            // If `separator` is not a regex, use native split
-            if (to_string.call(separator) !== '[object RegExp]') {
-                return string_split.call(this, separator, limit);
-            }
-
-            var output = [],
-                flags = (separator.ignoreCase ? 'i' : '') +
-                        (separator.multiline ? 'm' : '') +
-                        (separator.extended ? 'x' : '') + // Proposed for ES6
-                        (separator.sticky ? 'y' : ''), // Firefox 3+
-                lastLastIndex = 0,
-                // Make `global` and avoid `lastIndex` issues by working with a copy
-                separator2, match, lastIndex, lastLength;
-            separator = new RegExp(separator.source, flags + 'g');
-            string += ''; // Type-convert
-            if (!compliantExecNpcg) {
-                // Doesn't need flags gy, but they don't hurt
-                separator2 = new RegExp('^' + separator.source + '$(?!\\s)', flags);
-            }
-            /* Values for `limit`, per the spec:
-             * If undefined: 4294967295 // Math.pow(2, 32) - 1
-             * If 0, Infinity, or NaN: 0
-             * If positive number: limit = Math.floor(limit); if (limit > 4294967295) limit -= 4294967296;
-             * If negative number: 4294967296 - Math.floor(Math.abs(limit))
-             * If other: Type-convert, then use the above rules
-             */
-            limit = typeof limit === 'undefined' ?
-                -1 >>> 0 : // Math.pow(2, 32) - 1
-                ES.ToUint32(limit);
-            while (match = separator.exec(string)) {
-                // `separator.lastIndex` is not reliable cross-browser
-                lastIndex = match.index + match[0].length;
-                if (lastIndex > lastLastIndex) {
-                    output.push(string.slice(lastLastIndex, match.index));
-                    // Fix browsers whose `exec` methods don't consistently return `undefined` for
-                    // nonparticipating capturing groups
-                    if (!compliantExecNpcg && match.length > 1) {
-                        match[0].replace(separator2, function () {
-                            for (var i = 1; i < arguments.length - 2; i++) {
-                                if (typeof arguments[i] === 'undefined') {
-                                    match[i] = void 0;
-                                }
-                            }
-                        });
-                    }
-                    if (match.length > 1 && match.index < string.length) {
-                        array_push.apply(output, match.slice(1));
-                    }
-                    lastLength = match[0].length;
-                    lastLastIndex = lastIndex;
-                    if (output.length >= limit) {
-                        break;
-                    }
-                }
-                if (separator.lastIndex === match.index) {
-                    separator.lastIndex++; // Avoid an infinite loop
-                }
-            }
-            if (lastLastIndex === string.length) {
-                if (lastLength || !separator.test('')) {
-                    output.push('');
-                }
-            } else {
-                output.push(string.slice(lastLastIndex));
-            }
-            return output.length > limit ? output.slice(0, limit) : output;
-        };
-    }());
-
-// [bugfix, chrome]
-// If separator is undefined, then the result array contains just one String,
-// which is the this value (converted to a String). If limit is not undefined,
-// then the output array is truncated so that it contains no more than limit
-// elements.
-// "0".split(undefined, 0) -> []
-} else if ('0'.split(void 0, 0).length) {
-    StringPrototype.split = function split(separator, limit) {
-        if (typeof separator === 'undefined' && limit === 0) { return []; }
-        return string_split.call(this, separator, limit);
-    };
-}
-
-var str_replace = StringPrototype.replace;
-var replaceReportsGroupsCorrectly = (function () {
-    var groups = [];
-    'x'.replace(/x(.)?/g, function (match, group) {
-        groups.push(group);
-    });
-    return groups.length === 1 && typeof groups[0] === 'undefined';
-}());
-
-if (!replaceReportsGroupsCorrectly) {
-    StringPrototype.replace = function replace(searchValue, replaceValue) {
-        var isFn = isFunction(replaceValue);
-        var hasCapturingGroups = isRegex(searchValue) && (/\)[*?]/).test(searchValue.source);
-        if (!isFn || !hasCapturingGroups) {
-            return str_replace.call(this, searchValue, replaceValue);
-        } else {
-            var wrappedReplaceValue = function (match) {
-                var length = arguments.length;
-                var originalLastIndex = searchValue.lastIndex;
-                searchValue.lastIndex = 0;
-                var args = searchValue.exec(match) || [];
-                searchValue.lastIndex = originalLastIndex;
-                args.push(arguments[length - 2], arguments[length - 1]);
-                return replaceValue.apply(this, args);
-            };
-            return str_replace.call(this, searchValue, wrappedReplaceValue);
-        }
-    };
-}
-
-// ECMA-262, 3rd B.2.3
-// Not an ECMAScript standard, although ECMAScript 3rd Edition has a
-// non-normative section suggesting uniform semantics and it should be
-// normalized across all browsers
-// [bugfix, IE lt 9] IE < 9 substr() with negative value not working in IE
-var string_substr = StringPrototype.substr;
-var hasNegativeSubstrBug = ''.substr && '0b'.substr(-1) !== 'b';
-defineProperties(StringPrototype, {
-    substr: function substr(start, length) {
-        return string_substr.call(
-            this,
-            start < 0 ? ((start = this.length + start) < 0 ? 0 : start) : start,
-            length
-        );
-    }
-}, hasNegativeSubstrBug);
-
-// ES5 15.5.4.20
-// whitespace from: http://es5.github.io/#x15.5.4.20
-var ws = '\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003' +
-    '\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028' +
-    '\u2029\uFEFF';
-var zeroWidth = '\u200b';
-var wsRegexChars = '[' + ws + ']';
-var trimBeginRegexp = new RegExp('^' + wsRegexChars + wsRegexChars + '*');
-var trimEndRegexp = new RegExp(wsRegexChars + wsRegexChars + '*$');
-var hasTrimWhitespaceBug = StringPrototype.trim && (ws.trim() || !zeroWidth.trim());
-defineProperties(StringPrototype, {
-    // http://blog.stevenlevithan.com/archives/faster-trim-javascript
-    // http://perfectionkills.com/whitespace-deviations/
-    trim: function trim() {
-        if (typeof this === 'undefined' || this === null) {
-            throw new TypeError("can't convert " + this + ' to object');
-        }
-        return String(this).replace(trimBeginRegexp, '').replace(trimEndRegexp, '');
-    }
-}, hasTrimWhitespaceBug);
-
-// ES-5 15.1.2.2
-if (parseInt(ws + '08') !== 8 || parseInt(ws + '0x16') !== 22) {
-    /*global parseInt: true */
-    parseInt = (function (origParseInt) {
-        var hexRegex = /^0[xX]/;
-        return function parseIntES5(str, radix) {
-            str = String(str).trim();
-            if (!Number(radix)) {
-                radix = hexRegex.test(str) ? 16 : 10;
-            }
-            return origParseInt(str, radix);
-        };
-    }(parseInt));
-}
-
-}));
-
-;define("sl-ember-modelize/mixins/modelize", 
-  ["ember","exports"],
-  function(__dependency1__, __exports__) {
-    "use strict";
-    var Ember = __dependency1__["default"];
-
-    /**
-     * @module mixins
-     * @class  modelize
-     */
-    __exports__["default"] = Ember.Mixin.create({
+    exports['default'] = Ember['default'].Mixin.create({
 
         // -------------------------------------------------------------------------
         // Dependencies
@@ -66309,13 +64908,13 @@ if (parseInt(ws + '08') !== 8 || parseInt(ws + '0x16') !== 22) {
                         var classProperty = this.container.lookupFactory( normalizedKey );
 
                         if ( 'function' === typeof classProperty ) {
-                            if ( Ember.isArray( response[ property ] ) ) {
+                            if ( Ember['default'].isArray( response[ property ] ) ) {
                                 response[ property ] = response[ property ].map( mapArrayToClass );
                             } else {
                                 response[ property ] = classProperty.create( response[ property ] );
                             }
-                        } else if ( response[ property ] && !Ember.isArray( response[ property ] ) && !(response[ property ] instanceof Ember.Object) ) {
-                            response[ property ] = Ember.Object.create( response[ property ] );
+                        } else if ( response[ property ] && !Ember['default'].isArray( response[ property ] ) && !(response[ property ] instanceof Ember['default'].Object) ) {
+                            response[ property ] = Ember['default'].Object.create( response[ property ] );
                         }
 
                         this.modelize.call( this, response[ property ] );
@@ -66326,25 +64925,20 @@ if (parseInt(ws + '08') !== 8 || parseInt(ws + '0x16') !== 22) {
             return response;
         }
     });
-  });
-define("sl-ember-modelize", ["sl-ember-modelize/index","exports"], function(__index__, __exports__) {
+
+});
+define("sl-ember-store", ["sl-ember-store/index","exports"], function(__index__, __exports__) {
   "use strict";
   Object.keys(__index__).forEach(function(key){
     __exports__[key] = __index__[key];
   });
 });
 
-define("sl-ember-store/adapter", 
-  ["ember","sl-ember-modelize/mixins/modelize","exports"],
-  function(__dependency1__, __dependency2__, __exports__) {
-    "use strict";
-    var Ember = __dependency1__["default"];
-    var ModelizeMixin = __dependency2__["default"];
+define('sl-ember-store/adapter', ['exports', 'ember', 'sl-ember-modelize/mixins/modelize'], function (exports, Ember, ModelizeMixin) {
 
-    /**
-     * @class adapter
-     */
-    __exports__["default"] = Ember.Object.extend( ModelizeMixin, {
+    'use strict';
+
+    exports['default'] = Ember['default'].Object.extend( ModelizeMixin['default'], {
 
         /**
          * Run Pre Query Hooks
@@ -66376,24 +64970,23 @@ define("sl-ember-store/adapter",
          * @returns  {void}
          */
         find: function() {
-            Ember.assert( 'Your model should overwrite adapterType', true );
+            Ember['default'].assert( 'Your model should overwrite adapterType', true );
         }
 
     });
-  });
-define("sl-ember-store/adapters/ajax", 
-  ["ember","sl-ember-store/adapter","ic-ajax","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, __exports__) {
-    "use strict";
-    var Ember = __dependency1__["default"];
-    var Adapter = __dependency2__["default"];
-    var icAjax = __dependency3__;
+
+});
+define('sl-ember-store/adapters/ajax', ['exports', 'ember', 'sl-ember-store/adapter'], function (exports, Ember, Adapter) {
+
+    'use strict';
+
+    var icAjax = require( 'ic-ajax' );
 
     /**
      * @module adapters
      * @class  ajax
      */
-    __exports__["default"] = Adapter.extend({
+    exports['default'] = Adapter['default'].extend({
 
         /**
          * Find record(s)
@@ -66409,28 +65002,29 @@ define("sl-ember-store/adapters/ajax",
         find: function( type, id, options, findOne ) {
             var store = this.get( 'store' ),
                 model = store.modelFor( type ),
+                _self = this,
                 url,
                 results,
                 promise,
                 queryObj;
 
-            Ember.assert( 'Type is required', type && Ember.typeOf(type) === 'string' );
+            Ember['default'].assert( 'Type is required', type && Ember['default'].typeOf(type) === 'string' );
 
             options = options || {};
 
             url = model.getUrlForEndpointAction( options.endpoint, 'get' );
 
-            Ember.assert( 'A url is required to find a model', url );
+            Ember['default'].assert( 'A url is required to find a model', url );
 
-            if ( ! Ember.isNone( id ) ) {
+            if ( ! Ember['default'].isNone( id ) ) {
                 options.data    = options.data || {};
                 options.data.id = parseInt( id, 10 );
             }
 
             //set up the results, either an object or an array proxy w/ promise mixin
             results = ( ( options.data && options.data.id  ) || findOne ) ?
-                Ember.ObjectProxy.createWithMixins( Ember.PromiseProxyMixin ) :
-                Ember.ArrayProxy.createWithMixins( Ember.PromiseProxyMixin );
+                Ember['default'].ObjectProxy.createWithMixins( Ember['default'].PromiseProxyMixin ) :
+                Ember['default'].ArrayProxy.createWithMixins( Ember['default'].PromiseProxyMixin );
 
             queryObj = {
                 dataType : 'json',
@@ -66450,26 +65044,21 @@ define("sl-ember-store/adapters/ajax",
                     response = model.callSerializerForEndpointAction( options.endpoint, 'get', response, store );
 
                     // Run the modelize mixin to map keys to models
-                    response = this.modelize( response );
+                    response = _self.modelize( response );
 
-                    if ( results instanceof Ember.ArrayProxy ) {
-                        // Reject if the response if empty
-                        if( !response.length ) {
-                            throw { message: 'No objects found' };
-                        }
-
+                    if ( results instanceof Ember['default'].ArrayProxy ) {
                         tmpResult = [];
-                        Ember.makeArray( response ).forEach( function ( child ) {
+                        Ember['default'].makeArray( response ).forEach( function ( child ) {
                             tmpResult.pushObject( store.createRecord( type, child ) );
                         }, this );
                     } else {
                         tmpResult = store.createRecord( type, response );
                     }
 
-                    this.runPostQueryHooks( tmpResult );
+                    _self.runPostQueryHooks( tmpResult );
 
                     return tmpResult;
-                }.bind( this ), null, 'sl-ember--model.ajaxAdapter:find - then' );
+                }, null, 'sl-ember--model.ajaxAdapter:find - then' );
 
             // Set the promise on the promiseProxy
             results.set( 'promise', promise );
@@ -66492,16 +65081,17 @@ define("sl-ember-store/adapters/ajax",
                 type    : 'DELETE',
                 data    : JSON.stringify({ id: id }),
                 context : this
-            };
+            },
+            _self = this;
 
-            Ember.assert( 'A url is required to delete a model', url );
+            Ember['default'].assert( 'A url is required to delete a model', url );
 
             this.runPreQueryHooks( queryObj );
 
             return icAjax.request( queryObj )
                 .then( function ajaxAdapterDeleteFinally( response ) {
-                    this.runPostQueryHooks( response );
-                }.bind( this ) , 'sl-ember-store.ajaxAdapter:deleteRecord' );
+                    _self.runPostQueryHooks( response );
+                } , 'sl-ember-store.ajaxAdapter:deleteRecord' );
         },
 
         /**
@@ -66520,19 +65110,20 @@ define("sl-ember-store/adapters/ajax",
                     type    : 'POST',
                     data    : JSON.stringify( content ),
                     context : this
-                };
+                },
+                _self = this;
 
-            Ember.assert( 'A url property is required to save a model', url );
+            Ember['default'].assert( 'A url property is required to save a model', url );
 
             this.runPreQueryHooks( queryObj );
 
             promise = icAjax.request( queryObj )
                 .then( function ajaxAdapterSaveResponse( response ) {
-                    var modelized = this.modelize( response );
+                    var modelized = _self.modelize( response );
                     // run the modelize mixin to map keys to models
-                    this.runPostQueryHooks( modelized );
+                    _self.runPostQueryHooks( modelized );
                     return modelized;
-                }.bind( this ), null, 'sl-ember-store:save - then' )
+                }, null, 'sl-ember-store:save - then' )
 
                 .catch( function ajaxAdapterSaveCatch( jqxhr ) {
                     var errorData = {
@@ -66544,24 +65135,18 @@ define("sl-ember-store/adapters/ajax",
 
                     return errorData;
 
-                }.bind( this ), 'sl-ember-store:save - catch' );
+                }, 'sl-ember-store:save - catch' );
 
             return promise;
          }
     });
-  });
-define("sl-ember-store/adapters/localstorage", 
-  ["ember","sl-ember-store/adapter","exports"],
-  function(__dependency1__, __dependency2__, __exports__) {
-    "use strict";
-    var Ember = __dependency1__["default"];
-    var Adapter = __dependency2__["default"];
 
-    /**
-     * @module adapters
-     * @class  localstorage
-     */
-    var LocalStorageAdapter = Adapter.extend({
+});
+define('sl-ember-store/adapters/localstorage', ['exports', 'ember', 'sl-ember-store/adapter'], function (exports, Ember, Adapter) {
+
+    'use strict';
+
+    var LocalStorageAdapter = Adapter['default'].extend({
 
         /**
          * Find record(s)
@@ -66577,28 +65162,29 @@ define("sl-ember-store/adapters/localstorage",
         find: function ( type, id, options, findOne ) {
             var store = this.get( 'store' ),
                 model = store.modelFor( type ),
+                _self = this,
                 url,
                 results,
                 promise,
                 queryObj;
 
-            Ember.assert( 'Type is required', type && Ember.typeOf(type) === 'string' );
+            Ember['default'].assert( 'Type is required', type && Ember['default'].typeOf(type) === 'string' );
 
             options = options || {};
 
             url = model.getUrlForEndpointAction( options.endpoint, 'get' );
 
-            Ember.assert( 'A url is required to find a model', url );
+            Ember['default'].assert( 'A url is required to find a model', url );
 
-            if ( !Ember.isNone( id ) ) {
+            if ( !Ember['default'].isNone( id ) ) {
                 options.data    = options.data || {};
                 options.data.id = parseInt( id, 10 );
             }
 
             // Set up the results, either an object or an array proxy w/ promise mixin)
             results = ( ( options.data && options.data.id  ) || findOne ) ?
-                Ember.ObjectProxy.createWithMixins( Ember.PromiseProxyMixin ) :
-                Ember.ArrayProxy.createWithMixins( Ember.PromiseProxyMixin );
+                Ember['default'].ObjectProxy.createWithMixins( Ember['default'].PromiseProxyMixin ) :
+                Ember['default'].ArrayProxy.createWithMixins( Ember['default'].PromiseProxyMixin );
 
             queryObj = {
                 id: id
@@ -66606,15 +65192,15 @@ define("sl-ember-store/adapters/localstorage",
 
             this.runPreQueryHooks( queryObj );
 
-            promise = new Ember.RSVP.Promise( function( resolve, reject) {
+            promise = new Ember['default'].RSVP.Promise( function( resolve, reject) {
                 var db,
                     records,
                     response,
                     finalResult;
 
-                db = this._getDb();
+                db = _self._getDb();
 
-                records = this._getRecords( db, url );
+                records = _self._getRecords( db, url );
 
                 if ( options.data && options.data.id ) {
                     response = records.findBy( 'id', options.data.id );
@@ -66635,11 +65221,11 @@ define("sl-ember-store/adapters/localstorage",
 
                 response = model.callSerializerForEndpointAction( options.endpoint, 'get', response, store );
 
-                response = this.modelize( response );
+                response = _self.modelize( response );
 
-                if ( results instanceof Ember.ArrayProxy ) {
+                if ( results instanceof Ember['default'].ArrayProxy ) {
                     finalResult = [];
-                    Ember.makeArray( response ).forEach( function ( child ) {
+                    Ember['default'].makeArray( response ).forEach( function ( child ) {
                         finalResult.pushObject( store.createRecord( type, child ) );
                     }, this );
                 } else {
@@ -66648,12 +65234,12 @@ define("sl-ember-store/adapters/localstorage",
 
                 resolve( finalResult );
 
-            }.bind( this ), 'sl-ember-store.localstorageAdapter:find - Promise' )
+            }, 'sl-ember-store.localstorageAdapter:find - Promise' )
 
             .then( function lsAdapterFindThen( response ) {
-                this.runPostQueryHooks( response );
+                _self.runPostQueryHooks( response );
                 return response;
-            }.bind( this ), 'sl-ember-store.localstorageAdapter:find - then' );
+            }, 'sl-ember-store.localstorageAdapter:find - then' );
 
             //set the promise on the promiseProxy
             results.set( 'promise', promise );
@@ -66672,21 +65258,22 @@ define("sl-ember-store/adapters/localstorage",
          * @returns  {Ember.RSVP} Promise
          */
         deleteRecord: function( url, id ) {
-            var promise;
+            var _self = this,
+                promise;
 
-            Ember.assert( 'A url is required to delete a model', url );
+            Ember['default'].assert( 'A url is required to delete a model', url );
 
-            promise = new Ember.RSVP.Promise( function( resolve, reject ) {
+            promise = new Ember['default'].RSVP.Promise( function( resolve, reject ) {
                 var db,
                     records,
                     recordIndex,
                     exception = {};
 
-                db = this._getDb();
+                db = _self._getDb();
 
-                records = this._getRecords( db, url );
+                records = _self._getRecords( db, url );
 
-                recordIndex = this._getRecordIndexById( records, id );
+                recordIndex = _self._getRecordIndexById( records, id );
 
                 if ( recordIndex >= 0 ) {
                     records.splice( recordIndex, 1 );
@@ -66695,18 +65282,18 @@ define("sl-ember-store/adapters/localstorage",
                     reject( { textStatus: 'error', errorThrown: 'Not Found' } );
                 }
 
-                if ( !this._dbWrite( db, exception ) ) {
+                if ( !_self._dbWrite( db, exception ) ) {
                     reject( { textStatus: 'error', errorThrown: exception.msg } );
                 }
 
                 resolve();
 
-            }.bind( this ))
+            })
 
             .then( function lsAdapterDeleteFinally( response ) {
-                this.runPostQueryHooks( response );
+                _self.runPostQueryHooks( response );
                 return response;
-            }.bind( this ) , 'sl-ember-store.localstorageAdapter:deleteRecord - always' );
+            }, 'sl-ember-store.localstorageAdapter:deleteRecord - always' );
 
             return promise;
         },
@@ -66720,21 +65307,22 @@ define("sl-ember-store/adapters/localstorage",
          * @returns  {Ember.RSVP} Promise
          */
         save: function( url, content ) {
-            var promise;
+            var _self = this,
+                promise;
 
-            Ember.assert( 'A url is required to save a model', url );
+            Ember['default'].assert( 'A url is required to save a model', url );
 
-            promise = new Ember.RSVP.Promise( function( resolve, reject ) {
+            promise = new Ember['default'].RSVP.Promise( function( resolve, reject ) {
                 var db,
                     records,
                     recordIndex,
                     exception = {};
 
-                db = this._getDb();
+                db = _self._getDb();
 
-                records = this._getRecords( db, url );
+                records = _self._getRecords( db, url );
 
-                recordIndex = this._getRecordIndexById( records, content.id );
+                recordIndex = _self._getRecordIndexById( records, content.id );
 
                 if ( recordIndex >= 0 ) {
                     records.splice( recordIndex, 1 );
@@ -66742,17 +65330,17 @@ define("sl-ember-store/adapters/localstorage",
 
                 records.push( content );
 
-                if( ! this._dbWrite( db, exception ) ) {
+                if( ! _self._dbWrite( db, exception ) ) {
                     reject( { textStatus: 'error', errorThrown: exception.msg } );
                 }
 
                 resolve( content );
 
-            }.bind( this ))
+            })
             .then( function lsAdapterSaveFinally( response ) {
-                this.runPostQueryHooks( response );
+                _self.runPostQueryHooks( response );
                 return response;
-            }.bind( this ) , 'sl-ember-store.localstorageAdapter:saveRecord - always' );
+            } , 'sl-ember-store.localstorageAdapter:saveRecord - always' );
 
             return promise;
         },
@@ -66877,18 +65465,14 @@ define("sl-ember-store/adapters/localstorage",
         namespace: 'sl-ember-store'
     });
 
-    __exports__["default"] = LocalStorageAdapter;
-  });
-define("sl-ember-store/cache", 
-  ["ember","exports"],
-  function(__dependency1__, __exports__) {
-    "use strict";
-    var Ember = __dependency1__["default"];
+    exports['default'] = LocalStorageAdapter;
 
-    /**
-     * @class cache
-     */
-    __exports__["default"] = Ember.Object.extend({
+});
+define('sl-ember-store/cache', ['exports', 'ember'], function (exports, Ember) {
+
+    'use strict';
+
+    exports['default'] = Ember['default'].Object.extend({
 
         /*
          * The record cache
@@ -66918,8 +65502,8 @@ define("sl-ember-store/cache",
          */
         _setupCache: function() {
             this.setProperties({
-                '_records'  : Ember.Object.create(),
-                '_promises' : Ember.Object.create()
+                '_records'  : Ember['default'].Object.create(),
+                '_promises' : Ember['default'].Object.create()
             });
         }.on( 'init' ),
 
@@ -66990,8 +65574,8 @@ define("sl-ember-store/cache",
                 return false;
             }
 
-            return Ember.ObjectProxy.createWithMixins( Ember.PromiseProxyMixin )
-                .set( 'promise', Ember.RSVP.Promise.resolve( record ) );
+            return Ember['default'].ObjectProxy.createWithMixins( Ember['default'].PromiseProxyMixin )
+                .set( 'promise', Ember['default'].RSVP.Promise.resolve( record ) );
         },
 
         /**
@@ -67018,8 +65602,8 @@ define("sl-ember-store/cache",
                 return false;
             }
 
-            return Ember.ObjectProxy.createWithMixins( Ember.PromiseProxyMixin )
-                .set( 'promise', Ember.RSVP.Promise.resolve( record ) );
+            return Ember['default'].ObjectProxy.createWithMixins( Ember['default'].PromiseProxyMixin )
+                .set( 'promise', Ember['default'].RSVP.Promise.resolve( record ) );
         },
 
         /**
@@ -67045,8 +65629,8 @@ define("sl-ember-store/cache",
                 return false;
             }
 
-            return Ember.ArrayProxy.createWithMixins( Ember.PromiseProxyMixin )
-                .set( 'promise', Ember.RSVP.Promise.resolve( records ) );
+            return Ember['default'].ArrayProxy.createWithMixins( Ember['default'].PromiseProxyMixin )
+                .set( 'promise', Ember['default'].RSVP.Promise.resolve( records ) );
         },
 
         /**
@@ -67088,15 +65672,17 @@ define("sl-ember-store/cache",
          * @returns  {Ember.Object} ObjectProxy or PromiseProxyMixin
          */
         addPromise: function( type, id, promise ) {
+            var _self = this;
+
             this._getPromises( type ).set( 'ids.' + id, promise );
 
             promise.then( function( record ) {
-                this.addRecord( type, record );
-                delete this._getPromises( type ).get( 'ids' )[ id ];
-            }.bind( this ) )
+                _self.addRecord( type, record );
+                delete _self._getPromises( type ).get( 'ids' )[ id ];
+            })
             .catch( function() {
-                delete this._getPromises( type ).get( 'ids' )[ id ];
-            }.bind( this ) );
+                delete _self._getPromises( type ).get( 'ids' )[ id ];
+            });
 
             return promise;
         },
@@ -67110,15 +65696,17 @@ define("sl-ember-store/cache",
          * @returns  {Ember.Array} ArrayProxy or PromiseProxyMixin
          */
         addManyPromise: function( type, promise ) {
+            var _self = this;
+
             this._getPromises( type ).get( 'many' ).addObject( promise );
 
             promise.then( function( records ) {
-                this.addManyRecords( type, records );
-                this._getPromises( type ).get( 'many' ).removeObject( promise );
-            }.bind(this))
+                _self.addManyRecords( type, records );
+                _self._getPromises( type ).get( 'many' ).removeObject( promise );
+            })
             .catch( function() {
-                this._getPromises( type ).get( 'many' ).removeObject( promise );
-            }.bind(this));
+                _self._getPromises( type ).get( 'many' ).removeObject( promise );
+            });
 
             return promise;
         },
@@ -67153,9 +65741,11 @@ define("sl-ember-store/cache",
          * @returns  {void}
          */
         addRecords: function( type, records ) {
+            var _self = this;
+
             records.forEach( function( record ) {
-                this.addRecord( type, record );
-            }.bind( this ) );
+                _self.addRecord( type, record );
+            });
         },
 
         /**
@@ -67199,9 +65789,11 @@ define("sl-ember-store/cache",
          * @returns  {void}
          */
         removeRecords: function( type, records ) {
+            var _self = this;
+
             records.map( function( record ) {
-                this.removeRecord( type, record );
-            }.bind( this ) );
+                _self.removeRecord( type, record );
+            });
         },
 
         /**
@@ -67225,10 +65817,10 @@ define("sl-ember-store/cache",
          * @returns  {void}
          */
         _initializeRecords: function( type ) {
-            this.set( '_records.'+type, Ember.Object.create({
+            this.set( '_records.'+type, Ember['default'].Object.create({
                 all     : false,
                 records : [],
-                ids     : Ember.Object.create()
+                ids     : Ember['default'].Object.create()
             }));
         },
 
@@ -67285,9 +65877,9 @@ define("sl-ember-store/cache",
          * @returns  {void}
          */
         _initializePromises: function( type ) {
-            this.set( '_promises.' + type, Ember.Object.create({
-                many : Ember.ArrayProxy.create( { content: [] } ),
-                ids : Ember.Object.create()
+            this.set( '_promises.' + type, Ember['default'].Object.create({
+                many : Ember['default'].ArrayProxy.create( { content: [] } ),
+                ids : Ember['default'].Object.create()
             }));
         },
 
@@ -67335,7 +65927,7 @@ define("sl-ember-store/cache",
             var promises = this.get( '_promises.' + type + '.many' );
 
             if( promises && promises.get( 'length' ) ){
-                return Ember.RSVP.allSettled( promises.get( 'content' ) ).then(
+                return Ember['default'].RSVP.allSettled( promises.get( 'content' ) ).then(
                     function( results ){
                         var records = [];
                         results.forEach( function( result ){
@@ -67352,15 +65944,13 @@ define("sl-ember-store/cache",
         }
 
     });
-  });
-define("sl-ember-store/debug-adapter", 
-  ["ember","sl-ember-store/model","exports"],
-  function(__dependency1__, __dependency2__, __exports__) {
-    "use strict";
-    var Ember = __dependency1__["default"];
-    var Model = __dependency2__["default"];
 
-    __exports__["default"] = Ember.DataAdapter.extend({
+});
+define('sl-ember-store/debug-adapter', ['exports', 'ember', 'sl-ember-store/model'], function (exports, Ember, Model) {
+
+    'use strict';
+
+    exports['default'] = Ember['default'].DataAdapter.extend({
 
         /**
          * detect if a class is a model
@@ -67368,7 +65958,7 @@ define("sl-ember-store/debug-adapter",
          * @return {boolean}       is Model and ancestor of `klass`
          */
         detect: function(klass) {
-            return klass !== Model && Model.detect(klass);
+            return klass !== Model['default'] && Model['default'].detect(klass);
         },
 
         /**
@@ -67382,7 +65972,7 @@ define("sl-ember-store/debug-adapter",
                 record = this.get( 'store' )._cache._getRecords( type ).records[0];
 
             if( record ){
-                Ember.keys( record.content ).forEach( function( key ){
+                Ember['default'].keys( record.content ).forEach( function( key ){
                     columns.push( { name: key, desc: key });
                 });
             }
@@ -67409,8 +65999,8 @@ define("sl-ember-store/debug-adapter",
             var values = {};
 
             if( record ){
-                Ember.keys( record.content ).forEach( function( key ){
-                    values[ key ] = Ember.get( record, key );
+                Ember['default'].keys( record.content ).forEach( function( key ){
+                    values[ key ] = Ember['default'].get( record, key );
                 });
             }
 
@@ -67424,17 +66014,17 @@ define("sl-ember-store/debug-adapter",
          * @return {Function}               callback when a record is destroyed
          */
         observeRecord: function( record, recordUpdated ){
-            var releaseMethods = Ember.A(),
+            var releaseMethods = Ember['default'].A(),
                 self = this,
-                keysToObserve = Ember.keys( record.content );
+                keysToObserve = Ember['default'].keys( record.content );
 
             keysToObserve.forEach(function(key) {
                 var handler = function() {
                     recordUpdated(self.wrapRecord(record));
                 };
-                Ember.addObserver(record, key, handler);
+                Ember['default'].addObserver(record, key, handler);
                 releaseMethods.push(function() {
-                    Ember.removeObserver(record, key, handler);
+                    Ember['default'].removeObserver(record, key, handler);
                 });
             });
 
@@ -67446,38 +66036,22 @@ define("sl-ember-store/debug-adapter",
         }
 
     });
-  });
-define("sl-ember-store/initializers/sl-ember-store", 
-  ["sl-ember-store/store","sl-ember-store/adapters/ajax","sl-ember-store/adapters/localstorage","sl-ember-store/debug-adapter","exports"],
-  function(__dependency1__, __dependency2__, __dependency3__, __dependency4__, __exports__) {
-    "use strict";
-    var Store = __dependency1__["default"];
-    var AjaxAdapter = __dependency2__["default"];
-    var LocalstorageAdapter = __dependency3__["default"];
-    var DebugAdapter = __dependency4__["default"];
 
-    /**
-     * @module initializers
-     */
+});
+define('sl-ember-store/initializers/sl-ember-store', ['exports', 'sl-ember-store/store', 'sl-ember-store/adapters/ajax', 'sl-ember-store/adapters/localstorage', 'sl-ember-store/debug-adapter'], function (exports, Store, AjaxAdapter, LocalstorageAdapter, DebugAdapter) {
 
-    /*
-     * Register sl-ember-store objects to consuming application
-     *
-     * @function sl-ember-store
-     * @param    {Ember.ContainerView} container
-     * @param    {Ember.Application}   application
-     * @returns  {void}
-     */
-    __exports__["default"] = function( container, application ) {
-        var localstorageAdapter = LocalstorageAdapter.extend();
+    'use strict';
+
+    exports['default'] = function( container, application ) {
+        var localstorageAdapter = LocalstorageAdapter['default'].extend();
 
         localstorageAdapter.reopenClass({
             namespace: container.lookup( 'application:main' ).get( 'modulePrefix' )
         });
 
-        container.register( 'data-adapter:main', DebugAdapter );
-        container.register( 'store:main', Store );
-        container.register( 'adapter:ajax', AjaxAdapter );
+        container.register( 'data-adapter:main', DebugAdapter['default'] );
+        container.register( 'store:main', Store['default'] );
+        container.register( 'adapter:ajax', AjaxAdapter['default'] );
         container.register( 'adapter:localstorage', localstorageAdapter );
 
         application.inject( 'controller', 'store', 'store:main' );
@@ -67485,19 +66059,18 @@ define("sl-ember-store/initializers/sl-ember-store",
         application.inject( 'adapter', 'store', 'store:main' );
         application.inject( 'data-adapter', 'store', 'store:main' );
     }
-  });
-define("sl-ember-store/model", 
-  ["ember","exports"],
-  function(__dependency1__, __exports__) {
-    "use strict";
-    var Ember = __dependency1__["default"];
 
-    var get = Ember.get;
+});
+define('sl-ember-store/model', ['exports', 'ember'], function (exports, Ember) {
+
+    'use strict';
+
+    var get = Ember['default'].get;
 
     /**
      * @class model
      */
-    var Model =  Ember.ObjectProxy.extend({
+    var Model =  Ember['default'].ObjectProxy.extend({
 
          /**
          * Save the contents via the configured adapter
@@ -67515,13 +66088,13 @@ define("sl-ember-store/model",
             endpoint = this.constructor.getUrlForEndpointAction( options.endpoint, 'post' );
             data = this.get( 'content' );
 
-            Ember.assert( 'Endpoint must be configured on ' + this.toString() + ' before calling save.', endpoint );
+            Ember['default'].assert( 'Endpoint must be configured on ' + this.toString() + ' before calling save.', endpoint );
 
             return this.container.lookup( 'adapter:' + this.constructor.adapter ).save( endpoint, data )
-                .then( function( response ) {
+                .then( Ember['default'].run.bind( this, function( response ) {
                     this.set( 'content', response );
                     return this;
-                }.bind( this ), null, 'sl-ember-store.model:save' );
+                }), null, 'sl-ember-store.model:save' );
         },
 
         /**
@@ -67538,12 +66111,12 @@ define("sl-ember-store/model",
             options = options || {};
             endpoint = this.constructor.getUrlForEndpointAction( options.endpoint, 'delete' );
 
-            Ember.assert( 'Enpoint must be configured on ' + this.toString() + ' before calling deleteRecord.', endpoint );
+            Ember['default'].assert( 'Enpoint must be configured on ' + this.toString() + ' before calling deleteRecord.', endpoint );
 
             return this.container.lookup( 'adapter:'+this.constructor.adapter ).deleteRecord( endpoint, this.get( 'id' ) )
-                .then( function() {
-                    Ember.run( this, 'destroy' );
-                }.bind( this ), null, 'sl-ember-store.model:deleteRecord' );
+                .then( Ember['default'].run.bind( this, function() {
+                    Ember['default'].run( this, 'destroy' );
+                }), null, 'sl-ember-store.model:deleteRecord' );
         }
     });
 
@@ -67602,7 +66175,7 @@ define("sl-ember-store/model",
                 resolvedEndpoint = get( testEndpoint, 'url' ) || get( this, 'url' );
             }
 
-            Ember.assert( 'A url needs to be set for ' + this.toString(), resolvedEndpoint );
+            Ember['default'].assert( 'A url needs to be set for ' + this.toString(), resolvedEndpoint );
 
             return resolvedEndpoint;
         },
@@ -67635,25 +66208,20 @@ define("sl-ember-store/model",
                 resolvedSerializer = get( testEndpoint, 'serializer' ) || defaultSerializer;
             }
 
-            Ember.assert( 'A serializer needs to be set for ' + this.toString(), resolvedSerializer );
+            Ember['default'].assert( 'A serializer needs to be set for ' + this.toString(), resolvedSerializer );
 
             return resolvedSerializer.call( this, data, store );
         }
     });
 
-    __exports__["default"] = Model;
-  });
-define("sl-ember-store/store", 
-  ["ember","sl-ember-store/cache","exports"],
-  function(__dependency1__, __dependency2__, __exports__) {
-    "use strict";
-    var Ember = __dependency1__["default"];
-    var cache = __dependency2__["default"];
+    exports['default'] = Model;
 
-    /**
-     * @class store
-     */
-    __exports__["default"] = Ember.Object.extend({
+});
+define('sl-ember-store/store', ['exports', 'ember', 'sl-ember-store/cache'], function (exports, Ember, cache) {
+
+    'use strict';
+
+    exports['default'] = Ember['default'].Object.extend({
 
         /**
          * Array of functions to be run before an adapter runs a query
@@ -67688,7 +66256,7 @@ define("sl-ember-store/store",
          * @returns   {void}
          */
         setupcache: function() {
-            this.set( '_cache', cache.create() );
+            this.set( '_cache', cache['default'].create() );
         }.on( 'init' ),
 
         /**
@@ -67703,7 +66271,7 @@ define("sl-ember-store/store",
             var normalizedKey = this.container.normalize( 'model:' + type ),
                 factory       = this.container.lookupFactory( normalizedKey );
 
-            Ember.assert( 'No model was found for `' + type + '`', factory );
+            Ember['default'].assert( 'No model was found for `' + type + '`', factory );
 
             return factory;
         },
@@ -67819,7 +66387,7 @@ define("sl-ember-store/store",
         runPreQueryHooks: function( query ) {
             var preQueryHooks = this.get( 'preQueryHooks' );
 
-            if ( Ember.isArray( preQueryHooks ) ) {
+            if ( Ember['default'].isArray( preQueryHooks ) ) {
                 preQueryHooks.forEach( function( hookFunction ) {
                     hookFunction( query );
                 });
@@ -67847,7 +66415,7 @@ define("sl-ember-store/store",
         runPostQueryHooks: function( response ) {
             var postQueryHooks = this.get( 'postQueryHooks' );
 
-            if ( Ember.isArray( postQueryHooks ) ) {
+            if ( Ember['default'].isArray( postQueryHooks ) ) {
                 postQueryHooks.forEach( function( hookFunction ) {
                     hookFunction( response );
                 });
@@ -67887,11 +66455,11 @@ define("sl-ember-store/store",
             return cache.fetch( type, id, findOne );
         }
     });
-  });
-define("sl-ember-store", ["sl-ember-store/index","exports"], function(__index__, __exports__) {
-  "use strict";
-  Object.keys(__index__).forEach(function(key){
-    __exports__[key] = __index__[key];
-  });
+
 });
+;/* jshint ignore:start */
+
+
+
+/* jshint ignore:end */
 //# sourceMappingURL=vendor.map
