@@ -1,6 +1,6 @@
 {
   "name": "sl-ember-store",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Ember CLI Addon - Data Model",
   "homepage": "http://softlayer.github.io/sl-ember-store",
   "scripts": {
