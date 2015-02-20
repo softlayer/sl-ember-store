@@ -18,7 +18,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "sl-ember-modelize": "~1.4.0"
+    "sl-ember-modelize": "~1.5.0"
   },
   "devDependencies": {
     "body-parser": "~1.10.0",
