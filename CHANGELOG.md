@@ -1,5 +1,15 @@
 # sl-ember-store Changelog
 
+### 0.7.0
+
+* [#100](https://github.com/softlayer/sl-ember-store/pull/100) [ENHANCEMENT] Update body-parser to 1.10.0
+* [#110](https://github.com/softlayer/sl-ember-store/pull/110) [BREAKING ENHANCEMENT] No longer throw errors on empty result set
+* [#115](https://github.com/softlayer/sl-ember-store/pull/115) [BREAKING ENHANCEMENT] Upgrade to Ember CLI 0.1.15
+* [#116](https://github.com/softlayer/sl-ember-store/pull/116) [BREAKING ENHANCEMENT] Remove es5-shim
+* [#118](https://github.com/softlayer/sl-ember-store/pull/118) [ENHANCEMENT] Update sl-ember-modelize to 1.5.0
+
+[View complete changeset](https://github.com/softlayer/sl-ember-store/compare/v0.6.0...v0.7.0)
+
 ### 0.6.0
 
 Incorrectly released v0.5.0 as v1.5.0, so re-releasing as v0.6.0.  The v1.5.0 release will have to be skipped once arrived at.
