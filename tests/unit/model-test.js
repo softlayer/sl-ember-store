@@ -57,12 +57,17 @@ module( 'Unit - sl-ember-store/model', {
             url       : '/bar',
             endpoints : {
                 default: {
-                        post: '/barUpdate',
+                        post: '/barCreate',
+                        put: '/barUpdate',
                         delete: '/barDelete',
                         serializer: serializer1
                 },
                 car: {
                     post: {
+                        url: '/carCreate',
+                        serializer: serializer2,
+                    },
+                    put: {
                         url: '/carUpdate',
                         serializer: serializer2,
                     },
@@ -102,8 +107,7 @@ module( 'Unit - sl-ember-store/model', {
 
         foo = Foo.create({
             content: {
-                test: 'foo',
-                'bar': { id: 1, quiz: 'bar' },
+                test: 'foo'
             },
             container: container
         });
@@ -111,8 +115,7 @@ module( 'Unit - sl-ember-store/model', {
 
         bar = Bar.create({
             content: {
-                test: 'bar',
-                'car': { id: 1, quiz: 'car' },
+                test: 'bar'
             },
             container: container
         });
@@ -122,15 +125,13 @@ module( 'Unit - sl-ember-store/model', {
         adapter.deleteRecord.reset();
         foo = Foo.create({
             content: {
-                test: 'foo',
-                'bar': { id: 1, quiz: 'bar' },
+                test: 'foo'
             },
             container: container
         });
         bar = Bar.create({
             content: {
-                test: 'bar',
-                'car': { id: 1, quiz: 'car' },
+                test: 'bar'
             },
             container: container
         });
@@ -141,8 +142,12 @@ test( 'getUrlForEndpointAction:should return /bar for ( null, `get` )', function
     assert.equal( Bar.getUrlForEndpointAction( null, 'get' ), '/bar' );
 });
 
-test( 'getUrlForEndpointAction:should return /barUpdate for ( null, `post` )', function( assert ) {
-    assert.equal( Bar.getUrlForEndpointAction( null, 'post' ), '/barUpdate' );
+test( 'getUrlForEndpointAction:should return /barCreate for ( null, `post` )', function( assert ) {
+    assert.equal( Bar.getUrlForEndpointAction( null, 'post' ), '/barCreate' );
+});
+
+test( 'getUrlForEndpointAction:should return /barUpdate for ( null, `put` )', function( assert ) {
+    assert.equal( Bar.getUrlForEndpointAction( null, 'put' ), '/barUpdate' );
 });
 
 test( 'getUrlForEndpointAction:should return /barDelete for ( null, `delete` )', function( assert ) {
@@ -153,8 +158,12 @@ test( 'getUrlForEndpointAction:should return /bar for ( `default`, `get` )', fun
     assert.equal( Bar.getUrlForEndpointAction( 'default', 'get' ), '/bar' );
 });
 
-test( 'getUrlForEndpointAction:should return /barUpdate for ( `default`, `post` )', function( assert ) {
-    assert.equal( Bar.getUrlForEndpointAction( 'default', 'post' ), '/barUpdate' );
+test( 'getUrlForEndpointAction:should return /barCreate for ( `default`, `post` )', function( assert ) {
+    assert.equal( Bar.getUrlForEndpointAction( 'default', 'post' ), '/barCreate' );
+});
+
+test( 'getUrlForEndpointAction:should return /barUpdate for ( `default`, `put` )', function( assert ) {
+    assert.equal( Bar.getUrlForEndpointAction( 'default', 'put' ), '/barUpdate' );
 });
 
 test( 'getUrlForEndpointAction:should return /barDelete for ( `default`, `delete` )', function( assert ) {
@@ -165,8 +174,12 @@ test( 'getUrlForEndpointAction:should return /bar for ( `car`, `get` )', functio
     assert.equal( Bar.getUrlForEndpointAction( 'car', 'get' ), '/bar' );
 });
 
-test( 'getUrlForEndpointAction:should return /carUpdate for ( `car`, `post` )', function( assert ) {
-    assert.equal( Bar.getUrlForEndpointAction( 'car', 'post' ), '/carUpdate' );
+test( 'getUrlForEndpointAction:should return /carCreate for ( `car`, `post` )', function( assert ) {
+    assert.equal( Bar.getUrlForEndpointAction( 'car', 'post' ), '/carCreate' );
+});
+
+test( 'getUrlForEndpointAction:should return /carUpdate for ( `car`, `put` )', function( assert ) {
+    assert.equal( Bar.getUrlForEndpointAction( 'car', 'put' ), '/carUpdate' );
 });
 
 test( 'getUrlForEndpointAction:should return /carDelete for ( `car`, `delete` )', function( assert ) {
@@ -201,10 +214,11 @@ test( 'save-default:should update its content with fooResponse', function( asser
 test( 'save-endpoint:should call adapter.save with correct arguments', function( assert ) {
     assert.expect(2);
     bar.save().then( function() {
-        assert.equal( adapter.save.args[0][0], '/barUpdate' );
+        assert.equal( adapter.save.args[0][0], '/barCreate' );
         assert.equal( adapter.save.args[0][1].test, 'bar' );
     });
 });
+
 test( 'save-endpoint:should update its content with fooResponse', function( assert ) {
     assert.expect(1);
     bar.save().then( function() {
@@ -212,12 +226,26 @@ test( 'save-endpoint:should update its content with fooResponse', function( asse
     });
 });
 
-test( 'save-endpoint:car: should call adapter.save with correct arguments', function( assert ) {
+test( 'save-endpoint:car: should call adapter.save with correct arguments - NO id (POST)', function( assert ) {
     assert.expect(2);
     bar = Bar.create({
         content: {
-            test: 'bar',
-            'car': { id: 1, quiz: 'car' },
+            test: 'bar'
+        },
+        container: container
+    });
+    bar.save({endpoint:'car'}).then( function() {
+        assert.equal( adapter.save.args[0][0], '/carCreate' );
+        assert.equal( adapter.save.args[0][1].test, 'bar' );
+    });
+});
+
+test( 'save-endpoint:car: should call adapter.save with correct arguments - WITH id (PUT)', function( assert ) {
+    assert.expect(2);
+    bar = Bar.create({
+        content: {
+            id : 3,
+            test: 'bar'
         },
         container: container
     });
@@ -230,8 +258,7 @@ test( 'save-endpoint:car: should call adapter.save with correct arguments', func
 test( 'save-endpoint:car: should update its content with fooResponse', function( assert ) {
     bar = Bar.create({
         content: {
-            test: 'bar',
-            'car': { id: 1, quiz: 'car' },
+            test: 'bar'
         },
         container: container
     });
@@ -241,6 +268,13 @@ test( 'save-endpoint:car: should update its content with fooResponse', function(
 });
 
 test( 'delete: should call adapter.deleteRecord with correct arguments', function( assert ) {
+    var foo = Foo.create({
+            id: 3,
+            content: {
+                test: 'foo'
+            },
+            container: container
+    });
     assert.expect(1);
     foo.deleteRecord().then( function() {
         assert.ok( adapter.deleteRecord.calledWith( '/foo' ) );
@@ -248,6 +282,13 @@ test( 'delete: should call adapter.deleteRecord with correct arguments', functio
 });
 
 test( 'delete: should destroy foo', function( assert ) {
+    var foo = Foo.create({
+            id: 3,
+            content: {
+                test: 'foo'
+            },
+            container: container
+    });
     assert.expect(1);
     foo.deleteRecord().then( function() {
         assert.ok( foo.isDestroyed );
@@ -256,6 +297,13 @@ test( 'delete: should destroy foo', function( assert ) {
 });
 
 test( 'delete-endpoint: should call adapter.delete with correct arguments', function( assert ) {
+    var bar = Bar.create({
+            id: 3,
+            content: {
+                test: 'bar'
+            },
+            container: container
+    });
     assert.expect(1);
     bar.deleteRecord().then( function() {
         assert.ok( adapter.deleteRecord.calledWith( '/barDelete' ) );
@@ -263,6 +311,13 @@ test( 'delete-endpoint: should call adapter.delete with correct arguments', func
 });
 
 test( 'delete-endpoint: should destroy bar', function( assert ) {
+    var bar = Bar.create({
+            id: 3,
+            content: {
+                test: 'bar'
+            },
+            container: container
+    });
     assert.expect(1);
     bar.deleteRecord().then( function() {
         assert.ok( bar.isDestroyed );
@@ -270,6 +325,13 @@ test( 'delete-endpoint: should destroy bar', function( assert ) {
 });
 
 test( 'delete-endpoint:car: should call adapter.delete with correct arguments', function( assert ) {
+    var bar = Bar.create({
+            id: 3,
+            content: {
+                test: 'bar'
+            },
+            container: container
+    });
     assert.expect(1);
     bar.deleteRecord({endpoint:'car'}).then( function() {
         assert.ok( adapter.deleteRecord.calledWith( '/carDelete' ) );
@@ -277,6 +339,13 @@ test( 'delete-endpoint:car: should call adapter.delete with correct arguments', 
 });
 
 test( 'delete-endpoint:car: should destroy bar', function( assert ) {
+    var bar = Bar.create({
+            id: 3,
+            content: {
+                test: 'bar'
+            },
+            container: container
+    });
     assert.expect(1);
     bar.deleteRecord({endpoint:'car'}).then( function() {
         assert.ok( bar.isDestroyed );

@@ -103,7 +103,7 @@ Models have `ajax` specified as default, so you don't need to do this unless you
 
 sl-ember-store adapters always return [Ember Promise Proxies](http://emberjs.com/api/classes/Ember.PromiseProxyMixin.html).
 If you request a single object then you will get an `Ember.ObjectProxy` with the promise proxy mixin applied.  Requests for
-Multiple records will return an `Ember.ArrayProxy` with the promise proxiy mixin applied.
+Multiple records will return an `Ember.ArrayProxy` with the promise proxy mixin applied.
 
 ### Ajax adapter
 The `ajax` adapter uses [ic-ajax](https://github.com/instructure/ic-ajax) to make `xhr` requests to your remote api.
@@ -135,24 +135,33 @@ Foo.reopenClass({
                     return response.result;
                 }
             },
-            post: '/superFooPost'
+            post: '/superFooPost',
+            put: '/superFooPut',
+            delete: 'superFooDelete'
         },
         'boringFoo': {
             url: '/boringFoo',
             serializer: someSerializer
         },
-        'superBoringFoo': '/superBoringFoo',
+        'superBoringFoo': '/superBoringFoo'
     }
 });
 
 export default Foo;
 ```
-In the example above, the `superFoo:post` endpoint will use the default serializer.
+In the example above, the `superFoo:post` endpoint will use the default serializer.  Please note that specific endpoint
+actions ( get, post, put, and delete ) MUST be in lowercase.
 All HTTP verbs on the `boringfoo` endpoint will use the `someSerializer` function as their serializer.
 All HTTP verbs on the `superBoringFoo` endpoint will use the default serializer.
 
 Models should always have a `url` specified.  Further urls can be specified in the `endpoints` object.  Urls and
 Serializers can be specified on a per endpoint/action basis and will default to the top level url and serializer.
+
+The creation of a new record, one in which an id has not been assigned by your API, will result in a POST action.
+Updating a record, one in which an id has been assigned by your API, will result in a PUT action.  The model's save()
+method is responsible for both the creation and update of a record.  In both cases, the request body payload wil be passed through.
+The difference in whether a POST or a PUT is sent is dependent on whether the record already has an id assigned to it from the API.
+The deletion of a record requires that a record has an id already assigned to it from the API.
 
 If you find you need an `inflection` service to support your api, we recommend
 you use [Ember-Inflector](https://github.com/stefanpenner/ember-inflector).  You

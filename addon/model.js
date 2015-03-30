@@ -17,11 +17,13 @@ var Model =  Ember.ObjectProxy.extend({
      */
     save: function( options ) {
         var data,
+            type,
             endpoint;
 
         options = options || {};
-        endpoint = this.constructor.getUrlForEndpointAction( options.endpoint, 'post' );
         data = this.get( 'content' );
+        type = ( !Ember.isEmpty( data.id ) ) ? 'put' : 'post';
+        endpoint = this.constructor.getUrlForEndpointAction( options.endpoint, type );
 
         Ember.assert( 'Endpoint must be configured on ' + this.toString() + ' before calling save.', endpoint );
 
@@ -47,8 +49,9 @@ var Model =  Ember.ObjectProxy.extend({
         endpoint = this.constructor.getUrlForEndpointAction( options.endpoint, 'delete' );
 
         Ember.assert( 'Enpoint must be configured on ' + this.toString() + ' before calling deleteRecord.', endpoint );
+        Ember.assert( 'deleteRecord() requires an id', this.get( 'id' ) );
 
-        return this.container.lookup( 'adapter:'+this.constructor.adapter ).deleteRecord( endpoint, this.get( 'id' ) )
+        return this.container.lookup( 'adapter:' + this.constructor.adapter ).deleteRecord( endpoint, this.get( 'id' ) )
             .then( Ember.run.bind( this, function() {
                 Ember.run( this, 'destroy' );
             }), null, 'sl-ember-store.model:deleteRecord' );

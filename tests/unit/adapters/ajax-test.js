@@ -175,31 +175,113 @@ asyncTest( 'find should not throw error if response is empty', function( assert 
     });
 });
 
-test( 'save', function( assert ){
-    var foo = Foo.create({ test: 'foo', 'bar': { id: 1, quiz: 'bar' } });
+test( 'save() should send PUT since an id exists', function( assert ){
+    var foo = Foo.create({ id: 3 });
     response = ajaxAdapter.save( '/foo', foo );
     assert.ok( requestSpy.calledOnce, 'should call icAjax request once' );
-    assert.equal( requestSpy.args[0][0].url, '/foo', 'should call icAjax with correct url');
-    assert.equal( requestSpy.args[0][0].type, 'POST', 'should call icAjax with correct method');
+    assert.equal( requestSpy.args[0][0].url, '/foo/3', 'should call icAjax with correct url');
+    assert.equal( requestSpy.args[0][0].type, 'PUT', 'should call icAjax with PUT method');
     assert.equal( typeof requestSpy.args[0][0].data, 'string', 'icAjax should return a string');
 });
 
-test( 'save, should call $.ajax with the correct arguments', function( assert ){
-    var foo = Foo.create({ test: 'foo', 'bar': { id: 1, quiz: 'bar' } });
+test( 'save() should send POST since NO id exists', function( assert ){
+    var foo = Foo.create({ label: 'My name' });
+    response = ajaxAdapter.save( '/foo', foo );
+    assert.ok( requestSpy.calledOnce, 'should call icAjax request once' );
+    assert.equal( requestSpy.args[0][0].url, '/foo', 'should call icAjax with correct url');
+    assert.equal( requestSpy.args[0][0].type, 'POST', 'should call icAjax with POST method');
+    assert.equal( typeof requestSpy.args[0][0].data, 'string', 'icAjax should return a string');
+});
+
+test( 'save() should call $.ajax with the correct arguments', function( assert ){
+    var foo = Foo.create({ id: 3 });
     response = ajaxAdapter.save( '/foo', foo );
     assert.ok( requestSpy.calledOnce, 'request called once' );
-    assert.equal( requestSpy.args[0][0].url, '/foo' );
-    assert.equal( requestSpy.args[0][0].type, 'POST' );
-    assert.equal( typeof requestSpy.args[0][0].data, 'string' );
+    assert.equal( typeof requestSpy.args[0][0].data, 'string' ); // update to check json_decode also in 184 and 193
     assert.ok( response.then, 'response is a promise' );
 });
 
-test( 'delete, should call icAjax.request once', function( assert ){
-    var foo = Foo.create({ id: 1, test: 'foo', 'bar': { id: 1, quiz: 'bar' } });
-    response = ajaxAdapter.deleteRecord( '/foo', 1 );
+test( 'save() requires an Object to be provided as the second parameter', function( assert ) {
+
+    // Empty parameter
+
+    var assertionThrown = false;
+
+    try {
+        ajaxAdapter.save();
+    } catch( error ) {
+        assertionThrown = true;
+    }
+
+    assert.ok( assertionThrown, 'Parameter was empty' );
+
+    // Number parameter
+
+    assertionThrown = false;
+
+    try {
+        ajaxAdapter.save( 'test/', 4 );
+    } catch( error ) {
+        assertionThrown = true;
+    }
+
+    assert.ok( assertionThrown, 'Parameter was a Number' );
+
+    // Array Parameter
+
+    assertionThrown = false;
+
+    try {
+        ajaxAdapter.save( 'test/', [] );
+    } catch( error ) {
+        assertionThrown = true;
+    }
+
+    assert.ok( assertionThrown, 'Parameter was an Array' );
+
+    // Function
+
+    assertionThrown = false;
+
+    try {
+        ajaxAdapter.save( 'test/', function(){} );
+    } catch( error ) {
+        assertionThrown = true;
+    }
+
+    assert.ok( assertionThrown, 'Parameter was a Function' );
+
+    // String Parameter
+
+    assertionThrown = false;
+
+    try {
+        ajaxAdapter.save( 'test/', 'test' );
+    } catch( error ) {
+        assertionThrown = true;
+    }
+
+    assert.ok( assertionThrown, 'Parameter was a String' );
+
+    // Object Parameter
+
+    assertionThrown = false;
+
+    try {
+        ajaxAdapter.save( 'test/', {} );
+    } catch( error ) {
+        assertionThrown = true;
+    }
+
+    assert.ok( !assertionThrown, 'Parameter was an Object' );
+});
+
+test( 'deleteRecord() should call icAjax.request once', function( assert ){
+    var foo = Foo.create({ id: 3 });
+    response = ajaxAdapter.deleteRecord( '/foo', 3 );
 
     assert.ok( requestSpy.calledOnce );
-    assert.equal( requestSpy.args[0][0].url, '/foo', 'should call icAjax with correct url');
+    assert.equal( requestSpy.args[0][0].url, '/foo/3', 'should call icAjax with correct url');
     assert.equal( requestSpy.args[0][0].type, 'DELETE', 'should call icAjax with correct url');
     assert.equal( typeof requestSpy.args[0][0].data, 'string', 'icAjax should return a string');
     assert.ok( response.then, 'response is a proxy' );
