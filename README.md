@@ -157,9 +157,9 @@ All HTTP verbs on the `superBoringFoo` endpoint will use the default serializer.
 Models should always have a `url` specified.  Further urls can be specified in the `endpoints` object.  Urls and
 Serializers can be specified on a per endpoint/action basis and will default to the top level url and serializer.
 
-The creation of a new record, one in which an id has not been assigned by your API, will result in a POST action.
+The creation of a new record, one in which an id has not yet been assigned by your API, will result in a POST action.
 Updating a record, one in which an id has been assigned by your API, will result in a PUT action.  The model's save()
-method is responsible for both the creation and update of a record.  In both cases, the request body payload wil be passed through.
+method is responsible for both the creation and update of a record.  In both cases, the request body payload will be passed through.
 The difference in whether a POST or a PUT is sent is dependent on whether the record already has an id assigned to it from the API.
 The deletion of a record requires that a record has an id already assigned to it from the API.
 

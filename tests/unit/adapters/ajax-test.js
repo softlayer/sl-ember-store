@@ -208,7 +208,7 @@ test( 'save() requires an Object to be provided as the second parameter', functi
     var assertionThrown = false;
 
     try {
-        ajaxAdapter.save();
+        ajaxAdapter.save( 'test/', null );
     } catch( error ) {
         assertionThrown = true;
     }
