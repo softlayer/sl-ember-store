@@ -91,21 +91,24 @@ export default Adapter.extend({
      * Delete record
      *
      * @function deleteRecord
-     * @param    {string}  url - The URL to send the DELETE command to
+     * @param    {string} url - The URL to send the DELETE command to
      * @param    {integer} id  - The model record's ID
      * @throws   {Ember.assert}
      * @returns  {Ember.RSVP} Promise
      */
     deleteRecord: function( url, id ) {
-        var queryObj = {
-            url     : url,
+        var _self = this,
+            queryObj;
+
+        Ember.assert( 'A url is required to delete a model', url );
+        Ember.assert( 'An id property is required to delete a model', id );
+
+        queryObj = {
+            url     : url + '/' + id,
             type    : 'DELETE',
             data    : JSON.stringify({ id: id }),
             context : this
-        },
-        _self = this;
-
-        Ember.assert( 'A url is required to delete a model', url );
+        };
 
         this.runPreQueryHooks( queryObj );
 
@@ -115,26 +118,36 @@ export default Adapter.extend({
             } , 'sl-ember-store.ajaxAdapter:deleteRecord' );
     },
 
-    /**
+     /**
      * Save record
      *
      * @function save
-     * @param    {string} url     - The URL to send the POST command to
+     * @param    {string} url     - The URL to send the POST/PUT command to (depends on whether an id exists or not).
      * @param    {object} content - Data to save
      * @throws   {Ember.assert}
      * @returns  {Ember.RSVP} Promise
      */
      save: function( url, content ) {
-        var promise,
-            queryObj = {
-                url     : url,
-                type    : 'POST',
-                data    : JSON.stringify( content ),
-                context : this
-            },
-            _self = this;
+        var _self = this,
+            promise,
+            queryObj;
 
         Ember.assert( 'A url property is required to save a model', url );
+        Ember.assert(
+            'save() expects parameter to be an Object',
+            'object' === typeof content && !Array.isArray( content )
+        );
+
+        if ( Ember.get( content, 'id' ) ) {
+            url = url + '/' + Ember.get( content, 'id' );
+        }
+
+        queryObj = {
+            url     : url,
+            type    : ( content.id && !Ember.isEmpty( content.id ) ) ? 'PUT' : 'POST',
+            data    : JSON.stringify( content ),
+            context : this
+        };
 
         this.runPreQueryHooks( queryObj );
 
